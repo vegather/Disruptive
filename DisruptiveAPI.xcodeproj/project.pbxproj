@@ -7,9 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A066F162474FAAA0096F5D3 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A066F152474FAAA0096F5D3 /* Project.swift */; };
+		1A280D512480052F0091DF4A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A280D502480052F0091DF4A /* Event.swift */; };
+		1A38AA39247AF81700DD4572 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A38AA38247AF81700DD4572 /* Errors.swift */; };
+		1A4BBF00247909FB002D1AB1 /* ServerSentEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4BBEFF247909FB002D1AB1 /* ServerSentEvents.swift */; };
+		1A4BBF0624791DFA002D1AB1 /* DTLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4BBF0524791DFA002D1AB1 /* DTLog.swift */; };
+		1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4BBF07247939C4002D1AB1 /* NetworkTypes.swift */; };
+		1A4BBF0A247939EB002D1AB1 /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4BBF09247939EB002D1AB1 /* Requests.swift */; };
+		1A4BBF0C247A5A6C002D1AB1 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4BBF0B247A5A6C002D1AB1 /* Utils.swift */; };
+		1A65F8EF2473252A00948743 /* Disruptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65F8EE2473252A00948743 /* Disruptive.swift */; };
+		1A65F8F12473361C00948743 /* Organization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65F8F02473361C00948743 /* Organization.swift */; };
+		1A6A773124823E7F00D5419E /* Diagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6A773024823E7F00D5419E /* Diagnostics.swift */; };
+		1A6A77342482911400D5419E /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6A77332482911400D5419E /* GraphView.swift */; };
 		1A9149752471293C00CF45B7 /* DisruptiveAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */; };
 		1A91497A2471293C00CF45B7 /* DisruptiveAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */; };
 		1A91497C2471293C00CF45B7 /* DisruptiveAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF38524852B7400E4D0E5 /* Stream.swift */; };
+		1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC6FC5D247F15740034BEEB /* EventTypes.swift */; };
+		1AC7BF132477250000BC22C7 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC7BF122477250000BC22C7 /* Device.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +38,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A066F152474FAAA0096F5D3 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		1A280D502480052F0091DF4A /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		1A38AA38247AF81700DD4572 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		1A4BBEFF247909FB002D1AB1 /* ServerSentEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSentEvents.swift; sourceTree = "<group>"; };
+		1A4BBF0524791DFA002D1AB1 /* DTLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTLog.swift; sourceTree = "<group>"; };
+		1A4BBF07247939C4002D1AB1 /* NetworkTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTypes.swift; sourceTree = "<group>"; };
+		1A4BBF09247939EB002D1AB1 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
+		1A4BBF0B247A5A6C002D1AB1 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		1A65F8EE2473252A00948743 /* Disruptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disruptive.swift; sourceTree = "<group>"; };
+		1A65F8F02473361C00948743 /* Organization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organization.swift; sourceTree = "<group>"; };
+		1A6A773024823E7F00D5419E /* Diagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostics.swift; sourceTree = "<group>"; };
+		1A6A77332482911400D5419E /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DisruptiveAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisruptiveAPI.h; sourceTree = "<group>"; };
 		1A91496F2471293C00CF45B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A9149742471293C00CF45B7 /* DisruptiveAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DisruptiveAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisruptiveAPITests.swift; sourceTree = "<group>"; };
 		1A91497B2471293C00CF45B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AAEF38524852B7400E4D0E5 /* Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
+		1AC6FC5D247F15740034BEEB /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
+		1AC7BF122477250000BC22C7 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +80,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A38AA37247AF80600DD4572 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				1AC6FC5D247F15740034BEEB /* EventTypes.swift */,
+				1A6A773024823E7F00D5419E /* Diagnostics.swift */,
+				1A4BBF07247939C4002D1AB1 /* NetworkTypes.swift */,
+				1A38AA38247AF81700DD4572 /* Errors.swift */,
+				1A4BBEFF247909FB002D1AB1 /* ServerSentEvents.swift */,
+				1A4BBF09247939EB002D1AB1 /* Requests.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		1A4BBF03247919D4002D1AB1 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				1A4BBF0524791DFA002D1AB1 /* DTLog.swift */,
+				1A4BBF0B247A5A6C002D1AB1 /* Utils.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		1A4BBF04247919DB002D1AB1 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				1A65F8F02473361C00948743 /* Organization.swift */,
+				1A066F152474FAAA0096F5D3 /* Project.swift */,
+				1AC7BF122477250000BC22C7 /* Device.swift */,
+				1AAEF38524852B7400E4D0E5 /* Stream.swift */,
+				1A280D502480052F0091DF4A /* Event.swift */,
+				1A38AA37247AF80600DD4572 /* Helpers */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		1A6A7732248290F100D5419E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1A6A77332482911400D5419E /* GraphView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		1A9149612471293C00CF45B7 = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +145,10 @@
 			isa = PBXGroup;
 			children = (
 				1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */,
+				1A65F8EE2473252A00948743 /* Disruptive.swift */,
+				1A6A7732248290F100D5419E /* Views */,
+				1A4BBF04247919DB002D1AB1 /* API */,
+				1A4BBF03247919D4002D1AB1 /* Utilities */,
 				1A91496F2471293C00CF45B7 /* Info.plist */,
 			);
 			path = DisruptiveAPI;
@@ -148,6 +225,7 @@
 				TargetAttributes = {
 					1A91496A2471293C00CF45B7 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 					1A9149732471293C00CF45B7 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -195,6 +273,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A4BBF0624791DFA002D1AB1 /* DTLog.swift in Sources */,
+				1A4BBF00247909FB002D1AB1 /* ServerSentEvents.swift in Sources */,
+				1A6A773124823E7F00D5419E /* Diagnostics.swift in Sources */,
+				1A65F8EF2473252A00948743 /* Disruptive.swift in Sources */,
+				1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */,
+				1A4BBF0A247939EB002D1AB1 /* Requests.swift in Sources */,
+				1A280D512480052F0091DF4A /* Event.swift in Sources */,
+				1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */,
+				1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */,
+				1A4BBF0C247A5A6C002D1AB1 /* Utils.swift in Sources */,
+				1A6A77342482911400D5419E /* GraphView.swift in Sources */,
+				1A65F8F12473361C00948743 /* Organization.swift in Sources */,
+				1A38AA39247AF81700DD4572 /* Errors.swift in Sources */,
+				1A066F162474FAAA0096F5D3 /* Project.swift in Sources */,
+				1AC7BF132477250000BC22C7 /* Device.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,22 +433,26 @@
 		1A9149802471293C00CF45B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = RVT7D5LR65;
+				DEVELOPMENT_TEAM = 4V68D5W5GT;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = DisruptiveAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.disruptive-technologies.DisruptiveAPI";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.moon-labs.DisruptiveAPI";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -364,22 +461,25 @@
 		1A9149812471293C00CF45B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = RVT7D5LR65;
+				DEVELOPMENT_TEAM = 4V68D5W5GT;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = DisruptiveAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.disruptive-technologies.DisruptiveAPI";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.moon-labs.DisruptiveAPI";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -388,6 +488,7 @@
 		1A9149832471293C00CF45B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RVT7D5LR65;
 				INFOPLIST_FILE = DisruptiveAPITests/Info.plist;
@@ -406,6 +507,7 @@
 		1A9149842471293C00CF45B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RVT7D5LR65;
 				INFOPLIST_FILE = DisruptiveAPITests/Info.plist;
