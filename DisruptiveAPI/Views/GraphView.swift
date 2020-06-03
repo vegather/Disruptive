@@ -174,7 +174,8 @@ public class LineGraphView: UIView {
         separator.addLine(to: CGPoint(x: bounds.width - yAxisGutterWidth, y: bounds.height))
         separator.stroke()
         
-        // Determine divisor for tickmarks
+        // Determine divisor for tickmarks. This will be used as a modulo
+        // so we limit the number of tickmarks if the range is greater.
         let range = upperBound - lowerBound
         let divisor: Int
         switch range {

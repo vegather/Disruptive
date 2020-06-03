@@ -50,6 +50,8 @@ public struct Events {
         }
     }
     
+    // Helper to append to optional array. Creates the array if it's nil,
+    // and appends to the array if it already exists
     private static func addToList<T>(list: inout [T]?, newItem: T) {
         if list == nil {
             list = [newItem]
