@@ -8,10 +8,10 @@
 
 import Foundation
 
-public struct ServiceAccount {
-    public let email: String
-    public let key: String
-    public let secret: String
+public struct ServiceAccount: Codable {
+    public let email  : String
+    public let key    : String
+    public let secret : String
     
     public init(email: String, key: String, secret: String) {
         self.email = email
