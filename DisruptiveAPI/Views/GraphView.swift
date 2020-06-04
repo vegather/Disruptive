@@ -69,7 +69,6 @@ public class LineGraphView: UIView {
         let maxValue: CGFloat
         let minValue: CGFloat
         let startTime: Date
-        let endTime: Date
     }
     
     
@@ -105,8 +104,7 @@ public class LineGraphView: UIView {
             series     : [series],
             maxValue   : CGFloat(maxValue),
             minValue   : CGFloat(minValue),
-            startTime  : events.last! .timestamp,
-            endTime    : events.first!.timestamp
+            startTime  : events.last!.timestamp
         )
     }
     
@@ -131,7 +129,7 @@ public class LineGraphView: UIView {
         let lowerBound = graphData.minValue - range * 0.1
         
         let dy = bounds.height / (upperBound - lowerBound)
-        let dx = graphWidth / CGFloat(graphData.endTime.timeIntervalSince(graphData.startTime))
+        let dx = graphWidth / CGFloat(Date().timeIntervalSince(graphData.startTime))
         
         for serie in graphData.series {
             
