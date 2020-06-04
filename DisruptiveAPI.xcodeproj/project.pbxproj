@@ -23,6 +23,7 @@
 		1A91497A2471293C00CF45B7 /* DisruptiveAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */; };
 		1A91497C2471293C00CF45B7 /* DisruptiveAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF38524852B7400E4D0E5 /* Stream.swift */; };
+		1AAEF39224899F8F00E4D0E5 /* GraphTooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF39124899F8F00E4D0E5 /* GraphTooltipView.swift */; };
 		1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC6FC5D247F15740034BEEB /* EventTypes.swift */; };
 		1AC7BF132477250000BC22C7 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC7BF122477250000BC22C7 /* Device.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisruptiveAPITests.swift; sourceTree = "<group>"; };
 		1A91497B2471293C00CF45B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AAEF38524852B7400E4D0E5 /* Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
+		1AAEF39124899F8F00E4D0E5 /* GraphTooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTooltipView.swift; sourceTree = "<group>"; };
 		1AC6FC5D247F15740034BEEB /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
 		1AC7BF122477250000BC22C7 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				1A6A77332482911400D5419E /* GraphView.swift */,
+				1AAEF39124899F8F00E4D0E5 /* GraphTooltipView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				1A280D512480052F0091DF4A /* Event.swift in Sources */,
 				1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */,
 				1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */,
+				1AAEF39224899F8F00E4D0E5 /* GraphTooltipView.swift in Sources */,
 				1A4BBF0C247A5A6C002D1AB1 /* Utils.swift in Sources */,
 				1A6A77342482911400D5419E /* GraphView.swift in Sources */,
 				1A65F8F12473361C00948743 /* Organization.swift in Sources */,

@@ -8,19 +8,26 @@
 
 import UIKit
 
-public class LineGraphView: UIView {
+public class LineGraphView: UIView, GraphTooltipViewDelegate {
     
     public var separatorColor = UIColor.black {
         didSet { setNeedsDisplay() }
     }
     
     public var yAxisGutterWidth: CGFloat = 40 {
-        didSet { setNeedsDisplay() }
+        didSet {
+            // When the width of the y-gutter changes, we need
+            // to update the constraints of our tooltip view
+            tooltipViewRightConstraint.constant = -yAxisGutterWidth
+            setNeedsDisplay()
+        }
     }
     
     public var yAxisGutterFont: UIFont = .systemFont(ofSize: 12) {
         didSet { setNeedsDisplay() }
     }
+    
+    private(set) public var tooltipView: GraphTooltipView!
     
     
     
@@ -42,6 +49,24 @@ public class LineGraphView: UIView {
         isOpaque = true
         backgroundColor = .clear
         contentMode = .redraw
+        
+        addSubviews()
+    }
+    
+    private func addSubviews() {
+        tooltipView = GraphTooltipView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        tooltipView.delegate = self
+        tooltipView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(tooltipView)
+        
+        tooltipView.leftAnchor  .constraint(equalTo: leftAnchor)  .isActive = true
+        tooltipView.topAnchor   .constraint(equalTo: topAnchor)   .isActive = true
+        tooltipView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        // Keeping track of the right constraint because we need to update
+        // it if the `yAxisGutterWidth` changes.
+        tooltipViewRightConstraint = tooltipView.rightAnchor.constraint(equalTo: rightAnchor, constant: -yAxisGutterWidth)
+        tooltipViewRightConstraint.isActive = true
     }
     
     
@@ -50,11 +75,13 @@ public class LineGraphView: UIView {
     // MARK: Private State
     // -------------------------------
     
+    private var tooltipViewRightConstraint: NSLayoutConstraint!
+    
     private var graphData: GraphData? {
         didSet { setNeedsDisplay() }
     }
     
-    private struct Sample {
+    internal struct Sample {
         let value: CGFloat
         let timestame: Date
     }
@@ -70,6 +97,7 @@ public class LineGraphView: UIView {
         let minValue: CGFloat
         let startTime: Date
     }
+    
     
     
     
@@ -99,7 +127,6 @@ public class LineGraphView: UIView {
         
         let series = DataSeries(lineColor: lineColor, samples: samples)
         
-        
         graphData = GraphData(
             series     : [series],
             maxValue   : CGFloat(maxValue),
@@ -107,6 +134,17 @@ public class LineGraphView: UIView {
             startTime  : events.last!.timestamp
         )
     }
+    
+    
+    
+    // -------------------------------
+    // MARK: Tooltip Delegate
+    // -------------------------------
+    
+    func tooltip(forXPosition x: CGFloat) -> Tooltip {
+        return Tooltip(samplePoint: CGPoint(x: x, y: 0), title: "", subtitle: "")
+    }
+    
     
     
     
@@ -226,4 +264,5 @@ public class LineGraphView: UIView {
             }
         }
     }
+    
 }
