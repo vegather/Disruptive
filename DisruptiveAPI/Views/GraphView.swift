@@ -98,10 +98,21 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         let startTime: Date
     }
     
+    private var disconnectPeriods: [(start: Date, end: Date)] = [] {
+        didSet { setNeedsDisplay() }
+    }
     
     // Used for the tooltip
     private var valueName = "Value"
     private var unit = ""
+    
+    private var disconnectPeriodBackgroundColor: UIColor {
+        if case .dark = traitCollection.userInterfaceStyle {
+            return UIColor(white: 0.20, alpha: 1)
+        } else {
+            return UIColor(white: 0.90, alpha: 1)
+        }
+    }
     
     
     
@@ -144,6 +155,30 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         unit = "°C"
     }
     
+    /// Disconnect periods are defined as any time period between two timestamps
+    /// that is more than 50% of the median of timestamps. Meaning that if any sample
+    /// is missing (which is 100% of the median), that will count as a disconnect period,
+    /// but there is still leeway left in for variations in the heartbeat.
+    public func plotDisconnectPeriods(from timestamps: [Date]) {
+        // Ensures there are at least 20 timestamps before attempting
+        // to determine disconnect periods
+        guard timestamps.count >= 20 else { return }
+        
+        let intervals = stride(from: 1, to: timestamps.count, by: 1).map {
+            Float(timestamps[$0-1].timeIntervalSince(timestamps[$0]))
+        }
+        let median = TimeInterval(intervals.median())
+        
+        var periods = [(start: Date, end: Date)]()
+        
+        for i in stride(from: 1, to: timestamps.count, by: 1) {
+            let duration = timestamps[i-1].timeIntervalSince(timestamps[i])
+            if duration > median * 1.5 {
+                periods.append((timestamps[i], timestamps[i-1]))
+            }
+        }
+        
+        disconnectPeriods = periods
     }
     
     
@@ -173,6 +208,38 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("MMMdHHmm") // Will be "31 May, 19:11" in Norwegian locale
+        
+        // Check first if the tooltip is in the middle of a disconnect period
+        let tooltipDate = Date(timeIntervalSince1970: timeIntervalForTouch)
+        for period in disconnectPeriods {
+            
+            // Checks the following:
+            // 1. If the tooltip is right on a disconnect period
+            // 2. If the tooltip is after the latest sample, AND there is a disconnect period that ends after the latest sample.
+            // 3. If the tooltip is before the earliest sample, AND there is a disconnect period that starts before the earliest sample.
+            if (tooltipDate > period.start && tooltipDate < period.end) || // Tooltip date is right on disconnect
+                (tooltipDate > samples.first!.timestamp && period.end > samples.first!.timestamp) || //
+                (tooltipDate < samples.last!.timestamp && period.start < samples.last!.timestamp)
+            {
+                let duration = period.end.timeIntervalSince(period.start)
+                
+                // Determine the duration string
+                let durationString: String
+                if      duration < 3600  { durationString = "\(Int((duration / 60)   .rounded())) mins"}
+                else if duration < 86400 { durationString = "\(Int((duration / 3600) .rounded())) hours" }
+                else                     { durationString = "\(Int((duration / 86400).rounded())) days" }
+                                
+                return Tooltip(
+                    samplePoint: point,
+                    estimatedSize: CGSize(width: 160, height: 50),
+                    title: "Offline: \(durationString)",
+                    subtitle: "\(formatter.string(from: period.start)) - \(formatter.string(from: period.end))"
+                )
+            }
+        }
+        
+        // The tooltip is for a normal sample, figure out which
+        
         var sample = samples.last!
         
         for s in samples {
@@ -237,6 +304,7 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         guard let graphData = graphData else { return }
         
         graphData.series.forEach { drawSeries($0) }
+        drawDisconnectPeriods()
         drawYGutter()
         
         let end = CACurrentMediaTime()
@@ -261,6 +329,25 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         path.stroke()
     }
     
+    private func drawDisconnectPeriods() {
+        for period in disconnectPeriods {
+            // Abusing the graph drawing function helper to get the x coordinates
+            let xCoordinates = createPoints(for: [
+                Sample(value: 0, timestamp: period.start),
+                Sample(value: 0, timestamp: period.end)
+            ]).map { $0.x }
+            
+            disconnectPeriodBackgroundColor.setFill()
+            let rect = CGRect(
+                x: xCoordinates[0],
+                y: 0,
+                width: xCoordinates[1] - xCoordinates[0],
+                height: bounds.height
+            )
+            let box = UIBezierPath(rect: rect)
+            box.fill()
+        }
+    }
     
     public func drawYGutter() {
         guard let graphData = graphData else { return }
