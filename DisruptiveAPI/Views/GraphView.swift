@@ -14,7 +14,7 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         didSet { setNeedsDisplay() }
     }
     
-    public var yAxisGutterWidth: CGFloat = 40 {
+    public var yAxisGutterWidth: CGFloat = 30 {
         didSet {
             // When the width of the y-gutter changes, we need
             // to update the constraints of our tooltip view
@@ -83,7 +83,7 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
     
     internal struct Sample {
         let value: CGFloat
-        let timestame: Date
+        let timestamp: Date
     }
     
     private struct DataSeries {
@@ -97,6 +97,11 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         let minValue: CGFloat
         let startTime: Date
     }
+    
+    
+    // Used for the tooltip
+    private var valueName = "Value"
+    private var unit = ""
     
     
     
@@ -122,7 +127,7 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
             if event.value < minValue { minValue = event.value }
             
             // Add new sample
-            samples.append(Sample(value: CGFloat(event.value), timestame: event.timestamp))
+            samples.append(Sample(value: CGFloat(event.value), timestamp: event.timestamp))
         }
         
         let series = DataSeries(lineColor: lineColor, samples: samples)
@@ -133,6 +138,12 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
             minValue   : CGFloat(minValue),
             startTime  : events.last!.timestamp
         )
+        
+        // Used for the tooltip
+        valueName = "Temp"
+        unit = "°C"
+    }
+    
     }
     
     
@@ -141,8 +152,44 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
     // MARK: Tooltip Delegate
     // -------------------------------
     
-    func tooltip(forXPosition x: CGFloat) -> Tooltip {
-        return Tooltip(samplePoint: CGPoint(x: x, y: 0), title: "", subtitle: "")
+    func tooltip(forTouchPoint point: CGPoint) -> Tooltip {
+        
+        // Make sure there is data samples
+        guard let graphData = graphData,
+              let samples = graphData.series.first?.samples, samples.count > 0
+        else {
+            return Tooltip(
+                samplePoint: CGPoint(x: point.x, y: point.y),
+                estimatedSize: CGSize(width: 130, height: 50),
+                title: "-",
+                subtitle: "-"
+            )
+        }
+        
+        let graphWidth = bounds.width - yAxisGutterWidth
+        let graphTimeDuration = Date().timeIntervalSince(graphData.startTime)
+        let graphTimeSince1970 = graphData.startTime.timeIntervalSince1970
+        let timeIntervalForTouch = TimeInterval(point.x / graphWidth) * graphTimeDuration + graphTimeSince1970
+        
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("MMMdHHmm") // Will be "31 May, 19:11" in Norwegian locale
+        var sample = samples.last!
+        
+        for s in samples {
+            if s.timestamp.timeIntervalSince1970 < timeIntervalForTouch {
+                sample = s
+                break
+            }
+        }
+        
+        let samplePoint = createPoints(for: [sample])[0]
+        
+        return Tooltip(
+            samplePoint : CGPoint(x: samplePoint.x, y: point.y),
+            estimatedSize: CGSize(width: 130, height: 50),
+            title       : String(format: "\(valueName): %.2f \(unit)", sample.value),
+            subtitle    : "Time: " + formatter.string(from: sample.timestamp)
+        )
     }
     
     
@@ -152,54 +199,73 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
     // MARK: Drawing
     // -------------------------------
     
-    public override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-        let start = CACurrentMediaTime()
-        
-        guard let graphData = graphData else { return }
-        
-        // The width to plot the graph in
-        let graphWidth = bounds.width - yAxisGutterWidth
-        
+    /// The y properties (upperBound, lowerBound, and dy) are used in multiple places,
+    /// so this is a slightly less cumbersome (but still cumbersome) way to achieve that.
+    private func getYProperties(graphData: GraphData) -> (upperBound: CGFloat, lowerBound: CGFloat, dy: CGFloat) {
         let range = graphData.maxValue - graphData.minValue
         let upperBound = graphData.maxValue + range * 0.1
         let lowerBound = graphData.minValue - range * 0.1
         
         let dy = bounds.height / (upperBound - lowerBound)
+        
+        return (upperBound, lowerBound, dy)
+    }
+    
+    private func createPoints(for samples: [Sample]) -> [CGPoint] {
+        guard let graphData = graphData else { return [] }
+        
+        // Calculate the delta x
+        let graphWidth = bounds.width - yAxisGutterWidth
         let dx = graphWidth / CGFloat(Date().timeIntervalSince(graphData.startTime))
         
-        for serie in graphData.series {
-            
-            let path = UIBezierPath()
-            path.lineWidth = 3
-            path.lineJoinStyle = .round
-            serie.lineColor.setStroke()
-                        
-            for sample in serie.samples {
-                let point = CGPoint(
-                    x: CGFloat(sample.timestame.timeIntervalSince(graphData.startTime)) * dx,
-                    y: bounds.height - (sample.value - lowerBound) * dy
-                )
-                
-                if path.isEmpty {
-                    path.move(to: point)
-                } else {
-                    path.addLine(to: point)
-                }
-            }
-            
-            path.stroke()
-        }
+        let (_, lowerBound, dy) = getYProperties(graphData: graphData)
         
-        drawYGutter(lowerBound: lowerBound, upperBound: upperBound, dy: dy)
+        return samples.map {
+            CGPoint(
+                x: CGFloat($0.timestamp.timeIntervalSince(graphData.startTime)) * dx,
+                y: bounds.height - ($0.value - lowerBound) * dy
+            )
+        }
+    }
+    
+    public override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        let start = CACurrentMediaTime()
+        
+        // No point in doing any drawing without the graph data
+        guard let graphData = graphData else { return }
+        
+        graphData.series.forEach { drawSeries($0) }
+        drawYGutter()
         
         let end = CACurrentMediaTime()
         
         DTLog(String(format: "Drew graph in %.2f ms", (end - start) * 1000))
     }
     
-    public func drawYGutter(lowerBound: CGFloat, upperBound: CGFloat, dy: CGFloat) {
+    private func drawSeries(_ serie: DataSeries) {
+        let path = UIBezierPath()
+        path.lineWidth = 3
+        path.lineJoinStyle = .round
+        serie.lineColor.setStroke()
+                   
+        for point in createPoints(for: serie.samples) {
+           if path.isEmpty {
+               path.move(to: point)
+           } else {
+               path.addLine(to: point)
+           }
+        }
+
+        path.stroke()
+    }
+    
+    
+    public func drawYGutter() {
+        guard let graphData = graphData else { return }
+        let (upperBound, lowerBound, dy) = getYProperties(graphData: graphData)
+        
         // Set stroke color (for both separator and tickmarks)
         separatorColor.setStroke()
 
@@ -217,11 +283,9 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         switch range {
             case   ..<10: divisor = 1  // Range is 0  to 10, tickmarks: 10, 11, 12, 13...
             case 10..<20: divisor = 2  // Range is 10 to 20, tickmarks: 10, 12, 14, 16...
-            case 20..<50: divisor = 5  // Range is 20 to 50, tickmarks: 10, 15, 20, 25...
-            default:      divisor = 10 // Range is above 50, tickmarks: 10, 20, 30, 40...
+            case 20..<60: divisor = 5  // Range is 20 to 60, tickmarks: 10, 15, 20, 25...
+            default:      divisor = 10 // Range is above 60, tickmarks: 10, 20, 30, 40...
         }
-        
-        print("upperBound: \(upperBound), lowerBound: \(lowerBound), range: \(range), divisor: \(divisor)")
         
         // Get the min and max values as Ints, so we can derive tickmarks from them
         let minInt = Int(ceil(lowerBound))

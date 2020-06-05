@@ -10,6 +10,7 @@ import UIKit
 
 internal struct Tooltip {
     let samplePoint: CGPoint
+    let estimatedSize: CGSize
     let title: String
     let subtitle: String
 }
@@ -17,19 +18,40 @@ internal struct Tooltip {
 internal protocol GraphTooltipViewDelegate: class {
     
     /// Returns a tooltip for the sample that is closest to the specified x position
-    func tooltip(forXPosition: CGFloat) -> Tooltip
+    func tooltip(forTouchPoint point: CGPoint) -> Tooltip
 }
 
 public class GraphTooltipView: UIView {
     
-    public var titleFont: UIFont?
-    public var subtitleFont: UIFont?
-    
-    internal weak var delegate: GraphTooltipViewDelegate?
-    
-    private var currentTouchPos: CGPoint? {
+    public var titleFont = UIFont.boldSystemFont(ofSize: 14) {
         didSet { setNeedsDisplay() }
     }
+    public var subtitleFont = UIFont.systemFont(ofSize: 10) {
+        didSet { setNeedsDisplay() }
+    }
+    public var titleFontColor = UIColor.white {
+        didSet { setNeedsDisplay() }
+    }
+    public var subtitleFontColor = UIColor(white: 0.9, alpha: 1) {
+        didSet { setNeedsDisplay() }
+    }
+
+    internal weak var delegate: GraphTooltipViewDelegate?
+    
+    /// The point to render the tooltip for. Nil if the tooltip is currently inactive
+    private var currentTouchPos: CGPoint?
+    
+    /// Color to use for the background box of the tooltip
+    private var tooltipbackgroundColor: UIColor {
+        return UIColor(white: 0.18, alpha: 0.92)
+    }
+            
+    /// Specifies the horizontal position of the tooltip in relation to the users finger
+    private enum HorizontalPosition {
+        case left
+        case right
+    }
+    private var horizontalPos = HorizontalPosition.right
     
     
     // -------------------------------
@@ -76,6 +98,45 @@ public class GraphTooltipView: UIView {
             default:
                 currentTouchPos = nil
         }
+        
+        setNeedsDisplay()
+    }
+    
+    
+    
+    // -------------------------------
+    // MARK: Tooltip Positioning
+    // -------------------------------
+    
+    private func updateTooltipPositions(forTouchPoint point: CGPoint, size: CGSize) {
+        switch horizontalPos {
+            case .left:
+                if point.x < size.width + 4 {
+                    horizontalPos = .right
+                }
+            case .right:
+                if point.x > bounds.width - (size.width + 4) {
+                    horizontalPos = .left
+                }
+        }
+    }
+    
+    private func createTooltipFrame(forTouchPoint point: CGPoint, size: CGSize) -> CGRect {
+        var tooltipFrame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
+        // Update x-position
+        switch horizontalPos {
+            case .left  : tooltipFrame.origin.x = point.x - size.width - 4
+            case .right : tooltipFrame.origin.x = point.x + 4
+        }
+        
+        // Update y-position
+        let minY = CGFloat(0)
+        let maxY = bounds.height - size.height
+        let defaultY = point.y - size.height - 30
+        tooltipFrame.origin.y = max(minY, min(defaultY, maxY))
+        
+        return tooltipFrame
     }
     
     
@@ -95,14 +156,48 @@ public class GraphTooltipView: UIView {
         if currentTouchPos.x > bounds.width { currentTouchPos.x = bounds.width }
         
         // Get the tooltip from our delegate
-        guard let tooltip = delegate?.tooltip(forXPosition: currentTouchPos.x) else { return }
+        guard let tooltip = delegate?.tooltip(forTouchPoint: currentTouchPos) else { return }
         
         UIColor.secondaryLabel.setStroke()
         
         // Draw the vertical selection line
+        drawVerticalLine(at: tooltip.samplePoint.x)
+        
+        // Update the tooltip position
+        updateTooltipPositions(forTouchPoint: tooltip.samplePoint, size: tooltip.estimatedSize)
+        
+        // Draw the tooltip
+        let tooltipFrame = createTooltipFrame(forTouchPoint: tooltip.samplePoint, size: tooltip.estimatedSize)
+        drawTooltipBackground(in: tooltipFrame)
+        drawTooltipText(in: tooltipFrame, title: tooltip.title, subtitle: tooltip.subtitle)
+    }
+    
+    private func drawVerticalLine(at xPos: CGFloat) {
         let line = UIBezierPath()
-        line.move   (to: CGPoint(x: tooltip.samplePoint.x, y: 0))
-        line.addLine(to: CGPoint(x: tooltip.samplePoint.x, y: bounds.height))
+        line.move   (to: CGPoint(x: xPos, y: 0))
+        line.addLine(to: CGPoint(x: xPos, y: bounds.height))
         line.stroke()
+    }
+    
+    private func drawTooltipBackground(in rect: CGRect) {
+        tooltipbackgroundColor.setFill()
+        UIBezierPath(roundedRect: rect, cornerRadius: 8).fill()
+    }
+    
+    private func drawTooltipText(in rect: CGRect, title: String, subtitle: String) {
+        let titleAttributes: [NSAttributedString.Key: Any] = [
+            .font: titleFont,
+            .foregroundColor: titleFontColor
+        ]
+        let subtitleAttributes: [NSAttributedString.Key: Any] = [
+            .font: subtitleFont,
+            .foregroundColor: subtitleFontColor
+        ]
+        
+        let titlePoint    = CGPoint(x: rect.origin.x + 8, y: rect.origin.y + 6)
+        let subtitlePoint = CGPoint(x: rect.origin.x + 8, y: rect.origin.y + 26)
+        
+        NSString(string: title)   .draw(at: titlePoint,    withAttributes: titleAttributes)
+        NSString(string: subtitle).draw(at: subtitlePoint, withAttributes: subtitleAttributes)
     }
 }
