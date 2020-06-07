@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Accelerate
 
 // -------------------------------
 // MARK: Data -> String
@@ -40,39 +39,5 @@ public extension Data {
             (0...7).reduce("", { String((byte & (1 << $1)) >> $1) + $0})
         }).joined(separator: " ")
     }
-}
-
-
-
-// -------------------------------
-// MARK: DSP
-// -------------------------------
-
-/// Adds hardware accelerated functions to Array when the element is Float
-extension Array where Element == Float {
-
-    /// Calculates the mean of an array of Floats using Accelerate
-    func mean() -> Float {
-        var value: Float = 0
-        vDSP_meanv(self, vDSP_Stride(1), &value, vDSP_Length(count))
-        return value.isNaN ? 0 : value
-    }
-
-    /// Calculates the median of an array of Floats using Accelerate
-    func median() -> Float {
-        guard count > 0 else { return 0 }
-        guard count > 1 else { return first! }
-        
-        var input = self
-        vDSP_vsort(&input, vDSP_Length(count), 1)
-        
-        let midIndex = Int(floor(Double(count)/2))
-        if count % 2 == 0 {
-            return (input[midIndex-1] + input[midIndex]) / 2
-        } else {
-            return input[midIndex]
-        }
-    }
-
 }
 

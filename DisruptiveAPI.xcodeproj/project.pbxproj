@@ -18,12 +18,10 @@
 		1A65F8EF2473252A00948743 /* Disruptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65F8EE2473252A00948743 /* Disruptive.swift */; };
 		1A65F8F12473361C00948743 /* Organization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65F8F02473361C00948743 /* Organization.swift */; };
 		1A6A773124823E7F00D5419E /* Diagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6A773024823E7F00D5419E /* Diagnostics.swift */; };
-		1A6A77342482911400D5419E /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6A77332482911400D5419E /* GraphView.swift */; };
 		1A9149752471293C00CF45B7 /* DisruptiveAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */; };
 		1A91497A2471293C00CF45B7 /* DisruptiveAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */; };
 		1A91497C2471293C00CF45B7 /* DisruptiveAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF38524852B7400E4D0E5 /* Stream.swift */; };
-		1AAEF39224899F8F00E4D0E5 /* GraphTooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF39124899F8F00E4D0E5 /* GraphTooltipView.swift */; };
 		1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC6FC5D247F15740034BEEB /* EventTypes.swift */; };
 		1AC7BF132477250000BC22C7 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC7BF122477250000BC22C7 /* Device.swift */; };
 /* End PBXBuildFile section */
@@ -50,7 +48,6 @@
 		1A65F8EE2473252A00948743 /* Disruptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disruptive.swift; sourceTree = "<group>"; };
 		1A65F8F02473361C00948743 /* Organization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organization.swift; sourceTree = "<group>"; };
 		1A6A773024823E7F00D5419E /* Diagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostics.swift; sourceTree = "<group>"; };
-		1A6A77332482911400D5419E /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DisruptiveAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisruptiveAPI.h; sourceTree = "<group>"; };
 		1A91496F2471293C00CF45B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,7 +55,6 @@
 		1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisruptiveAPITests.swift; sourceTree = "<group>"; };
 		1A91497B2471293C00CF45B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AAEF38524852B7400E4D0E5 /* Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
-		1AAEF39124899F8F00E4D0E5 /* GraphTooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphTooltipView.swift; sourceTree = "<group>"; };
 		1AC6FC5D247F15740034BEEB /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
 		1AC7BF122477250000BC22C7 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,15 +113,6 @@
 			path = API;
 			sourceTree = "<group>";
 		};
-		1A6A7732248290F100D5419E /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				1A6A77332482911400D5419E /* GraphView.swift */,
-				1AAEF39124899F8F00E4D0E5 /* GraphTooltipView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		1A9149612471293C00CF45B7 = {
 			isa = PBXGroup;
 			children = (
@@ -149,7 +136,6 @@
 			children = (
 				1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */,
 				1A65F8EE2473252A00948743 /* Disruptive.swift */,
-				1A6A7732248290F100D5419E /* Views */,
 				1A4BBF04247919DB002D1AB1 /* API */,
 				1A4BBF03247919D4002D1AB1 /* Utilities */,
 				1A91496F2471293C00CF45B7 /* Info.plist */,
@@ -285,9 +271,7 @@
 				1A280D512480052F0091DF4A /* Event.swift in Sources */,
 				1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */,
 				1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */,
-				1AAEF39224899F8F00E4D0E5 /* GraphTooltipView.swift in Sources */,
 				1A4BBF0C247A5A6C002D1AB1 /* Utils.swift in Sources */,
-				1A6A77342482911400D5419E /* GraphView.swift in Sources */,
 				1A65F8F12473361C00948743 /* Organization.swift in Sources */,
 				1A38AA39247AF81700DD4572 /* Errors.swift in Sources */,
 				1A066F162474FAAA0096F5D3 /* Project.swift in Sources */,
