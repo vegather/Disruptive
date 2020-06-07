@@ -27,6 +27,10 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         didSet { setNeedsDisplay() }
     }
     
+    /// Represents the duration of the graph (in the x-axis). The end of the graph
+    /// will always be "now" (`Date()`), and the start will be "now - graphDuration".
+    public var graphDuration: TimeInterval = 1
+    
     private(set) public var tooltipView: GraphTooltipView!
     
     
@@ -71,17 +75,12 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
     
     
     
+    
     // -------------------------------
-    // MARK: Private State
+    // MARK: Private Structs
     // -------------------------------
     
-    private var tooltipViewRightConstraint: NSLayoutConstraint!
-    
-    private var graphData: GraphData? {
-        didSet { setNeedsDisplay() }
-    }
-    
-    internal struct Sample {
+    private struct Sample {
         let value: CGFloat
         let timestamp: Date
     }
@@ -95,12 +94,31 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         let series: [DataSeries] // Supports multiple series
         let maxValue: CGFloat
         let minValue: CGFloat
-        let startTime: Date
     }
     
+    
+    
+    // -------------------------------
+    // MARK: Private State
+    // -------------------------------
+    
+    /// Constraint on the right side of the tooltip view to compensate
+    /// for the y-axis gutter.
+    private var tooltipViewRightConstraint: NSLayoutConstraint!
+    
+    private var graphData: GraphData? {
+        didSet { setNeedsDisplay() }
+    }
+    
+    /// Sections where it was determined that the device was disconnected
     private var disconnectPeriods: [(start: Date, end: Date)] = [] {
         didSet { setNeedsDisplay() }
     }
+    
+    // Used as the start and end of the x-axis. These will be
+    // updated when the graphDuration or the data to present changes.
+    private var graphStart: TimeInterval = 0
+    private var graphEnd  : TimeInterval = 1
     
     // Used for the tooltip
     private var valueName = "Value"
@@ -146,8 +164,7 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         graphData = GraphData(
             series     : [series],
             maxValue   : CGFloat(maxValue),
-            minValue   : CGFloat(minValue),
-            startTime  : events.last!.timestamp
+            minValue   : CGFloat(minValue)
         )
         
         // Used for the tooltip
@@ -202,9 +219,7 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         }
         
         let graphWidth = bounds.width - yAxisGutterWidth
-        let graphTimeDuration = Date().timeIntervalSince(graphData.startTime)
-        let graphTimeSince1970 = graphData.startTime.timeIntervalSince1970
-        let timeIntervalForTouch = TimeInterval(point.x / graphWidth) * graphTimeDuration + graphTimeSince1970
+        let timeIntervalForTouch = TimeInterval(point.x / graphWidth) * graphDuration + graphStart
         
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("MMMdHHmm") // Will be "31 May, 19:11" in Norwegian locale
@@ -217,8 +232,8 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
             // 1. If the tooltip is right on a disconnect period
             // 2. If the tooltip is after the latest sample, AND there is a disconnect period that ends after the latest sample.
             // 3. If the tooltip is before the earliest sample, AND there is a disconnect period that starts before the earliest sample.
-            if (tooltipDate > period.start && tooltipDate < period.end) || // Tooltip date is right on disconnect
-                (tooltipDate > samples.first!.timestamp && period.end > samples.first!.timestamp) || //
+            if (tooltipDate > period.start && tooltipDate < period.end) ||
+                (tooltipDate > samples.first!.timestamp && period.end > samples.first!.timestamp) ||
                 (tooltipDate < samples.last!.timestamp && period.start < samples.last!.timestamp)
             {
                 let duration = period.end.timeIntervalSince(period.start)
@@ -269,6 +284,10 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
         
+        // Ensures the graph start and end are up to date right
+        // before we start drawing
+        updateStartAndEnd()
+        
         let start = CACurrentMediaTime()
         
         // No point in doing any drawing without the graph data
@@ -288,7 +307,7 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
         path.lineWidth = 3
         path.lineJoinStyle = .round
         serie.lineColor.setStroke()
-                   
+                
         for point in createPoints(for: serie.samples) {
            if path.isEmpty {
                path.move(to: point)
@@ -420,6 +439,11 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
                 y: bounds.height - ($0.value - lowerBound) * dy
             )
         }
+    }
+    
+    private func updateStartAndEnd() {
+        graphEnd = Date().timeIntervalSince1970
+        graphStart = graphEnd - graphDuration
     }
     
 }
