@@ -266,35 +266,6 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
     // MARK: Drawing
     // -------------------------------
     
-    /// The y properties (upperBound, lowerBound, and dy) are used in multiple places,
-    /// so this is a slightly less cumbersome (but still cumbersome) way to achieve that.
-    private func getYProperties(graphData: GraphData) -> (upperBound: CGFloat, lowerBound: CGFloat, dy: CGFloat) {
-        let range = graphData.maxValue - graphData.minValue
-        let upperBound = graphData.maxValue + range * 0.1
-        let lowerBound = graphData.minValue - range * 0.1
-        
-        let dy = bounds.height / (upperBound - lowerBound)
-        
-        return (upperBound, lowerBound, dy)
-    }
-    
-    private func createPoints(for samples: [Sample]) -> [CGPoint] {
-        guard let graphData = graphData else { return [] }
-        
-        // Calculate the delta x
-        let graphWidth = bounds.width - yAxisGutterWidth
-        let dx = graphWidth / CGFloat(Date().timeIntervalSince(graphData.startTime))
-        
-        let (_, lowerBound, dy) = getYProperties(graphData: graphData)
-        
-        return samples.map {
-            CGPoint(
-                x: CGFloat($0.timestamp.timeIntervalSince(graphData.startTime)) * dx,
-                y: bounds.height - ($0.value - lowerBound) * dy
-            )
-        }
-    }
-    
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
         
@@ -413,6 +384,41 @@ public class LineGraphView: UIView, GraphTooltipViewDelegate {
                 )
                 valueString.draw(at: tickmarkStringPoint, withAttributes: attributes)
             }
+        }
+    }
+    
+    
+    
+    // -------------------------------
+    // MARK: Helpers
+    // -------------------------------
+    
+    /// The y properties (upperBound, lowerBound, and dy) are used in multiple places,
+    /// so this is a slightly less cumbersome (but still cumbersome) way to achieve that.
+    private func getYProperties(graphData: GraphData) -> (upperBound: CGFloat, lowerBound: CGFloat, dy: CGFloat) {
+        let range = graphData.maxValue - graphData.minValue
+        let upperBound = graphData.maxValue + range * 0.1
+        let lowerBound = graphData.minValue - range * 0.1
+        
+        let dy = bounds.height / (upperBound - lowerBound)
+        
+        return (upperBound, lowerBound, dy)
+    }
+    
+    private func createPoints(for samples: [Sample]) -> [CGPoint] {
+        guard let graphData = graphData else { return [] }
+        
+        // Calculate the delta x
+        let graphWidth = bounds.width - yAxisGutterWidth
+        let dx = graphWidth / CGFloat(graphDuration) //CGFloat(Date().timeIntervalSince(graphData.startTime))
+        
+        let (_, lowerBound, dy) = getYProperties(graphData: graphData)
+        
+        return samples.map {
+            CGPoint(
+                x: CGFloat($0.timestamp.timeIntervalSince1970 - graphStart) * dx,
+                y: bounds.height - ($0.value - lowerBound) * dy
+            )
         }
     }
     
