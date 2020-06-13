@@ -9,7 +9,7 @@
 import Foundation
 
 extension Disruptive {
-    public static func subscribeToDevices(
+    public func subscribeToDevices(
         in projectID : String,
         deviceIDs    : [String]? = nil,
         deviceTypes  : [Device.DeviceType]? = nil,
@@ -33,8 +33,12 @@ extension Disruptive {
         }
         
         // Get the URL request
+        guard let auth = authorization else {
+            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+            return nil
+        }
         let request = Request(method: .get, endpoint: "projects/\(projectID)/devices:stream", params: params)
-        guard let urlRequest = request.urlRequest() else {
+        guard let urlRequest = request.urlRequest(authorization: auth) else {
             return nil
         }
         

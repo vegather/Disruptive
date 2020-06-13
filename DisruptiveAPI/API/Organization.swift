@@ -33,7 +33,7 @@ extension Organization {
 }
 
 extension Disruptive {
-    public static func getOrganizations(completion: @escaping (Result<[Organization], DisruptiveError>) -> ()) {
+    public func getOrganizations(completion: @escaping (Result<[Organization], DisruptiveError>) -> ()) {
         // Create the request
         let request = Request(method: .get, endpoint: "organizations")
         

@@ -26,11 +26,18 @@ extension Disruptive {
     /**
      Sends a request that doesn't expect any response
      */
-    internal static func sendRequest(
+    internal func sendRequest(
         request: Request,
         completion: @escaping (Result<Void, DisruptiveError>) -> ())
     {
-        guard let urlReq = request.urlRequest() else {
+        guard let auth = authorization else {
+            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+            DispatchQueue.main.async {
+                completion(.failure(.unauthorized))
+            }
+            return
+        }
+        guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
                 completion(.failure(.unknownError))
@@ -94,11 +101,18 @@ extension Disruptive {
     /**
      Sends a requests that expects a single (non-paginated) response.
      */
-    internal static func sendRequest<T: Decodable>(
+    internal func sendRequest<T: Decodable>(
         request: Request,
         completion: @escaping (Result<T, DisruptiveError>) -> ())
     {
-        guard let urlReq = request.urlRequest() else {
+        guard let auth = authorization else {
+            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+            DispatchQueue.main.async {
+                completion(.failure(.unauthorized))
+            }
+            return
+        }
+        guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
                 completion(.failure(.unknownError))
@@ -178,13 +192,20 @@ extension Disruptive {
      will be handled automatically, and an array of the response type (T)
      will be returned.
      */
-    internal static func sendRequest<T: Decodable>(
+    internal func sendRequest<T: Decodable>(
         request: Request,
         cumulativeResults: [T] = [],
         pageingKey: String,
         completion: @escaping (Result<[T], DisruptiveError>) -> ())
     {
-        guard let urlReq = request.urlRequest() else {
+        guard let auth = authorization else {
+            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+            DispatchQueue.main.async {
+                completion(.failure(.unauthorized))
+            }
+            return
+        }
+        guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
                 completion(.failure(.unknownError))
@@ -239,7 +260,7 @@ extension Disruptive {
                 }
                 return
             }
-            
+                        
             // Prepare a decoder for decoding paginated results
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .custom { keys in

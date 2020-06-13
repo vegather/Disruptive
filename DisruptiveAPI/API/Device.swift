@@ -97,7 +97,7 @@ extension Device {
 }
 
 extension Disruptive {
-    public static func getDevices(projectID: String, completion: @escaping (Result<[Device], DisruptiveError>) -> ()) {
+    public func getDevices(projectID: String, completion: @escaping (Result<[Device], DisruptiveError>) -> ()) {
         // Create the request
         let request = Request(method: .get, endpoint: "projects/\(projectID)/devices")
         

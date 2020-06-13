@@ -29,6 +29,8 @@ public struct Events {
     public var cellularStatus     : [CellularStatus]?
     public var latencyStatus      : [ConnectionLatency]?
     
+    public init() {}
+    
     fileprivate init(events: [EventContainer]) {
         for event in events {
             switch event {
@@ -62,7 +64,7 @@ public struct Events {
 }
 
 extension Disruptive {
-    public static func getEvents(
+    public func getEvents(
         projectID: String,
         deviceID: String,
         startDate: Date? = nil,

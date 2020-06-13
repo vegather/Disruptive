@@ -9,12 +9,14 @@
 import Foundation
 
 public struct Disruptive {
-    internal static var authorization: String? = nil
+    internal var authorization: String?
     internal static let baseURL = "https://api.disruptive-technologies.com/v2/"
     
     public static var loggingEnabled = false
     
-    public static func authenticate(serviceAccount: ServiceAccount) {
+    public init(serviceAccount: ServiceAccount) {
         self.authorization = serviceAccount.authorization()
     }
+    
+    
 }

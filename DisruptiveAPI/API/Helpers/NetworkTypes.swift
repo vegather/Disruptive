@@ -90,11 +90,7 @@ internal struct Request {
         self.params = params
     }
     
-    func urlRequest() -> URLRequest? {
-        guard let authorization = Disruptive.authorization else {
-            DTLog("Not yet authorized. Call Disruptive.authenticate(serviceAccount: ) to authenticate")
-            return nil
-        }
+    func urlRequest(authorization: String) -> URLRequest? {
         
         // Construct the URL
         
