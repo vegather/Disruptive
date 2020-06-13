@@ -20,6 +20,10 @@ public struct TouchEvent: Decodable {
         case timestamp = "updateTime"
     }
     
+    public init(timestamp: Date) {
+        self.timestamp = timestamp
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -36,6 +40,11 @@ public struct TemperatureEvent: Decodable {
     private enum CodingKeys: String, CodingKey {
         case value
         case timestamp = "updateTime"
+    }
+    
+    public init(value: Float, timestamp: Date) {
+        self.value = value
+        self.timestamp = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -59,6 +68,11 @@ public struct ObjectPresentEvent: Decodable {
         case timestamp = "updateTime"
     }
     
+    public init(objectPresent: Bool, timestamp: Date) {
+        self.objectPresent = objectPresent
+        self.timestamp = timestamp
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -71,6 +85,8 @@ public struct ObjectPresentEvent: Decodable {
         switch stateString {
             case "NOT_PRESENT": self.objectPresent = false
             case "PRESENT"    : self.objectPresent = true
+            
+            // "UNKNOWN"
             default           : self.objectPresent = nil
         }
     }
@@ -85,6 +101,12 @@ public struct HumidityEvent: Decodable {
         case temperature
         case relativeHumidity
         case timestamp = "updateTime"
+    }
+    
+    public init(temperature: Float, relativeHumidity: Float, timestamp: Date) {
+        self.temperature = temperature
+        self.relativeHumidity = relativeHumidity
+        self.timestamp = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -109,6 +131,11 @@ public struct ObjectPresentCount: Decodable {
         case timestamp = "updateTime"
     }
     
+    public init(total: Int, timestamp: Date) {
+        self.total = total
+        self.timestamp = timestamp
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -130,6 +157,11 @@ public struct TouchCount: Decodable {
         case timestamp = "updateTime"
     }
     
+    public init(total: Int, timestamp: Date) {
+        self.total = total
+        self.timestamp = timestamp
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -149,6 +181,11 @@ public struct WaterPresentEvent: Decodable {
     private enum CodingKeys: String, CodingKey {
         case waterPresent = "state"
         case timestamp = "updateTime"
+    }
+    
+    public init(waterPresent: Bool, timestamp: Date) {
+        self.waterPresent = waterPresent
+        self.timestamp = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -198,6 +235,13 @@ public struct NetworkStatus: Decodable {
         case transmissionMode
     }
     
+    public init(signalStrength: Int, timestamp: Date, cloudConnectors: [CloudConnector], transmissionMode: TransmissionMode) {
+        self.signalStrength = signalStrength
+        self.timestamp = timestamp
+        self.cloudConnectors = cloudConnectors
+        self.transmissionMode = transmissionMode
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -221,6 +265,11 @@ public struct BatteryStatus: Decodable {
         case timestamp = "updateTime"
     }
     
+    public init(percentage: Int, timestamp: Date) {
+        self.percentage = percentage
+        self.timestamp = timestamp
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -238,6 +287,12 @@ public struct LabelsChanged: Decodable {
     public let added    : [String: String]
     public let modified : [String: String]
     public let removed  : [String]
+    
+    public init(added: [String: String], modified: [String: String], removed: [String]) {
+        self.added = added
+        self.modified = modified
+        self.removed = removed
+    }
 }
 
 
@@ -283,6 +338,12 @@ public struct ConnectionStatus: Decodable {
         case timestamp = "updateTime"
     }
     
+    public init(connection: Connection, available: [Available], timestamp: Date) {
+        self.connection = connection
+        self.available = available
+        self.timestamp = timestamp
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -314,6 +375,13 @@ public struct EthernetStatus: Decodable {
         case timestamp = "updateTime"
     }
     
+    public init(macAddress: String, ipAddress: String, errors: [ErrorMessage], timestamp: Date) {
+        self.macAddress = macAddress
+        self.ipAddress = ipAddress
+        self.errors = errors
+        self.timestamp = timestamp
+    }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -342,6 +410,12 @@ public struct CellularStatus: Decodable {
         case signalStrength
         case errors
         case timestamp = "updateTime"
+    }
+    
+    public init(signalStrength: Int, errors: [ErrorMessage], timestamp: Date) {
+        self.signalStrength = signalStrength
+        self.errors = errors
+        self.timestamp = timestamp
     }
     
     public init(from decoder: Decoder) throws {

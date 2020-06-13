@@ -14,6 +14,14 @@ public struct Project: Codable {
     public let isInventory: Bool
     public let sensorCount: Int
     public let cloudConnectorCount: Int
+    
+    public init(identifier: String, name: String, isInventory: Bool, sensorCount: Int, cloudConnectorCount: Int) {
+        self.identifier = identifier
+        self.name = name
+        self.isInventory = isInventory
+        self.sensorCount = sensorCount
+        self.cloudConnectorCount = cloudConnectorCount
+    }
 }
 
 extension Project {

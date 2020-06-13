@@ -15,6 +15,16 @@ public struct Device: Decodable {
     public let labels: [String: String]
     public let type: DeviceType
     public var reportedEvents: ReportedEvents
+    
+    public init(identifier: String, name: String, projectID: String, labels: [String: String], type: DeviceType, reportedEvents: ReportedEvents)
+    {
+        self.identifier = identifier
+        self.name = name
+        self.projectID = projectID
+        self.labels = labels
+        self.type = type
+        self.reportedEvents = reportedEvents
+    }
 }
 
 extension Device {
@@ -93,6 +103,8 @@ extension Device {
         public var cellularStatus     : CellularStatus?
         public var connectionStatus   : ConnectionStatus?
         public var connectionLatency  : ConnectionLatency?
+        
+        public init() {}
     }
 }
 
