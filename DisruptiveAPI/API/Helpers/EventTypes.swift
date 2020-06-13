@@ -432,16 +432,23 @@ public struct CellularStatus: Decodable {
 }
 
 public struct ConnectionLatency: Decodable {
-    public let avgLatencyMillis: Int
-    public let minLatencyMillis: Int
-    public let maxLatencyMillis: Int
+    public let avgLatencyMilliseconds: Int
+    public let minLatencyMilliseconds: Int
+    public let maxLatencyMilliseconds: Int
     public let timestamp: Date
     
     private enum CodingKeys: String, CodingKey {
-        case avgLatencyMillis
-        case minLatencyMillis
-        case maxLatencyMillis
+        case avgLatencyMilliseconds = "avgLatencyMillis"
+        case minLatencyMilliseconds = "minLatencyMillis"
+        case maxLatencyMilliseconds = "maxLatencyMillis"
         case timestamp = "updateTime"
+    }
+    
+    public init(avgLatencyMilliseconds: Int, minLatencyMilliseconds: Int, maxLatencyMilliseconds: Int, timestamp: Date) {
+        self.avgLatencyMilliseconds = avgLatencyMilliseconds
+        self.minLatencyMilliseconds = minLatencyMilliseconds
+        self.maxLatencyMilliseconds = maxLatencyMilliseconds
+        self.timestamp = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -452,9 +459,9 @@ public struct ConnectionLatency: Decodable {
         self.timestamp = try parseDate(iso8601: timeString)
         
         // Extract the other values
-        self.avgLatencyMillis = try values.decode(Int.self, forKey: .avgLatencyMillis)
-        self.minLatencyMillis = try values.decode(Int.self, forKey: .minLatencyMillis)
-        self.maxLatencyMillis = try values.decode(Int.self, forKey: .maxLatencyMillis)
+        self.avgLatencyMilliseconds = try values.decode(Int.self, forKey: .avgLatencyMilliseconds)
+        self.minLatencyMilliseconds = try values.decode(Int.self, forKey: .minLatencyMilliseconds)
+        self.maxLatencyMilliseconds = try values.decode(Int.self, forKey: .maxLatencyMilliseconds)
     }
 }
 
