@@ -153,6 +153,32 @@ extension Disruptive {
     }
     
     /**
+     Sets the name of a device to a new value (overwrites it if a name already exists).
+     
+     This is a convenience function that uses the `setDeviceLabel` function with the `name` key.
+     
+     - Parameter projectID: The identifier for the project the device is in
+     - Parameter deviceID: The identifier of the device to change the name of
+     - Parameter newName: The new name to set for the device
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<Void, DisruptiveError>`
+     */
+    public func setDeviceName(
+        projectID : String,
+        deviceID  : String,
+        newName   : String,
+        completion: @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    {
+        setDeviceLabel(
+            projectID  : projectID,
+            deviceID   : deviceID,
+            key        : "name",
+            value      : newName,
+            completion : completion
+        )
+    }
+    
+    /**
      Assigns a value to a label key for a specific device. If the label key doesn't already exists it will be created. Otherwise the value for the key is updated. This is in effect an upsert.
      
      - Parameter projectID: The identifier for the project the device is in
