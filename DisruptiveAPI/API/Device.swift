@@ -151,4 +151,45 @@ extension Disruptive {
             completion(response)
         }
     }
+    
+    /**
+     Assigns a value to a label key for a specific device. If the label key doesn't already exists it will be created. Otherwise the value for the key is updated. This is in effect an upsert.
+     
+     - Parameter projectID: The identifier for the project the device is in
+     - Parameter deviceID: The identifier of the device to set the label for
+     - Parameter key: The key of the label
+     - Parameter value: The new value of the label
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<Void, DisruptiveError>`
+     */
+    public func setDeviceLabel(
+        projectID  : String,
+        deviceID   : String,
+        key        : String,
+        value      : String,
+        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    {
+        // Create the body
+        struct Body: Codable {
+            let devices: [String]
+            let addLabels: [String: String]
+        }
+        let body = Body(
+            devices: ["/projects/\(projectID)/devices/\(deviceID)"],
+            addLabels: [key: value]
+        )
+        
+        do {
+            // Create the request
+            let request = try Request(method: .post, endpoint: "projects/\(projectID)/devices:batchUpdate", body: body)
+            
+            // Send the request
+            sendRequest(request: request) { response in
+                completion(response)
+            }
+        } catch (let error) {
+            DTLog("Failed to init setLabel request with payload: \(body). Error: \(error)", isError: true)
+            completion(.failure(.unknownError))
+        }
+    }
 }
