@@ -51,9 +51,9 @@ extension Project {
 
 extension Disruptive {
     public func getProjects(
-        organizationID: String? = nil,
-        query: String? = nil,
-        completion: @escaping (Result<[Project], DisruptiveError>) -> ())
+        organizationID : String? = nil,
+        query          : String? = nil,
+        completion     : @escaping (Result<[Project], DisruptiveError>) -> ())
     {
         // Set up the query parameters
         var params: [String: [String]] = [:]
@@ -73,7 +73,10 @@ extension Disruptive {
         }
     }
     
-    public func getProject(projectID: String, completion: @escaping (Result<Project, DisruptiveError>) -> ()) {
+    public func getProject(
+        projectID  : String,
+        completion : @escaping (Result<Project, DisruptiveError>) -> ())
+    {
         // Create the request
         let request = Request(method: .get, endpoint: "projects/\(projectID)")
         
@@ -83,7 +86,11 @@ extension Disruptive {
         }
     }
     
-    public func createProject(name: String, organizationID: String, completion: @escaping (Result<Project, DisruptiveError>) -> ()) {
+    public func createProject(
+        name           : String,
+        organizationID : String,
+        completion     : @escaping (Result<Project, DisruptiveError>) -> ())
+    {
         // Create body for new project
         let payload = [
             "displayName" : name,

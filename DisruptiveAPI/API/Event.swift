@@ -65,12 +65,12 @@ public struct Events {
 
 extension Disruptive {
     public func getEvents(
-        projectID: String,
-        deviceID: String,
-        startDate: Date? = nil,
-        endDate: Date? = nil,
-        eventTypes: [EventType]? = nil,
-        completion: @escaping (Result<Events, DisruptiveError>) -> ())
+        projectID  : String,
+        deviceID   : String,
+        startDate  : Date? = nil,
+        endDate    : Date? = nil,
+        eventTypes : [EventType]? = nil,
+        completion : @escaping (_ result: Result<Events, DisruptiveError>) -> ())
     {
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
