@@ -106,7 +106,7 @@ extension Disruptive {
                 completion(response)
             }
         } catch (let error) {
-            DTLog("Failed to create CreateProject request with payload: \(payload). Error: \(error)", isError: true)
+            DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
         }
     }
