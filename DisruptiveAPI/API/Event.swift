@@ -61,9 +61,44 @@ public struct Events {
             list?.append(newItem)
         }
     }
+    
+    fileprivate mutating func sort() {
+        touch?             .sort { $0.timestamp < $1.timestamp }
+        temperature?       .sort { $0.timestamp < $1.timestamp }
+        objectPresent?     .sort { $0.timestamp < $1.timestamp }
+        humidity?          .sort { $0.timestamp < $1.timestamp }
+        objectPresentCount?.sort { $0.timestamp < $1.timestamp }
+        touchCount?        .sort { $0.timestamp < $1.timestamp }
+        waterPresent?      .sort { $0.timestamp < $1.timestamp }
+        networkStatus?     .sort { $0.timestamp < $1.timestamp }
+        batteryStatus?     .sort { $0.timestamp < $1.timestamp }
+        connectionStatus?  .sort { $0.timestamp < $1.timestamp }
+        ethernetStatus?    .sort { $0.timestamp < $1.timestamp }
+        cellularStatus?    .sort { $0.timestamp < $1.timestamp }
+        latencyStatus?     .sort { $0.timestamp < $1.timestamp }
+    }
 }
 
 extension Disruptive {
+    /**
+     Fetches historical data for a specific device from the server. The events are
+     returned with the oldest event at the beginning of the array, and the newest
+     event at the end.
+     
+     If one or more `eventTypes` are specified, only those events will be fetched.
+     Otherwise, all the events available for the specified device will be fetched.
+     Note that not all event types are available for all devices.
+     
+     If `startDate` or `endDate` is not specified, it defaults to the last 24 hours.
+     
+     - Parameter projectID: The identifier of the project where the device is
+     - Parameter deviceID: The identifier of the device to get events from
+     - Parameter startDate: The timestamp of the first event to fetch. Defaults to 24 hours ago
+     - Parameter endDate: The timestamp of the last event to fetch. Defaults to now
+     - Parameter eventTypes: A list of event types to fetch. Defaults to fetching all events for specified device
+     - Parameter completion: The completion handler that is called when data is returned from the server. This is a `Result` type where the success case is a list of `Events`, and the failure case is a `DisruptiveError`.
+     - Parameter result: `Result<Events, DisruptiveError>`
+     */
     public func getEvents(
         projectID  : String,
         deviceID   : String,
@@ -94,7 +129,15 @@ extension Disruptive {
         sendRequest(request: request, pageingKey: "events") { (response: Result<[EventContainer], DisruptiveError>) in
             switch response {
                 case .success(let eventContainers):
-                    completion(.success(Events(events: eventContainers)))
+                    // The events are returned from the server with the newest event at the beginning.
+                    // We want to flip this around to make the data easier to work with (draw as
+                    // graphs, etc). The `reversed()` call should be doing most of the heavy lifting
+                    // here, and we're sorting at the end to guarantee the order. This is way faster
+                    // than just sorting without reversing first.
+                    var events = Events(events: eventContainers.reversed())
+                    events.sort()
+                    
+                    completion(.success(events))
                 case .failure(let error):
                     completion(.failure(error))
             }
