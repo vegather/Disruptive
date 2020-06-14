@@ -40,9 +40,7 @@ struct RequestDiagnostics {
         guard let networkEnd   = networkEnd   else { return }
         
         let networkDuration = String(format: "%.2f ms", (networkEnd - networkStart) * 1000)
-        let networkString = "Finished request to \(request.endpoint) in \(networkDuration). "
-        
-        var parseString = ""
+        var str = "Finished request to \(request.endpoint) in \(networkDuration). "
         
         if let parseStart = parseStart, let parseEnd = parseEnd {
             var byteCount = 0
@@ -51,9 +49,9 @@ struct RequestDiagnostics {
             }
             let parseDuration = String(format: "%.2f ms", (parseEnd - parseStart) * 1000)
             
-            parseString = "Parsed \(byteCount) bytes in \(parseDuration)"
+            str += "Parsed \(byteCount) bytes in \(parseDuration)"
         }
         
-        DTLog(networkString + parseString)
+        DTLog(str)
     }
 }
