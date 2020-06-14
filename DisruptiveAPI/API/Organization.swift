@@ -33,8 +33,14 @@ extension Organization {
 }
 
 extension Disruptive {
+    /**
+     Gets a list of all the organizations available to the authenticated account.
+     
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Organization`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<[Organization], DisruptiveError>`
+     */
     public func getOrganizations(
-        completion: @escaping (Result<[Organization], DisruptiveError>) -> ())
+        completion: @escaping (_ result: Result<[Organization], DisruptiveError>) -> ())
     {
         // Create the request
         let request = Request(method: .get, endpoint: "organizations")

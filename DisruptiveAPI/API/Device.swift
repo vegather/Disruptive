@@ -109,10 +109,18 @@ extension Device {
 }
 
 extension Disruptive {
+    /**
+     Gets details for a specific device. This device could be found within a specific project, or if the default `projectID` argument is used, throughout all the project available to the authenticated account.
+     
+     - Parameter projectID: The identifier of the project to find the device in. The default value is a wildcard character that searches through all the project the authenticated account has access to.
+     - Parameter deviceID: The identifier of the device to get details on.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<Device, DisruptiveError>`
+     */
     public func getDevice(
         projectID  : String = "-",
         deviceID   : String,
-        completion : @escaping (Result<Device, DisruptiveError>) -> ())
+        completion : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
     {
         // Create the request
         let endpoint = "projects/\(projectID)/devices/\(deviceID)"
@@ -124,9 +132,16 @@ extension Disruptive {
         }
     }
     
+    /**
+     Gets a list of devices in a specific project.
+     
+     - Parameter projectID: The identifier for the project to get devices from
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`
+     - Parameter result: `Result<[Device], DisruptiveError>`
+     */
     public func getDevices(
         projectID  : String,
-        completion : @escaping (Result<[Device], DisruptiveError>) -> ())
+        completion : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
     {
         // Create the request
         let request = Request(method: .get, endpoint: "projects/\(projectID)/devices")

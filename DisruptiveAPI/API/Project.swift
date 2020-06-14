@@ -50,10 +50,18 @@ extension Project {
 }
 
 extension Disruptive {
+    /**
+     Gets a list of projects. If an `organizationID` is specified, only projects within this organization is fetched. Otherwise, all the projects the authenticated account has access to is returned.
+     
+     - Parameter organizationID: The identifier of the organization to get projects from. If not specified (or nil), will fetch all the project the authenticated account has access to.
+     - Parameter query: Simple keyword based search. If not specified (or nil), all projects will be returned.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`
+     - Parameter result: `Result<[Project], DisruptiveError>`
+     */
     public func getProjects(
         organizationID : String? = nil,
         query          : String? = nil,
-        completion     : @escaping (Result<[Project], DisruptiveError>) -> ())
+        completion     : @escaping (_ result: Result<[Project], DisruptiveError>) -> ())
     {
         // Set up the query parameters
         var params: [String: [String]] = [:]
@@ -73,9 +81,16 @@ extension Disruptive {
         }
     }
     
+    /**
+     Gets details for a specific project
+     
+     - Parameter projectID: The identifier of the project to get details for
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<Project, DisruptiveError>`
+     */
     public func getProject(
         projectID  : String,
-        completion : @escaping (Result<Project, DisruptiveError>) -> ())
+        completion : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
         // Create the request
         let request = Request(method: .get, endpoint: "projects/\(projectID)")
@@ -86,10 +101,18 @@ extension Disruptive {
         }
     }
     
+    /**
+     Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful
+     
+     - Parameter name: The name of the new project
+     - Parameter organizationID: The identifier of the organization to create the project in
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<Project, DisruptiveError>`
+     */
     public func createProject(
         name           : String,
         organizationID : String,
-        completion     : @escaping (Result<Project, DisruptiveError>) -> ())
+        completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
         // Create body for new project
         let payload = [
