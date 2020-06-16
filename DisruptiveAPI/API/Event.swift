@@ -30,54 +30,8 @@ public struct Events {
     public var latencyStatus      : [ConnectionLatency]?
     
     public init() {}
-    
-    fileprivate init(events: [EventContainer]) {
-        for event in events {
-            switch event {
-                case .touch             (_, let event): Events.addToList(list: &touch,              newItem: event)
-                case .temperature       (_, let event): Events.addToList(list: &temperature,        newItem: event)
-                case .objectPresent     (_, let event): Events.addToList(list: &objectPresent,      newItem: event)
-                case .humidity          (_, let event): Events.addToList(list: &humidity,           newItem: event)
-                case .objectPresentCount(_, let event): Events.addToList(list: &objectPresentCount, newItem: event)
-                case .touchCount        (_, let event): Events.addToList(list: &touchCount,         newItem: event)
-                case .waterPresent      (_, let event): Events.addToList(list: &waterPresent,       newItem: event)
-                case .networkStatus     (_, let event): Events.addToList(list: &networkStatus,      newItem: event)
-                case .batteryStatus     (_, let event): Events.addToList(list: &batteryStatus,      newItem: event)
-                case .labelsChanged     (_, let event): Events.addToList(list: &labelsChanged,      newItem: event)
-                case .connectionStatus  (_, let event): Events.addToList(list: &connectionStatus,   newItem: event)
-                case .ethernetStatus    (_, let event): Events.addToList(list: &ethernetStatus,     newItem: event)
-                case .cellularStatus    (_, let event): Events.addToList(list: &cellularStatus,     newItem: event)
-                case .latencyStatus     (_, let event): Events.addToList(list: &latencyStatus,      newItem: event)
-            }
-        }
-    }
-    
-    // Helper to append to optional array. Creates the array if it's nil,
-    // and appends to the array if it already exists
-    private static func addToList<T>(list: inout [T]?, newItem: T) {
-        if list == nil {
-            list = [newItem]
-        } else {
-            list?.append(newItem)
-        }
-    }
-    
-    fileprivate mutating func sort() {
-        touch?             .sort { $0.timestamp < $1.timestamp }
-        temperature?       .sort { $0.timestamp < $1.timestamp }
-        objectPresent?     .sort { $0.timestamp < $1.timestamp }
-        humidity?          .sort { $0.timestamp < $1.timestamp }
-        objectPresentCount?.sort { $0.timestamp < $1.timestamp }
-        touchCount?        .sort { $0.timestamp < $1.timestamp }
-        waterPresent?      .sort { $0.timestamp < $1.timestamp }
-        networkStatus?     .sort { $0.timestamp < $1.timestamp }
-        batteryStatus?     .sort { $0.timestamp < $1.timestamp }
-        connectionStatus?  .sort { $0.timestamp < $1.timestamp }
-        ethernetStatus?    .sort { $0.timestamp < $1.timestamp }
-        cellularStatus?    .sort { $0.timestamp < $1.timestamp }
-        latencyStatus?     .sort { $0.timestamp < $1.timestamp }
-    }
 }
+
 
 extension Disruptive {
     /**
@@ -142,5 +96,56 @@ extension Disruptive {
                     completion(.failure(error))
             }
         }
+    }
+}
+
+
+extension Events {
+    
+    fileprivate init(events: [EventContainer]) {
+        for event in events {
+            switch event {
+                case .touch             (_, let event): Events.addToList(list: &touch,              newItem: event)
+                case .temperature       (_, let event): Events.addToList(list: &temperature,        newItem: event)
+                case .objectPresent     (_, let event): Events.addToList(list: &objectPresent,      newItem: event)
+                case .humidity          (_, let event): Events.addToList(list: &humidity,           newItem: event)
+                case .objectPresentCount(_, let event): Events.addToList(list: &objectPresentCount, newItem: event)
+                case .touchCount        (_, let event): Events.addToList(list: &touchCount,         newItem: event)
+                case .waterPresent      (_, let event): Events.addToList(list: &waterPresent,       newItem: event)
+                case .networkStatus     (_, let event): Events.addToList(list: &networkStatus,      newItem: event)
+                case .batteryStatus     (_, let event): Events.addToList(list: &batteryStatus,      newItem: event)
+                case .labelsChanged     (_, let event): Events.addToList(list: &labelsChanged,      newItem: event)
+                case .connectionStatus  (_, let event): Events.addToList(list: &connectionStatus,   newItem: event)
+                case .ethernetStatus    (_, let event): Events.addToList(list: &ethernetStatus,     newItem: event)
+                case .cellularStatus    (_, let event): Events.addToList(list: &cellularStatus,     newItem: event)
+                case .latencyStatus     (_, let event): Events.addToList(list: &latencyStatus,      newItem: event)
+            }
+        }
+    }
+    
+    // Helper to append to optional array. Creates the array if it's nil,
+    // and appends to the array if it already exists
+    private static func addToList<T>(list: inout [T]?, newItem: T) {
+        if list == nil {
+            list = [newItem]
+        } else {
+            list?.append(newItem)
+        }
+    }
+    
+    fileprivate mutating func sort() {
+        touch?             .sort { $0.timestamp < $1.timestamp }
+        temperature?       .sort { $0.timestamp < $1.timestamp }
+        objectPresent?     .sort { $0.timestamp < $1.timestamp }
+        humidity?          .sort { $0.timestamp < $1.timestamp }
+        objectPresentCount?.sort { $0.timestamp < $1.timestamp }
+        touchCount?        .sort { $0.timestamp < $1.timestamp }
+        waterPresent?      .sort { $0.timestamp < $1.timestamp }
+        networkStatus?     .sort { $0.timestamp < $1.timestamp }
+        batteryStatus?     .sort { $0.timestamp < $1.timestamp }
+        connectionStatus?  .sort { $0.timestamp < $1.timestamp }
+        ethernetStatus?    .sort { $0.timestamp < $1.timestamp }
+        cellularStatus?    .sort { $0.timestamp < $1.timestamp }
+        latencyStatus?     .sort { $0.timestamp < $1.timestamp }
     }
 }

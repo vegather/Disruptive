@@ -24,30 +24,6 @@ public struct Project: Codable {
     }
 }
 
-extension Project {
-    private enum CodingKeys: String, CodingKey {
-        case identifier  = "name"
-        case name        = "displayName"
-        case isInventory = "inventory"
-        case sensorCount
-        case cloudConnectorCount
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        
-        // Project identifiers are formatted as "projects/b7s3e550fee000ba5dhg"
-        // Setting the identifier to the last component of the path
-        let projectPath = try values.decode(String.self, forKey: .identifier)
-        self.identifier = projectPath.components(separatedBy: "/").last ?? ""
-        
-        // Getting the other properties without any modifications
-        self.name                = try values.decode(String.self, forKey: .name)
-        self.isInventory         = try values.decode(Bool.self,   forKey: .isInventory)
-        self.sensorCount         = try values.decode(Int.self,    forKey: .sensorCount)
-        self.cloudConnectorCount = try values.decode(Int.self,    forKey: .cloudConnectorCount)
-    }
-}
 
 extension Disruptive {
     /**
@@ -132,5 +108,31 @@ extension Disruptive {
             DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
         }
+    }
+}
+
+
+extension Project {
+    private enum CodingKeys: String, CodingKey {
+        case identifier  = "name"
+        case name        = "displayName"
+        case isInventory = "inventory"
+        case sensorCount
+        case cloudConnectorCount
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Project identifiers are formatted as "projects/b7s3e550fee000ba5dhg"
+        // Setting the identifier to the last component of the path
+        let projectPath = try values.decode(String.self, forKey: .identifier)
+        self.identifier = projectPath.components(separatedBy: "/").last ?? ""
+        
+        // Getting the other properties without any modifications
+        self.name                = try values.decode(String.self, forKey: .name)
+        self.isInventory         = try values.decode(Bool.self,   forKey: .isInventory)
+        self.sensorCount         = try values.decode(Int.self,    forKey: .sensorCount)
+        self.cloudConnectorCount = try values.decode(Int.self,    forKey: .cloudConnectorCount)
     }
 }

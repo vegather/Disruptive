@@ -13,24 +13,6 @@ public struct Organization: Codable {
     public let name: String
 }
 
-extension Organization {
-    private enum CodingKeys: String, CodingKey {
-        case identifier = "name"
-        case name = "displayName"
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        
-        // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
-        // Setting the identifier to the last component of the path
-        let orgPath = try values.decode(String.self, forKey: .identifier)
-        self.identifier = orgPath.components(separatedBy: "/").last ?? ""
-        
-        // Getting the name property without any modifications
-        self.name  = try values.decode(String.self, forKey: .name)
-    }
-}
 
 extension Disruptive {
     /**
@@ -49,5 +31,25 @@ extension Disruptive {
         sendRequest(request: request, pageingKey: "organizations") { response in
             completion(response)
         }
+    }
+}
+
+
+extension Organization {
+    private enum CodingKeys: String, CodingKey {
+        case identifier = "name"
+        case name = "displayName"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
+        // Setting the identifier to the last component of the path
+        let orgPath = try values.decode(String.self, forKey: .identifier)
+        self.identifier = orgPath.components(separatedBy: "/").last ?? ""
+        
+        // Getting the name property without any modifications
+        self.name  = try values.decode(String.self, forKey: .name)
     }
 }
