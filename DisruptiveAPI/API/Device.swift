@@ -119,10 +119,12 @@ extension Disruptive {
         struct Body: Codable {
             let devices: [String]
             let addLabels: [String: String]
+            let removeLabels: [String]
         }
         let body = Body(
-            devices: ["/projects/\(projectID)/devices/\(deviceID)"],
-            addLabels: [key: value]
+            devices: ["projects/\(projectID)/devices/\(deviceID)"],
+            addLabels: [key: value],
+            removeLabels: []
         )
         
         do {
