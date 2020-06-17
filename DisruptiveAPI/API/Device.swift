@@ -10,7 +10,7 @@ import Foundation
 
 public struct Device: Decodable {
     public let identifier: String
-    public let name: String
+    public var name: String
     public let projectID: String
     public let labels: [String: String]
     public let type: DeviceType
