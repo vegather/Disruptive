@@ -86,7 +86,7 @@ extension ServerSentEvents: URLSessionDataDelegate {
         // - Convert to String
         // - Split on "\n\n"
         // - Remove empty strings
-        // - Replace the "data: " prefix
+        // - Remove the "data: " prefix
         // - Convert back to Data
         // - JSON decode the Data
         
