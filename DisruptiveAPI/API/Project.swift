@@ -12,13 +12,17 @@ public struct Project: Codable {
     public let identifier: String
     public let name: String
     public let isInventory: Bool
+    public let organizationID: String
+    public let organizationName: String
     public let sensorCount: Int
     public let cloudConnectorCount: Int
     
-    public init(identifier: String, name: String, isInventory: Bool, sensorCount: Int, cloudConnectorCount: Int) {
+    public init(identifier: String, name: String, isInventory: Bool, organizationID: String, organizationName: String, sensorCount: Int, cloudConnectorCount: Int) {
         self.identifier = identifier
         self.name = name
         self.isInventory = isInventory
+        self.organizationID = organizationID
+        self.organizationName = organizationName
         self.sensorCount = sensorCount
         self.cloudConnectorCount = cloudConnectorCount
     }
@@ -114,9 +118,11 @@ extension Disruptive {
 
 extension Project {
     private enum CodingKeys: String, CodingKey {
-        case identifier  = "name"
-        case name        = "displayName"
-        case isInventory = "inventory"
+        case identifier       = "name"
+        case name             = "displayName"
+        case isInventory      = "inventory"
+        case organizationID   = "organization"
+        case organizationName = "organizationDisplayName"
         case sensorCount
         case cloudConnectorCount
     }
@@ -129,9 +135,15 @@ extension Project {
         let projectPath = try values.decode(String.self, forKey: .identifier)
         self.identifier = projectPath.components(separatedBy: "/").last ?? ""
         
+        // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
+        // Setting the identifier to the last component of the path
+        let orgPath = try values.decode(String.self, forKey: .organizationID)
+        self.organizationID = orgPath.components(separatedBy: "/").last ?? ""
+        
         // Getting the other properties without any modifications
         self.name                = try values.decode(String.self, forKey: .name)
         self.isInventory         = try values.decode(Bool.self,   forKey: .isInventory)
+        self.organizationName    = try values.decode(String.self, forKey: .organizationName)
         self.sensorCount         = try values.decode(Int.self,    forKey: .sensorCount)
         self.cloudConnectorCount = try values.decode(Int.self,    forKey: .cloudConnectorCount)
     }
