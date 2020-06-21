@@ -25,6 +25,11 @@ public enum DisruptiveError: Error {
     /// token has expired. This error comes from a 401 status code.
     case unauthorized
     
+    /// You attempted to access a resource that you don't
+    /// have access to. This error comes from either a 403
+    /// status code.
+    case insufficientPermissions
+    
     /// You attempted to access a resource that you either don't
     /// have access to, or doesn't exist. This error comes from
     /// either a 403 or a 404 status code.
@@ -152,7 +157,7 @@ internal enum InternalError: Error {
             case .unknownError          : return .unknownError
             case .badRequest            : return .badRequest
             case .unauthorized          : return .unauthorized
-            case .forbidden             : return .notFound
+            case .forbidden             : return .insufficientPermissions
             case .notFound              : return .notFound
             case .conflict              : return .resourceAlreadyExists
             case .tooManyRequests       : return nil
