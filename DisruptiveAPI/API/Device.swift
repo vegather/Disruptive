@@ -176,7 +176,7 @@ extension Device {
 }
 
 extension Device {
-    public enum DeviceType: String, Codable {
+    public enum DeviceType: String, Codable, CaseIterable {
         case temperature      = "temperature"
         case touch            = "touch"
         case proximity        = "proximity"
