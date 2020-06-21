@@ -21,6 +21,7 @@
 		1A9149752471293C00CF45B7 /* DisruptiveAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */; };
 		1A91497A2471293C00CF45B7 /* DisruptiveAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */; };
 		1A91497C2471293C00CF45B7 /* DisruptiveAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1A9DFB07249FC88C00B7739D /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9DFB06249FC88C00B7739D /* Permissions.swift */; };
 		1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF38524852B7400E4D0E5 /* Stream.swift */; };
 		1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC6FC5D247F15740034BEEB /* EventTypes.swift */; };
 		1AC7BF132477250000BC22C7 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC7BF122477250000BC22C7 /* Device.swift */; };
@@ -54,6 +55,7 @@
 		1A9149742471293C00CF45B7 /* DisruptiveAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DisruptiveAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisruptiveAPITests.swift; sourceTree = "<group>"; };
 		1A91497B2471293C00CF45B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A9DFB06249FC88C00B7739D /* Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
 		1AAEF38524852B7400E4D0E5 /* Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
 		1AC6FC5D247F15740034BEEB /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
 		1AC7BF122477250000BC22C7 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				1AC7BF122477250000BC22C7 /* Device.swift */,
 				1AAEF38524852B7400E4D0E5 /* Stream.swift */,
 				1A280D502480052F0091DF4A /* Event.swift */,
+				1A9DFB06249FC88C00B7739D /* Permissions.swift */,
 				1A38AA37247AF80600DD4572 /* Helpers */,
 			);
 			path = API;
@@ -272,6 +275,7 @@
 				1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */,
 				1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */,
 				1A4BBF0C247A5A6C002D1AB1 /* Utils.swift in Sources */,
+				1A9DFB07249FC88C00B7739D /* Permissions.swift in Sources */,
 				1A65F8F12473361C00948743 /* Organization.swift in Sources */,
 				1A38AA39247AF81700DD4572 /* Errors.swift in Sources */,
 				1A066F162474FAAA0096F5D3 /* Project.swift in Sources */,
