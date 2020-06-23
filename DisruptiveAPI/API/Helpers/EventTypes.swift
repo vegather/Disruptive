@@ -213,6 +213,7 @@ public struct WaterPresentEvent: Decodable {
 
 public struct NetworkStatus: Decodable {
     public let signalStrength: Int
+    public let rssi: Int
     public let timestamp: Date
     public let cloudConnectors: [CloudConnector]
     public let transmissionMode: TransmissionMode
@@ -230,15 +231,23 @@ public struct NetworkStatus: Decodable {
     
     private enum CodingKeys: String, CodingKey {
         case signalStrength
+        case rssi
         case timestamp = "updateTime"
         case cloudConnectors
         case transmissionMode
     }
     
-    public init(signalStrength: Int, timestamp: Date, cloudConnectors: [CloudConnector], transmissionMode: TransmissionMode) {
-        self.signalStrength = signalStrength
-        self.timestamp = timestamp
-        self.cloudConnectors = cloudConnectors
+    public init(
+        signalStrength   : Int,
+        rssi             : Int,
+        timestamp        : Date,
+        cloudConnectors  : [CloudConnector],
+        transmissionMode : TransmissionMode)
+    {
+        self.signalStrength   = signalStrength
+        self.rssi             = rssi
+        self.timestamp        = timestamp
+        self.cloudConnectors  = cloudConnectors
         self.transmissionMode = transmissionMode
     }
     
@@ -250,8 +259,9 @@ public struct NetworkStatus: Decodable {
         self.timestamp = try parseDate(iso8601: timeString)
         
         // Extract the other values
-        self.signalStrength = try values.decode(Int.self, forKey: .signalStrength)
-        self.cloudConnectors = try values.decode([CloudConnector].self, forKey: .cloudConnectors)
+        self.signalStrength   = try values.decode(Int.self, forKey: .signalStrength)
+        self.rssi             = try values.decode(Int.self, forKey: .rssi)
+        self.cloudConnectors  = try values.decode([CloudConnector].self, forKey: .cloudConnectors)
         self.transmissionMode = try values.decode(TransmissionMode.self, forKey: .transmissionMode)
     }
 }
