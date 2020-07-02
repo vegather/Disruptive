@@ -26,6 +26,13 @@ public class ServerSentEvents: NSObject {
     }()
     
     private var session: URLSession!
+    private var task: URLSessionTask?
+    private var request: URLRequest!
+    
+    private var retryScheme = RetryScheme()
+    
+    private var hasBeenClosed = false
+    
     
     // Event callbacks
     public var onTouch              : ((String, TouchEvent)         -> ())?
@@ -53,17 +60,42 @@ public class ServerSentEvents: NSObject {
     internal init(request: URLRequest) {
         super.init()
         
+        self.request = request
+        setupSession()
+        restartStream()
+    }
+    
+    public func close() {
+        guard hasBeenClosed == false else { return }
+        
+        hasBeenClosed = true
+        task?.cancel()
+        session.invalidateAndCancel()
+    }
+    
+    deinit {
+        close()
+    }
+    
+    
+    
+    // -------------------------------
+    // MARK: Private Helpers
+    // -------------------------------
+    
+    private func setupSession() {
         session = URLSession(
             configuration: ServerSentEvents.sseConfig,
             delegate: self,
             delegateQueue: .main
         )
-        
-        session.dataTask(with: request).resume()
     }
     
-    public func close() {
-        session.invalidateAndCancel()
+    private func restartStream() {
+        guard hasBeenClosed == false else { return }
+        
+        task = session.dataTask(with: request)
+        task?.resume()
     }
 }
 
@@ -82,6 +114,9 @@ extension ServerSentEvents: URLSessionDataDelegate {
         dataTask: URLSessionDataTask,
         didReceive data: Data)
     {
+        // We got data, so reset the retry scheme
+        retryScheme.reset()
+        
         // Somewhat clunky way to parse this data:
         // - Convert to String
         // - Split on "\n\n"
@@ -153,8 +188,17 @@ extension ServerSentEvents: URLSessionDataDelegate {
         let statusCode = (task.response as? HTTPURLResponse)?.statusCode
         let errorMessage = error?.localizedDescription ?? ""
         
-        DTLog("The event stream finished with error: \"\(errorMessage)\". Status code: \(String(describing: statusCode))")
+        DTLog("The event stream closed with message: \"\(errorMessage)\". Status code: \(String(describing: statusCode))")
         
-        close()
+        if hasBeenClosed {
+            DTLog("Not reconnecting to stream since it has been closed")
+            return
+        }
+        
+        let backoff = retryScheme.nextBackoff()
+        DTLog("Reconnecting to the event stream in \(backoff)s...")
+        DispatchQueue.global().asyncAfter(deadline: .now() + backoff) { [weak self] in
+            self?.restartStream()
+        }
     }
 }

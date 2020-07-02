@@ -18,6 +18,7 @@
 		1A65F8EF2473252A00948743 /* Disruptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65F8EE2473252A00948743 /* Disruptive.swift */; };
 		1A65F8F12473361C00948743 /* Organization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65F8F02473361C00948743 /* Organization.swift */; };
 		1A6A773124823E7F00D5419E /* Diagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6A773024823E7F00D5419E /* Diagnostics.swift */; };
+		1A6B336124AE3EA000EAEC97 /* RetryScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6B336024AE3EA000EAEC97 /* RetryScheme.swift */; };
 		1A9149752471293C00CF45B7 /* DisruptiveAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */; };
 		1A91497A2471293C00CF45B7 /* DisruptiveAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9149792471293C00CF45B7 /* DisruptiveAPITests.swift */; };
 		1A91497C2471293C00CF45B7 /* DisruptiveAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -49,6 +50,7 @@
 		1A65F8EE2473252A00948743 /* Disruptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disruptive.swift; sourceTree = "<group>"; };
 		1A65F8F02473361C00948743 /* Organization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organization.swift; sourceTree = "<group>"; };
 		1A6A773024823E7F00D5419E /* Diagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostics.swift; sourceTree = "<group>"; };
+		1A6B336024AE3EA000EAEC97 /* RetryScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryScheme.swift; sourceTree = "<group>"; };
 		1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DisruptiveAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisruptiveAPI.h; sourceTree = "<group>"; };
 		1A91496F2471293C00CF45B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		1A38AA37247AF80600DD4572 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				1A6B336024AE3EA000EAEC97 /* RetryScheme.swift */,
 				1AC6FC5D247F15740034BEEB /* EventTypes.swift */,
 				1A6A773024823E7F00D5419E /* Diagnostics.swift */,
 				1A4BBF07247939C4002D1AB1 /* NetworkTypes.swift */,
@@ -272,6 +275,7 @@
 				1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */,
 				1A4BBF0A247939EB002D1AB1 /* Requests.swift in Sources */,
 				1A280D512480052F0091DF4A /* Event.swift in Sources */,
+				1A6B336124AE3EA000EAEC97 /* RetryScheme.swift in Sources */,
 				1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */,
 				1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */,
 				1A4BBF0C247A5A6C002D1AB1 /* Utils.swift in Sources */,

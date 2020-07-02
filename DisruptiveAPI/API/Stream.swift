@@ -37,6 +37,8 @@ extension Disruptive {
         eventTypes   : [EventType]?         = nil)
         -> ServerSentEvents?
     {
+        DTLog("Subscribing to \(projectID)")
+        
         // Construct parameters
         var params: [String: [String]] = [:]
         if let deviceIDs = deviceIDs {
