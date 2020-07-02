@@ -68,7 +68,7 @@ public struct ObjectPresentEvent: Decodable {
         case timestamp = "updateTime"
     }
     
-    public init(objectPresent: Bool, timestamp: Date) {
+    public init(objectPresent: Bool?, timestamp: Date) {
         self.objectPresent = objectPresent
         self.timestamp = timestamp
     }
