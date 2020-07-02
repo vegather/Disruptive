@@ -12,8 +12,8 @@ extension Disruptive {
     /// Creates a URL session with a 10 second timeout
     private static var defaultSession: URLSession = {
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest  = 15
-        config.timeoutIntervalForResource = 15
+        config.timeoutIntervalForRequest  = 20
+        config.timeoutIntervalForResource = 20
         
         return URLSession(configuration: config)
     }()
