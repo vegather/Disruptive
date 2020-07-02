@@ -29,7 +29,7 @@ public struct TouchEvent: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
     }
 }
 
@@ -52,7 +52,7 @@ public struct TemperatureEvent: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the value
         self.value = try values.decode(Float.self, forKey: .value)
@@ -78,7 +78,7 @@ public struct ObjectPresentEvent: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the state
         let stateString = try values.decode(String.self, forKey: .objectPresent)
@@ -114,7 +114,7 @@ public struct HumidityEvent: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the values
         self.temperature = try values.decode(Float.self, forKey: .temperature)
@@ -141,7 +141,7 @@ public struct ObjectPresentCount: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the total
         self.total = try values.decode(Int.self, forKey: .total)
@@ -167,7 +167,7 @@ public struct TouchCount: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the total
         self.total = try values.decode(Int.self, forKey: .total)
@@ -193,7 +193,7 @@ public struct WaterPresentEvent: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the state
         let stateString = try values.decode(String.self, forKey: .waterPresent)
@@ -256,7 +256,7 @@ public struct NetworkStatus: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the other values
         self.signalStrength   = try values.decode(Int.self, forKey: .signalStrength)
@@ -285,7 +285,7 @@ public struct BatteryStatus: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the percentage
         self.percentage = try values.decode(Int.self, forKey: .percentage)
@@ -359,7 +359,7 @@ public struct ConnectionStatus: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the other values
         self.connection = try values.decode(Connection.self, forKey: .connection)
@@ -397,7 +397,7 @@ public struct EthernetStatus: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the other values
         self.macAddress = try values.decode(String.self, forKey: .macAddress)
@@ -433,7 +433,7 @@ public struct CellularStatus: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the other values
         self.signalStrength = try values.decode(Int.self, forKey: .signalStrength)
@@ -466,7 +466,7 @@ public struct ConnectionLatency: Decodable {
         
         // Extract the timestamp
         let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try parseDate(iso8601: timeString)
+        self.timestamp = try decodeDate(iso8601: timeString)
         
         // Extract the other values
         self.avgLatencyMilliseconds = try values.decode(Int.self, forKey: .avgLatencyMilliseconds)
@@ -605,7 +605,7 @@ extension EventContainer {
 // MARK: Helpers
 // -------------------------------
 
-private func parseDate(iso8601: String) throws -> Date {
+private func decodeDate(iso8601: String) throws -> Date {
     let formatter = ISO8601DateFormatter()
     formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
     if let date = formatter.date(from: iso8601) {
