@@ -12,7 +12,7 @@ import Foundation
 // MARK: Data -> String
 // -------------------------------
 
-public extension Data {
+internal extension Data {
     enum HexFormat {
         /// <0x00, 0x01, 0x02, 0x03, 0x04, 0x05>
         case byteByByte
