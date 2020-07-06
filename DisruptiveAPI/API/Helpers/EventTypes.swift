@@ -221,6 +221,11 @@ public struct NetworkStatus: Decodable {
     public struct CloudConnector: Decodable {
         public let id: String
         public let signalStrength: Int
+        
+        public init(id: String, signalStrength: Int) {
+            self.id = id
+            self.signalStrength = signalStrength
+        }
     }
     
     public enum TransmissionMode: String, Decodable {
