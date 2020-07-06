@@ -148,4 +148,21 @@ extension Events {
         cellularStatus?    .sort { $0.timestamp < $1.timestamp }
         latencyStatus?     .sort { $0.timestamp < $1.timestamp }
     }
+    
+    public mutating func merge(with other: Events) {
+        if let e = other.touch              { self.touch              = e }
+        if let e = other.temperature        { self.temperature        = e }
+        if let e = other.objectPresent      { self.objectPresent      = e }
+        if let e = other.humidity           { self.humidity           = e }
+        if let e = other.objectPresentCount { self.objectPresentCount = e }
+        if let e = other.touchCount         { self.touchCount         = e }
+        if let e = other.waterPresent       { self.waterPresent       = e }
+        if let e = other.networkStatus      { self.networkStatus      = e }
+        if let e = other.batteryStatus      { self.batteryStatus      = e }
+        if let e = other.labelsChanged      { self.labelsChanged      = e }
+        if let e = other.connectionStatus   { self.connectionStatus   = e }
+        if let e = other.ethernetStatus     { self.ethernetStatus     = e }
+        if let e = other.cellularStatus     { self.cellularStatus     = e }
+        if let e = other.latencyStatus      { self.latencyStatus      = e }
+    }
 }
