@@ -185,6 +185,7 @@ extension Device {
         case proximityCounter = "proximityCounter"
         case waterDetector    = "waterDetector"
         case cloudConnector   = "ccon"
+        case unknown
         
         public func humanPresentable() -> String {
             switch self {
@@ -196,6 +197,7 @@ extension Device {
                 case .proximityCounter : return "Proximity Counter"
                 case .waterDetector    : return "Water Detector"
                 case .cloudConnector   : return "Cloud Connector"
+                case .unknown          : return "Unknown"
             }
         }
     }
