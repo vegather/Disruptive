@@ -10,7 +10,7 @@ import Foundation
 
 public struct Project: Codable {
     public let identifier: String
-    public let name: String
+    public var name: String
     public let isInventory: Bool
     public let organizationID: String
     public let organizationName: String
@@ -104,6 +104,35 @@ extension Disruptive {
             sendRequest(request: request) { completion($0) }
         } catch (let error) {
             DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", isError: true)
+            completion(.failure(.unknownError))
+        }
+    }
+    
+    /**
+     Updates the name of a project, and returns the new project (with the updated name) if successful
+     
+     - Parameter projectID: The identifier of the project to update the name of
+     - Parameter newName: The new name to set for the project
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project` with the updated name. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<Project, DisruptiveError>`
+     */
+    public func updateProjectName(
+        projectID: String,
+        newName: String,
+        completion: @escaping (_ result: Result<Project, DisruptiveError>) -> ())
+    {
+        let payload = [
+            "displayName": newName
+        ]
+        
+        do {
+            // Create the request
+            let request = try Request(method: .patch, endpoint: "projects/\(projectID)", body: payload)
+            
+            // Update the project name
+            sendRequest(request: request) { completion($0) }
+        } catch (let error) {
+            DTLog("Failed to init the update project request with payload: \(payload). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
         }
     }
