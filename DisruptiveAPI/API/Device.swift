@@ -69,7 +69,7 @@ extension Disruptive {
     }
     
     /**
-     Sets the name of a device to a new value (overwrites it if a name already exists).
+     Updates the name of a device to a new value (overwrites it if a name already exists).
      
      This is a convenience function that uses the `setDeviceLabel` function with the `name` key.
      
@@ -79,7 +79,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func setDeviceName(
+    public func updateDeviceName(
         projectID : String,
         deviceID  : String,
         newName   : String,
