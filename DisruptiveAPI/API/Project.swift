@@ -56,9 +56,7 @@ extension Disruptive {
         let request = Request(method: .get, endpoint: "projects", params: params)
         
         // Send the request
-        sendRequest(request: request, pageingKey: "projects") { response in
-            completion(response)
-        }
+        sendRequest(request: request, pageingKey: "projects") { completion($0) }
     }
     
     /**
@@ -76,9 +74,7 @@ extension Disruptive {
         let request = Request(method: .get, endpoint: "projects/\(projectID)")
         
         // Send the request
-        sendRequest(request: request) { response in
-            completion(response)
-        }
+        sendRequest(request: request) { completion($0) }
     }
     
     /**
@@ -105,9 +101,7 @@ extension Disruptive {
             let request = try Request(method: .post, endpoint: "projects", body: payload)
             
             // Create the new project
-            sendRequest(request: request) { response in
-                completion(response)
-            }
+            sendRequest(request: request) { completion($0) }
         } catch (let error) {
             DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
