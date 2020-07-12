@@ -50,6 +50,13 @@ public enum Permission: String, Codable {
 }
 
 extension Disruptive {
+    /**
+     Gets all the permissions the currently logged in user has for the given organization.
+     
+     - Parameter forOrganization: The identifier of the organization to get the permissions for
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<[Permission], DisruptiveError>`
+     */
     public func getPermissions(
         forOrganization orgID : String,
         completion            : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
@@ -66,6 +73,13 @@ extension Disruptive {
         }
     }
     
+    /**
+    Gets all the permissions the currently logged in user has for the given project.
+    
+    - Parameter forProject: The identifier of the project to get the permissions for
+    - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
+    - Parameter result: `Result<[Permission], DisruptiveError>`
+    */
     public func getPermissions(
         forProject projectID : String,
         completion           : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
