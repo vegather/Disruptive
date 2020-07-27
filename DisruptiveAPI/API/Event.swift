@@ -76,6 +76,8 @@ extension Disruptive {
             params["event_types"] = eventTypes.map { $0.rawValue }
         }
         
+        params["page_size"] = ["1000"]
+        
         // Create the request
         let request = Request(method: .get, endpoint: "projects/\(projectID)/devices/\(deviceID)/events", params: params)
         
