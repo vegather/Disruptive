@@ -9,14 +9,16 @@
 import Foundation
 
 public struct Disruptive {
-    internal var authorization: String?
     public static var baseURL = "https://api.disruptive-technologies.com/v2/"
     
+    /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`
     public static var loggingEnabled = false
     
-    public init(serviceAccount: ServiceAccount) {
-        self.authorization = serviceAccount.authorization()
+    /// The active authentication token
+    internal var authorization: String?
+    
+    /// Authenticates using a service account with basic auth.
+    public init(serviceAccountWithBasicAuth: ServiceAccount) {
+        self.authorization = serviceAccountWithBasicAuth.authorization()
     }
-    
-    
 }
