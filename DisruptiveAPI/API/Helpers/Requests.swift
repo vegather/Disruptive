@@ -286,13 +286,13 @@ extension Disruptive {
             diagnostics.logDiagnostics(responseData: data)
             
             // Concatinate all the results so far
-            let updateResultArray = cumulativeResults + pagedResult.results
+            let updatedResultsArray = cumulativeResults + pagedResult.results
             
             // Check if there are any more pages
             if pagedResult.nextPageToken.count == 0 {
                 // This was the last page
                 DispatchQueue.main.async {
-                    completion(.success(updateResultArray))
+                    completion(.success(updatedResultsArray))
                 }
             } else {
                 // This was not the last page, send request for the next page
@@ -304,7 +304,7 @@ extension Disruptive {
                 DispatchQueue.global().async() {
                     self.sendRequest(
                         request: nextRequest,
-                        cumulativeResults: updateResultArray,
+                        cumulativeResults: updatedResultsArray,
                         pageingKey: pageingKey,
                         completion: completion
                     )
