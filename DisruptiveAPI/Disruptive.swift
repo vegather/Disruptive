@@ -10,7 +10,7 @@ import Foundation
 
 public struct Disruptive {
     internal var authorization: String?
-    internal static let baseURL = "https://api.disruptive-technologies.com/v2/"
+    public static var baseURL = "https://api.disruptive-technologies.com/v2/"
     
     public static var loggingEnabled = false
     
