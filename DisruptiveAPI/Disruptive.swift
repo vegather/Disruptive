@@ -10,9 +10,10 @@ import Foundation
 
 public struct Disruptive {
     public static var baseURL = "https://api.disruptive-technologies.com/v2/"
+    public static var authURL = "https://identity.disruptive-technologies.com/oauth2/token"
     
     /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`
-    public static var loggingEnabled = false
+    public static var loggingEnabled = true
     
     /// The active authentication token
     internal var authorization: String?
@@ -20,5 +21,10 @@ public struct Disruptive {
     /// Authenticates using a service account with basic auth.
     public init(serviceAccountWithBasicAuth: ServiceAccount) {
         self.authorization = serviceAccountWithBasicAuth.authorization()
+        
+    }
+
+    public init(serviceAccountWithJwtAuth: ServiceAccount) {
+        self.authorization = serviceAccountWithJwtAuth.authorization()
     }
 }

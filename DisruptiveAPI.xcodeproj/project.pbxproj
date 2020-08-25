@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,7 @@
 		1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF38524852B7400E4D0E5 /* Stream.swift */; };
 		1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC6FC5D247F15740034BEEB /* EventTypes.swift */; };
 		1AC7BF132477250000BC22C7 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC7BF122477250000BC22C7 /* Device.swift */; };
+		E5FD090524F4FBE6009E93C1 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = E5FD090424F4FBE6009E93C1 /* SwiftJWT */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5FD090524F4FBE6009E93C1 /* SwiftJWT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +188,9 @@
 			dependencies = (
 			);
 			name = DisruptiveAPI;
+			packageProductDependencies = (
+				E5FD090424F4FBE6009E93C1 /* SwiftJWT */,
+			);
 			productName = DisruptiveAPI;
 			productReference = 1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */;
 			productType = "com.apple.product-type.framework";
@@ -236,6 +241,9 @@
 				Base,
 			);
 			mainGroup = 1A9149612471293C00CF45B7;
+			packageReferences = (
+				E5FD090324F4FBE6009E93C1 /* XCRemoteSwiftPackageReference "Swift-JWT" */,
+			);
 			productRefGroup = 1A91496C2471293C00CF45B7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -554,6 +562,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E5FD090324F4FBE6009E93C1 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/IBM-Swift/Swift-JWT.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.6.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E5FD090424F4FBE6009E93C1 /* SwiftJWT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E5FD090324F4FBE6009E93C1 /* XCRemoteSwiftPackageReference "Swift-JWT" */;
+			productName = SwiftJWT;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1A9149622471293C00CF45B7 /* Project object */;
 }

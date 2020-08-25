@@ -30,13 +30,15 @@ extension Disruptive {
         request: Request,
         completion: @escaping (Result<Void, DisruptiveError>) -> ())
     {
-        guard let auth = authorization else {
+        guard let auth = AccessToken.shared.getAuth() else {
             DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
+        print("Auth: \(auth)")
+
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
@@ -105,13 +107,14 @@ extension Disruptive {
         request: Request,
         completion: @escaping (Result<T, DisruptiveError>) -> ())
     {
-        guard let auth = authorization else {
+        guard let auth = AccessToken.shared.getAuth() else {
             DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
+        print("Auth: \(auth)")
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
@@ -198,13 +201,15 @@ extension Disruptive {
         pageingKey: String,
         completion: @escaping (Result<[T], DisruptiveError>) -> ())
     {
-        guard let auth = authorization else {
+         guard let auth = AccessToken.shared.getAuth() else {
             DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
+        print("Auth: \(auth)")
+
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
