@@ -55,7 +55,7 @@ extension Disruptive {
         }
         
         // Get the URL request
-        guard let auth = authorization else {
+        guard let auth = Disruptive.authProvider?.authToken else {
             DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
             return nil
         }

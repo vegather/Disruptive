@@ -30,15 +30,13 @@ extension Disruptive {
         request: Request,
         completion: @escaping (Result<Void, DisruptiveError>) -> ())
     {
-        guard let auth = AccessToken.shared.getAuth() else {
-            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+        guard let auth = Disruptive.authProvider?.authToken else {
+            DTLog("Notr yet authorized. Call authenticate(serviceAccount: ) to authenticate")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
-        print("Auth: \(auth)")
-
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
@@ -107,14 +105,13 @@ extension Disruptive {
         request: Request,
         completion: @escaping (Result<T, DisruptiveError>) -> ())
     {
-        guard let auth = AccessToken.shared.getAuth() else {
-            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+        guard let auth = Disruptive.authProvider?.authToken else {
+            DTLog("Nottt yet authorized. Call authenticate(serviceAccount: ) to authenticate")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
-        print("Auth: \(auth)")
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
@@ -201,15 +198,42 @@ extension Disruptive {
         pageingKey: String,
         completion: @escaping (Result<[T], DisruptiveError>) -> ())
     {
-         guard let auth = AccessToken.shared.getAuth() else {
-            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+        guard let authProvider = Disruptive.authProvider else {
+            DTLog("DisruptiveAPI not initialised")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
-        print("Auth: \(auth)")
-
+        if authProvider.authToken == nil {
+            authProvider.authenticate(completion: { result in
+                switch result {
+                case .success:
+                    self.sendRequest(
+                        request: request,
+                        cumulativeResults: cumulativeResults,
+                        pageingKey: pageingKey,
+                        completion: completion
+                    )
+                    return
+                case .failure:
+                    DTLog("DisruptiveAPI not initialised")
+                    DispatchQueue.main.async {
+                        completion(.failure(.unauthorized))
+                    }
+                    return
+                }
+            })
+            return
+        }
+        
+        guard let auth = Disruptive.authProvider?.authToken else {
+            DTLog("Not ydet authorized. Call authenticate(serviceAccount: ) to authenticate")
+            DispatchQueue.main.async {
+                completion(.failure(.unauthorized))
+            }
+            return
+        }
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {

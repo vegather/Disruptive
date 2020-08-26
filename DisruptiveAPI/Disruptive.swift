@@ -15,16 +15,9 @@ public struct Disruptive {
     /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`
     public static var loggingEnabled = true
     
-    /// The active authentication token
-    internal var authorization: String?
-    
-    /// Authenticates using a service account with basic auth.
-    public init(serviceAccountWithBasicAuth: ServiceAccount) {
-        self.authorization = serviceAccountWithBasicAuth.authorization()
-        
-    }
+    internal static var authProvider: AuthProvider?
 
-    public init(serviceAccountWithJwtAuth: ServiceAccount) {
-        self.authorization = serviceAccountWithJwtAuth.authorization()
+    public init(authProvider: AuthProvider) {
+        Disruptive.self.authProvider = authProvider
     }
 }

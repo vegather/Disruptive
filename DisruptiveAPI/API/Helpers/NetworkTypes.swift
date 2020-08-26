@@ -8,100 +8,111 @@
 
 import Foundation
 import SwiftJWT
-import SwiftUI
-
-class AccessToken {
-    
-    static let shared = AccessToken()
-    
-    private var token: String?
-    
-    private init() {}
-    
-    func setToken(_ newToken: String) {
-        print("Token was set")
-        print(newToken)
-        token = newToken
-    }
-    
-    func getToken() -> String? {
-        print("Asked for token")
-        return token
-    }
-    func getAuth() -> String? {
-        print("Asked for auth")
-        if let token = self.token {
-            print("Asked for auth")
-            print(token)
-            return "Bearer \(token)"
-        } else {
-            return nil
-        }
-    }
-}
 
 public struct ServiceAccount: Codable {
     public let email  : String
     public let key    : String
     public let secret : String
-
+    
     public init(email: String, key: String, secret: String) {
         self.email = email
         self.key = key
         self.secret = secret
     }
-    
-    internal func authorization() -> String {
-        if AccessToken.shared.getToken() == nil {
-            print("Access token was not set")
-            let authClaims = AuthClaims(iss: email,
-                                        iat: Date(),
-                                        exp: Date(timeIntervalSinceNow: 3600),
-                                        aud: Disruptive.authURL)
-            let myHeader = Header(kid: key)
-            var myJWT = JWT(header: myHeader, claims: authClaims)
-            let jwtSigner = JWTSigner.hs256(key: secret.data(using: .utf8)!)
-            var signedJWT = "knut"
-            do {
-                signedJWT = try myJWT.sign(using: jwtSigner)
-                print(signedJWT)
-            } catch {
-                print("Unable to sign JWT")
-            }
-            
-        // Construct the URL
-            
-            guard var urlComponents = URLComponents(string: Disruptive.authURL) else {return "mordi"}
-            urlComponents.queryItems = [URLQueryItem(name: "grant_type", value:"urn:ietf:params:oauth:grant-type:jwt-bearer"),
-                                        URLQueryItem(name: "assertion", value: signedJWT)]
-            guard let url = urlComponents.url(relativeTo: nil) else { return "mordi" }
-            var req = URLRequest(url: url)
-            req.httpMethod = HTTPMethod.post.rawValue
-            req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            req.httpBody = urlComponents.query?.data(using: .utf8)
+}
 
-            var result:AccessTokenResponse!
-            //print(req)
-            URLSession.shared.dataTask(with: req) { (data, response, error) in
-                let decoder = JSONDecoder()
-                do {
-                    result = try decoder.decode(AccessTokenResponse.self, from: data!)
-                } catch {
-                    if let str = String(data:data!, encoding: .utf8) {
-                        print(str)
-                    }
-                    return
-                }
-                print("Setting access token")
-                AccessToken.shared.setToken(result.access_token)
-                //print(response)
-                //print(error)
-            }.resume()
-            return ""
-        } else {
-            print("Returning access token")
-            return "Bearer \(AccessToken.shared.getToken() ?? "")"
+public protocol AuthProvider {
+    
+    var authToken: String? { get }
+    var expirationDate: Date? { get }
+    
+    func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ())
+}
+
+public struct BasicAuthServiceAccount: AuthProvider {
+    private let account : ServiceAccount
+    
+    public var authToken: String? {
+        return "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString()
+    }
+    
+    public var expirationDate: Date? { .distantFuture }
+    
+    public init(account: ServiceAccount) {
+        self.account = account
+    }
+    
+    public func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+        completion(.success(()))
+    }
+}
+
+public class JWTAuthServiceAccount: AuthProvider {
+
+    private let account : ServiceAccount
+
+    private(set) public var authToken: String?
+    private(set) public var expirationDate: Date?
+
+    public init(account: ServiceAccount) {
+        self.account = account
+    }
+    
+    public func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+        DTLog("JWT authentication requested")
+        guard let request = jwtRequest() else {
+            DTLog("Failed to create authentication request from credentials")
+            DispatchQueue.main.async {
+                completion(.failure(.unknownError))
+            }
+            return
         }
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            let decoder = JSONDecoder()
+            var result: AccessTokenResponse!
+            do {
+                result = try decoder.decode(AccessTokenResponse.self, from: data!)
+            } catch {
+                DispatchQueue.main.async {
+                   DTLog("Failed to parse the response JSON from")
+                   completion(.failure(.unknownError))
+                }
+                return
+            }
+            self.authToken = "Bearer \(result.access_token)"
+            self.expirationDate = Date(timeIntervalSinceNow: 3600)
+            DispatchQueue.main.async {
+                completion(.success(()))
+            }
+
+        }.resume()
+    }
+
+    private func jwtRequest() -> URLRequest? {
+        let authClaims = AuthClaims(iss: account.email,
+                                    iat: Date(),
+                                    exp: Date(timeIntervalSinceNow: 3600),
+                                    aud: Disruptive.authURL)
+        let myHeader = Header(kid: account.key)
+        var myJWT = JWT(header: myHeader, claims: authClaims)
+        let jwtSigner = JWTSigner.hs256(key: account.secret.data(using: .utf8)!)
+        var signedJWT = ""
+        do {
+            signedJWT = try myJWT.sign(using: jwtSigner)
+        } catch {
+            return nil
+        }
+
+        guard var urlComponents = URLComponents(string: Disruptive.authURL) else {return nil}
+        urlComponents.queryItems = [URLQueryItem(name: "grant_type", value:"urn:ietf:params:oauth:grant-type:jwt-bearer"),
+                                    URLQueryItem(name: "assertion", value: signedJWT)]
+        guard let url = urlComponents.url(relativeTo: nil) else { return nil }
+        var req = URLRequest(url: url)
+        req.httpMethod = HTTPMethod.post.rawValue
+        req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        req.httpBody = urlComponents.query?.data(using: .utf8)
+
+        return req
     }
 }
 
@@ -201,14 +212,14 @@ internal struct Request {
         // Create the request
         var req = URLRequest(url: url)
         req.httpMethod = method.rawValue
+        req.httpBody = body
         
         // Add the headers
         headers.forEach { req.addValue($0.value, forHTTPHeaderField: $0.field) }
         
         // Add auth
         req.setValue(authorization, forHTTPHeaderField: "Authorization")
-        print(req)
-        print(authorization)
+
         return req
     }
 }
