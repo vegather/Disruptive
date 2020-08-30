@@ -54,8 +54,12 @@ extension Disruptive {
             params["event_types"] = eventTypes.map { $0.rawValue }
         }
         
-        // Get the URL request
-        guard let auth = Disruptive.authProvider?.authToken else {
+        guard let authProvider = Disruptive.authProvider else {
+            DTLog("DisruptiveAPI not initialised")
+            return nil
+        }
+        
+        guard let auth = authProvider.authToken else {
             DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
             return nil
         }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,7 +26,7 @@
 		1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF38524852B7400E4D0E5 /* Stream.swift */; };
 		1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC6FC5D247F15740034BEEB /* EventTypes.swift */; };
 		1AC7BF132477250000BC22C7 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC7BF122477250000BC22C7 /* Device.swift */; };
-		E5FD090524F4FBE6009E93C1 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = E5FD090424F4FBE6009E93C1 /* SwiftJWT */; };
+		E5BE154124FBF0360046E48E /* JWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BE154024FBF0360046E48E /* JWT.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +62,7 @@
 		1AAEF38524852B7400E4D0E5 /* Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
 		1AC6FC5D247F15740034BEEB /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
 		1AC7BF122477250000BC22C7 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		E5BE154024FBF0360046E48E /* JWT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JWT.swift; path = ../../../disruptiveapi/DisruptiveAPI/Utilities/JWT.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +70,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5FD090524F4FBE6009E93C1 /* SwiftJWT in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +103,7 @@
 			children = (
 				1A4BBF0524791DFA002D1AB1 /* DTLog.swift */,
 				1A4BBF0B247A5A6C002D1AB1 /* Utils.swift */,
+				E5BE154024FBF0360046E48E /* JWT.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -189,7 +190,6 @@
 			);
 			name = DisruptiveAPI;
 			packageProductDependencies = (
-				E5FD090424F4FBE6009E93C1 /* SwiftJWT */,
 			);
 			productName = DisruptiveAPI;
 			productReference = 1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */;
@@ -242,7 +242,6 @@
 			);
 			mainGroup = 1A9149612471293C00CF45B7;
 			packageReferences = (
-				E5FD090324F4FBE6009E93C1 /* XCRemoteSwiftPackageReference "Swift-JWT" */,
 			);
 			productRefGroup = 1A91496C2471293C00CF45B7 /* Products */;
 			projectDirPath = "";
@@ -283,6 +282,7 @@
 				1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */,
 				1A4BBF0A247939EB002D1AB1 /* Requests.swift in Sources */,
 				1A280D512480052F0091DF4A /* Event.swift in Sources */,
+				E5BE154124FBF0360046E48E /* JWT.swift in Sources */,
 				1A6B336124AE3EA000EAEC97 /* RetryScheme.swift in Sources */,
 				1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */,
 				1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */,
@@ -562,25 +562,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		E5FD090324F4FBE6009E93C1 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/IBM-Swift/Swift-JWT.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.6.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		E5FD090424F4FBE6009E93C1 /* SwiftJWT */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E5FD090324F4FBE6009E93C1 /* XCRemoteSwiftPackageReference "Swift-JWT" */;
-			productName = SwiftJWT;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1A9149622471293C00CF45B7 /* Project object */;
 }

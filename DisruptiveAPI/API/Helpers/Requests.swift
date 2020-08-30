@@ -10,7 +10,7 @@ import Foundation
 
 extension Disruptive {    
     /// Creates a URL session with a 10 second timeout
-    private static var defaultSession: URLSession = {
+    internal static var defaultSession: URLSession = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest  = 20
         config.timeoutIntervalForResource = 20
@@ -30,13 +30,28 @@ extension Disruptive {
         request: Request,
         completion: @escaping (Result<Void, DisruptiveError>) -> ())
     {
-        guard let auth = Disruptive.authProvider?.authToken else {
-            DTLog("Notr yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+        guard let authProvider = Disruptive.authProvider else {
+            DTLog("DisruptiveAPI not initialised")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
+        guard let auth = authProvider.authToken else {
+            authProvider.authenticate(completion: { result in
+                switch result {
+                case .success:
+                    self.sendRequest(request: request, completion: completion)
+                case .failure:
+                    DTLog("Authentication unsuccessful")
+                    DispatchQueue.main.async {
+                        completion(.failure(.unauthorized))
+                    }
+                }
+            })
+            return
+        }
+        
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
@@ -60,6 +75,23 @@ extension Disruptive {
                 response: response,
                 error: error)
             {
+                // Retry authentication if we are unathorized
+                if case .unauthorized = internalError {
+                    DTLog("Request authentication failed, trying to reauthenticate")
+                    authProvider.authenticate(completion: { result in
+                        switch result {
+                        case .success:
+                            self.sendRequest(request: request, completion: completion)
+                        case .failure:
+                            DTLog("Authentication unsuccessful")
+                            DispatchQueue.main.async {
+                                completion(.failure(.unauthorized))
+                            }
+                        }
+                    })
+                    return
+                }
+
                 // If this error can be converted to a disruptive error
                 if let dtErr = internalError.disruptiveError() {
                     DTLog("Request to \(urlString) resulted in error: \(dtErr)")
@@ -105,13 +137,29 @@ extension Disruptive {
         request: Request,
         completion: @escaping (Result<T, DisruptiveError>) -> ())
     {
-        guard let auth = Disruptive.authProvider?.authToken else {
-            DTLog("Nottt yet authorized. Call authenticate(serviceAccount: ) to authenticate")
+        guard let authProvider = Disruptive.authProvider else {
+            DTLog("DisruptiveAPI not initialised")
             DispatchQueue.main.async {
                 completion(.failure(.unauthorized))
             }
             return
         }
+        
+        guard let auth = authProvider.authToken else {
+            authProvider.authenticate(completion: { result in
+                switch result {
+                case .success:
+                    self.sendRequest(request: request, completion: completion)
+                case .failure:
+                    DTLog("Authentication unsuccessful")
+                    DispatchQueue.main.async {
+                        completion(.failure(.unauthorized))
+                    }
+                }
+            })
+            return
+        }
+        
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
@@ -134,6 +182,23 @@ extension Disruptive {
                 response: response,
                 error: error)
             {
+                // Retry authentication if we are unathorized
+                if case .unauthorized = internalError {
+                    DTLog("Request authentication failed, trying to reauthenticate")
+                    authProvider.authenticate(completion: { result in
+                        switch result {
+                        case .success:
+                            self.sendRequest(request: request, completion: completion)
+                        case .failure:
+                            DTLog("Authentication unsuccessful")
+                            DispatchQueue.main.async {
+                                completion(.failure(.unauthorized))
+                            }
+                        }
+                    })
+                    return
+                }
+
                 // If this error can be converted to a disruptive error
                 if let dtErr = internalError.disruptiveError() {
                     DTLog("Request to \(urlString) resulted in error: \(dtErr)")
@@ -205,7 +270,7 @@ extension Disruptive {
             }
             return
         }
-        if authProvider.authToken == nil {
+        guard let auth = authProvider.authToken else {
             authProvider.authenticate(completion: { result in
                 switch result {
                 case .success:
@@ -215,25 +280,16 @@ extension Disruptive {
                         pageingKey: pageingKey,
                         completion: completion
                     )
-                    return
                 case .failure:
-                    DTLog("DisruptiveAPI not initialised")
+                    DTLog("Authentication unsuccessful")
                     DispatchQueue.main.async {
                         completion(.failure(.unauthorized))
                     }
-                    return
                 }
             })
             return
         }
         
-        guard let auth = Disruptive.authProvider?.authToken else {
-            DTLog("Not ydet authorized. Call authenticate(serviceAccount: ) to authenticate")
-            DispatchQueue.main.async {
-                completion(.failure(.unauthorized))
-            }
-            return
-        }
         guard let urlReq = request.urlRequest(authorization: auth) else {
             DTLog("Failed to create URLRequest from request: \(request)", isError: true)
             DispatchQueue.main.async {
@@ -256,6 +312,28 @@ extension Disruptive {
                 response: response,
                 error: error)
             {
+                // Retry authentication if we are unathorized
+                if case .unauthorized = internalError {
+                    DTLog("Request authentication failed, trying to reauthenticate")
+                    authProvider.authenticate(completion: { result in
+                        switch result {
+                        case .success:
+                            self.sendRequest(
+                                request: request,
+                                cumulativeResults: cumulativeResults,
+                                pageingKey: pageingKey,
+                                completion: completion
+                            )
+                        case .failure:
+                            DTLog("Authentication unsuccessful")
+                            DispatchQueue.main.async {
+                                completion(.failure(.unauthorized))
+                            }
+                        }
+                    })
+                    return
+                }
+                
                 // If this error can be converted to a disruptive error
                 if let dtErr = internalError.disruptiveError() {
                     DTLog("Request to \(urlString) resulted in error: \(dtErr)")
@@ -401,7 +479,7 @@ extension Disruptive {
     // MARK: Parsing Payload
     // -------------------------------
     
-    private static func parsePayload<T: Decodable>(_ payload: Data?, decoder: JSONDecoder) -> T? {
+    internal static func parsePayload<T: Decodable>(_ payload: Data?, decoder: JSONDecoder) -> T? {
         // Unwrap payload
         guard let payload = payload else {
             DTLog("Didn't get a body in the response as expected", isError: true)
