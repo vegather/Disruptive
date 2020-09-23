@@ -12,7 +12,7 @@ import Foundation
 struct JWT {
     /// Produces a JWT token that is suitable for a Disruptive service account.
     /// Docs: https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication
-    internal static func serviceAccount(account: ServiceAccount) -> String? {
+    internal static func serviceAccount(authURL: String, account: ServiceAccount) -> String? {
         let headers = [
             "alg": "HS256",
             "kid": account.key
@@ -22,7 +22,7 @@ struct JWT {
         let claims: [String: Any] = [
             "iat": now,
             "exp": now + 3600,
-            "aud": Disruptive.authURL,
+            "aud": authURL,
             "iss": account.email
         ]
         

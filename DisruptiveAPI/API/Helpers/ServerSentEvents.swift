@@ -27,12 +27,15 @@ public class ServerSentEvents: NSObject {
     
     private var session: URLSession!
     private var task: URLSessionTask?
-    private var request: URLRequest!
+    private let request: Request
+    private let authProvider: AuthProvider
     
     private var retryScheme = RetryScheme()
     
     private var hasBeenClosed = false
     
+    // Error
+    public var onError              : ((DisruptiveError)            -> ())?
     
     // Event callbacks
     public var onTouch              : ((String, TouchEvent)         -> ())?
@@ -55,12 +58,14 @@ public class ServerSentEvents: NSObject {
     public var onLatencyStatus      : ((String, ConnectionLatency) -> ())?
     
     // Preventing init without parameters
-    private override init() {}
+    private override init() { fatalError() }
     
-    internal init(request: URLRequest) {
+    internal init(request: Request, authProvider: AuthProvider) {
+        self.request = request
+        self.authProvider = authProvider
+        
         super.init()
         
-        self.request = request
         setupSession()
         restartStream()
     }
@@ -94,8 +99,31 @@ public class ServerSentEvents: NSObject {
     private func restartStream() {
         guard hasBeenClosed == false else { return }
         
-        task = session.dataTask(with: request)
-        task?.resume()
+        authProvider.getNonExpiredAuthToken { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let token):
+                
+                // Add the "Authorization" header to the Request
+                var req = self.request
+                req.setHeader(field: "Authorization", value: token)
+                
+                // Convert to URLRequest
+                guard let urlRequest = req.urlRequest() else {
+                    DTLog("Failed to create URLRequest to restart the ServerSentEvents stream", isError: true)
+                    self.onError?(.unknownError)
+                    return
+                }
+                
+                // Send the request (connect to stream)
+                self.task = self.session.dataTask(with: urlRequest)
+                self.task?.resume()
+            case .failure(let e):
+                DTLog("Failed to authenticate the ServerSentEvents stream. Error: \(e)", isError: true)
+                self.onError?(e)
+            }
+        }
     }
 }
 
@@ -173,7 +201,6 @@ extension ServerSentEvents: URLSessionDataDelegate {
             }
         }
         
-                    
     }
     
     public func urlSession(

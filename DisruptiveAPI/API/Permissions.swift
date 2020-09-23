@@ -62,10 +62,10 @@ extension Disruptive {
         completion            : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, endpoint: "organizations/\(orgID)/permissions")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations/\(orgID)/permissions")
         
         // Send the request
-        sendRequest(request: request, pageingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
+        sendRequest(request, pageingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
             switch response {
                 case .success(let wrappers) : completion(.success(wrappers.compactMap { $0.permission }))
                 case .failure(let error)    : completion(.failure(error))
@@ -85,10 +85,10 @@ extension Disruptive {
         completion           : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, endpoint: "projects/\(projectID)/permissions")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/permissions")
         
         // Send the request
-        sendRequest(request: request, pageingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
+        sendRequest(request, pageingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
             switch response {
                 case .success(let wrappers) : completion(.success(wrappers.compactMap { $0.permission }))
                 case .failure(let error)    : completion(.failure(error))
