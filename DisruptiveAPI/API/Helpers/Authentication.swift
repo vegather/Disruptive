@@ -26,6 +26,7 @@ public protocol AuthProvider {
     var expirationDate: Date? { get }
     
     func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ())
+    func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ())
 }
 
 internal extension AuthProvider {
@@ -90,6 +91,10 @@ public struct BasicAuthServiceAccount: AuthProvider {
     public func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         completion(.success(()))
     }
+    
+    public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+        completion(.success(()))
+    }
 }
 
 public class JWTAuthServiceAccount: AuthProvider {
@@ -149,6 +154,12 @@ public class JWTAuthServiceAccount: AuthProvider {
             completion(.failure(.unknownError))
             return
         }
+    }
+    
+    public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+        authToken = nil
+        expirationDate = nil
+        completion(.success(()))
     }
 
     private struct AccessTokenResponse: Codable {
