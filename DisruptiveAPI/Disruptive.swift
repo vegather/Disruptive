@@ -28,10 +28,10 @@ public struct Disruptive {
     /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`
     public static var loggingEnabled = false
     
-    /// The base URL for the Disruptive REST API.
-    /// This is a settable, member property, meaning that multiple instances
-    /// of `Disruptive` clients can be used at the same time with different base URLs.
-    /// (eg. to the dev environment or somewhere else for testing).
+    /// The authentication mechanism used by `Disruptive`. This will be
+    /// checked to see if it has a non-expired `authToken` before every request
+    /// is sent to the Disruptive backend. If no non-expired `authToken` were found
+    /// the `authenticate` method will be called before attempting to send the request.
     internal let authProvider: AuthProvider
 
     public init(authProvider: AuthProvider) {
