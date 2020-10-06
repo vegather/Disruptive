@@ -26,6 +26,8 @@
 		1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAEF38524852B7400E4D0E5 /* Stream.swift */; };
 		1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC6FC5D247F15740034BEEB /* EventTypes.swift */; };
 		1AC7BF132477250000BC22C7 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC7BF122477250000BC22C7 /* Device.swift */; };
+		9A3CCAD1251783F8005B8843 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3CCAD0251783F8005B8843 /* Authentication.swift */; };
+		E5BE154124FBF0360046E48E /* JWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BE154024FBF0360046E48E /* JWT.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		1AAEF38524852B7400E4D0E5 /* Stream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
 		1AC6FC5D247F15740034BEEB /* EventTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTypes.swift; sourceTree = "<group>"; };
 		1AC7BF122477250000BC22C7 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		9A3CCAD0251783F8005B8843 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		E5BE154024FBF0360046E48E /* JWT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWT.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,17 +96,12 @@
 				1A38AA38247AF81700DD4572 /* Errors.swift */,
 				1A4BBEFF247909FB002D1AB1 /* ServerSentEvents.swift */,
 				1A4BBF09247939EB002D1AB1 /* Requests.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
-		1A4BBF03247919D4002D1AB1 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
+				9A3CCAD0251783F8005B8843 /* Authentication.swift */,
 				1A4BBF0524791DFA002D1AB1 /* DTLog.swift */,
 				1A4BBF0B247A5A6C002D1AB1 /* Utils.swift */,
+				E5BE154024FBF0360046E48E /* JWT.swift */,
 			);
-			path = Utilities;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		1A4BBF04247919DB002D1AB1 /* API */ = {
@@ -143,7 +142,6 @@
 				1A91496E2471293C00CF45B7 /* DisruptiveAPI.h */,
 				1A65F8EE2473252A00948743 /* Disruptive.swift */,
 				1A4BBF04247919DB002D1AB1 /* API */,
-				1A4BBF03247919D4002D1AB1 /* Utilities */,
 				1A91496F2471293C00CF45B7 /* Info.plist */,
 			);
 			path = DisruptiveAPI;
@@ -186,6 +184,8 @@
 			dependencies = (
 			);
 			name = DisruptiveAPI;
+			packageProductDependencies = (
+			);
 			productName = DisruptiveAPI;
 			productReference = 1A91496B2471293C00CF45B7 /* DisruptiveAPI.framework */;
 			productType = "com.apple.product-type.framework";
@@ -236,6 +236,8 @@
 				Base,
 			);
 			mainGroup = 1A9149612471293C00CF45B7;
+			packageReferences = (
+			);
 			productRefGroup = 1A91496C2471293C00CF45B7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -275,6 +277,7 @@
 				1AAEF38624852B7400E4D0E5 /* Stream.swift in Sources */,
 				1A4BBF0A247939EB002D1AB1 /* Requests.swift in Sources */,
 				1A280D512480052F0091DF4A /* Event.swift in Sources */,
+				E5BE154124FBF0360046E48E /* JWT.swift in Sources */,
 				1A6B336124AE3EA000EAEC97 /* RetryScheme.swift in Sources */,
 				1AC6FC5E247F15740034BEEB /* EventTypes.swift in Sources */,
 				1A4BBF08247939C4002D1AB1 /* NetworkTypes.swift in Sources */,
@@ -284,6 +287,7 @@
 				1A38AA39247AF81700DD4572 /* Errors.swift in Sources */,
 				1A066F162474FAAA0096F5D3 /* Project.swift in Sources */,
 				1AC7BF132477250000BC22C7 /* Device.swift in Sources */,
+				9A3CCAD1251783F8005B8843 /* Authentication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

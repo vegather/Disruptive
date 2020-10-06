@@ -25,10 +25,10 @@ extension Disruptive {
         completion: @escaping (_ result: Result<[Organization], DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, endpoint: "organizations")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations")
         
         // Send the request
-        sendRequest(request: request, pageingKey: "organizations") { completion($0) }
+        sendRequest(request, pageingKey: "organizations") { completion($0) }
     }
 }
 
