@@ -41,3 +41,15 @@ internal extension Data {
     }
 }
 
+
+
+
+// -------------------------------
+// MARK: String
+// -------------------------------
+
+internal extension String {
+    func urlEncoded() -> String? {
+        return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+    }
+}

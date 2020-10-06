@@ -53,10 +53,10 @@ extension Disruptive {
         }
         
         // Create the request
-        let request = Request(method: .get, endpoint: "projects", params: params)
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects", params: params)
         
         // Send the request
-        sendRequest(request: request, pageingKey: "projects") { completion($0) }
+        sendRequest(request, pageingKey: "projects") { completion($0) }
     }
     
     /**
@@ -71,10 +71,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, endpoint: "projects/\(projectID)")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)")
         
         // Send the request
-        sendRequest(request: request) { completion($0) }
+        sendRequest(request) { completion($0) }
     }
     
     /**
@@ -98,10 +98,10 @@ extension Disruptive {
         
         do {
             // Create the request
-            let request = try Request(method: .post, endpoint: "projects", body: payload)
+            let request = try Request(method: .post, baseURL: baseURL, endpoint: "projects", body: payload)
             
             // Create the new project
-            sendRequest(request: request) { completion($0) }
+            sendRequest(request) { completion($0) }
         } catch (let error) {
             DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
@@ -127,10 +127,10 @@ extension Disruptive {
         
         do {
             // Create the request
-            let request = try Request(method: .patch, endpoint: "projects/\(projectID)", body: payload)
+            let request = try Request(method: .patch, baseURL: baseURL, endpoint: "projects/\(projectID)", body: payload)
             
             // Update the project name
-            sendRequest(request: request) { completion($0) }
+            sendRequest(request) { completion($0) }
         } catch (let error) {
             DTLog("Failed to init the update project request with payload: \(payload). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
