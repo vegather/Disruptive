@@ -169,7 +169,7 @@ extension Request {
                     
                     // Dispatch the same request again after waiting
                     DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(retryAfter)) {
-                        self.send(completion: completion)
+                        self.send(decoder: decoder, completion: completion)
                     }
                     
                     return
