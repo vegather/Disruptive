@@ -20,24 +20,57 @@ public struct ServiceAccount: Codable {
     }
 }
 
+public struct Auth {
+    /// The current token to use for authentication. This `String` needs to
+    /// be prefixed with the authentication scheme. Eg: "Basic ..." or "Bearer ..."
+    let token: String
+    
+    /// The expiration date of the `authToken`. If there is less than a minute until
+    /// expiration, and a request is made on the network, the `authenticate` function
+    /// will be called first.
+    let expirationDate: Date
+    
+    public init(token: String, expirationDate: Date) {
+        self.token = token
+        self.expirationDate = expirationDate
+    }
+}
+
 public protocol AuthProvider {
     
-    var authToken: String? { get }
-    var expirationDate: Date? { get }
+    /// The authentication data (token, and expiration date)
+    var auth: Auth? { get }
     
-    func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ())
-    func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ())
+    /// Indicates whether the `authProvider` should be logged in or not.
+    /// This is intended to prevent any accidental reauthentications being made
+    /// after the client has logged out.
+    var shouldBeLoggedIn: Bool { get }
+    
+    /// The completion closure type used by the auth functions
+    typealias AuthHandler = (Result<Void, DisruptiveError>) -> ()
+    
+    /// This will log the client in by calling the `reauthenticate()` function
+    /// (which sets the `auth` property), and set `shouldBeLoggedIn` to `true`.
+    func login(completion: @escaping AuthHandler)
+    
+    /// This will clear any local state related to logging in, including the `auth` property.
+    /// It may or may not invoke a URL to log the user out in the default browser as well,
+    /// depending on the implementation of the specific `AuthProvider`.
+    func logout(completion: @escaping AuthHandler)
+    
+    /// This will be called internally when the auth token has expired, or is close
+    /// to expiring.
+    func reauthenticate(completion: @escaping AuthHandler)
 }
 
 internal extension AuthProvider {
+    
     /// Returns the auth token if the auth token is non-nil, AND
     /// there's an expiration date that is further away than a minute.
     /// Otherwise returns nil.
     private func getAuthToken() -> String? {
-        if let authToken = authToken, let expirationDate = expirationDate,
-           expirationDate.timeIntervalSinceNow > 60
-        {
-            return authToken
+        if let auth = auth, auth.expirationDate.timeIntervalSinceNow > 60 {
+            return auth.token
         } else {
             return nil
         }
@@ -49,14 +82,18 @@ internal extension AuthProvider {
     /// re-authenticate the auth provider and return the new auth token.
     /// If the re-authentication fails, this will result in an error.
     func getNonExpiredAuthToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
-        if let authToken = getAuthToken() {
+        if shouldBeLoggedIn == false {
+            // We should no longer be logged in. Just return the `.loggedOut` error code
+            DTLog("The `authProvider` is not logged in. Call `login()` on the `authProvider` to log back in.")
+            completion(.failure(.loggedOut))
+        } else if let authToken = getAuthToken() {
             // There already exists a non-expired auth token
             completion(.success(authToken))
         } else {
             // The auth provider is either not authenticated, or the auth
-            // token too close to getting expired. Will re-authenticate the auth provider
+            // token too close to getting expired. Will reauthenticate the auth provider
             DTLog("Authenticating the auth provider...")
-            authenticate { result in
+            reauthenticate { result in
                 switch result {
                 case .success():
                     if let authToken = getAuthToken() {
@@ -77,22 +114,30 @@ internal extension AuthProvider {
 
 public struct BasicAuthServiceAccount: AuthProvider {
     private let account : ServiceAccount
-    
-    public var authToken: String? {
-        return "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString()
+        
+    public var auth: Auth? {
+        return Auth(
+            token: "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString(),
+            expirationDate: .distantFuture
+        )
     }
     
-    public var expirationDate: Date? { .distantFuture }
+    // A basic auth provider is always logged in
+    public var shouldBeLoggedIn: Bool { return true }
     
     public init(account: ServiceAccount) {
         self.account = account
     }
     
-    public func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+    public func reauthenticate(completion: @escaping AuthHandler) {
         completion(.success(()))
     }
     
-    public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+    public func login(completion: @escaping AuthHandler) {
+        completion(.success(()))
+    }
+    
+    public func logout(completion: @escaping AuthHandler) {
         completion(.success(()))
     }
 }
@@ -101,8 +146,8 @@ public class JWTAuthServiceAccount: AuthProvider {
 
     private let account : ServiceAccount
 
-    private(set) public var authToken: String?
-    private(set) public var expirationDate: Date?
+    private(set) public var auth: Auth?
+    private(set) public var shouldBeLoggedIn = false
     
     let authURL: String
 
@@ -111,7 +156,22 @@ public class JWTAuthServiceAccount: AuthProvider {
         self.account = account
     }
     
-    public func authenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+    // Fetches the auth token using the `reauthenticate` function, and
+    // sets `shouldBeLoggedIn` to `true` when done.
+    public func login(completion: @escaping AuthHandler) {
+        reauthenticate { [weak self] result in
+            self?.shouldBeLoggedIn = true
+            completion(result)
+        }
+    }
+    
+    public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+        auth = nil
+        shouldBeLoggedIn = false
+        completion(.success(()))
+    }
+    
+    public func reauthenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         guard let authJWT = JWT.serviceAccount(authURL: authURL, account: account) else {
             DTLog("Failed to create a JWT from service account: \(account)", isError: true)
             completion(.failure(.unknownError))
@@ -135,12 +195,14 @@ public class JWTAuthServiceAccount: AuthProvider {
                 headers: [header],
                 body: body
             )
-            request.send { (result: Result<AccessTokenResponse, DisruptiveError>) in
+            request.send { [weak self] (result: Result<AccessTokenResponse, DisruptiveError>) in
                 switch result {
                     case .success(let response):
                         DispatchQueue.main.async {
-                            self.authToken = "Bearer \(response.accessToken)"
-                            self.expirationDate = Date(timeIntervalSinceNow: TimeInterval(response.expiresIn))
+                            self?.auth = Auth(
+                                token: "Bearer \(response.accessToken)",
+                                expirationDate: Date(timeIntervalSinceNow: TimeInterval(response.expiresIn))
+                            )
                             completion(.success(()))
                         }
                     case .failure(let e):
@@ -154,12 +216,6 @@ public class JWTAuthServiceAccount: AuthProvider {
             completion(.failure(.unknownError))
             return
         }
-    }
-    
-    public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
-        authToken = nil
-        expirationDate = nil
-        completion(.success(()))
     }
 
     private struct AccessTokenResponse: Codable {

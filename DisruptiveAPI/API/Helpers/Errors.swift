@@ -42,6 +42,10 @@ public enum DisruptiveError: Error {
     /// Something unexpected happened that could not be recovered from.
     /// Check the logs for more information
     case unknownError
+    
+    /// Returned when the `authProvider` is currently logged out. Call
+    /// `login()` on the `authProvider` to log it back in.
+    case loggedOut
 }
 
 internal enum InternalError: Error {
