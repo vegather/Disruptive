@@ -36,10 +36,6 @@ public enum Permission: String, Codable {
     case projectRead             = "project.read"
     case projectUpdate           = "project.update"
     
-    case sensorRead              = "sensor.read"
-    case sensorTransfer          = "sensor.transfer"
-    case sensorUpdate            = "sensor.update"
-    
     case serviceAccountCreate    = "serviceaccount.create"
     case serviceAccountDelete    = "serviceaccount.delete"
     case serviceAccountKeyCreate = "serviceaccount.key.create"

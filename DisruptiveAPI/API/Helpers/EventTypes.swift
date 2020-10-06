@@ -221,10 +221,12 @@ public struct NetworkStatus: Decodable {
     public struct CloudConnector: Decodable {
         public let id: String
         public let signalStrength: Int
+        public let rssi: Int
         
-        public init(id: String, signalStrength: Int) {
+        public init(id: String, signalStrength: Int, rssi: Int) {
             self.id = id
             self.signalStrength = signalStrength
+            self.rssi = rssi
         }
     }
     
