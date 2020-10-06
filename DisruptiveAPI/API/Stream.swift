@@ -53,22 +53,10 @@ extension Disruptive {
         if let eventTypes = eventTypes {
             params["event_types"] = eventTypes.map { $0.rawValue }
         }
-        
-        guard let authProvider = Disruptive.authProvider else {
-            DTLog("DisruptiveAPI not initialised")
-            return nil
-        }
-        
-        guard let auth = authProvider.authToken else {
-            DTLog("Not yet authorized. Call authenticate(serviceAccount: ) to authenticate")
-            return nil
-        }
-        let request = Request(method: .get, endpoint: "projects/\(projectID)/devices:stream", params: params)
-        guard let urlRequest = request.urlRequest(authorization: auth) else {
-            return nil
-        }
+                
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices:stream", params: params)
         
         // Create the stream, and connect to it
-        return ServerSentEvents(request: urlRequest)
+        return ServerSentEvents(request: request, authProvider: authProvider)
     }
 }

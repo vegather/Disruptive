@@ -44,10 +44,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID ?? "-")/devices/\(deviceID)"
-        let request = Request(method: .get, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request: request) { completion($0) }
+        sendRequest(request) { completion($0) }
     }
     
     /**
@@ -62,10 +62,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, endpoint: "projects/\(projectID)/devices")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices")
         
         // Send the request
-        sendRequest(request: request, pageingKey: "devices") { completion($0) }
+        sendRequest(request, pageingKey: "devices") { completion($0) }
     }
     
     /**
@@ -125,10 +125,10 @@ extension Disruptive {
         
         do {
             // Create the request
-            let request = try Request(method: .post, endpoint: "projects/\(projectID)/devices:batchUpdate", body: body)
+            let request = try Request(method: .post, baseURL: baseURL, endpoint: "projects/\(projectID)/devices:batchUpdate", body: body)
             
             // Send the request
-            sendRequest(request: request) { completion($0) }
+            sendRequest(request) { completion($0) }
         } catch (let error) {
             DTLog("Failed to init setLabel request with payload: \(body). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
