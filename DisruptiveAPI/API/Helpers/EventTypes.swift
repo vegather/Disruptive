@@ -299,18 +299,19 @@ public struct BatteryStatus: Decodable {
     }
 }
 
-/// This will only be available on device stream
-public struct LabelsChanged: Decodable {
-    public let added    : [String: String]
-    public let modified : [String: String]
-    public let removed  : [String]
-    
-    public init(added: [String: String], modified: [String: String], removed: [String]) {
-        self.added = added
-        self.modified = modified
-        self.removed = removed
-    }
-}
+/// This will only be available when subscribing to an event stream on a sensor, or through a data connector
+// TODO: This does not work! `labelsChanged` is not a key in the `data` field as expected
+//public struct LabelsChanged: Decodable {
+//    public let added    : [String: String]
+//    public let modified : [String: String]
+//    public let removed  : [String]
+//
+//    public init(added: [String: String], modified: [String: String], removed: [String]) {
+//        self.added = added
+//        self.modified = modified
+//        self.removed = removed
+//    }
+//}
 
 
 
@@ -524,7 +525,7 @@ internal enum EventContainer: Decodable {
     // Sensor Status
     case networkStatus      (deviceID: String, event: NetworkStatus)
     case batteryStatus      (deviceID: String, event: BatteryStatus)
-    case labelsChanged      (deviceID: String, event: LabelsChanged)
+//    case labelsChanged      (deviceID: String, event: LabelsChanged)
     
     // Cloud Connector
     case connectionStatus   (deviceID: String, event: ConnectionStatus)
@@ -585,9 +586,9 @@ extension EventContainer {
             case .batteryStatus:
                 let event = try eventContainer.decode(BatteryStatus.self, forKey: .batteryStatus)
                 self = .batteryStatus(deviceID: deviceID, event: event)
-            case .labelsChanged:
-                let event = try eventContainer.decode(LabelsChanged.self, forKey: .labelsChanged)
-                self = .labelsChanged(deviceID: deviceID, event: event)
+//            case .labelsChanged:
+//                let event = try eventContainer.decode(LabelsChanged.self, forKey: .labelsChanged)
+//                self = .labelsChanged(deviceID: deviceID, event: event)
                 
             // Cloud Connector
             case .connectionStatus:
