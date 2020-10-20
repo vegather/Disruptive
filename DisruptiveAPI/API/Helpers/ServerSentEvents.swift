@@ -49,7 +49,7 @@ public class ServerSentEvents: NSObject {
     // Sensor status callbacks
     public var onNetworkStatus      : ((String, NetworkStatus) -> ())?
     public var onBatteryStatus      : ((String, BatteryStatus) -> ())?
-    public var onLabelsChanged      : ((String, LabelsChanged) -> ())?
+//    public var onLabelsChanged      : ((String, LabelsChanged) -> ())?
     
     // Cloud connector callbacks
     public var onConnectionStatus   : ((String, ConnectionStatus)  -> ())?
@@ -188,7 +188,7 @@ extension ServerSentEvents: URLSessionDataDelegate {
                     // Sensor status
                     case .networkStatus      (let d, let e): onNetworkStatus?(d, e)
                     case .batteryStatus      (let d, let e): onBatteryStatus?(d, e)
-                    case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
+//                    case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
                     
                     // Cloud connector
                     case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)
