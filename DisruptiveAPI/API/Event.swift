@@ -21,7 +21,7 @@ public struct Events {
     // Sensor Status
     public var networkStatus      : [NetworkStatus]?
     public var batteryStatus      : [BatteryStatus]?
-    public var labelsChanged      : [LabelsChanged]?
+//    public var labelsChanged      : [LabelsChanged]?
     
     // Cloud Connector
     public var connectionStatus   : [ConnectionStatus]?
@@ -116,7 +116,7 @@ extension Events {
                 case .waterPresent      (_, let event): Events.addToList(list: &waterPresent,       newItem: event)
                 case .networkStatus     (_, let event): Events.addToList(list: &networkStatus,      newItem: event)
                 case .batteryStatus     (_, let event): Events.addToList(list: &batteryStatus,      newItem: event)
-                case .labelsChanged     (_, let event): Events.addToList(list: &labelsChanged,      newItem: event)
+//                case .labelsChanged     (_, let event): Events.addToList(list: &labelsChanged,      newItem: event)
                 case .connectionStatus  (_, let event): Events.addToList(list: &connectionStatus,   newItem: event)
                 case .ethernetStatus    (_, let event): Events.addToList(list: &ethernetStatus,     newItem: event)
                 case .cellularStatus    (_, let event): Events.addToList(list: &cellularStatus,     newItem: event)
@@ -161,7 +161,7 @@ extension Events {
         if let e = other.waterPresent       { self.waterPresent       = e }
         if let e = other.networkStatus      { self.networkStatus      = e }
         if let e = other.batteryStatus      { self.batteryStatus      = e }
-        if let e = other.labelsChanged      { self.labelsChanged      = e }
+//        if let e = other.labelsChanged      { self.labelsChanged      = e }
         if let e = other.connectionStatus   { self.connectionStatus   = e }
         if let e = other.ethernetStatus     { self.ethernetStatus     = e }
         if let e = other.cellularStatus     { self.cellularStatus     = e }

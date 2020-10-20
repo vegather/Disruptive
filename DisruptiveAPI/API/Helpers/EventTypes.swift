@@ -502,7 +502,7 @@ public enum EventType: String, Encodable, CodingKey {
     // Sensor status
     case networkStatus
     case batteryStatus
-    case labelsChanged
+//    case labelsChanged
     
     // Cloud Connector
     case connectionStatus
