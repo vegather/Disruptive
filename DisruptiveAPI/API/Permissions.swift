@@ -8,6 +8,105 @@
 
 import Foundation
 
+/**
+ A permission is a specific action that an authenticated account is allowed to do within
+ a specific project.
+ 
+ Permissions for the four different roles:
+ 
+ Project.User:
+ * emulator.read
+ * device.read
+ * dataconnector.read
+ * serviceaccount.key.read
+ * sensor.read
+ * serviceaccount.read
+ * membership.read
+ * project.read
+ 
+ Project.Developer:
+ * emulator.delete
+ * dataconnector.update
+ * serviceaccount.read
+ * dataconnector.create
+ * project.read
+ * dataconnector.delete
+ * dataconnector.read
+ * device.read
+ * sensor.read
+ * device.update
+ * emulator.read
+ * emulator.create
+ * emulator.update
+ * sensor.update
+ * membership.read
+ * serviceaccount.key.read
+ 
+ Project.Admin:
+ * serviceaccount.key.create
+ * project.delete
+ * dataconnector.create
+ * membership.read
+ * emulator.create
+ * device.read
+ * serviceaccount.update
+ * sensor.read
+ * serviceaccount.read
+ * emulator.update
+ * membership.create
+ * project.update
+ * project.read
+ * device.transfer
+ * emulator.delete
+ * serviceaccount.delete
+ * dataconnector.update
+ * dataconnector.delete
+ * dataconnector.read
+ * serviceaccount.key.read
+ * emulator.read
+ * membership.delete
+ * serviceaccount.key.delete
+ * serviceaccount.create
+ * sensor.update
+ * device.update
+ * membership.update
+ 
+ Organization.Admin:
+ * device.update
+ * membership.read
+ * serviceaccount.key.create
+ * serviceaccount.delete
+ * serviceaccount.key.read
+ * membership.create
+ * dataconnector.create
+ * project.delete
+ * device.transfer
+ * serviceaccount.key.delete
+ * sensor.update
+ * membership.update
+ * project.read
+ * dataconnector.delete
+ * device.read
+ * dataconnector.read
+ * serviceaccount.read
+ * emulator.read
+ * emulator.create
+ * emulator.delete
+ * sensor.read
+ * serviceaccount.create
+ * emulator.update
+ * project.update
+ * serviceaccount.update
+ * dataconnector.update
+ * membership.delete
+ * project.create
+ * organization.update
+ * organization.read
+
+
+
+ */
+
 public enum Permission: String, Codable {
     case dataConnectorCreate     = "dataconnector.create"
     case dataConnectorDelete     = "dataconnector.delete"

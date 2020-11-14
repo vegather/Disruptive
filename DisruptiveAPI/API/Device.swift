@@ -125,7 +125,8 @@ extension Disruptive {
         
         do {
             // Create the request
-            let request = try Request(method: .post, baseURL: baseURL, endpoint: "projects/\(projectID)/devices:batchUpdate", body: body)
+            let endpoint = "projects/\(projectID)/devices:batchUpdate"
+            let request = try Request(method: .post, baseURL: baseURL, endpoint: endpoint, body: body)
             
             // Send the request
             sendRequest(request) { completion($0) }
@@ -133,6 +134,65 @@ extension Disruptive {
             DTLog("Failed to init setLabel request with payload: \(body). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
         }
+    }
+    
+    /**
+     Moves a list of devices from one project to another. The authenticated account must be an admin
+     in the `toProjectID`, or an organization admin in which the `toProjectID` resides.
+     
+     - Parameter deviceIDs: A list of the device identifiers to move from one project to another
+     - Parameter fromProjectID: The identifier of the project to move the devices from
+     - Parameter toProjectID: The identifier of the project to move the devices to
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<Void, DisruptiveError>`
+     */
+    public func moveDevices(
+        deviceIDs     : [String],
+        fromProjectID : String,
+        toProjectID   : String,
+        completion    : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    {
+        // Create the body
+        struct Body: Codable {
+            let devices: [String]
+        }
+        let body = Body(devices: deviceIDs.map { "projects/\(fromProjectID)/devices/\($0)" })
+        
+        do {
+            // Create the request
+            let endpoint = "projects/\(toProjectID)/devices:transfer"
+            let request = try Request(method: .post, baseURL: baseURL, endpoint: endpoint, body: body)
+            
+            // Send the request
+            sendRequest(request) { completion($0) }
+        } catch (let error) {
+            DTLog("Failed to initialize move devices request with payload: \(body). Error: \(error)", isError: true)
+            completion(.failure(.unknownError))
+        }
+    }
+    
+    /**
+     Moves a list of devices from one project to another. The authenticated account must be an admin
+     in the `toProject`, or an organization admin in which the `toProject` resides.
+     
+     - Parameter devices: A list of the devices to move from one project to another
+     - Parameter fromProject: The project to move the devices from
+     - Parameter toProject: The project to move the devices to
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<Void, DisruptiveError>`
+     */
+    public func moveDevices(
+        _ devices   : [Device],
+        fromProject : Project,
+        toProject   : Project,
+        completion  : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    {
+        moveDevices(
+            deviceIDs     : devices.map { $0.identifier },
+            fromProjectID : fromProject.identifier,
+            toProjectID   : toProject.identifier,
+            completion    : completion
+        )
     }
 }
 
