@@ -18,12 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          # https://github.com/marketplace/actions/git-auto-commit#checkout-the-correct-branch
+          ref: ${{ github.head_ref }}
       - name: Generate Documentation
         uses: SwiftDocOrg/swift-doc@master
         with:
           module-name: Disruptive
           format: html
           output: "docs"
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "CI: Updated Swift documentation"
       #- name: Commit Documentation
       #  run: |
       #    echo ${{ github.ref }}
@@ -31,14 +37,14 @@ jobs:
       #    git config --local user.email "action@github.com"
       #    git config --local user.name "GitHub Action"
       #    git commit -m "CI: Update Swift documentation" -a | exit 0
-      - run: git add .
-      - run: git config --local user.email "action@github.com"
-      - run: git config --local user.name "GitHub Action"
-      - run: git commit -m "CI - Update Swift documentation"
-      - name: Push Documentation
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      #- run: git add .
+      #- run: git config --local user.email "action@github.com"
+      #- run: git config --local user.name "GitHub Action"
+      #- run: git commit -m "CI - Update Swift documentation"
+      #- name: Push Documentation
+      #  uses: ad-m/github-push-action@v0.6.0
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
     
   #publish_jazzy_docs:
   #  runs-on: macos-latest
