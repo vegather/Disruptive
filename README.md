@@ -1,4 +1,4 @@
-![DT Logo](https://github.com/vegather/Disruptive/dt_logo.png)
+![DT Logo](https://raw.githubusercontent.com/vegather/Disruptive/master/dt_logo.png)
 
 # Disruptive - Swift API
 
