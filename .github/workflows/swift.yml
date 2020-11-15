@@ -24,13 +24,17 @@ jobs:
           module-name: Disruptive
           format: html
           output: "docs"
-      - name: Commit Documentation
-        run: |
-          echo ${{ github.ref }}
-          git add .
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "CI: Update Swift documentation" -a | exit 0
+      #- name: Commit Documentation
+      #  run: |
+      #    echo ${{ github.ref }}
+      #    git add .
+      #    git config --local user.email "action@github.com"
+      #    git config --local user.name "GitHub Action"
+      #    git commit -m "CI: Update Swift documentation" -a | exit 0
+      - run: git add .
+      - run: git config --local user.email "action@github.com"
+      - run: git config --local user.name "GitHub Action"
+      - run: git commit -m "CI - Update Swift documentation"
       - name: Push Documentation
         uses: ad-m/github-push-action@v0.6.0
         with:
