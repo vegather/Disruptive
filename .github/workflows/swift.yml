@@ -30,6 +30,8 @@ jobs:
           module-name: Disruptive
           format: html
           output: docs
+      - name: Checks
+        run: ls -lah // ls -lah docs
       - name: Git add
         run: git add .
       #- uses: stefanzweifel/git-auto-commit-action@v4
