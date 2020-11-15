@@ -15,7 +15,7 @@ jobs:
   #    run: swift test -v
   
   publish_swift_docs:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
         with:
