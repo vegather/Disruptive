@@ -10,7 +10,7 @@ import Foundation
 
 public struct Organization: Codable {
     public let identifier: String
-    public let name: String
+    public let displayName: String
 }
 
 
@@ -36,7 +36,7 @@ extension Disruptive {
 extension Organization {
     private enum CodingKeys: String, CodingKey {
         case identifier = "name"
-        case name = "displayName"
+        case displayName
     }
     
     public init(from decoder: Decoder) throws {
@@ -47,7 +47,7 @@ extension Organization {
         let orgPath = try values.decode(String.self, forKey: .identifier)
         self.identifier = orgPath.components(separatedBy: "/").last ?? ""
         
-        // Getting the name property without any modifications
-        self.name  = try values.decode(String.self, forKey: .name)
+        // Getting the display name property without any modifications
+        self.displayName  = try values.decode(String.self, forKey: .displayName)
     }
 }

@@ -10,16 +10,16 @@ import Foundation
 
 public struct Device: Decodable {
     public let identifier: String
-    public var name: String
+    public var displayName: String
     public let projectID: String
     public let labels: [String: String]
     public let type: DeviceType
     public var reportedEvents: ReportedEvents
     
-    public init(identifier: String, name: String, projectID: String, labels: [String: String], type: DeviceType, reportedEvents: ReportedEvents)
+    public init(identifier: String, displayName: String, projectID: String, labels: [String: String], type: DeviceType, reportedEvents: ReportedEvents)
     {
         self.identifier = identifier
-        self.name = name
+        self.displayName = displayName
         self.projectID = projectID
         self.labels = labels
         self.type = type
@@ -69,27 +69,27 @@ extension Disruptive {
     }
     
     /**
-     Updates the name of a device to a new value (overwrites it if a name already exists).
+     Updates the display name of a device to a new value (overwrites it if a display name already exists).
      
      This is a convenience function that uses the `setDeviceLabel` function with the `name` key.
      
      - Parameter projectID: The identifier for the project the device is in
-     - Parameter deviceID: The identifier of the device to change the name of
-     - Parameter newName: The new name to set for the device
+     - Parameter deviceID: The identifier of the device to change the display name of
+     - Parameter newDisplayName: The new display name to set for the device
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func updateDeviceName(
-        projectID : String,
-        deviceID  : String,
-        newName   : String,
-        completion: @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    public func updateDeviceDisplayName(
+        projectID      : String,
+        deviceID       : String,
+        newDisplayName : String,
+        completion     : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
         setDeviceLabel(
             projectID  : projectID,
             deviceID   : deviceID,
             key        : "name",
-            value      : newName,
+            value      : newDisplayName,
             completion : completion
         )
     }
@@ -223,7 +223,7 @@ extension Device {
         self.type   = try values.decode(DeviceType.self,       forKey: .type)
         
         // The name of the device comes in a label (if set)
-        self.name = self.labels["name", default: ""]
+        self.displayName = self.labels["name", default: ""]
         
         self.reportedEvents = try values.decode(ReportedEvents.self, forKey: .reportedEvents)
     }
