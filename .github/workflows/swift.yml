@@ -7,13 +7,25 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  test:
     runs-on: macos-latest
-
     steps:
     - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
     - name: Run tests
       run: swift test -v
+  
+  publish_jazzy_docs:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Generate Jazzy Docs
+      run: jazzy \
+           --clean
+           --module Disruptive \
+           --swift-build-tool spm \
+           --build-tool-arguments -Xswiftc,-swift-version,-Xswiftc,5 \
+           --output docs
+    - name: Public Jazzy Docs
+      run: git commit -am "Updated Jazzy Docs" && \
+           git push
+      
