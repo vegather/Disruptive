@@ -31,9 +31,8 @@ jobs:
           format: html
           output: docs
       - run: pwd
-      - run: cd docs
-      - run: pwd
-      - run: cd ..
+      - run: cd docs && pwd
+      - run: git status
       - run: whoami
       - name: Checks
         run: ls -lah
