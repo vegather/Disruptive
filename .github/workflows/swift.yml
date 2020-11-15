@@ -19,17 +19,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          # Fetches the code in the current branch
           # https://github.com/marketplace/actions/git-auto-commit#checkout-the-correct-branch
           ref: ${{ github.head_ref }}
           token: ${{ secrets.PAT_TOKEN }}
       - name: Generate Documentation
         uses: SwiftDocOrg/swift-doc@master
         with:
+          # Generates HTML documentation, and writes to the `docs` dir
           module-name: Disruptive
           format: html
-          output: "docs"
+          output: docs
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          # Pushes the `docs` dir to a `documentation` branch
+          branch: documentation
+          file_pattern: docs
           commit_message: "CI: Updated Swift documentation"
       #- name: Commit Documentation
       #  run: |
