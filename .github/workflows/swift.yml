@@ -34,12 +34,10 @@ jobs:
       - run: cd docs && pwd
       - run: git status
       - run: whoami
-      - name: Checks
-        run: ls -lah
-      - name: check2
-        run: ls -lah docs
-      - name: Git add
-        run: git add docs/
+      - run: ls -lah
+      - run: ls -lah docs
+      - run: ls -lah docs/Auth
+      - run: git add docs/
       #- uses: stefanzweifel/git-auto-commit-action@v4
       #  with:
       #    # Pushes the `docs` dir to a `documentation` branch
