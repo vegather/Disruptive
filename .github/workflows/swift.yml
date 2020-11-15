@@ -30,12 +30,14 @@ jobs:
           module-name: Disruptive
           format: html
           output: docs
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          # Pushes the `docs` dir to a `documentation` branch
-          branch: documentation
-          file_pattern: docs
-          commit_message: "CI: Updated Swift documentation"
+      - name: Git add
+        run: git add .
+      #- uses: stefanzweifel/git-auto-commit-action@v4
+      #  with:
+      #    # Pushes the `docs` dir to a `documentation` branch
+      #    branch: documentation
+      #    file_pattern: docs
+      #    commit_message: "CI: Updated Swift documentation"
       #- name: Commit Documentation
       #  run: |
       #    echo ${{ github.ref }}
