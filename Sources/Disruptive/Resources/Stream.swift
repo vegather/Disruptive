@@ -22,7 +22,7 @@ extension Disruptive {
      ```
      
      - Parameter projectID: The identifier of the project that contains the device(s)
-     - Parameter deviceID: An array of device identifiers to subscribe to. If not specified (or `nil`), all the devices in the project will be subscribed to.
+     - Parameter deviceIDs: An array of device identifiers to subscribe to. If not specified (or `nil`), all the devices in the project will be subscribed to.
      - Parameter deviceTypes: An array of device types to subscribe to. This is useful if `nil` is specified for the `deviceIDs` argument.
      - Parameter labelFilters: An array of label filter expressions that filters the set of devices for the results. Each expression takes the form labelKey=labelValue.
      - Parameter eventTypes: An array of event types to subscribe to.

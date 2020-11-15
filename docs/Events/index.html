@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disruptive - Events</title>
+    <link rel="stylesheet" type="text/css" href="/all.css" media="all" />
+</head>
+<body>
+    <header>
+        <a href="/">
+            <strong>
+                Disruptive
+            </strong>
+            <span>Documentation</span>
+        </a>
+        <sup>Beta</sup>
+    </header>
+
+    <!--
+    <form class="search">
+        <input type="search" placeholder="Search" />
+    </form>
+    -->
+
+    <nav>
+        <div class="wrapper">
+            <h2>On This Page</h2>
+            <ol><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#events.init()">init()</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#events.touch">touch</a></li><li class="variable"><a href="#events.temperature">temperature</a></li><li class="variable"><a href="#events.objectpresent">object​Present</a></li><li class="variable"><a href="#events.humidity">humidity</a></li><li class="variable"><a href="#events.objectpresentcount">object​Present​Count</a></li><li class="variable"><a href="#events.touchcount">touch​Count</a></li><li class="variable"><a href="#events.waterpresent">water​Present</a></li><li class="variable"><a href="#events.networkstatus">network​Status</a></li><li class="variable"><a href="#events.batterystatus">battery​Status</a></li><li class="variable"><a href="#events.connectionstatus">connection​Status</a></li><li class="variable"><a href="#events.ethernetstatus">ethernet​Status</a></li><li class="variable"><a href="#events.cellularstatus">cellular​Status</a></li><li class="variable"><a href="#events.latencystatus">latency​Status</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#events.merge(with:)">merge(with:​)</a></li></ul></li></ol>
+        </div>
+    </nav>
+
+    <main>
+        <article>
+            <h1>
+    <small>Structure</small>
+    <code class="name">Events</code>
+</h1>
+
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">Events</span></code></pre></body></html>
+
+    <section id="initializers">
+        <h2>Initializers</h2>
+
+        <div role="article" class="initializer" id="events.init()">
+    <h3>
+        <code>init()</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>()</code></pre></body></html>
+</div>
+    </section>
+    <section id="properties">
+        <h2>Properties</h2>
+
+        <div role="article" class="variable" id="events.touch">
+    <h3>
+        <code>touch</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">touch</span>: [<a href="/TouchEvent"><span class="type">TouchEvent</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.temperature">
+    <h3>
+        <code>temperature</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">temperature</span>: [<a href="/TemperatureEvent"><span class="type">TemperatureEvent</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.objectpresent">
+    <h3>
+        <code>object​Present</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">objectPresent</span>: [<a href="/ObjectPresentEvent"><span class="type">ObjectPresentEvent</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.humidity">
+    <h3>
+        <code>humidity</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">humidity</span>: [<a href="/HumidityEvent"><span class="type">HumidityEvent</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.objectpresentcount">
+    <h3>
+        <code>object​Present​Count</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">objectPresentCount</span>: [<a href="/ObjectPresentCount"><span class="type">ObjectPresentCount</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.touchcount">
+    <h3>
+        <code>touch​Count</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">touchCount</span>: [<a href="/TouchCount"><span class="type">TouchCount</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.waterpresent">
+    <h3>
+        <code>water​Present</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">waterPresent</span>: [<a href="/WaterPresentEvent"><span class="type">WaterPresentEvent</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.networkstatus">
+    <h3>
+        <code>network​Status</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">networkStatus</span>: [<a href="/NetworkStatus"><span class="type">NetworkStatus</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.batterystatus">
+    <h3>
+        <code>battery​Status</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">batteryStatus</span>: [<a href="/BatteryStatus"><span class="type">BatteryStatus</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.connectionstatus">
+    <h3>
+        <code>connection​Status</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">connectionStatus</span>: [<a href="/ConnectionStatus"><span class="type">ConnectionStatus</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.ethernetstatus">
+    <h3>
+        <code>ethernet​Status</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">ethernetStatus</span>: [<a href="/EthernetStatus"><span class="type">EthernetStatus</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.cellularstatus">
+    <h3>
+        <code>cellular​Status</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">cellularStatus</span>: [<a href="/CellularStatus"><span class="type">CellularStatus</span></a>]?</code></pre></body></html>
+</div>
+<div role="article" class="variable" id="events.latencystatus">
+    <h3>
+        <code>latency​Status</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">latencyStatus</span>: [<a href="/ConnectionLatency"><span class="type">ConnectionLatency</span></a>]?</code></pre></body></html>
+</div>
+    </section>
+    <section id="methods">
+        <h2>Methods</h2>
+
+        <div role="article" class="function" id="events.merge(with:)">
+    <h3>
+        <code>merge(with:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="attribute">mutating</span> <span class="keyword">func</span> <span class="function">merge</span>(<span class="variable">with</span> <span class="variable">other</span>: <a href="/Events"><span class="type">Events</span></a>)</code></pre></body></html>
+</div>
+    </section>
+
+
+
+        </article>
+    </main>
+
+    <footer>
+        <p>
+    Generated on <time datetime="2020-11-15T23:58:13+0100">15 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+</p>
+    </footer>
+</body>
+</html>

@@ -8,6 +8,11 @@
 
 import Foundation
 
+/**
+ Represents a Cloud Connector or Sensor from Disruptive Technologies
+ 
+ - SeeAlso: Methods are implemented in [Disruptive](../Disruptive/index.html)
+ */
 public struct Device: Decodable {
     public let identifier: String
     public var displayName: String
