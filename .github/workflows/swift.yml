@@ -14,22 +14,44 @@ jobs:
   #  - name: Run tests
   #    run: swift test -v
   
-  publish_jazzy_docs:
-    runs-on: macos-latest
+  publish_swift_docs:
+    runs-on: ubuntu-latest
     steps:
-      - name: Publish Jazzy Docs
-        # You may pin to the exact commit or the version.
-        # uses: Steven0351/publish-jazzy-docs@9ac83856c845f4b7d4803f1ebb3bbc2fa85bbfdd
-        uses: Steven0351/publish-jazzy-docs@v1.1.2
+      - uses: actions/checkout@v2
+      - name: Generate Documentation
+        uses: SwiftDocOrg/swift-doc@master
         with:
-          # Path to .jazzy.yml file - preferred
-          #config: # optional
-          # Arguments to pass to Jazzy
-          args: "--clean --module Disruptive --swift-build-tool spm --build-tool-arguments -Xswiftc,-swift-version,-Xswiftc,5"
-          # Jazzy Version
-          #version: # optional
-          # Personal access token
-          personal_access_token: ${{ secrets.GITHUB_TOKEN }}
+          module-name: Disruptive
+          format: html
+          output: "docs"
+      - name: Commit Documentation
+        run: |
+          echo ${{ github.ref }}
+          git add .
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "CI: Update Swift documentation" -a | exit 0
+      - name: Push Documentation
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+    
+  #publish_jazzy_docs:
+  #  runs-on: macos-latest
+  #  steps:
+  #    - name: Publish Jazzy Docs
+  #      # You may pin to the exact commit or the version.
+  #      # uses: Steven0351/publish-jazzy-docs@9ac83856c845f4b7d4803f1ebb3bbc2fa85bbfdd
+  #      uses: Steven0351/publish-jazzy-docs@v1.1.2
+  #      with:
+  #        # Path to .jazzy.yml file - preferred
+  #        #config: # optional
+  #        # Arguments to pass to Jazzy
+  #        args: "--clean --module Disruptive --swift-build-tool spm --build-tool-arguments -Xswiftc,-swift-version,-Xswiftc,5"
+  #        # Jazzy Version
+  #        #version: # optional
+  #        # Personal access token
+  #        personal_access_token: ${{ secrets.GITHUB_TOKEN }}
   
   #publish_jazzy_docs:
   #  runs-on: macos-latest
