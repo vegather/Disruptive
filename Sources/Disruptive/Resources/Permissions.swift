@@ -10,7 +10,7 @@ import Foundation
 
 /**
  A permission is a specific action that an authenticated account is allowed to do within
- a specific project.
+ a specific project or organization.
  
  Permissions for the four different roles:
  

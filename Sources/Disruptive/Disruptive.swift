@@ -11,8 +11,6 @@ import Foundation
 /**
  This is the core of the `Disruptive` Swift API, and implements the majority of the Disruptive Technologies REST API endpoints.
  
- This 
- 
  The most straight-forward usage is to create one single shared instance of this, and use it across
  the entire app (although you can create multiple instances if you need to). When initialized with an
  `AuthProvider`, a `Disruptive` instance will keep an access token up-to-date automatically,
