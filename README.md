@@ -31,7 +31,9 @@ dependencies: [
 
 ### Overview
 
-To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be the entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors. 
+To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be the entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors.
+
+The endpoints implemented on the `Disruptive` struct will typically return a value of the type `Result` (read more about that type [here](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This will contain the value you requested on `.success` (if any, `Void` if not), or a `DisruptiveError` on `.failure`.
 
 The following sections will provide a brief guide to the most common use-cases of the API. Check out the [full API documentation](https://vegather.github.io/Disruptive/) for more.
 
@@ -46,13 +48,105 @@ Here's an example of how to authenticate a service account with the OAuth2 flow:
 let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
 let authProvider = OAuth2ServiceAccount(account: serviceAccount)
 let disruptive = Disruptive(authProvider: authProvider)
+
+// Call methods on disruptive...
 ```
 
 ### Requesting Orgs, Projects, and Devices
 
+The endpoints that returns a list (such as `getOrganizations` or `getProjects`), are paginated automatically in the background. This could mean that multiple networking requests are made and their results group together before returning the final list. The end result is that you just call one method, and get back one array of items.
+
+Example of fetching all organizations available to the authenticated account:
+
+```swift
+disruptive.getOrganizations { result in
+    switch result {
+        case .success(let organizations):
+            print(organizations)
+        case .failure(let error):
+            print("Failed to get organizations: \(error)")
+    }
+}
+```
+
+Fetching projects lets you filter on both the organization (by identifier) as well as a keyword based query. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
+
+```swift
+disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result in
+    switch result {
+        case .success(let projects):
+            print(projects)
+        case .failure(let error):
+            print("Failed to get projects: \(error)")
+    }
+}
+```
+
+When fetching devices you need to specify the identifier of the project to fetch the devices for. This identifier could be fetched from the `getProjects` endpoint for example.
+
+```swift
+disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
+    switch result {
+        case .success(let devices):
+            print(devices)
+        case .failure(let error):
+            print("Failed to get devices: \(error)")
+    }
+}
+```
+
+It is also possible to look-up a single device just by the identifier of the device. This is useful if you can an identifier by scanning a QR code for example:
+
+```swift
+disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
+    switch result {
+        case .success(let device):
+            print(device)
+        case .failure(let error):
+            print("Failed to get device: \(error)")
+    }
+}
+```
+
 ### Requesting Historical Events
 
+Fetching historical events for a device is similar to fetching other lists of data (like `getOrganizations` or `getProjects`). You need to specify the identifier of the project and the device, and optionally the start/end time and which events to fetch (certain event types are only available for certain device types, eg. `temperature`). If the result was `.success`, you will receive a value of type `Events` that contains an optional array of events for each event type. Only the event types that were actually returned will be non-nil, not necessarily the one specified in the `eventTypes` parameter.
+
+Example of fetching just temperature events for a temperature sensor (defaults to last 24 hours):
+
+```swift
+disruptive.getEvents(projectID: "<PROJECT_ID>", deviceID: "<DEVICE_ID>", eventTypes: [.temperature]) { result in
+    switch result {
+        case .success(let events):
+            if let temperatureEvents = events.temperature {
+                print(temperatureEvents)
+            }
+        case .failure(let error):
+            print("Failed to get temperature events: \(error)")
+    }
+}
+```
+
+
 ### Subscribing to Device Events
+
+When subscribing to device events you have two options: Either subscribe to a single device, or to a list of devices. If you want to subscribe to a list of devices, you can filter on which devices to subscribe to based on both device types and labels. Either way, you will get a value of type `ServerSentEvents` back that will let you set up a callback for the various event types.
+
+Example of subscribing to temperature events for a single temperature sensor:
+```swift
+let stream = disruptive.subscribeToDevice(
+    projectID  : "<PROJECT_ID>", 
+    deviceID   : "<DEVICE_ID>", 
+    eventTypes : [.temperature]
+)
+stream?.onError = { error in
+    print("Got stream error: \(error)")
+}
+stream?.onTemperature = { deviceID, temperatureEvent in
+    print("Got temperature \(temperatureEvent) for device with id \(deviceID)")
+}
+```
+
 
 ### Misc Tips
 

@@ -67,9 +67,24 @@ extension Disruptive {
         - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
      */
     public func subscribeToDevice(_ device: Device, eventTypes: [EventType]? = nil) -> ServerSentEvents? {
+        return subscribeToDevice(
+            projectID  : device.projectID,
+            deviceID   : device.identifier,
+            eventTypes : eventTypes
+        )
+    }
+    
+    /**
+     Convenience function to subscribe to just a single device. See `subscribeToDevices` for more details.
+     
+     - Parameter projectID: The identifier of the project the device is currently in
+     - Parameter deviceID: The identifier of the device to subscribe to
+     - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
+     */
+    public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> ServerSentEvents? {
         return subscribeToDevices(
-            projectID    : device.projectID,
-            deviceIDs    : [device.identifier],
+            projectID    : projectID,
+            deviceIDs    : [deviceID],
             deviceTypes  : nil,
             labelFilters : nil,
             eventTypes   : eventTypes

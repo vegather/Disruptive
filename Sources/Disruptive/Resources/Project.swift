@@ -33,8 +33,8 @@ extension Disruptive {
     /**
      Gets a list of projects. If an `organizationID` is specified, only projects within this organization is fetched. Otherwise, all the projects the authenticated account has access to is returned.
      
-     - Parameter organizationID: The identifier of the organization to get projects from. If not specified (or nil), will fetch all the project the authenticated account has access to.
-     - Parameter query: Simple keyword based search. If not specified (or nil), all projects will be returned.
+     - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch all the project the authenticated account has access to.
+     - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), all projects will be returned.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`
      - Parameter result: `Result<[Project], DisruptiveError>`
      */
