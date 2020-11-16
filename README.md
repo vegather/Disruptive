@@ -4,6 +4,9 @@
 
 Swift library for accessing data from Disruptive Technologies.
 
+
+## Documentation
+
 The full documentation is available [here](https://vegather.github.io/Disruptive/)
 
 
