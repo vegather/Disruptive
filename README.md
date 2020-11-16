@@ -7,7 +7,9 @@ Swift library for accessing data from Disruptive Technologies.
 
 ## Documentation
 
-The full documentation is available [here](https://vegather.github.io/Disruptive/)
+The full API documentation for this library is available [here](https://vegather.github.io/Disruptive/)
+
+Documentation for the Disruptive Technologies REST API is available [here](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260)
 
 
 ## Installation
