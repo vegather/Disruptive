@@ -11,7 +11,10 @@ import Foundation
 /**
  Represents a Cloud Connector or Sensor from Disruptive Technologies
  
- - SeeAlso: Methods are implemented in [Disruptive](../Disruptive/index.html)
+ ### Relevant methods in [Disruptive](../Disruptive):
+ * [`getDevice`](../Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
+ * [`getDevices`](../Disruptive/#disruptive.getdevices(projectid:completion:))
+ 
  */
 public struct Device: Decodable {
     public let identifier: String

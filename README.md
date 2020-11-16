@@ -27,7 +27,37 @@ dependencies: [
 ```
 
 
-## Examples
+## Guides
+
+### Overview
+
+To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be the entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors. 
+
+The following sections will provide a brief guide to the most common use-cases of the API. Check out the [full API documentation](https://vegather.github.io/Disruptive/) for more.
+
+
+### Authentication
+
+Authentication is done by initializing the `Disruptive` instance with a type that conforms to the `AuthProvider` protocol. The recommended type for this is `OAuth2ServiceAccount` which will authenticate a service account using the OAuth2 flow. A service account can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+
+Here's an example of how to authenticate a service account with the OAuth2 flow:
+
+```swift
+let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+let authProvider = OAuth2ServiceAccount(account: serviceAccount)
+let disruptive = Disruptive(authProvider: authProvider)
+```
+
+### Requesting Orgs, Projects, and Devices
+
+### Requesting Historical Events
+
+### Subscribing to Device Events
+
+### Misc Tips
+
+* Some basic debug logs can be enabled by setting `disruptive.loggingEnabled = true` 
+
 
 
 ## Endpoints Implemented
@@ -90,6 +120,13 @@ Emulator
 - [ ] GET /projects/{project}/devices/{device}
 - [ ] DELETE /projects/{project}/devices/{device}
 - [ ] POST /projects/{project}/devices/{device}:publish
+
+
+## Todo
+
+- [ ] Add unit tests. Would like to try to get a test harness set up based on `URLProtocol` as described in this blog post: https://medium.com/@dhawaldawar/how-to-mock-urlsession-using-urlprotocol-8b74f389a67a
+- [ ] Provide better control of pagination. At the moment, this library will automatically fetch all pages before returning the data. Ideally, the caller would be able to decide whether or not they want this automatic behavior, or do it by themselves instead. This would be useful when there are a lot of items in a list, and paging all the items would take too much time.
+- [ ] Labels changed support. The `labelsChanged` event has a slightly different structure than the rest of the event types. It was added to this repo before this was realized, so the implementation is simply commented-out until proper parsing logic is implemented. 
 
 
 ## License

@@ -8,6 +8,11 @@
 
 import Foundation
 
+/**
+ A ServiceAccount is used to authenticate against the Disruptive Technologies API.
+ It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking
+ the `Service Account` tab under `API Integrations` in the side menu.
+ */
 public struct ServiceAccount: Codable {
     public let email  : String
     public let key    : String
@@ -20,6 +25,12 @@ public struct ServiceAccount: Codable {
     }
 }
 
+/**
+ Encapsulates authentication details like access token and expiration date.
+ 
+ This type is only useful to implement an `AuthProvider`, and does not
+ need to be accessed or created in any other circumstances.
+ */
 public struct Auth {
     /// The current token to use for authentication. This `String` needs to
     /// be prefixed with the authentication scheme. Eg: "Basic ..." or "Bearer ..."
@@ -36,6 +47,9 @@ public struct Auth {
     }
 }
 
+/**
+ Defines the interface required to authenticate the `Disruptive` struct.
+ */
 public protocol AuthProvider {
     
     /// The authentication data (token, and expiration date)
@@ -112,6 +126,20 @@ internal extension AuthProvider {
     }
 }
 
+/**
+ An `AuthProvider` that logs in a service account using basic auth.
+ 
+ Only the initializer (`init(account:)`) is relevant externally.
+ 
+ __Note__: This should only be used for development/testing. For production use-cases `JWTAuthSerivecAccount` should be used.
+ 
+ Example:
+ ```
+ let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+ let authProvider = BasicAuthServiceAccount(account: serviceAccount)
+ let disruptive = Disruptive(authProvider: authProvider)
+ ```
+ */
 public struct BasicAuthServiceAccount: AuthProvider {
     private let account : ServiceAccount
         
@@ -125,6 +153,11 @@ public struct BasicAuthServiceAccount: AuthProvider {
     // A basic auth provider is always logged in
     public var shouldBeLoggedIn: Bool { return true }
     
+    /**
+     Initializes a `BasicAuthServiceAccount` using a `ServiceAccount`
+     
+     - Parameter account: The `ServiceAccount` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+     */
     public init(account: ServiceAccount) {
         self.account = account
     }
@@ -142,7 +175,22 @@ public struct BasicAuthServiceAccount: AuthProvider {
     }
 }
 
-public class JWTAuthServiceAccount: AuthProvider {
+/**
+ An `AuthProvider` that logs in a service account using OAuth2.
+ 
+ This is a more secure flow than the basic auth counter-part, and is the
+ recommended way to authenticate a service account in a production environment.
+ 
+ Only the initializer (`init(account:)`) is relevant externally.
+ 
+ Example:
+ ```
+ let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+ let authProvider = OAuth2ServiceAccount(account: serviceAccount)
+ let disruptive = Disruptive(authProvider: authProvider)
+ ```
+ */
+public class OAuth2ServiceAccount: AuthProvider {
 
     private let account : ServiceAccount
 
@@ -150,8 +198,15 @@ public class JWTAuthServiceAccount: AuthProvider {
     private(set) public var shouldBeLoggedIn = false
     
     let authURL: String
-
-    public init(authURL: String, account: ServiceAccount) {
+    
+    
+    /**
+     Initializes an `OAuth2ServiceAccount` using a `ServiceAccount`
+     
+     - Parameter account: The `ServiceAccount` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+     - Parameter authURL: Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is `Disruptive.defaultAuthURL`
+     */
+    public init(account: ServiceAccount, authURL: String = Disruptive.defaultAuthURL) {
         self.authURL = authURL
         self.account = account
     }
@@ -198,6 +253,7 @@ public class JWTAuthServiceAccount: AuthProvider {
             request.send { [weak self] (result: Result<AccessTokenResponse, DisruptiveError>) in
                 switch result {
                     case .success(let response):
+                        DTLog("OAuth2 authentication successful")
                         DispatchQueue.main.async {
                             self?.auth = Auth(
                                 token: "Bearer \(response.accessToken)",
@@ -206,6 +262,7 @@ public class JWTAuthServiceAccount: AuthProvider {
                             completion(.success(()))
                         }
                     case .failure(let e):
+                        DTLog("OAuth2 authentication failed with error: \(e)")
                         DispatchQueue.main.async {
                             completion(.failure(e))
                         }

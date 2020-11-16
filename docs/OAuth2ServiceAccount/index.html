@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disruptive - BasicAuthServiceAccount</title>
+    <title>Disruptive - OAuth2ServiceAccount</title>
     <link rel="stylesheet" type="text/css" href="https://vegather.github.io/Disruptive/all.css" media="all" />
 </head>
 <body>
@@ -26,31 +26,32 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#basicauthserviceaccount.init(account:)">init(account:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#basicauthserviceaccount.auth">auth</a></li><li class="variable"><a href="#basicauthserviceaccount.shouldbeloggedin">should​BeLogged​In</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#basicauthserviceaccount.reauthenticate(completion:)">reauthenticate(completion:​)</a></li><li class="function"><a href="#basicauthserviceaccount.login(completion:)">login(completion:​)</a></li><li class="function"><a href="#basicauthserviceaccount.logout(completion:)">logout(completion:​)</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#oauth2serviceaccount.init(account:authurl:)">init(account:​auth​URL:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#oauth2serviceaccount.auth">auth</a></li><li class="variable"><a href="#oauth2serviceaccount.shouldbeloggedin">should​BeLogged​In</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#oauth2serviceaccount.login(completion:)">login(completion:​)</a></li><li class="function"><a href="#oauth2serviceaccount.logout(completion:)">logout(completion:​)</a></li><li class="function"><a href="#oauth2serviceaccount.reauthenticate(completion:)">reauthenticate(completion:​)</a></li></ul></li></ol>
         </div>
     </nav>
 
     <main>
         <article>
             <h1>
-    <small>Structure</small>
-    <code class="name">Basic​Auth​Service​Account</code>
+    <small>Class</small>
+    <code class="name">OAuth2Service​Account</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">BasicAuthServiceAccount</span>: <a href="https://vegather.github.io/Disruptive/AuthProvider"><span class="type">AuthProvider</span></a></code></pre></body></html>
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="type">OAuth2ServiceAccount</span>: <a href="https://vegather.github.io/Disruptive/AuthProvider"><span class="type">AuthProvider</span></a></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>An <code>AuthProvider</code> that logs in a service account using basic auth.</p>
+    <p>An <code>AuthProvider</code> that logs in a service account using OAuth2.</p>
 
 </div>
 <div class="discussion">
-    <p>Only the initializer (<code>init(account:)</code>) is relevant externally.</p>
+    <p>This is a more secure flow than the basic auth counter-part, and is the
+recommended way to authenticate a service account in a production environment.</p>
 
-<p><strong>Note</strong>: This should only be used for development/testing. For production use-cases <code>JWTAuthSerivecAccount</code> should be used.</p>
+<p>Only the initializer (<code>init(account:)</code>) is relevant externally.</p>
 
 <p>Example:</p>
 
 <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">serviceAccount</span> = <span class="variable">ServiceAccount</span>(<span class="variable">email</span>: <span class="string literal">"</span><span class="string literal">&lt;EMAIL&gt;</span><span class="string literal">"</span>, <span class="variable">key</span>: <span class="string literal">"</span><span class="string literal">&lt;KEY_ID&gt;</span><span class="string literal">"</span>, <span class="variable">secret</span>: <span class="string literal">"</span><span class="string literal">&lt;SECRET&gt;</span><span class="string literal">"</span>)
-<span class="keyword">let</span> <span class="variable">authProvider</span> = <span class="variable">BasicAuthServiceAccount</span>(<span class="variable">account</span>: <span class="type">serviceAccount</span>)
+<span class="keyword">let</span> <span class="variable">authProvider</span> = <span class="variable">OAuth2ServiceAccount</span>(<span class="variable">account</span>: <span class="type">serviceAccount</span>)
 <span class="keyword">let</span> <span class="variable">disruptive</span> = <span class="variable">Disruptive</span>(<span class="variable">authProvider</span>: <span class="type">authProvider</span>)
 </code></pre></body></html>
 </div>
@@ -67,12 +68,12 @@
  viewBox="0.00 0.00 872.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-112 868,-112 868,4 -4,4"/>
-<!-- BasicAuthServiceAccount -->
-<g id="node1" class="node structure current">
-<title>BasicAuthServiceAccount</title>
-<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/BasicAuthServiceAccount" xlink:title="BasicAuthServiceAccount">
+<!-- OAuth2ServiceAccount -->
+<g id="node1" class="node class current">
+<title>OAuth2ServiceAccount</title>
+<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/OAuth2ServiceAccount" xlink:title="OAuth2ServiceAccount">
 <path fill="none" stroke="black" stroke-width="3" d="M528,-108C528,-108 336,-108 336,-108 330,-108 324,-102 324,-96 324,-96 324,-84 324,-84 324,-78 330,-72 336,-72 336,-72 528,-72 528,-72 534,-72 540,-78 540,-84 540,-84 540,-96 540,-96 540,-102 534,-108 528,-108"/>
-<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00">BasicAuthServiceAccount</text>
+<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00">OAuth2ServiceAccount</text>
 </a>
 </g>
 </g>
@@ -85,9 +86,9 @@
 </a>
 </g>
 </g>
-<!-- BasicAuthServiceAccount&#45;&gt;AuthProvider -->
+<!-- OAuth2ServiceAccount&#45;&gt;AuthProvider -->
 <g id="edge1" class="edge conformsTo">
-<title>BasicAuthServiceAccount&#45;&gt;AuthProvider</title>
+<title>OAuth2ServiceAccount&#45;&gt;AuthProvider</title>
 <path fill="none" stroke="black" d="M432,-71.7C432,-63.98 432,-54.71 432,-46.11"/>
 <polygon fill="black" stroke="black" points="435.5,-46.1 432,-36.1 428.5,-46.1 435.5,-46.1"/>
 </g>
@@ -95,7 +96,7 @@
 </svg>
 
 
-    <figcaption hidden>Inheritance graph for BasicAuthServiceAccount.</figcaption>
+    <figcaption hidden>Inheritance graph for OAuth2ServiceAccount.</figcaption>
 </figure>
         <h3>Conforms To</h3>
 <dl>
@@ -107,13 +108,13 @@
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="basicauthserviceaccount.init(account:)">
+        <div role="article" class="initializer" id="oauth2serviceaccount.init(account:authurl:)">
     <h3>
-        <code>init(account:​)</code>
+        <code>init(account:​auth​URL:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">account</span>: <a href="https://vegather.github.io/Disruptive/ServiceAccount"><span class="type">ServiceAccount</span></a>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">account</span>: <a href="https://vegather.github.io/Disruptive/ServiceAccount"><span class="type">ServiceAccount</span></a>, <span class="variable">authURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultAuthURL</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Initializes a <code>BasicAuthServiceAccount</code> using a <code>ServiceAccount</code></p>
+    <p>Initializes an <code>OAuth2ServiceAccount</code> using a <code>ServiceAccount</code></p>
 
 </div>
 <h4>Parameters</h4>
@@ -133,6 +134,12 @@
     <td><p>The <code>ServiceAccount</code> to use for authentication. It can be created in <a href="https://studio.disruptive-technologies.com">DT Studio</a> by clicking the <code>Service Account</code> tab under <code>API Integrations</code> in the side menu.</p>
 </td>
 </tr>
+<tr>
+    <th>auth​URL</th>
+    <td><code class="type">String</code></td>
+    <td><p>Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is <code>Disruptive.defaultAuthURL</code></p>
+</td>
+</tr>
   </tbody>
 </table>
 </div>
@@ -140,39 +147,39 @@
     <section id="properties">
         <h2>Properties</h2>
 
-        <div role="article" class="variable" id="basicauthserviceaccount.auth">
+        <div role="article" class="variable" id="oauth2serviceaccount.auth">
     <h3>
         <code>auth</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">auth</span>: <a href="https://vegather.github.io/Disruptive/Auth"><span class="type">Auth</span></a>?</code></pre></body></html>
 </div>
-<div role="article" class="variable" id="basicauthserviceaccount.shouldbeloggedin">
+<div role="article" class="variable" id="oauth2serviceaccount.shouldbeloggedin">
     <h3>
         <code>should​BeLogged​In</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">shouldBeLoggedIn</span>: <span class="type">Bool</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">shouldBeLoggedIn</span> = <span class="keyword">false</span></code></pre></body></html>
 </div>
     </section>
     <section id="methods">
         <h2>Methods</h2>
 
-        <div role="article" class="function" id="basicauthserviceaccount.reauthenticate(completion:)">
-    <h3>
-        <code>reauthenticate(completion:​)</code>
-    </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">reauthenticate</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> <span class="type">AuthHandler</span>)</code></pre></body></html>
-</div>
-<div role="article" class="function" id="basicauthserviceaccount.login(completion:)">
+        <div role="article" class="function" id="oauth2serviceaccount.login(completion:)">
     <h3>
         <code>login(completion:​)</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">login</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> <span class="type">AuthHandler</span>)</code></pre></body></html>
 </div>
-<div role="article" class="function" id="basicauthserviceaccount.logout(completion:)">
+<div role="article" class="function" id="oauth2serviceaccount.logout(completion:)">
     <h3>
         <code>logout(completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">logout</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> <span class="type">AuthHandler</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">logout</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+</div>
+<div role="article" class="function" id="oauth2serviceaccount.reauthenticate(completion:)">
+    <h3>
+        <code>reauthenticate(completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">reauthenticate</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 </div>
     </section>
 

@@ -8,22 +8,26 @@
 
 import Foundation
 
+/**
+ This is the core of the `Disruptive` Swift API, and implements the majority of the Disruptive Technologies REST API endpoints.
+ 
+ This 
+ 
+ The most straight-forward usage is to create one single shared instance of this, and use it across
+ the entire app (although you can create multiple instances if you need to). When initialized with an
+ `AuthProvider`, a `Disruptive` instance will keep an access token up-to-date automatically,
+ so all requests are authenticated.
+ */
 public struct Disruptive {
     
+    /// The default base URL for the Disruptive Technologies REST API in the production environment
     public static let defaultBaseURL = "https://api.disruptive-technologies.com/v2/"
+    
+    /// The default base URL for authenticating against the Disruptive Technologies REST API in the production environment
     public static let defaultAuthURL = "https://identity.disruptive-technologies.com/oauth2/token"
     
     /// The base URL for the Disruptive REST API.
-    /// This is a settable, member property, meaning that multiple instances
-    /// of `Disruptive` clients can be used at the same time with different
-    /// base URLs (eg. to the dev environment or somewhere else for testing).
-    public var baseURL = Disruptive.defaultBaseURL
-    
-    /// The authentication URL for the Disruptive REST API.
-    /// This is a settable, member property, meaning that multiple instances
-    /// of `Disruptive` clients can be used at the same time with different
-    /// authentication URLs (eg. to the dev environment or somewhere else for testing).
-    public var authURL = Disruptive.defaultAuthURL
+    public let baseURL: String
     
     /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`
     public static var loggingEnabled = false
@@ -34,8 +38,15 @@ public struct Disruptive {
     /// the `authenticate` method will be called before attempting to send the request.
     public let authProvider: AuthProvider
 
-    public init(authProvider: AuthProvider) {
+    /**
+     Initializes a `Disruptive` instance
+     
+     - Parameter authProvider: Used to authenticate against the Disruptive Technologies REST API. It is recommended to pass an `OAuth2ServiceAccount` instance to this parameter.
+     - Parameter baseURL: Optional parameter. The base URL for the REST API. The default value is `Disruptive.defaultBaseURL`.
+     */
+    public init(authProvider: AuthProvider, baseURL: String = Disruptive.defaultBaseURL) {
         self.authProvider = authProvider
+        self.baseURL = baseURL
     }
 }
 
