@@ -29,16 +29,16 @@ dependencies: [
 
 The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemente in this Swift library.
 
-- [x] GET /projects/{project}/devices
-- [x] POST /projects/{project}/devices:batchUpdate
-- [x] POST /projects/{project}/devices:transfer
-- [x] GET /projects/{project}/devices/{device}
-- [x] POST /projects/{project}/devices/{device}/labels (implicitly through `POST /projects/{project}/devices:batchUpdate`)
-- [x] PATCH /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)
+- [x] ~~GET /projects/{project}/devices~~
+- [x] ~~POST /projects/{project}/devices:batchUpdate~~
+- [x] ~~POST /projects/{project}/devices:transfer~~
+- [x] ~~GET /projects/{project}/devices/{device}~~
+- [x] ~~POST /projects/{project}/devices/{device}/labels (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
+- [x] ~~PATCH /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
 - [ ] DELETE /projects/{project}/devices/{device}/labels/{label}
-- [x] GET /projects/{project}/devices/{device}/events
-- [x] GET /projects/{project}/devices:stream
-- [x] GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)
+- [x] ~~GET /projects/{project}/devices/{device}/events~~
+- [x] ~~GET /projects/{project}/devices:stream~~
+- [x] ~~GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)~~
 - [ ] GET /projects/{project}/dataconnectors
 - [ ] POST /projects/{project}/dataconnectors
 - [ ] GET /projects/{project}/dataconnectors/{dataconnector}
@@ -52,22 +52,22 @@ The following is a list of all the available endpoints in the Disruptive Technol
 - [ ] PATCH /organizations/{organization}/members/{member}
 - [ ] DELETE /organizations/{organization}/members/{member}
 - [ ] GET /organizations/{organization}/members/{member}:getInviteUrl
-- [x] GET /organizations/{organization}/permissions
+- [x] ~~GET /organizations/{organization}/permissions~~
 - [ ] GET /projects/{project}/members
 - [ ] POST /projects/{project}/members
 - [ ] GET /projects/{project}/members/{member}
 - [ ] PATCH /projects/{project}/members/{member}
 - [ ] DELETE /projects/{project}/members/{member}
 - [ ] GET /projects/{project}/members/{member}:getInviteUrl
-- [x] GET /projects/{project}/permissions
+- [x] ~~GET /projects/{project}/permissions~~
 - [ ] GET /roles
 - [ ] GET /roles/{role}
-- [x] GET /organizations
+- [x] ~~GET /organizations~~
 - [ ] GET /organizations/{organization}
-- [x] GET /projects
-- [x] POST /projects
-- [x] GET /projects/{project}
-- [x] PATCH /projects/{project}
+- [x] ~~GET /projects~~
+- [x] ~~POST /projects~~
+- [x] ~~GET /projects/{project}~~
+- [x] ~~PATCH /projects/{project}~~
 - [ ] DELETE /projects/{project}
 - [ ] GET /projects/{project}/serviceaccounts
 - [ ] POST /projects/{project}/serviceaccounts
