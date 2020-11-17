@@ -93,7 +93,7 @@ disruptive.getOrganizations { result in
     }
 }
 ```
-[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))
+[`getOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))
 
 
 #### Fetch Projects
@@ -110,7 +110,7 @@ disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result
     }
 }
 ```
-[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))
+[`getProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))
 
 
 #### Fetch Devices
@@ -127,7 +127,7 @@ disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
     }
 }
 ```
-[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:completion:))
+[`getDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:completion:))
 
 
 #### Single Device Lookup
@@ -144,7 +144,7 @@ disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
     }
 }
 ```
-[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
+[`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
 
 
 ### Requesting Historical Events
@@ -165,7 +165,7 @@ disruptive.getEvents(projectID: "<PROJECT_ID>", deviceID: "<DEVICE_ID>", eventTy
     }
 }
 ```
-[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:))
+[`getEvents` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:))
 
 
 ### Subscribing to Device Events
@@ -186,7 +186,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
     print("Got temperature \(temperatureEvent) for device with id \(deviceID)")
 }
 ```
-[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.subscribetodevices(projectid:deviceids:devicetypes:labelfilters:eventtypes:))
+[`subscribeToDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.subscribetodevices(projectid:deviceids:devicetypes:labelfilters:eventtypes:))
 
 
 ### Misc Tips
