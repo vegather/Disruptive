@@ -5,6 +5,24 @@
 Swift library for accessing data from [Disruptive Technologies](https://disruptive-technologies.com).
 
 
+- [API Documentation](#api-documentation)
+- [Installation](#installation)
+- [Guides](#guides)
+    - [Overview](#overview)
+    - [Authentication](#authentication)
+    - [Requesting Organizations, Projects, and Devices](#requesting-organizations-projects-and-devices)
+        - [Fetch Organizations](#fetch-organizations)
+        - [Fetch Projects](#fetch-projects)
+        - [Fetch Devices](#fetch-devices)
+        - [Single Device Lookup](#single-device-lookup)
+    - [Requesting Historical Events](#requesting-historical-events)
+    - [Subscribing to Device Events](#subscribing-to-device-events)
+    - [Misc Tips](#misc-tips)
+- [Endpoints Implemented](#endpoints-implemented)
+- [Todo](#todo)
+- [License](#license)
+
+
 ## API Documentation
 
 The full Swift API documentation for this library is available [here](https://vegather.github.io/Disruptive/)
@@ -44,7 +62,7 @@ The following sections will provide a brief guide to the most common use-cases o
 
 Authentication is done by initializing the `Disruptive` instance with a type that conforms to the `AuthProvider` protocol. The recommended type for this is `OAuth2ServiceAccount` which will authenticate a service account using the OAuth2 flow. A service account can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
 
-Here's an example of how to authenticate a service account with the OAuth2 flow ([docs](https://vegather.github.io/Disruptive/OAuth2ServiceAccount/)):
+Here's an example of how to authenticate a service account with the OAuth2 flow:
 
 ```swift
 let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
@@ -54,13 +72,16 @@ let disruptive = Disruptive(authProvider: authProvider)
 // All methods called on the disruptive instance will be authenticated
 ```
 
+[`OAuth2ServiceAccount` documentation](https://vegather.github.io/Disruptive/OAuth2ServiceAccount/)
+
 ### Requesting Organizations, Projects, and Devices
 
 The endpoints that returns a list (such as `getOrganizations` or `getProjects`), are paginated automatically in the background. This could mean that multiple networking requests are made in the background, the result of each of those requests are grouped together, and the final array is returned within the `Result` in the callback. The end result is that you just call one method, and get back one array of items.
 
+
 #### Fetch Organizations
 
-Here's an example of fetching all the organizations available to the authenticated account ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))):
+Here's an example of fetching all the organizations available to the authenticated account:
 
 ```swift
 disruptive.getOrganizations { result in
@@ -72,10 +93,12 @@ disruptive.getOrganizations { result in
     }
 }
 ```
+[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))
+
 
 #### Fetch Projects
 
-Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))):
+Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
 
 ```swift
 disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result in
@@ -87,10 +110,12 @@ disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result
     }
 }
 ```
+[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))
+
 
 #### Fetch Devices
 
-When fetching devices, you need to specify the identifier of the project to fetch the devices for (this identifier could be fetched from the `getProjects` endpoint for example). Here's an example of how to fetch all the devices within a specified project id ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:completion:)))
+When fetching devices, you need to specify the identifier of the project to fetch the devices for (this identifier could be fetched from the `getProjects` endpoint for example). Here's an example of how to fetch all the devices within a specified project id:
 
 ```swift
 disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
@@ -102,10 +127,12 @@ disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
     }
 }
 ```
+[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:completion:))
+
 
 #### Single Device Lookup
 
-It is also possible to look up a single device just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))):
+It is also possible to look up a single device just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example:
 
 ```swift
 disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
@@ -117,10 +144,12 @@ disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
     }
 }
 ```
+[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
+
 
 ### Requesting Historical Events
 
-Fetching historical events for a device is similar to fetching other lists of data (like `getOrganizations` or `getProjects`). You need to specify the identifier of the project and the device, and optionally the start/end time and which events to fetch (certain event types are only available for certain device types, eg. `temperature` events are only available for `temperature` sensors). If the `Result` returned in the callback was `.success`, you will receive a value of type `Events` that contains an optional array of events for each event type. Only the event types that were actually returned will be non-nil, not necessarily the one specified in the `eventTypes` parameter. ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:)))
+Fetching historical events for a device is similar to fetching other lists of data (like `getOrganizations` or `getProjects`). You need to specify the identifier of the project and the device, and optionally the start/end time and which events to fetch (certain event types are only available for certain device types, eg. `temperature` events are only available for `temperature` sensors). If the `Result` returned in the callback was `.success`, you will receive a value of type `Events` that contains an optional array of events for each event type. Only the event types that were actually returned will be non-nil, not necessarily the one specified in the `eventTypes` parameter.
 
 Example of fetching just temperature events for a temperature sensor (defaults to last 24 hours):
 
@@ -136,6 +165,7 @@ disruptive.getEvents(projectID: "<PROJECT_ID>", deviceID: "<DEVICE_ID>", eventTy
     }
 }
 ```
+[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:))
 
 
 ### Subscribing to Device Events
@@ -156,6 +186,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
     print("Got temperature \(temperatureEvent) for device with id \(deviceID)")
 }
 ```
+[Documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.subscribetodevices(projectid:deviceids:devicetypes:labelfilters:eventtypes:))
 
 
 ### Misc Tips
