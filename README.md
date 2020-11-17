@@ -2,12 +2,12 @@
 
 # Disruptive - Swift API
 
-Swift library for accessing data from Disruptive Technologies.
+Swift library for accessing data from [Disruptive Technologies](https://disruptive-technologies.com).
 
 
-## Documentation
+## API Documentation
 
-The full API documentation for this library is available [here](https://vegather.github.io/Disruptive/)
+The full Swift API documentation for this library is available [here](https://vegather.github.io/Disruptive/)
 
 Documentation for the Disruptive Technologies REST API is available [here](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260)
 
@@ -31,32 +31,36 @@ dependencies: [
 
 ### Overview
 
-To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be the entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors.
+To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be your entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors.
 
-The endpoints implemented on the `Disruptive` struct will typically return a value of the type `Result` (read more about that type [here](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This will contain the value you requested on `.success` (if any, `Void` if not), or a `DisruptiveError` on `.failure`.
+The endpoints implemented on the `Disruptive` struct asynchronous, and will typically a closure you provide with an argument of type `Result` (read more about that type [here](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This `Result` will contain the value you requested on `.success` (`Void` if no values makes sense), or a `DisruptiveError` on `.failure`.
 
-The following sections will provide a brief guide to the most common use-cases of the API. Check out the [full API documentation](https://vegather.github.io/Disruptive/) for more.
+**Note**: The callback with the `Result` will always be called on the `main` queue, even if networking/processing is done in a background queue.
+
+The following sections will provide a brief guide to the most common use-cases of the API. Check out the [full Swift API documentation](https://vegather.github.io/Disruptive/) for more.
 
 
 ### Authentication
 
 Authentication is done by initializing the `Disruptive` instance with a type that conforms to the `AuthProvider` protocol. The recommended type for this is `OAuth2ServiceAccount` which will authenticate a service account using the OAuth2 flow. A service account can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
 
-Here's an example of how to authenticate a service account with the OAuth2 flow:
+Here's an example of how to authenticate a service account with the OAuth2 flow ([docs](https://vegather.github.io/Disruptive/OAuth2ServiceAccount/)):
 
 ```swift
 let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
 let authProvider = OAuth2ServiceAccount(account: serviceAccount)
 let disruptive = Disruptive(authProvider: authProvider)
 
-// Call methods on disruptive...
+// All methods called on the disruptive instance will be authenticated
 ```
 
-### Requesting Orgs, Projects, and Devices
+### Requesting Organizations, Projects, and Devices
 
-The endpoints that returns a list (such as `getOrganizations` or `getProjects`), are paginated automatically in the background. This could mean that multiple networking requests are made and their results group together before returning the final list. The end result is that you just call one method, and get back one array of items.
+The endpoints that returns a list (such as `getOrganizations` or `getProjects`), are paginated automatically in the background. This could mean that multiple networking requests are made in the background, the result of each of those requests are grouped together, and the final array is returned within the `Result` in the callback. The end result is that you just call one method, and get back one array of items.
 
-Example of fetching all organizations available to the authenticated account:
+#### Fetch Organizations
+
+Here's an example of fetching all the organizations available to the authenticated account ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))):
 
 ```swift
 disruptive.getOrganizations { result in
@@ -69,7 +73,9 @@ disruptive.getOrganizations { result in
 }
 ```
 
-Fetching projects lets you filter on both the organization (by identifier) as well as a keyword based query. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
+#### Fetch Projects
+
+Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))):
 
 ```swift
 disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result in
@@ -82,7 +88,9 @@ disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result
 }
 ```
 
-When fetching devices you need to specify the identifier of the project to fetch the devices for. This identifier could be fetched from the `getProjects` endpoint for example.
+#### Fetch Devices
+
+When fetching devices, you need to specify the identifier of the project to fetch the devices for (this identifier could be fetched from the `getProjects` endpoint for example). Here's an example of how to fetch all the devices within a specified project id ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:completion:)))
 
 ```swift
 disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
@@ -95,7 +103,9 @@ disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
 }
 ```
 
-It is also possible to look-up a single device just by the identifier of the device. This is useful if you can an identifier by scanning a QR code for example:
+#### Single Device Lookup
+
+It is also possible to look up a single device just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))):
 
 ```swift
 disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
@@ -110,7 +120,7 @@ disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
 
 ### Requesting Historical Events
 
-Fetching historical events for a device is similar to fetching other lists of data (like `getOrganizations` or `getProjects`). You need to specify the identifier of the project and the device, and optionally the start/end time and which events to fetch (certain event types are only available for certain device types, eg. `temperature`). If the result was `.success`, you will receive a value of type `Events` that contains an optional array of events for each event type. Only the event types that were actually returned will be non-nil, not necessarily the one specified in the `eventTypes` parameter.
+Fetching historical events for a device is similar to fetching other lists of data (like `getOrganizations` or `getProjects`). You need to specify the identifier of the project and the device, and optionally the start/end time and which events to fetch (certain event types are only available for certain device types, eg. `temperature` events are only available for `temperature` sensors). If the `Result` returned in the callback was `.success`, you will receive a value of type `Events` that contains an optional array of events for each event type. Only the event types that were actually returned will be non-nil, not necessarily the one specified in the `eventTypes` parameter. ([docs](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:)))
 
 Example of fetching just temperature events for a temperature sensor (defaults to last 24 hours):
 
@@ -130,14 +140,14 @@ disruptive.getEvents(projectID: "<PROJECT_ID>", deviceID: "<DEVICE_ID>", eventTy
 
 ### Subscribing to Device Events
 
-When subscribing to device events you have two options: Either subscribe to a single device, or to a list of devices. If you want to subscribe to a list of devices, you can filter on which devices to subscribe to based on both device types and labels. Either way, you will get a value of type `ServerSentEvents` back that will let you set up a callback for the various event types.
+When subscribing to device events you have two options: Either subscribe to a single device, or to a list of devices. If you want to subscribe to a list of devices, you can filter on which devices to subscribe to based on both device types and labels. Either way, you will get a value of type `ServerSentEvents` back that will let you set up a callbacks for each the various event types. Only the event types specified in the `eventTypes` parameter will actually receive callbacks.
 
 Example of subscribing to temperature events for a single temperature sensor:
 ```swift
 let stream = disruptive.subscribeToDevice(
     projectID  : "<PROJECT_ID>", 
     deviceID   : "<DEVICE_ID>", 
-    eventTypes : [.temperature]
+    eventTypes : [.temperature] // optional
 )
 stream?.onError = { error in
     print("Got stream error: \(error)")
@@ -156,7 +166,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 ## Endpoints Implemented
 
-The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemente in this Swift library.
+The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
 
 - [x] ~~GET /projects/{project}/devices~~
 - [x] ~~POST /projects/{project}/devices:batchUpdate~~
