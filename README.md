@@ -40,7 +40,7 @@ If you want to add it manually, you can add the following dependency to your `Pa
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vegather/Disruptive.git", .upToNextMajor(from: "2.0.0"))
+    .package(url: "https://github.com/vegather/Disruptive.git", from: "0.0.0")
 ]
 ```
 
