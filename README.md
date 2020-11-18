@@ -34,9 +34,9 @@ Documentation for the Disruptive Technologies REST API is available [here](https
 
 This library is currently only available through the Swift Package Manager (SPM).
 
-If you're running Xcode 11 or later, installing this library can be done by going to `File -> Swift Packages -> Add Package Dependency...` in Xcode, and pasting in the URL to this repo: https://github.com/vegather/Disruptive
+To add this Swift Package as a dependency in Xcode, go to `File -> Swift Packages -> Add Package Dependency...`, and paste in the following URL: `https://github.com/vegather/Disruptive.git`
 
-If you want to add it manually, you can add the following dependency to your `Package.swift`:
+If you want to add it manually to your Swift project, you can add the following dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
