@@ -13,7 +13,7 @@ import Foundation
 // MARK: Events
 // -------------------------------
 
-public struct TouchEvent: Decodable {
+public struct TouchEvent: Decodable, Equatable {
     public let timestamp: Date
     
     private enum CodingKeys: String, CodingKey {
@@ -33,7 +33,7 @@ public struct TouchEvent: Decodable {
     }
 }
 
-public struct TemperatureEvent: Decodable {
+public struct TemperatureEvent: Decodable, Equatable {
     public let value: Float
     public let timestamp: Date
     
@@ -59,7 +59,7 @@ public struct TemperatureEvent: Decodable {
     }
 }
 
-public struct ObjectPresentEvent: Decodable {
+public struct ObjectPresentEvent: Decodable, Equatable {
     public let objectPresent: Bool?
     public let timestamp: Date
     
@@ -92,7 +92,7 @@ public struct ObjectPresentEvent: Decodable {
     }
 }
 
-public struct HumidityEvent: Decodable {
+public struct HumidityEvent: Decodable, Equatable {
     public let temperature: Float
     public let relativeHumidity: Float
     public let timestamp: Date
@@ -122,7 +122,7 @@ public struct HumidityEvent: Decodable {
     }
 }
 
-public struct ObjectPresentCount: Decodable {
+public struct ObjectPresentCount: Decodable, Equatable {
     public let total: Int
     public let timestamp: Date
     
@@ -148,7 +148,7 @@ public struct ObjectPresentCount: Decodable {
     }
 }
 
-public struct TouchCount: Decodable {
+public struct TouchCount: Decodable, Equatable {
     public let total: Int
     public let timestamp: Date
     
@@ -174,7 +174,7 @@ public struct TouchCount: Decodable {
     }
 }
 
-public struct WaterPresentEvent: Decodable {
+public struct WaterPresentEvent: Decodable, Equatable {
     public let waterPresent: Bool?
     public let timestamp: Date
     
@@ -211,14 +211,14 @@ public struct WaterPresentEvent: Decodable {
 // MARK: Sensor Status
 // -------------------------------
 
-public struct NetworkStatus: Decodable {
+public struct NetworkStatus: Decodable, Equatable {
     public let signalStrength: Int
     public let rssi: Int
     public let timestamp: Date
     public let cloudConnectors: [CloudConnector]
     public let transmissionMode: TransmissionMode
     
-    public struct CloudConnector: Decodable {
+    public struct CloudConnector: Decodable, Equatable {
         public let id: String
         public let signalStrength: Int
         public let rssi: Int
@@ -230,7 +230,7 @@ public struct NetworkStatus: Decodable {
         }
     }
     
-    public enum TransmissionMode: String, Decodable {
+    public enum TransmissionMode: String, Decodable, Equatable {
         case unknown  = "UNKNOWN_MODE"
         case standard = "LOW_POWER_STANDARD_MODE"
         case boost    = "HIGH_POWER_BOOST_MODE"
@@ -273,7 +273,7 @@ public struct NetworkStatus: Decodable {
     }
 }
 
-public struct BatteryStatus: Decodable {
+public struct BatteryStatus: Decodable, Equatable {
     public let percentage: Int
     public let timestamp: Date
     
@@ -319,8 +319,8 @@ public struct BatteryStatus: Decodable {
 // MARK: Cloud Connector
 // -------------------------------
 
-public struct ConnectionStatus: Decodable {
-    public enum Connection: String, Decodable {
+public struct ConnectionStatus: Decodable, Equatable {
+    public enum Connection: String, Decodable, Equatable {
         case offline  = "OFFLINE"
         case ethernet = "ETHERNET"
         case cellular = "CELLULAR"
@@ -334,7 +334,7 @@ public struct ConnectionStatus: Decodable {
         }
     }
     
-    public enum Available: String, Decodable {
+    public enum Available: String, Decodable, Equatable {
         case ethernet = "ETHERNET"
         case cellular = "CELLULAR"
         
@@ -375,8 +375,8 @@ public struct ConnectionStatus: Decodable {
     }
 }
 
-public struct EthernetStatus: Decodable {
-    public struct ErrorMessage: Decodable {
+public struct EthernetStatus: Decodable, Equatable {
+    public struct ErrorMessage: Decodable, Equatable {
         let code: String
         let message: String
     }
@@ -414,8 +414,8 @@ public struct EthernetStatus: Decodable {
     }
 }
 
-public struct CellularStatus: Decodable {
-    public struct ErrorMessage: Decodable {
+public struct CellularStatus: Decodable, Equatable {
+    public struct ErrorMessage: Decodable, Equatable {
         let code: String
         let message: String
     }
@@ -477,7 +477,7 @@ public enum EventType: String, Encodable, CodingKey {
 }
 
 /// Used to simplify event JSON parsing
-internal enum EventContainer: Decodable {
+internal enum EventContainer: Decodable, Equatable {
     // Events
     case touch              (deviceID: String, event: TouchEvent)
     case temperature        (deviceID: String, event: TemperatureEvent)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Events {
+public struct Events: Equatable {
     // Events
     public var touch              : [TouchEvent]?
     public var temperature        : [TemperatureEvent]?

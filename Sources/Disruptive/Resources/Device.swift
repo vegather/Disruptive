@@ -16,7 +16,7 @@ import Foundation
  * [`getDevices`](../Disruptive/#disruptive.getdevices(projectid:completion:))
  
  */
-public struct Device: Decodable {
+public struct Device: Decodable, Equatable {
     public let identifier: String
     public var displayName: String
     public let projectID: String
@@ -264,7 +264,7 @@ extension Device {
         }
     }
         
-    public struct ReportedEvents: Decodable {
+    public struct ReportedEvents: Decodable, Equatable {
         // Events
         public var touch              : TouchEvent?
         public var touchCount         : TouchCount?

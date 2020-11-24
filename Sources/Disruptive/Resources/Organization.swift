@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Organization: Codable {
+public struct Organization: Codable, Equatable {
     public let identifier: String
     public let displayName: String
 }

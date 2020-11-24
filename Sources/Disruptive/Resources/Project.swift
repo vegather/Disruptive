@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Project: Codable {
+public struct Project: Codable, Equatable {
     public let identifier: String
     public var displayName: String
     public let isInventory: Bool
