@@ -148,12 +148,12 @@ extension Disruptive {
     /**
      Gets all the permissions the currently logged in user has for the given organization.
      
-     - Parameter forOrganization: The identifier of the organization to get the permissions for
+     - Parameter forOrganizationID: The identifier of the organization to get the permissions for
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<[Permission], DisruptiveError>`
      */
     public func getPermissions(
-        forOrganization orgID : String,
+        forOrganizationID orgID : String,
         completion            : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
         // Create the request
@@ -171,12 +171,12 @@ extension Disruptive {
     /**
     Gets all the permissions the currently logged in user has for the given project.
     
-    - Parameter forProject: The identifier of the project to get the permissions for
+    - Parameter forProjectID: The identifier of the project to get the permissions for
     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
     - Parameter result: `Result<[Permission], DisruptiveError>`
     */
     public func getPermissions(
-        forProject projectID : String,
+        forProjectID projectID : String,
         completion           : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
         // Create the request
