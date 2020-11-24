@@ -455,7 +455,7 @@ public struct CellularStatus: Decodable, Equatable {
 // MARK: Events
 // -------------------------------
 
-public enum EventType: String, Encodable, CodingKey {
+public enum EventType: String, Encodable, CodingKey, CaseIterable {
     // Events
     case touch
     case temperature
