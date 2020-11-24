@@ -289,7 +289,7 @@ extension Request {
                 DTLog("Failed to parse JSON: \(str)", isError: true)
                 DTLog("Error: \(error)", isError: true)
             } else {
-                DTLog("Failed to parse payload data: \(payload.hexString())", isError: true)
+                DTLog("Failed to parse payload data: \(payload)", isError: true)
             }
             
             return nil
