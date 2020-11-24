@@ -282,7 +282,6 @@ extension Device {
         public var ethernetStatus     : EthernetStatus?
         public var cellularStatus     : CellularStatus?
         public var connectionStatus   : ConnectionStatus?
-        public var connectionLatency  : ConnectionLatency?
         
         public init() {}
     }

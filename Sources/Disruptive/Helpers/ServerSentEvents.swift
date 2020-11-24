@@ -55,7 +55,6 @@ public class ServerSentEvents: NSObject {
     public var onConnectionStatus   : ((String, ConnectionStatus)  -> ())?
     public var onEthernetStatus     : ((String, EthernetStatus)    -> ())?
     public var onCellularStatus     : ((String, CellularStatus)    -> ())?
-    public var onLatencyStatus      : ((String, ConnectionLatency) -> ())?
     
     // Preventing init without parameters
     private override init() { fatalError() }
@@ -194,7 +193,6 @@ extension ServerSentEvents: URLSessionDataDelegate {
                     case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)
                     case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
                     case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
-                    case .latencyStatus      (let d, let e): onLatencyStatus?(d, e)
                 }
             } catch {
                 DTLog("Failed to decode: \(String(describing: String(data: data, encoding: .utf8))). Error: \(error)", isError: true)

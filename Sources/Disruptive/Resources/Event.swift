@@ -27,7 +27,6 @@ public struct Events {
     public var connectionStatus   : [ConnectionStatus]?
     public var ethernetStatus     : [EthernetStatus]?
     public var cellularStatus     : [CellularStatus]?
-    public var latencyStatus      : [ConnectionLatency]?
     
     public init() {}
 }
@@ -120,7 +119,6 @@ extension Events {
                 case .connectionStatus  (_, let event): Events.addToList(list: &connectionStatus,   newItem: event)
                 case .ethernetStatus    (_, let event): Events.addToList(list: &ethernetStatus,     newItem: event)
                 case .cellularStatus    (_, let event): Events.addToList(list: &cellularStatus,     newItem: event)
-                case .latencyStatus     (_, let event): Events.addToList(list: &latencyStatus,      newItem: event)
             }
         }
     }
@@ -148,7 +146,6 @@ extension Events {
         connectionStatus?  .sort { $0.timestamp < $1.timestamp }
         ethernetStatus?    .sort { $0.timestamp < $1.timestamp }
         cellularStatus?    .sort { $0.timestamp < $1.timestamp }
-        latencyStatus?     .sort { $0.timestamp < $1.timestamp }
     }
     
     public mutating func merge(with other: Events) {
@@ -165,6 +162,5 @@ extension Events {
         if let e = other.connectionStatus   { self.connectionStatus   = e }
         if let e = other.ethernetStatus     { self.ethernetStatus     = e }
         if let e = other.cellularStatus     { self.cellularStatus     = e }
-        if let e = other.latencyStatus      { self.latencyStatus      = e }
     }
 }

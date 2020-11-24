@@ -449,40 +449,6 @@ public struct CellularStatus: Decodable {
     }
 }
 
-public struct ConnectionLatency: Decodable {
-    public let avgLatencyMilliseconds: Int
-    public let minLatencyMilliseconds: Int
-    public let maxLatencyMilliseconds: Int
-    public let timestamp: Date
-    
-    private enum CodingKeys: String, CodingKey {
-        case avgLatencyMilliseconds = "avgLatencyMillis"
-        case minLatencyMilliseconds = "minLatencyMillis"
-        case maxLatencyMilliseconds = "maxLatencyMillis"
-        case timestamp = "updateTime"
-    }
-    
-    public init(avgLatencyMilliseconds: Int, minLatencyMilliseconds: Int, maxLatencyMilliseconds: Int, timestamp: Date) {
-        self.avgLatencyMilliseconds = avgLatencyMilliseconds
-        self.minLatencyMilliseconds = minLatencyMilliseconds
-        self.maxLatencyMilliseconds = maxLatencyMilliseconds
-        self.timestamp = timestamp
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        
-        // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
-        self.timestamp = try Date(iso8601String: timeString)
-        
-        // Extract the other values
-        self.avgLatencyMilliseconds = try values.decode(Int.self, forKey: .avgLatencyMilliseconds)
-        self.minLatencyMilliseconds = try values.decode(Int.self, forKey: .minLatencyMilliseconds)
-        self.maxLatencyMilliseconds = try values.decode(Int.self, forKey: .maxLatencyMilliseconds)
-    }
-}
-
 
 
 // -------------------------------
@@ -508,7 +474,6 @@ public enum EventType: String, Encodable, CodingKey {
     case connectionStatus
     case ethernetStatus
     case cellularStatus
-    case latencyStatus
 }
 
 /// Used to simplify event JSON parsing
@@ -531,7 +496,6 @@ internal enum EventContainer: Decodable {
     case connectionStatus   (deviceID: String, event: ConnectionStatus)
     case ethernetStatus     (deviceID: String, event: EthernetStatus)
     case cellularStatus     (deviceID: String, event: CellularStatus)
-    case latencyStatus      (deviceID: String, event: ConnectionLatency)
 }
 
 extension EventContainer {
@@ -600,9 +564,6 @@ extension EventContainer {
             case .cellularStatus:
                 let event = try eventContainer.decode(CellularStatus.self, forKey: .cellularStatus)
                 self = .cellularStatus(deviceID: deviceID, event: event)
-            case .latencyStatus:
-                let event = try eventContainer.decode(ConnectionLatency.self, forKey: .latencyStatus)
-                self = .latencyStatus(deviceID: deviceID, event: event)
         }
     }
 }
