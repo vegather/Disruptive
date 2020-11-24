@@ -105,7 +105,7 @@ internal struct Request {
 
 extension Request {
     /// Creates a URL session with a 20 second timeout
-    private static var defaultSession: URLSession = {
+    static var defaultSession: URLSession = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest  = 20
         config.timeoutIntervalForResource = 20

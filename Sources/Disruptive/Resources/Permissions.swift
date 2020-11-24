@@ -196,7 +196,7 @@ extension Disruptive {
 /// Enables optional JSON parsing of Permissions.
 /// Eg. if a new permission gets added to the REST API, that will simply
 /// be ignored until it gets added to the `Permission` enum above.
-private struct PermissionWrapper: Decodable {
+internal struct PermissionWrapper: Decodable {
     let permission: Permission?
     
     public init(from decoder: Decoder) throws {
