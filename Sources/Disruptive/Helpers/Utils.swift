@@ -45,11 +45,23 @@ internal extension Data {
 
 
 // -------------------------------
-// MARK: String
+// MARK: Date <-> String
 // -------------------------------
 
-internal extension String {
-    func urlEncoded() -> String? {
-        return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+internal extension Date {
+    func iso8601String() -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.string(from: self)
+    }
+    
+    init(iso8601String: String) throws {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = formatter.date(from: iso8601String) {
+            self = date
+        } else {
+            throw ParseError.dateFormat(date: "Failed to parse ISO 8601 string: \(iso8601String)")
+        }
     }
 }
