@@ -154,14 +154,14 @@ extension Project {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
         // Project identifiers are formatted as "projects/b7s3e550fee000ba5dhg"
-        // Setting the identifier to the last component of the path
-        let projectPath = try values.decode(String.self, forKey: .identifier)
-        self.identifier = projectPath.components(separatedBy: "/").last ?? ""
+        // Setting the identifier to the last component of the resource name
+        let projectResourceName = try values.decode(String.self, forKey: .identifier)
+        self.identifier = projectResourceName.components(separatedBy: "/").last ?? ""
         
         // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
-        // Setting the identifier to the last component of the path
-        let orgPath = try values.decode(String.self, forKey: .orgID)
-        self.orgID = orgPath.components(separatedBy: "/").last ?? ""
+        // Setting the identifier to the last component of the resource name
+        let orgResourceName = try values.decode(String.self, forKey: .orgID)
+        self.orgID = orgResourceName.components(separatedBy: "/").last ?? ""
         
         // Getting the other properties without any modifications
         self.displayName         = try values.decode(String.self, forKey: .displayName)

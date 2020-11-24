@@ -43,9 +43,9 @@ extension Organization {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
         // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
-        // Setting the identifier to the last component of the path
-        let orgPath = try values.decode(String.self, forKey: .identifier)
-        self.identifier = orgPath.components(separatedBy: "/").last ?? ""
+        // Setting the identifier to the last component of the resource name
+        let orgResourceName = try values.decode(String.self, forKey: .identifier)
+        self.identifier = orgResourceName.components(separatedBy: "/").last ?? ""
         
         // Getting the display name property without any modifications
         self.displayName  = try values.decode(String.self, forKey: .displayName)

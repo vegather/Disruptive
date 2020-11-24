@@ -217,14 +217,14 @@ extension Device {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
         // Device identifiers are formatted as "projects/b7s3umd0fee000ba5di0/devices/b5rj9ed7rihk942p48og"
-        // Setting the identifier to the last component of the path
-        let projectPath = try values.decode(String.self, forKey: .identifier)
-        let pathComponents = projectPath.components(separatedBy: "/")
-        guard pathComponents.count == 4 else {
-            throw ParseError.identifier(path: projectPath)
+        // Setting the identifier to the last component of the resource name
+        let projectResourceName = try values.decode(String.self, forKey: .identifier)
+        let resourceNameComponents = projectResourceName.components(separatedBy: "/")
+        guard resourceNameComponents.count == 4 else {
+            throw ParseError.identifier(path: projectResourceName)
         }
-        self.projectID  = pathComponents[1]
-        self.identifier = pathComponents[3]
+        self.projectID  = resourceNameComponents[1]
+        self.identifier = resourceNameComponents[3]
         
         // Getting the other properties without any modifications
         self.labels = try values.decode([String: String].self, forKey: .labels)
