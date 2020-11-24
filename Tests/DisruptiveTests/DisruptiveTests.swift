@@ -1,15 +1,18 @@
 import XCTest
 @testable import Disruptive
 
-final class DisruptiveTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssert(true)
+class DisruptiveTests: XCTestCase {
+    var disruptive: Disruptive!
+    var expectation: XCTestExpectation!
+    
+    override func setUp() {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        Request.defaultSession = URLSession(configuration: configuration)
+        
+        let sa = ServiceAccount(email: "", key: "", secret: "")
+        let ap = BasicAuthServiceAccount(account: sa)
+        disruptive = Disruptive(authProvider: ap)
+        Disruptive.loggingEnabled = true
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }
