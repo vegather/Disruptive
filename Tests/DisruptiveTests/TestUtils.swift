@@ -74,13 +74,17 @@ extension DisruptiveTests {
 }
 
 
-// The following is used to check for equality between JSON payloads
+// The following is used to check for equality between JSON `Data` payloads
 // Source: https://forums.swift.org/t/dynamic-equality-checking-and-equatable/24556/4
 protocol JSONValue {
     func isEqual(to: JSONValue) -> Bool
 }
-extension Array        : JSONValue where Element : JSONValue {}
-extension Dictionary   : JSONValue where Value   : JSONValue {}
+extension JSONValue where Self: Equatable {
+    func isEqual(to: JSONValue) -> Bool {
+        guard let other = to as? Self else { return false }
+        return self == other
+    }
+}
 extension String       : JSONValue {}
 extension Date         : JSONValue {}
 extension Int          : JSONValue {}
@@ -90,21 +94,15 @@ extension NSNull       : JSONValue {}
 extension AnyHashable  : JSONValue {}
 extension NSArray      : JSONValue {}
 extension NSDictionary : JSONValue {}
-extension JSONValue where Self: Equatable {
+extension Array: JSONValue where Element: JSONValue {
     func isEqual(to: JSONValue) -> Bool {
-        guard let other = to as? Self else { return false }
-        return self == other
-    }
-}
-extension Array where Element: JSONValue {
-    func isEqual(to: JSONValue) -> Bool {
-        guard let other = to as? Array<JSONValue>, count == other.count else { return false }
+        guard let other = to as? Self, count == other.count else { return false }
         return (0..<count).allSatisfy { self[$0].isEqual(to: other[$0]) }
     }
 }
-extension Dictionary where Value: JSONValue {
+extension Dictionary: JSONValue where Value: JSONValue {
     func isEqual(to: JSONValue) -> Bool {
-        guard let other = to as? Dictionary<Key, JSONValue>, count == other.count else { return false }
+        guard let other = to as? Self, count == other.count else { return false }
         return allSatisfy { (k, v) in other[k].map { v.isEqual(to: $0) } ?? false }
     }
 }
