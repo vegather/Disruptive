@@ -27,7 +27,7 @@ jobs:
     - name: Create Status Badge
       uses: emibcn/badge-action@v1
       with:
-        label: 'Code Coverage'
+        label: 'Code Coverage 1'
         status: cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5
         color: 'success'
         path: '.github/badges/coverage.svg'
