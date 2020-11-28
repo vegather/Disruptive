@@ -8,8 +8,17 @@
 
 import Foundation
 
+/**
+ Represents an organization registered with Disruptive Technologies.
+ 
+ Relevant methods for `Organization` can be found in [Disruptive](../Disruptive):
+ */
 public struct Organization: Codable, Equatable {
+    
+    /// The unique identifier for the organization. This will be different from the REST API in that it is just the identifier without the `organizations/` prefix.
     public let identifier: String
+    
+    /// The display name of the organization.
     public let displayName: String
 }
 

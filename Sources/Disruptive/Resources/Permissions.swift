@@ -102,9 +102,6 @@ import Foundation
  * project.create
  * organization.update
  * organization.read
-
-
-
  */
 
 public enum Permission: String, Codable {

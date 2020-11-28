@@ -38,6 +38,10 @@
 </h1>
 
 <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">ReportedEvents</span>: <span class="type">Decodable</span>, <span class="type">Equatable</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Represents the latest known reported values for a <code>Device</code>. Any of the event types that is not available for that particular device type, or that have not yet received an event, will be <code>nil</code>.</p>
+
+</div>
 <section id="relationships">
     <h2 hidden>Relationships</h2>
         <figure>
@@ -60,27 +64,27 @@
 </a>
 </g>
 </g>
-<!-- Equatable -->
+<!-- Decodable -->
 <g id="node2" class="node unknown">
-<title>Equatable</title>
+<title>Decodable</title>
 <path fill="none" stroke="black" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
-<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00">Equatable</text>
+<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00">Decodable</text>
 </g>
-<!-- Device.ReportedEvents&#45;&gt;Equatable -->
+<!-- Device.ReportedEvents&#45;&gt;Decodable -->
 <g id="edge1" class="edge conformsTo">
-<title>Device.ReportedEvents&#45;&gt;Equatable</title>
+<title>Device.ReportedEvents&#45;&gt;Decodable</title>
 <path fill="none" stroke="black" d="M377.25,-71.97C345.4,-62.06 305.08,-49.51 271.67,-39.12"/>
 <polygon fill="black" stroke="black" points="272.59,-35.74 262,-36.11 270.51,-42.42 272.59,-35.74"/>
 </g>
-<!-- Decodable -->
+<!-- Equatable -->
 <g id="node3" class="node unknown">
-<title>Decodable</title>
+<title>Equatable</title>
 <path fill="none" stroke="black" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
-<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00">Decodable</text>
+<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00">Equatable</text>
 </g>
-<!-- Device.ReportedEvents&#45;&gt;Decodable -->
+<!-- Device.ReportedEvents&#45;&gt;Equatable -->
 <g id="edge2" class="edge conformsTo">
-<title>Device.ReportedEvents&#45;&gt;Decodable</title>
+<title>Device.ReportedEvents&#45;&gt;Equatable</title>
 <path fill="none" stroke="black" d="M486.75,-71.97C518.6,-62.06 558.92,-49.51 592.33,-39.12"/>
 <polygon fill="black" stroke="black" points="593.49,-42.42 602,-36.11 591.41,-35.74 593.49,-42.42"/>
 </g>
@@ -125,7 +129,7 @@
     <h3>
         <code>touch​Count</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">touchCount</span>: <a href="https://vegather.github.io/Disruptive/TouchCount"><span class="type">TouchCount</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">touchCount</span>: <a href="https://vegather.github.io/Disruptive/TouchCountEvent"><span class="type">TouchCountEvent</span></a>?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="device.reportedevents.temperature">
     <h3>
@@ -149,7 +153,7 @@
     <h3>
         <code>object​Present​Count</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">objectPresentCount</span>: <a href="https://vegather.github.io/Disruptive/ObjectPresentCount"><span class="type">ObjectPresentCount</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">objectPresentCount</span>: <a href="https://vegather.github.io/Disruptive/ObjectPresentCountEvent"><span class="type">ObjectPresentCountEvent</span></a>?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="device.reportedevents.waterpresent">
     <h3>
@@ -161,31 +165,31 @@
     <h3>
         <code>battery​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">batteryStatus</span>: <a href="https://vegather.github.io/Disruptive/BatteryStatus"><span class="type">BatteryStatus</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">batteryStatus</span>: <a href="https://vegather.github.io/Disruptive/BatteryStatusEvent"><span class="type">BatteryStatusEvent</span></a>?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="device.reportedevents.networkstatus">
     <h3>
         <code>network​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">networkStatus</span>: <a href="https://vegather.github.io/Disruptive/NetworkStatus"><span class="type">NetworkStatus</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">networkStatus</span>: <a href="https://vegather.github.io/Disruptive/NetworkStatusEvent"><span class="type">NetworkStatusEvent</span></a>?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="device.reportedevents.ethernetstatus">
     <h3>
         <code>ethernet​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">ethernetStatus</span>: <a href="https://vegather.github.io/Disruptive/EthernetStatus"><span class="type">EthernetStatus</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">ethernetStatus</span>: <a href="https://vegather.github.io/Disruptive/EthernetStatusEvent"><span class="type">EthernetStatusEvent</span></a>?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="device.reportedevents.cellularstatus">
     <h3>
         <code>cellular​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">cellularStatus</span>: <a href="https://vegather.github.io/Disruptive/CellularStatus"><span class="type">CellularStatus</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">cellularStatus</span>: <a href="https://vegather.github.io/Disruptive/CellularStatusEvent"><span class="type">CellularStatusEvent</span></a>?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="device.reportedevents.connectionstatus">
     <h3>
         <code>connection​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">connectionStatus</span>: <a href="https://vegather.github.io/Disruptive/ConnectionStatus"><span class="type">ConnectionStatus</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">connectionStatus</span>: <a href="https://vegather.github.io/Disruptive/ConnectionStatusEvent"><span class="type">ConnectionStatusEvent</span></a>?</code></pre></body></html>
 </div>
     </section>
 
@@ -196,7 +200,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-25T00:05:26+0100">25 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-28T15:34:11+0100">28 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

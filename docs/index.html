@@ -36,8 +36,8 @@
         <h2>Classes</h2>
         <dl>
             <dt class="class">
-    <a href="https://vegather.github.io/Disruptive/OAuth2ServiceAccount" title="class - OAuth2ServiceAccount">
-        OAuth2Service​Account
+    <a href="https://vegather.github.io/Disruptive/OAuth2Authenticator" title="class - OAuth2Authenticator">
+        OAuth2Authenticator
     </a>
 </dt>
 <dd>
@@ -45,12 +45,13 @@
 
 </dd>
 <dt class="class">
-    <a href="https://vegather.github.io/Disruptive/ServerSentEvents" title="class - ServerSentEvents">
-        Server​Sent​Events
+    <a href="https://vegather.github.io/Disruptive/DeviceEventStream" title="class - DeviceEventStream">
+        Device​Event​Stream
     </a>
 </dt>
 <dd>
-    
+    <p>Represent an event stream for a device, and is implemented using <a href="https://www.w3.org/TR/eventsource/">Server-Sent Events</a></p>
+
 </dd>
         </dl>
     </section>
@@ -87,8 +88,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
 
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/BasicAuthServiceAccount" title="structure - BasicAuthServiceAccount">
-        Basic​Auth​Service​Account
+    <a href="https://vegather.github.io/Disruptive/BasicAuthAuthenticator" title="structure - BasicAuthAuthenticator">
+        Basic​Auth​Authenticator
     </a>
 </dt>
 <dd>
@@ -101,7 +102,9 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>An event that is sent whenever a device is touched. This event is sent for almost all the
+available device types (except a few like the counting sensors).</p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/TemperatureEvent" title="structure - TemperatureEvent">
@@ -109,7 +112,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>A temperature event that is sent for temperature sensors every heartbeat, and whenever the sensor is touched.</p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/ObjectPresentEvent" title="structure - ObjectPresentEvent">
@@ -117,7 +121,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>An event that is sent whenever an object is close to a proximity sensor or not.</p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/HumidityEvent" title="structure - HumidityEvent">
@@ -125,23 +130,30 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>A humidity event that is sent for humidity sensors every heartbeat, and whenever the
+sensor is touched. This event contains both the measured temperature as well as the relative humidity.</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/ObjectPresentCount" title="structure - ObjectPresentCount">
-        Object​Present​Count
+    <a href="https://vegather.github.io/Disruptive/ObjectPresentCountEvent" title="structure - ObjectPresentCountEvent">
+        Object​Present​Count​Event
     </a>
 </dt>
 <dd>
-    
+    <p>An event that includes the accumulated count of proximity state changes for a
+Counting Proximity sensor. These events are sent every heartbeat, and <em>not</em> when
+the sensor is touched or when the state is switched (to save battery life).</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/TouchCount" title="structure - TouchCount">
-        Touch​Count
+    <a href="https://vegather.github.io/Disruptive/TouchCountEvent" title="structure - TouchCountEvent">
+        Touch​Count​Event
     </a>
 </dt>
 <dd>
-    
+    <p>An event that includes the accumulated count of touches for a Counting Touch sensor.
+These events are sent every heartbeat, and <em>not</em> when the sensor is touched (to save battery life).</p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/WaterPresentEvent" title="structure - WaterPresentEvent">
@@ -149,35 +161,41 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>An event that indicates whether or not water is present to a Water Detector sensor.
+This event is sent every heartbeat, and when the sensor is touched.</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/NetworkStatus" title="structure - NetworkStatus">
-        Network​Status
+    <a href="https://vegather.github.io/Disruptive/NetworkStatusEvent" title="structure - NetworkStatusEvent">
+        Network​Status​Event
     </a>
 </dt>
 <dd>
-    
+    <p>A network status event describes which Cloud Connectors a sensor is connected to, and how strong
+that connection is. A network status event is sent on every heartbeat, as well as when a sensor is touched.</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/NetworkStatus_CloudConnector" title="structure - NetworkStatus.CloudConnector">
-        Network​Status.​Cloud​Connector
+    <a href="https://vegather.github.io/Disruptive/NetworkStatusEvent_CloudConnector" title="structure - NetworkStatusEvent.CloudConnector">
+        Network​Status​Event.​Cloud​Connector
     </a>
 </dt>
 <dd>
-    
+    <p>A Cloud Connector that picked a network status event for a sensor</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/BatteryStatus" title="structure - BatteryStatus">
-        Battery​Status
+    <a href="https://vegather.github.io/Disruptive/BatteryStatusEvent" title="structure - BatteryStatusEvent">
+        Battery​Status​Event
     </a>
 </dt>
 <dd>
-    
+    <p>A battery status event is sent quite rarely since the battery life of the sensors lasts up to 15 years. It indicates how much battery life is left in the sensor.</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/ConnectionStatus" title="structure - ConnectionStatus">
-        Connection​Status
+    <a href="https://vegather.github.io/Disruptive/ConnectionStatusEvent" title="structure - ConnectionStatusEvent">
+        Connection​Status​Event
     </a>
 </dt>
 <dd>
@@ -185,36 +203,40 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
 
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/EthernetStatus" title="structure - EthernetStatus">
-        Ethernet​Status
+    <a href="https://vegather.github.io/Disruptive/EthernetStatusEvent" title="structure - EthernetStatusEvent">
+        Ethernet​Status​Event
     </a>
 </dt>
 <dd>
-    
+    <p>Details about the current ethernet connection status of a Cloud Connector</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/EthernetStatus_ErrorMessage" title="structure - EthernetStatus.ErrorMessage">
-        Ethernet​Status.​Error​Message
+    <a href="https://vegather.github.io/Disruptive/EthernetStatusEvent_ErrorMessage" title="structure - EthernetStatusEvent.ErrorMessage">
+        Ethernet​Status​Event.​Error​Message
     </a>
 </dt>
 <dd>
-    
+    <p>Indicates an error related to connecting to the local network</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/CellularStatus" title="structure - CellularStatus">
-        Cellular​Status
+    <a href="https://vegather.github.io/Disruptive/CellularStatusEvent" title="structure - CellularStatusEvent">
+        Cellular​Status​Event
     </a>
 </dt>
 <dd>
-    
+    <p>Details about the current cellular connection status of a Cloud Connector.</p>
+
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/CellularStatus_ErrorMessage" title="structure - CellularStatus.ErrorMessage">
-        Cellular​Status.​Error​Message
+    <a href="https://vegather.github.io/Disruptive/CellularStatusEvent_ErrorMessage" title="structure - CellularStatusEvent.ErrorMessage">
+        Cellular​Status​Event.​Error​Message
     </a>
 </dt>
 <dd>
-    
+    <p>Indicates an error related to connecting to the cellular network</p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/Device" title="structure - Device">
@@ -231,7 +253,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>Represents the latest known reported values for a <code>Device</code>. Any of the event types that is not available for that particular device type, or that have not yet received an event, will be <code>nil</code>.</p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/Events" title="structure - Events">
@@ -239,7 +262,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>Contains a array of events for each type of event for a specific <code>Device</code>.  Detailed documentation for each event type can be found on Disruptive Technologies' <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events">developer website</a></p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/Organization" title="structure - Organization">
@@ -247,7 +271,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>Represents an organization registered with Disruptive Technologies.</p>
+
 </dd>
 <dt class="structure">
     <a href="https://vegather.github.io/Disruptive/Project" title="structure - Project">
@@ -255,7 +280,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>Represents a project within an <code>Organization</code></p>
+
 </dd>
         </dl>
     </section>
@@ -268,31 +294,37 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>An enumeration of all the possible errors that could occur by calling one of the endpoints.</p>
+
 </dd>
 <dt class="enumeration">
-    <a href="https://vegather.github.io/Disruptive/NetworkStatus_TransmissionMode" title="enumeration - NetworkStatus.TransmissionMode">
-        Network​Status.​Transmission​Mode
+    <a href="https://vegather.github.io/Disruptive/NetworkStatusEvent_TransmissionMode" title="enumeration - NetworkStatusEvent.TransmissionMode">
+        Network​Status​Event.​Transmission​Mode
     </a>
 </dt>
 <dd>
-    
+    <p>The transmission mode the sensor is currently in. The sensor will automatically switch
+transmission modes when the sensor has low connectivity to a Cloud Connector.
+See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360003182914-What-is-Boost-high-power-usage-">Help Center</a> for more details.</p>
+
 </dd>
 <dt class="enumeration">
-    <a href="https://vegather.github.io/Disruptive/ConnectionStatus_Connection" title="enumeration - ConnectionStatus.Connection">
-        Connection​Status.​Connection
+    <a href="https://vegather.github.io/Disruptive/ConnectionStatusEvent_Connection" title="enumeration - ConnectionStatusEvent.Connection">
+        Connection​Status​Event.​Connection
     </a>
 </dt>
 <dd>
-    
+    <p>Indicates the current connectivity of a Cloud Connector</p>
+
 </dd>
 <dt class="enumeration">
-    <a href="https://vegather.github.io/Disruptive/ConnectionStatus_Available" title="enumeration - ConnectionStatus.Available">
-        Connection​Status.​Available
+    <a href="https://vegather.github.io/Disruptive/ConnectionStatusEvent_Available" title="enumeration - ConnectionStatusEvent.Available">
+        Connection​Status​Event.​Available
     </a>
 </dt>
 <dd>
-    
+    <p>Indicates a connectivity that is available for a Cloud Connector</p>
+
 </dd>
 <dt class="enumeration">
     <a href="https://vegather.github.io/Disruptive/EventType" title="enumeration - EventType">
@@ -300,7 +332,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>An enumeration of all the possible types of events that a device can emit.</p>
+
 </dd>
 <dt class="enumeration">
     <a href="https://vegather.github.io/Disruptive/Device_DeviceType" title="enumeration - Device.DeviceType">
@@ -308,7 +341,8 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
     </a>
 </dt>
 <dd>
-    
+    <p>Represents the type of a <code>Device</code>.</p>
+
 </dd>
 <dt class="enumeration">
     <a href="https://vegather.github.io/Disruptive/Permission" title="enumeration - Permission">
@@ -341,7 +375,7 @@ a specific project or organization.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-25T00:05:25+0100">25 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-28T15:34:10+0100">28 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

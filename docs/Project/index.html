@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#project.init(identifier:displayname:isinventory:orgid:orgdisplayname:sensorcount:cloudconnectorcount:)">init(identifier:​display​Name:​is​Inventory:​org​ID:​org​Display​Name:​sensor​Count:​cloud​Connector​Count:​)</a></li><li class="initializer"><a href="#project.init(from:)">init(from:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#project.identifier">identifier</a></li><li class="variable"><a href="#project.displayname">display​Name</a></li><li class="variable"><a href="#project.isinventory">is​Inventory</a></li><li class="variable"><a href="#project.orgid">org​ID</a></li><li class="variable"><a href="#project.orgdisplayname">org​Display​Name</a></li><li class="variable"><a href="#project.sensorcount">sensor​Count</a></li><li class="variable"><a href="#project.cloudconnectorcount">cloud​Connector​Count</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#project.init(identifier:displayname:isinventory:organizationid:organizationdisplayname:sensorcount:cloudconnectorcount:)">init(identifier:​display​Name:​is​Inventory:​organization​ID:​organization​Display​Name:​sensor​Count:​cloud​Connector​Count:​)</a></li><li class="initializer"><a href="#project.init(from:)">init(from:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#project.identifier">identifier</a></li><li class="variable"><a href="#project.displayname">display​Name</a></li><li class="variable"><a href="#project.isinventory">is​Inventory</a></li><li class="variable"><a href="#project.organizationid">organization​ID</a></li><li class="variable"><a href="#project.organizationdisplayname">organization​Display​Name</a></li><li class="variable"><a href="#project.sensorcount">sensor​Count</a></li><li class="variable"><a href="#project.cloudconnectorcount">cloud​Connector​Count</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -38,6 +38,14 @@
 </h1>
 
 <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">Project</span>: <span class="type">Codable</span>, <span class="type">Equatable</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Represents a project within an <code>Organization</code></p>
+
+</div>
+<div class="discussion">
+    <p>Relevant methods for <code>Project</code> can be found in <a href="../Disruptive">Disruptive</a>:</p>
+
+</div>
 <section id="relationships">
     <h2 hidden>Relationships</h2>
         <figure>
@@ -67,7 +75,7 @@
 <text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00">Equatable</text>
 </g>
 <!-- Project&#45;&gt;Equatable -->
-<g id="edge1" class="edge conformsTo">
+<g id="edge2" class="edge conformsTo">
 <title>Project&#45;&gt;Equatable</title>
 <path fill="none" stroke="black" d="M377.25,-71.97C345.4,-62.06 305.08,-49.51 271.67,-39.12"/>
 <polygon fill="black" stroke="black" points="272.59,-35.74 262,-36.11 270.51,-42.42 272.59,-35.74"/>
@@ -79,7 +87,7 @@
 <text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00">Codable</text>
 </g>
 <!-- Project&#45;&gt;Codable -->
-<g id="edge2" class="edge conformsTo">
+<g id="edge1" class="edge conformsTo">
 <title>Project&#45;&gt;Codable</title>
 <path fill="none" stroke="black" d="M486.75,-71.97C518.6,-62.06 558.92,-49.51 592.33,-39.12"/>
 <polygon fill="black" stroke="black" points="593.49,-42.42 602,-36.11 591.41,-35.74 593.49,-42.42"/>
@@ -99,11 +107,15 @@
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="project.init(identifier:displayname:isinventory:orgid:orgdisplayname:sensorcount:cloudconnectorcount:)">
+        <div role="article" class="initializer" id="project.init(identifier:displayname:isinventory:organizationid:organizationdisplayname:sensorcount:cloudconnectorcount:)">
     <h3>
-        <code>init(identifier:​display​Name:​is​Inventory:​org​ID:​org​Display​Name:​sensor​Count:​cloud​Connector​Count:​)</code>
+        <code>init(identifier:​display​Name:​is​Inventory:​organization​ID:​organization​Display​Name:​sensor​Count:​cloud​Connector​Count:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">identifier</span>: <span class="type">String</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">isInventory</span>: <span class="type">Bool</span>, <span class="variable">orgID</span>: <span class="type">String</span>, <span class="variable">orgDisplayName</span>: <span class="type">String</span>, <span class="variable">sensorCount</span>: <span class="type">Int</span>, <span class="variable">cloudConnectorCount</span>: <span class="type">Int</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">identifier</span>: <span class="type">String</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">isInventory</span>: <span class="type">Bool</span>, <span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">organizationDisplayName</span>: <span class="type">String</span>, <span class="variable">sensorCount</span>: <span class="type">Int</span>, <span class="variable">cloudConnectorCount</span>: <span class="type">Int</span>)</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Creates a new <code>Project</code>. Creating a new project can be useful for testing purposes</p>
+
+</div>
 </div>
 <div role="article" class="initializer" id="project.init(from:)">
     <h3>
@@ -120,42 +132,70 @@
         <code>identifier</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">identifier</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The unique identifier of the project</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="project.displayname">
     <h3>
         <code>display​Name</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">displayName</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The display name of the project</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="project.isinventory">
     <h3>
         <code>is​Inventory</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">isInventory</span>: <span class="type">Bool</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Specifies whether or not the project is the inventory project. The inventory project in an organization is the project where newly purchased devices will be placed.</p>
+
 </div>
-<div role="article" class="variable" id="project.orgid">
-    <h3>
-        <code>org​ID</code>
-    </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">orgID</span>: <span class="type">String</span></code></pre></body></html>
 </div>
-<div role="article" class="variable" id="project.orgdisplayname">
+<div role="article" class="variable" id="project.organizationid">
     <h3>
-        <code>org​Display​Name</code>
+        <code>organization​ID</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">orgDisplayName</span>: <span class="type">String</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">organizationID</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The identifier of the organization the project is in</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="project.organizationdisplayname">
+    <h3>
+        <code>organization​Display​Name</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">organizationDisplayName</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The display name of the organization the project is in</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="project.sensorcount">
     <h3>
         <code>sensor​Count</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">sensorCount</span>: <span class="type">Int</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The number of Sensors currently in the project</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="project.cloudconnectorcount">
     <h3>
         <code>cloud​Connector​Count</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">cloudConnectorCount</span>: <span class="type">Int</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The number of Cloud Connectors currently in the project</p>
+
+</div>
 </div>
     </section>
 
@@ -166,7 +206,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-25T00:05:27+0100">25 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-28T15:34:11+0100">28 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

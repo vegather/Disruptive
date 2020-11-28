@@ -43,16 +43,7 @@
 
 </div>
 <div class="discussion">
-    <h3>Relevant methods in <a href="../Disruptive">Disruptive</a>:</h3>
-
-<ul>
-<li>
-<p><a href="../Disruptive/#disruptive.getdevice(projectid:deviceid:completion:)"><code>getDevice</code></a></p>
-</li>
-<li>
-<p><a href="../Disruptive/#disruptive.getdevices(projectid:completion:)"><code>getDevices</code></a></p>
-</li>
-</ul>
+    <p>Relevant methods for <code>Device</code> can be found in <a href="../Disruptive">Disruptive</a>:</p>
 
 </div>
 <section id="relationships">
@@ -77,27 +68,27 @@
 </a>
 </g>
 </g>
-<!-- Equatable -->
+<!-- Decodable -->
 <g id="node2" class="node unknown">
-<title>Equatable</title>
+<title>Decodable</title>
 <path fill="none" stroke="black" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
-<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00">Equatable</text>
+<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00">Decodable</text>
 </g>
-<!-- Device&#45;&gt;Equatable -->
+<!-- Device&#45;&gt;Decodable -->
 <g id="edge2" class="edge conformsTo">
-<title>Device&#45;&gt;Equatable</title>
+<title>Device&#45;&gt;Decodable</title>
 <path fill="none" stroke="black" d="M377.25,-71.97C345.4,-62.06 305.08,-49.51 271.67,-39.12"/>
 <polygon fill="black" stroke="black" points="272.59,-35.74 262,-36.11 270.51,-42.42 272.59,-35.74"/>
 </g>
-<!-- Decodable -->
+<!-- Equatable -->
 <g id="node3" class="node unknown">
-<title>Decodable</title>
+<title>Equatable</title>
 <path fill="none" stroke="black" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
-<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00">Decodable</text>
+<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00">Equatable</text>
 </g>
-<!-- Device&#45;&gt;Decodable -->
+<!-- Device&#45;&gt;Equatable -->
 <g id="edge1" class="edge conformsTo">
-<title>Device&#45;&gt;Decodable</title>
+<title>Device&#45;&gt;Equatable</title>
 <path fill="none" stroke="black" d="M486.75,-71.97C518.6,-62.06 558.92,-49.51 592.33,-39.12"/>
 <polygon fill="black" stroke="black" points="593.49,-42.42 602,-36.11 591.41,-35.74 593.49,-42.42"/>
 </g>
@@ -110,9 +101,11 @@
         <h3>Nested Types</h3>
 <dl>
     <dt class="enumeration"><code><a href="https://vegather.github.io/Disruptive/Device_DeviceType">Device.DeviceType</a></code></dt>
-<dd></dd>
+<dd><p>Represents the type of a <code>Device</code>.</p>
+</dd>
 <dt class="structure"><code><a href="https://vegather.github.io/Disruptive/Device_ReportedEvents">Device.ReportedEvents</a></code></dt>
-<dd></dd>
+<dd><p>Represents the latest known reported values for a <code>Device</code>. Any of the event types that is not available for that particular device type, or that have not yet received an event, will be <code>nil</code>.</p>
+</dd>
 </dl>
 <h3>Conforms To</h3>
 <dl>
@@ -128,6 +121,10 @@
         <code>init(identifier:​display​Name:​project​ID:​labels:​type:​reported​Events:​)</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">identifier</span>: <span class="type">String</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">labels</span>: [<span class="type">String</span>: <span class="type">String</span>], <span class="variable">type</span>: <span class="type">DeviceType</span>, <span class="variable">reportedEvents</span>: <span class="type">ReportedEvents</span>)</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Creates a new <code>Device</code>. Creating a new device can be useful for testing purposes.</p>
+
+</div>
 </div>
 <div role="article" class="initializer" id="device.init(from:)">
     <h3>
@@ -144,36 +141,60 @@
         <code>identifier</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">identifier</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The unique identifier of the device. This will be different from the REST API in that it is just the identifier without the <code>projects/*/devices/</code> prefix.</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="device.displayname">
     <h3>
         <code>display​Name</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">displayName</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The display name of the device.</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="device.projectid">
     <h3>
         <code>project​ID</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">projectID</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The identifier of the project the device is in</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="device.labels">
     <h3>
         <code>labels</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">labels</span>: [<span class="type">String</span>: <span class="type">String</span>]</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The labels that are currently set on the device. This will also include the <code>displayName</code> of the device as a label with the key <code>name</code>.</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="device.type">
     <h3>
         <code>type</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">type</span>: <span class="type">DeviceType</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The type of the device. What type the device is determines which types of events it will receive.</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="device.reportedevents">
     <h3>
         <code>reported​Events</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">reportedEvents</span>: <span class="type">ReportedEvents</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The last known reported event for each available event type for the device. Which of these are available is dependent on the device <code>type</code>.</p>
+
+</div>
 </div>
     </section>
 
@@ -184,7 +205,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-25T00:05:26+0100">25 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-28T15:34:11+0100">28 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

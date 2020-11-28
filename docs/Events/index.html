@@ -38,6 +38,14 @@
 </h1>
 
 <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">Events</span>: <span class="type">Equatable</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Contains a array of events for each type of event for a specific <code>Device</code>.  Detailed documentation for each event type can be found on Disruptive Technologies' <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events">developer website</a></p>
+
+</div>
+<div class="discussion">
+    <p>Relevant methods for <code>Events</code> can be found in <a href="../Disruptive">Disruptive</a>:</p>
+
+</div>
 <section id="relationships">
     <h2 hidden>Relationships</h2>
         <figure>
@@ -124,13 +132,13 @@
     <h3>
         <code>object​Present​Count</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">objectPresentCount</span>: [<a href="https://vegather.github.io/Disruptive/ObjectPresentCount"><span class="type">ObjectPresentCount</span></a>]?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">objectPresentCount</span>: [<a href="https://vegather.github.io/Disruptive/ObjectPresentCountEvent"><span class="type">ObjectPresentCountEvent</span></a>]?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="events.touchcount">
     <h3>
         <code>touch​Count</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">touchCount</span>: [<a href="https://vegather.github.io/Disruptive/TouchCount"><span class="type">TouchCount</span></a>]?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">touchCount</span>: [<a href="https://vegather.github.io/Disruptive/TouchCountEvent"><span class="type">TouchCountEvent</span></a>]?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="events.waterpresent">
     <h3>
@@ -142,31 +150,31 @@
     <h3>
         <code>network​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">networkStatus</span>: [<a href="https://vegather.github.io/Disruptive/NetworkStatus"><span class="type">NetworkStatus</span></a>]?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">networkStatus</span>: [<a href="https://vegather.github.io/Disruptive/NetworkStatusEvent"><span class="type">NetworkStatusEvent</span></a>]?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="events.batterystatus">
     <h3>
         <code>battery​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">batteryStatus</span>: [<a href="https://vegather.github.io/Disruptive/BatteryStatus"><span class="type">BatteryStatus</span></a>]?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">batteryStatus</span>: [<a href="https://vegather.github.io/Disruptive/BatteryStatusEvent"><span class="type">BatteryStatusEvent</span></a>]?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="events.connectionstatus">
     <h3>
         <code>connection​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">connectionStatus</span>: [<a href="https://vegather.github.io/Disruptive/ConnectionStatus"><span class="type">ConnectionStatus</span></a>]?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">connectionStatus</span>: [<a href="https://vegather.github.io/Disruptive/ConnectionStatusEvent"><span class="type">ConnectionStatusEvent</span></a>]?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="events.ethernetstatus">
     <h3>
         <code>ethernet​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">ethernetStatus</span>: [<a href="https://vegather.github.io/Disruptive/EthernetStatus"><span class="type">EthernetStatus</span></a>]?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">ethernetStatus</span>: [<a href="https://vegather.github.io/Disruptive/EthernetStatusEvent"><span class="type">EthernetStatusEvent</span></a>]?</code></pre></body></html>
 </div>
 <div role="article" class="variable" id="events.cellularstatus">
     <h3>
         <code>cellular​Status</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">cellularStatus</span>: [<a href="https://vegather.github.io/Disruptive/CellularStatus"><span class="type">CellularStatus</span></a>]?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">cellularStatus</span>: [<a href="https://vegather.github.io/Disruptive/CellularStatusEvent"><span class="type">CellularStatusEvent</span></a>]?</code></pre></body></html>
 </div>
     </section>
     <section id="methods">
@@ -187,7 +195,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-25T00:05:27+0100">25 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-28T15:34:11+0100">28 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

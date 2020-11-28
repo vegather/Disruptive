@@ -11,19 +11,29 @@ import Foundation
 /**
  Represents a Cloud Connector or Sensor from Disruptive Technologies
  
- ### Relevant methods in [Disruptive](../Disruptive):
- * [`getDevice`](../Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
- * [`getDevices`](../Disruptive/#disruptive.getdevices(projectid:completion:))
- 
+ Relevant methods for `Device` can be found in [Disruptive](../Disruptive):
  */
 public struct Device: Decodable, Equatable {
+    
+    /// The unique identifier of the device. This will be different from the REST API in that it is just the identifier without the `projects/*/devices/` prefix.
     public let identifier: String
+    
+    /// The display name of the device.
     public var displayName: String
+    
+    /// The identifier of the project the device is in
     public let projectID: String
+    
+    /// The labels that are currently set on the device. This will also include the `displayName` of the device as a label with the key `name`.
     public let labels: [String: String]
+    
+    /// The type of the device. What type the device is determines which types of events it will receive.
     public let type: DeviceType
+    
+    /// The last known reported event for each available event type for the device. Which of these are available is dependent on the device `type`.
     public var reportedEvents: ReportedEvents
     
+    /// Creates a new `Device`. Creating a new device can be useful for testing purposes.
     public init(identifier: String, displayName: String, projectID: String, labels: [String: String], type: DeviceType, reportedEvents: ReportedEvents)
     {
         self.identifier = identifier
@@ -61,7 +71,7 @@ extension Disruptive {
     /**
      Gets a list of devices in a specific project.
      
-     - Parameter projectID: The identifier for the project to get devices from
+     - Parameter projectID: The identifier of the project to get devices from
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
@@ -79,9 +89,9 @@ extension Disruptive {
     /**
      Updates the display name of a device to a new value (overwrites it if a display name already exists).
      
-     This is a convenience function that uses the `setDeviceLabel` function with the `name` key.
+     This is a convenience function for `batchUpdateDeviceLabels` by setting the `name` label to the new display name.
      
-     - Parameter projectID: The identifier for the project the device is in
+     - Parameter projectID: The identifier of the project the device is in
      - Parameter deviceID: The identifier of the device to change the display name of
      - Parameter newDisplayName: The new display name to set for the device
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
@@ -102,6 +112,17 @@ extension Disruptive {
         )
     }
     
+    /**
+     Removes the specified label for the device. Will return success if the label didn't exist
+     
+     This is a convenience function for `batchUpdateDeviceLabels`.
+     
+     - Parameter projectID: The identifier of the project the device is in
+     - Parameter deviceID: The identifier of the device to remove a label from
+     - Parameter labelKey: The key of the label to remove
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<Void, DisruptiveError>`
+     */
     public func removeDeviceLabel(
         projectID  : String,
         deviceID   : String,
@@ -118,9 +139,11 @@ extension Disruptive {
     }
     
     /**
-     Assigns a value to a label key for a specific device. If the label key doesn't already exists it will be created. Otherwise the value for the key is updated. This is in effect an upsert.
+     Assigns a value to a label key for a specific device. If the label key doesn't already exists it will be created, otherwise the value for the key is updated. This is in effect an upsert.
      
-     - Parameter projectID: The identifier for the project the device is in
+     This is a convenience function for `batchUpdateDeviceLabels`.
+     
+     - Parameter projectID: The identifier of the project the device is in
      - Parameter deviceID: The identifier of the device to set the label for
      - Parameter labelKey: The key of the label
      - Parameter labelValue: The new value of the label
@@ -143,6 +166,16 @@ extension Disruptive {
         )
     }
     
+    /**
+     Performs a batch update to add or remove one or more labels to one or more devices in a project.
+     
+     - Parameter projectID: The identifier of the project the devices are in
+     - Parameter deviceIDs: An array of identifiers for the devices to set or remove labels from
+     - Parameter labelsToSet: The key-value pairs to set for the device. If the labels already exists they will be updated, otherwise they will be created, effectively doing an upsert. Any labels that already exists on a device, but are not provided here will be left as-is.
+     - Parameter labelsToRemove: An array of label keys to remove from the device
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<Void, DisruptiveError>`
+     */
     public func batchUpdateDeviceLabels(
         projectID      : String,
         deviceIDs      : [String],
@@ -245,6 +278,10 @@ extension Device {
 }
 
 extension Device {
+    
+    /**
+     Represents the type of a `Device`.
+     */
     public enum DeviceType: String, Codable, CaseIterable {
         case temperature      = "temperature"
         case touch            = "touch"
@@ -256,6 +293,7 @@ extension Device {
         case cloudConnector   = "ccon"
         case unknown
         
+        /// Returns a `String` representation of the device type that is suited for presenting to a user on screen
         public func displayName() -> String {
             switch self {
                 case .temperature      : return "Temperature"
@@ -270,7 +308,10 @@ extension Device {
             }
         }
     }
-        
+    
+    /**
+     Represents the latest known reported values for a `Device`. Any of the event types that is not available for that particular device type, or that have not yet received an event, will be `nil`.
+     */
     public struct ReportedEvents: Decodable, Equatable {
         // Events
         public var touch              : TouchEvent?

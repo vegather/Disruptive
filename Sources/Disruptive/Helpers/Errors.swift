@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+ An enumeration of all the possible errors that could occur by calling one of the endpoints.
+ */
 public enum DisruptiveError: Error {
     /// Could not reach the server. Either the client is not connected
     /// to the internet, or the server is currently offline.

@@ -8,15 +8,35 @@
 
 import Foundation
 
+/**
+ Represents a project within an `Organization`
+ 
+ Relevant methods for `Project` can be found in [Disruptive](../Disruptive):
+ */
 public struct Project: Codable, Equatable {
+    
+    /// The unique identifier of the project
     public let identifier: String
+    
+    /// The display name of the project
     public var displayName: String
+    
+    /// Specifies whether or not the project is the inventory project. The inventory project in an organization is the project where newly purchased devices will be placed.
     public let isInventory: Bool
+    
+    /// The identifier of the organization the project is in
     public let organizationID: String
+    
+    /// The display name of the organization the project is in
     public let organizationDisplayName: String
+    
+    /// The number of Sensors currently in the project
     public let sensorCount: Int
+    
+    /// The number of Cloud Connectors currently in the project
     public let cloudConnectorCount: Int
     
+    /// Creates a new `Project`. Creating a new project can be useful for testing purposes
     public init(identifier: String, displayName: String, isInventory: Bool, organizationID: String, organizationDisplayName: String, sensorCount: Int, cloudConnectorCount: Int) {
         self.identifier = identifier
         self.displayName = displayName
