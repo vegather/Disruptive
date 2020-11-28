@@ -194,7 +194,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.setDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, key: reqLabelKey, value: reqLabelValue) { result in
+        disruptive.setDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKey, labelValue: reqLabelValue) { result in
             switch result {
                 case .success():
                     break
@@ -305,9 +305,9 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testHumanPresentableDeviceType() {
+    func testDeviceTypeDisplayName() {
         Device.DeviceType.allCases.forEach {
-            XCTAssertTrue($0.humanPresentable().count > 0)
+            XCTAssertTrue($0.displayName().count > 0)
         }
     }
 }

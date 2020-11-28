@@ -27,7 +27,7 @@ extension Disruptive {
      - Parameter labelFilters: An array of label filter expressions that filters the set of devices for the results. Each expression takes the form labelKey=labelValue.
      - Parameter eventTypes: An array of event types to subscribe to.
           
-     - Returns: A `ServerSentEvents` device stream object with callbacks for each type of event. For example, set a closure on the `onNetworkStatus` property to receive an event each time a device sends out a heart beat.
+     - Returns: A `DeviceEventStream` device stream object with callbacks for each type of event. For example, set a closure on the `onNetworkStatus` property to receive an event each time a device sends out a heart beat.
      */
     public func subscribeToDevices(
         projectID    : String,
@@ -35,7 +35,7 @@ extension Disruptive {
         deviceTypes  : [Device.DeviceType]? = nil,
         labelFilters : [String]?            = nil,
         eventTypes   : [EventType]?         = nil)
-        -> ServerSentEvents?
+        -> DeviceEventStream?
     {
         DTLog("Subscribing to \(projectID)")
         
@@ -57,7 +57,7 @@ extension Disruptive {
         let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices:stream", params: params)
         
         // Create the stream, and connect to it
-        return ServerSentEvents(request: request, authProvider: authProvider)
+        return DeviceEventStream(request: request, authProvider: authProvider)
     }
     
     /**
@@ -66,7 +66,7 @@ extension Disruptive {
         - Parameter device: The device to subscribe to
         - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
      */
-    public func subscribeToDevice(_ device: Device, eventTypes: [EventType]? = nil) -> ServerSentEvents? {
+    public func subscribeToDevice(_ device: Device, eventTypes: [EventType]? = nil) -> DeviceEventStream? {
         return subscribeToDevice(
             projectID  : device.projectID,
             deviceID   : device.identifier,
@@ -81,7 +81,7 @@ extension Disruptive {
      - Parameter deviceID: The identifier of the device to subscribe to
      - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
      */
-    public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> ServerSentEvents? {
+    public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> DeviceEventStream? {
         return subscribeToDevices(
             projectID    : projectID,
             deviceIDs    : [deviceID],

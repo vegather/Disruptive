@@ -12,17 +12,17 @@ public struct Project: Codable, Equatable {
     public let identifier: String
     public var displayName: String
     public let isInventory: Bool
-    public let orgID: String
-    public let orgDisplayName: String
+    public let organizationID: String
+    public let organizationDisplayName: String
     public let sensorCount: Int
     public let cloudConnectorCount: Int
     
-    public init(identifier: String, displayName: String, isInventory: Bool, orgID: String, orgDisplayName: String, sensorCount: Int, cloudConnectorCount: Int) {
+    public init(identifier: String, displayName: String, isInventory: Bool, organizationID: String, organizationDisplayName: String, sensorCount: Int, cloudConnectorCount: Int) {
         self.identifier = identifier
         self.displayName = displayName
         self.isInventory = isInventory
-        self.orgID = orgID
-        self.orgDisplayName = orgDisplayName
+        self.organizationID = organizationID
+        self.organizationDisplayName = organizationDisplayName
         self.sensorCount = sensorCount
         self.cloudConnectorCount = cloudConnectorCount
     }
@@ -141,11 +141,11 @@ extension Disruptive {
 
 extension Project {
     private enum CodingKeys: String, CodingKey {
-        case identifier     = "name"
+        case identifier              = "name"
         case displayName
-        case isInventory    = "inventory"
-        case orgID          = "organization"
-        case orgDisplayName = "organizationDisplayName"
+        case isInventory             = "inventory"
+        case organizationID          = "organization"
+        case organizationDisplayName = "organizationDisplayName"
         case sensorCount
         case cloudConnectorCount
     }
@@ -160,14 +160,14 @@ extension Project {
         
         // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
         // Setting the identifier to the last component of the resource name
-        let orgResourceName = try values.decode(String.self, forKey: .orgID)
-        self.orgID = orgResourceName.components(separatedBy: "/").last ?? ""
+        let orgResourceName = try values.decode(String.self, forKey: .organizationID)
+        self.organizationID = orgResourceName.components(separatedBy: "/").last ?? ""
         
         // Getting the other properties without any modifications
-        self.displayName         = try values.decode(String.self, forKey: .displayName)
-        self.isInventory         = try values.decode(Bool.self,   forKey: .isInventory)
-        self.orgDisplayName      = try values.decode(String.self, forKey: .orgDisplayName)
-        self.sensorCount         = try values.decode(Int.self,    forKey: .sensorCount)
-        self.cloudConnectorCount = try values.decode(Int.self,    forKey: .cloudConnectorCount)
+        self.displayName             = try values.decode(String.self, forKey: .displayName)
+        self.isInventory             = try values.decode(Bool.self,   forKey: .isInventory)
+        self.organizationDisplayName = try values.decode(String.self, forKey: .organizationDisplayName)
+        self.sensorCount             = try values.decode(Int.self,    forKey: .sensorCount)
+        self.cloudConnectorCount     = try values.decode(Int.self,    forKey: .cloudConnectorCount)
     }
 }

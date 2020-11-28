@@ -122,7 +122,7 @@ public struct HumidityEvent: Decodable, Equatable {
     }
 }
 
-public struct ObjectPresentCount: Decodable, Equatable {
+public struct ObjectPresentCountEvent: Decodable, Equatable {
     public let total: Int
     public let timestamp: Date
     
@@ -146,17 +146,17 @@ public struct ObjectPresentCount: Decodable, Equatable {
         // Extract the total
         self.total = try values.decode(Int.self, forKey: .total)
     }
-}
-
-public struct TouchCount: Decodable, Equatable {
-    public let total: Int
-    public let timestamp: Date
     
     private enum CodingKeys: String, CodingKey {
         case total
         case timestamp = "updateTime"
     }
+}
+
+public struct TouchCountEvent: Decodable, Equatable {
     
+    public let total: Int
+    public let timestamp: Date
     public init(total: Int, timestamp: Date) {
         self.total = total
         self.timestamp = timestamp
@@ -211,7 +211,7 @@ public struct WaterPresentEvent: Decodable, Equatable {
 // MARK: Sensor Status
 // -------------------------------
 
-public struct NetworkStatus: Decodable, Equatable {
+public struct NetworkStatusEvent: Decodable, Equatable {
     public let signalStrength: Int
     public let rssi: Int
     public let timestamp: Date
@@ -219,12 +219,12 @@ public struct NetworkStatus: Decodable, Equatable {
     public let transmissionMode: TransmissionMode
     
     public struct CloudConnector: Decodable, Equatable {
-        public let id: String
+        public let identifier: String
         public let signalStrength: Int
         public let rssi: Int
         
-        public init(id: String, signalStrength: Int, rssi: Int) {
-            self.id = id
+        public init(identifier: String, signalStrength: Int, rssi: Int) {
+            self.identifier = identifier
             self.signalStrength = signalStrength
             self.rssi = rssi
         }
@@ -273,7 +273,7 @@ public struct NetworkStatus: Decodable, Equatable {
     }
 }
 
-public struct BatteryStatus: Decodable, Equatable {
+public struct BatteryStatusEvent: Decodable, Equatable {
     public let percentage: Int
     public let timestamp: Date
     
@@ -301,7 +301,7 @@ public struct BatteryStatus: Decodable, Equatable {
 
 /// This will only be available when subscribing to an event stream on a sensor, or through a data connector
 // TODO: This does not work! `labelsChanged` is not a key in the `data` field as expected
-//public struct LabelsChanged: Decodable {
+//public struct LabelsChangedEvent: Decodable {
 //    public let added    : [String: String]
 //    public let modified : [String: String]
 //    public let removed  : [String]
@@ -319,13 +319,13 @@ public struct BatteryStatus: Decodable, Equatable {
 // MARK: Cloud Connector
 // -------------------------------
 
-public struct ConnectionStatus: Decodable, Equatable {
+public struct ConnectionStatusEvent: Decodable, Equatable {
     public enum Connection: String, Decodable, Equatable {
         case offline  = "OFFLINE"
         case ethernet = "ETHERNET"
         case cellular = "CELLULAR"
         
-        public func humanReadable() -> String {
+        public func displayName() -> String {
             switch self {
                 case .offline: return "Offline"
                 case .ethernet: return "Ethernet"
@@ -338,7 +338,7 @@ public struct ConnectionStatus: Decodable, Equatable {
         case ethernet = "ETHERNET"
         case cellular = "CELLULAR"
         
-        public func humanReadable() -> String {
+        public func displayName() -> String {
             switch self {
                 case .ethernet: return "Ethernet"
                 case .cellular: return "Cellular"
@@ -375,12 +375,12 @@ public struct ConnectionStatus: Decodable, Equatable {
     }
 }
 
-public struct EthernetStatus: Decodable, Equatable {
     public struct ErrorMessage: Decodable, Equatable {
         let code: String
         let message: String
     }
     
+public struct EthernetStatusEvent: Decodable, Equatable {
     public let macAddress: String
     public let ipAddress: String
     public let errors: [ErrorMessage]
@@ -414,12 +414,12 @@ public struct EthernetStatus: Decodable, Equatable {
     }
 }
 
-public struct CellularStatus: Decodable, Equatable {
     public struct ErrorMessage: Decodable, Equatable {
         let code: String
         let message: String
     }
     
+public struct CellularStatusEvent: Decodable, Equatable {
     public let signalStrength: Int
     public let errors: [ErrorMessage]
     public let timestamp: Date
@@ -483,19 +483,19 @@ internal enum EventContainer: Decodable, Equatable {
     case temperature        (deviceID: String, event: TemperatureEvent)
     case objectPresent      (deviceID: String, event: ObjectPresentEvent)
     case humidity           (deviceID: String, event: HumidityEvent)
-    case objectPresentCount (deviceID: String, event: ObjectPresentCount)
-    case touchCount         (deviceID: String, event: TouchCount)
+    case objectPresentCount (deviceID: String, event: ObjectPresentCountEvent)
+    case touchCount         (deviceID: String, event: TouchCountEvent)
     case waterPresent       (deviceID: String, event: WaterPresentEvent)
     
     // Sensor Status
-    case networkStatus      (deviceID: String, event: NetworkStatus)
-    case batteryStatus      (deviceID: String, event: BatteryStatus)
+    case networkStatus      (deviceID: String, event: NetworkStatusEvent)
+    case batteryStatus      (deviceID: String, event: BatteryStatusEvent)
 //    case labelsChanged      (deviceID: String, event: LabelsChanged)
     
     // Cloud Connector
-    case connectionStatus   (deviceID: String, event: ConnectionStatus)
-    case ethernetStatus     (deviceID: String, event: EthernetStatus)
-    case cellularStatus     (deviceID: String, event: CellularStatus)
+    case connectionStatus   (deviceID: String, event: ConnectionStatusEvent)
+    case ethernetStatus     (deviceID: String, event: EthernetStatusEvent)
+    case cellularStatus     (deviceID: String, event: CellularStatusEvent)
 }
 
 extension EventContainer {
@@ -534,10 +534,10 @@ extension EventContainer {
                 let event = try eventContainer.decode(HumidityEvent.self, forKey: .humidity)
                 self = .humidity(deviceID: deviceID, event: event)
             case .objectPresentCount:
-                let event = try eventContainer.decode(ObjectPresentCount.self, forKey: .objectPresentCount)
+                let event = try eventContainer.decode(ObjectPresentCountEvent.self, forKey: .objectPresentCount)
                 self = .objectPresentCount(deviceID: deviceID, event: event)
             case .touchCount:
-                let event = try eventContainer.decode(TouchCount.self, forKey: .touchCount)
+                let event = try eventContainer.decode(TouchCountEvent.self, forKey: .touchCount)
                 self = .touchCount(deviceID: deviceID, event: event)
             case .waterPresent:
                 let event = try eventContainer.decode(WaterPresentEvent.self, forKey: .waterPresent)
@@ -545,10 +545,10 @@ extension EventContainer {
                 
             // Sensor Status
             case .networkStatus:
-                let event = try eventContainer.decode(NetworkStatus.self, forKey: .networkStatus)
+                let event = try eventContainer.decode(NetworkStatusEvent.self, forKey: .networkStatus)
                 self = .networkStatus(deviceID: deviceID, event: event)
             case .batteryStatus:
-                let event = try eventContainer.decode(BatteryStatus.self, forKey: .batteryStatus)
+                let event = try eventContainer.decode(BatteryStatusEvent.self, forKey: .batteryStatus)
                 self = .batteryStatus(deviceID: deviceID, event: event)
 //            case .labelsChanged:
 //                let event = try eventContainer.decode(LabelsChanged.self, forKey: .labelsChanged)
@@ -556,13 +556,13 @@ extension EventContainer {
                 
             // Cloud Connector
             case .connectionStatus:
-                let event = try eventContainer.decode(ConnectionStatus.self, forKey: .connectionStatus)
+                let event = try eventContainer.decode(ConnectionStatusEvent.self, forKey: .connectionStatus)
                 self = .connectionStatus(deviceID: deviceID, event: event)
             case .ethernetStatus:
-                let event = try eventContainer.decode(EthernetStatus.self, forKey: .ethernetStatus)
+                let event = try eventContainer.decode(EthernetStatusEvent.self, forKey: .ethernetStatus)
                 self = .ethernetStatus(deviceID: deviceID, event: event)
             case .cellularStatus:
-                let event = try eventContainer.decode(CellularStatus.self, forKey: .cellularStatus)
+                let event = try eventContainer.decode(CellularStatusEvent.self, forKey: .cellularStatus)
                 self = .cellularStatus(deviceID: deviceID, event: event)
         }
     }

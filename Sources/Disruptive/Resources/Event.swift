@@ -14,19 +14,19 @@ public struct Events: Equatable {
     public var temperature        : [TemperatureEvent]?
     public var objectPresent      : [ObjectPresentEvent]?
     public var humidity           : [HumidityEvent]?
-    public var objectPresentCount : [ObjectPresentCount]?
-    public var touchCount         : [TouchCount]?
+    public var objectPresentCount : [ObjectPresentCountEvent]?
+    public var touchCount         : [TouchCountEvent]?
     public var waterPresent       : [WaterPresentEvent]?
 
     // Sensor Status
-    public var networkStatus      : [NetworkStatus]?
-    public var batteryStatus      : [BatteryStatus]?
+    public var networkStatus      : [NetworkStatusEvent]?
+    public var batteryStatus      : [BatteryStatusEvent]?
 //    public var labelsChanged      : [LabelsChanged]?
     
     // Cloud Connector
-    public var connectionStatus   : [ConnectionStatus]?
-    public var ethernetStatus     : [EthernetStatus]?
-    public var cellularStatus     : [CellularStatus]?
+    public var connectionStatus   : [ConnectionStatusEvent]?
+    public var ethernetStatus     : [EthernetStatusEvent]?
+    public var cellularStatus     : [CellularStatusEvent]?
     
     public init() {}
 }

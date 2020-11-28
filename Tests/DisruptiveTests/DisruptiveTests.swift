@@ -11,8 +11,8 @@ class DisruptiveTests: XCTestCase {
         Request.defaultSession = URLSession(configuration: configuration)
         
         let sa = ServiceAccount(email: "", key: "", secret: "")
-        let ap = BasicAuthServiceAccount(account: sa)
-        disruptive = Disruptive(authProvider: ap)
+        let auth = BasicAuthAuthenticator(account: sa)
+        disruptive = Disruptive(authProvider: auth)
         Disruptive.loggingEnabled = true
     }
 }

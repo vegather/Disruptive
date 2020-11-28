@@ -183,8 +183,8 @@ extension ProjectTests {
               "name": "projects/\(project.identifier)",
               "displayName": "\(project.displayName)",
               "inventory": \(project.isInventory),
-              "organization": "organizations/\(project.orgID)",
-              "organizationDisplayName": "\(project.orgDisplayName)",
+              "organization": "organizations/\(project.organizationID)",
+              "organizationDisplayName": "\(project.organizationDisplayName)",
               "sensorCount": \(project.sensorCount),
               "cloudConnectorCount": \(project.cloudConnectorCount)
             }
@@ -208,13 +208,13 @@ extension ProjectTests {
     
     fileprivate func createDummyProject() -> Project {
         return Project(
-            identifier          : "b7s3e550fee000ba5dhg",
-            displayName         : "Vaskebakken 45, 4. etasje",
-            isInventory         : true,
-            orgID               : "b8ntihoaplm0028st07g",
-            orgDisplayName      : "Disruptive Technologies",
-            sensorCount         : 6,
-            cloudConnectorCount : 9
+            identifier              : "b7s3e550fee000ba5dhg",
+            displayName             : "Vaskebakken 45, 4. etasje",
+            isInventory             : true,
+            organizationID          : "b8ntihoaplm0028st07g",
+            organizationDisplayName : "Disruptive Technologies",
+            sensorCount             : 6,
+            cloudConnectorCount     : 9
         )
     }
 }

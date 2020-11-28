@@ -60,19 +60,19 @@ The following sections will provide a brief guide to the most common use-cases o
 
 ### Authentication
 
-Authentication is done by initializing the `Disruptive` instance with a type that conforms to the `AuthProvider` protocol. The recommended type for this is `OAuth2ServiceAccount` which will authenticate a service account using the OAuth2 flow. A service account can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+Authentication is done by initializing the `Disruptive` instance with a type that conforms to the `AuthProvider` protocol. The recommended type for this is `OAuth2Authenticator` which will authenticate a service account using the OAuth2 flow. A service account can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
 
 Here's an example of how to authenticate a service account with the OAuth2 flow:
 
 ```swift
 let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
-let authProvider = OAuth2ServiceAccount(account: serviceAccount)
-let disruptive = Disruptive(authProvider: authProvider)
+let authenticator = OAuth2Authenticator(account: serviceAccount)
+let disruptive = Disruptive(authProvider: authenticator)
 
 // All methods called on the disruptive instance will be authenticated
 ```
 
-[`OAuth2ServiceAccount` documentation](https://vegather.github.io/Disruptive/OAuth2ServiceAccount/)
+[`OAuth2Authenticator` documentation](https://vegather.github.io/Disruptive/OAuth2Authenticator/)
 
 ### Requesting Organizations, Projects, and Devices
 

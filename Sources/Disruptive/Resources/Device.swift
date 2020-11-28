@@ -249,7 +249,7 @@ extension Device {
         case cloudConnector   = "ccon"
         case unknown
         
-        public func humanPresentable() -> String {
+        public func displayName() -> String {
             switch self {
                 case .temperature      : return "Temperature"
                 case .touch            : return "Touch"
@@ -267,21 +267,21 @@ extension Device {
     public struct ReportedEvents: Decodable, Equatable {
         // Events
         public var touch              : TouchEvent?
-        public var touchCount         : TouchCount?
+        public var touchCount         : TouchCountEvent?
         public var temperature        : TemperatureEvent?
         public var humidity           : HumidityEvent?
         public var objectPresent      : ObjectPresentEvent?
-        public var objectPresentCount : ObjectPresentCount?
+        public var objectPresentCount : ObjectPresentCountEvent?
         public var waterPresent       : WaterPresentEvent?
         
         // Sensor Status
-        public var batteryStatus      : BatteryStatus?
-        public var networkStatus      : NetworkStatus?
+        public var batteryStatus      : BatteryStatusEvent?
+        public var networkStatus      : NetworkStatusEvent?
         
         // Cloud Connector
-        public var ethernetStatus     : EthernetStatus?
-        public var cellularStatus     : CellularStatus?
-        public var connectionStatus   : ConnectionStatus?
+        public var ethernetStatus     : EthernetStatusEvent?
+        public var cellularStatus     : CellularStatusEvent?
+        public var connectionStatus   : ConnectionStatusEvent?
         
         public init() {}
     }

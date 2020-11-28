@@ -1,5 +1,5 @@
 //
-//  ServerSentEvents.swift
+//  DeviceEventStream.swift
 //  DisruptiveAPI
 //
 //  Created by Vegard Solheim Theriault on 23/05/2020.
@@ -8,9 +8,91 @@
 
 import Foundation
 
-// Reference: https://www.w3.org/TR/eventsource/
 
-public class ServerSentEvents: NSObject {
+/**
+ Represent an event stream for a device, and is implemented using [Server-Sent Events](https://www.w3.org/TR/eventsource/)
+ 
+ Has callbacks that can be set for each type of event. Note that which event type is available for a device depends on the device type.
+ 
+ Example:
+ ```
+ let stream = disruptive.subscribeToDevice(
+    projectID  : "<PROJECT_ID>",
+    deviceID   : "<DEVICE_ID>",
+ )
+ stream?.onTemperature = { deviceID, temperatureEvent in
+    print("Got temperature \(temperatureEvent) for device with id \(deviceID)")
+ }
+ ```
+ */
+public class DeviceEventStream: NSObject {
+    
+    /// Used to specify that the `String` argument in the callbacks is the identifier of a device
+    public typealias DeviceID = String
+    
+    
+    // Sensor data callbacks
+    // -------------------------
+    
+    /// Called with the device identifier and the event when a new `TouchEvent` is received
+    public var onTouch              : ((DeviceID, TouchEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `TemperatureEvent` is received
+    public var onTemperature        : ((DeviceID, TemperatureEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `ObjectPresentEvent` is received
+    public var onObjectPresent      : ((DeviceID, ObjectPresentEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `HumidityEvent` is received
+    public var onHumidity           : ((DeviceID, HumidityEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `ObjectPresentCountEvent` is received
+    public var onObjectPresentCount : ((DeviceID, ObjectPresentCountEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `TouchCountEvent` is received
+    public var onTouchCount         : ((DeviceID, TouchCountEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `WaterPresentEvent` is received
+    public var onWaterPresent       : ((DeviceID, WaterPresentEvent) -> ())?
+    
+    
+    
+    // Sensor status callbacks
+    // -------------------------
+    
+    /// Called with the device identifier and the event when a new `NetworkStatusEvent` is received
+    public var onNetworkStatus      : ((DeviceID, NetworkStatusEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `BatteryStatusEvent` is received
+    public var onBatteryStatus      : ((DeviceID, BatteryStatusEvent) -> ())?
+    
+//    public var onLabelsChanged      : ((DeviceID, LabelsChanged) -> ())?
+    
+    
+    
+    // Cloud connector callbacks
+    // -------------------------
+    
+    /// Called with the device identifier and the event when a new `ConnectionStatusEvent` is received
+    public var onConnectionStatus   : ((DeviceID, ConnectionStatusEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `EthernetStatusEvent` is received
+    public var onEthernetStatus     : ((DeviceID, EthernetStatusEvent) -> ())?
+    
+    /// Called with the device identifier and the event when a new `CellularStatusEvent` is received
+    public var onCellularStatus     : ((DeviceID, CellularStatusEvent) -> ())?
+    
+    
+    
+    // Error
+    // -------------------------
+    
+    /// Called with an error if the device stream couldn't open
+    public var onError: ((DisruptiveError)-> ())?
+
+    
+    
+    
     private static var sseConfig: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest  = .greatestFiniteMagnitude
@@ -34,27 +116,7 @@ public class ServerSentEvents: NSObject {
     
     private var hasBeenClosed = false
     
-    // Error
-    public var onError              : ((DisruptiveError)            -> ())?
     
-    // Event callbacks
-    public var onTouch              : ((String, TouchEvent)         -> ())?
-    public var onTemperature        : ((String, TemperatureEvent)   -> ())?
-    public var onObjectPresent      : ((String, ObjectPresentEvent) -> ())?
-    public var onHumidity           : ((String, HumidityEvent)      -> ())?
-    public var onObjectPresentCount : ((String, ObjectPresentCount) -> ())?
-    public var onTouchCount         : ((String, TouchCount)         -> ())?
-    public var onWaterPresent       : ((String, WaterPresentEvent)  -> ())?
-    
-    // Sensor status callbacks
-    public var onNetworkStatus      : ((String, NetworkStatus) -> ())?
-    public var onBatteryStatus      : ((String, BatteryStatus) -> ())?
-//    public var onLabelsChanged      : ((String, LabelsChanged) -> ())?
-    
-    // Cloud connector callbacks
-    public var onConnectionStatus   : ((String, ConnectionStatus)  -> ())?
-    public var onEthernetStatus     : ((String, EthernetStatus)    -> ())?
-    public var onCellularStatus     : ((String, CellularStatus)    -> ())?
     
     // Preventing init without parameters
     private override init() { fatalError() }
@@ -69,6 +131,9 @@ public class ServerSentEvents: NSObject {
         restartStream()
     }
     
+    /**
+     Closes the open connection to the device stream. If the stream had already been closed, nothing will happen. Once a stream has been closed, it can not be re-opened. Create a new stream instead.
+     */
     public func close() {
         guard hasBeenClosed == false else { return }
         
@@ -89,7 +154,7 @@ public class ServerSentEvents: NSObject {
     
     private func setupSession() {
         session = URLSession(
-            configuration: ServerSentEvents.sseConfig,
+            configuration: DeviceEventStream.sseConfig,
             delegate: self,
             delegateQueue: .main
         )
@@ -126,7 +191,7 @@ public class ServerSentEvents: NSObject {
     }
 }
 
-extension ServerSentEvents: URLSessionDataDelegate {
+extension DeviceEventStream: URLSessionDataDelegate {
     // Packet format for payloads from the ServerSentEvent
     private struct StreamPacket: Decodable {
         let result: StreamEvent

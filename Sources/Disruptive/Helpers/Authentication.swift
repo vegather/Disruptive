@@ -136,11 +136,11 @@ internal extension AuthProvider {
  Example:
  ```
  let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
- let authProvider = BasicAuthServiceAccount(account: serviceAccount)
- let disruptive = Disruptive(authProvider: authProvider)
+ let authenticator = BasicAuthAuthenticater(account: serviceAccount)
+ let disruptive = Disruptive(authProvider: authenticator)
  ```
  */
-public struct BasicAuthServiceAccount: AuthProvider {
+public struct BasicAuthAuthenticator: AuthProvider {
     private let account : ServiceAccount
         
     public var auth: Auth? {
@@ -154,7 +154,7 @@ public struct BasicAuthServiceAccount: AuthProvider {
     public var shouldBeLoggedIn: Bool { return true }
     
     /**
-     Initializes a `BasicAuthServiceAccount` using a `ServiceAccount`
+     Initializes a `BasicAuthAuthenticator` using a `ServiceAccount`
      
      - Parameter account: The `ServiceAccount` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
      */
@@ -186,22 +186,22 @@ public struct BasicAuthServiceAccount: AuthProvider {
  Example:
  ```
  let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
- let authProvider = OAuth2ServiceAccount(account: serviceAccount)
- let disruptive = Disruptive(authProvider: authProvider)
+ let authenticator = OAuth2Authenticator(account: serviceAccount)
+ let disruptive = Disruptive(authProvider: authenticator)
  ```
  */
-public class OAuth2ServiceAccount: AuthProvider {
-
-    private let account : ServiceAccount
+public class OAuth2Authenticator: AuthProvider {
 
     private(set) public var auth: Auth?
     private(set) public var shouldBeLoggedIn = false
+
     
-    let authURL: String
+    private let account : ServiceAccount
+    private let authURL: String
     
     
     /**
-     Initializes an `OAuth2ServiceAccount` using a `ServiceAccount`
+     Initializes an `OAuth2Authenticator` using a `ServiceAccount`
      
      - Parameter account: The `ServiceAccount` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
      - Parameter authURL: Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is `Disruptive.defaultAuthURL`

@@ -331,18 +331,18 @@ class EventsTests: DisruptiveTests {
     
     func testMergeAllEvents() {
         var mergee = Events()
-        mergee.touch = [TouchEvent(timestamp: Date())]
-        mergee.temperature = [TemperatureEvent(value: 67, timestamp: Date())]
-        mergee.objectPresent = [ObjectPresentEvent(objectPresent: true, timestamp: Date())]
-        mergee.humidity = [HumidityEvent(temperature: 67, relativeHumidity: 90, timestamp: Date())]
-        mergee.objectPresentCount = [ObjectPresentCount(total: 67, timestamp: Date())]
-        mergee.touchCount = [TouchCount(total: 88, timestamp: Date())]
-        mergee.waterPresent = [WaterPresentEvent(waterPresent: true, timestamp: Date())]
-        mergee.networkStatus = [NetworkStatus(signalStrength: 22, rssi: 33, timestamp: Date(), cloudConnectors: [], transmissionMode: .standard)]
-        mergee.batteryStatus = [BatteryStatus(percentage: 87, timestamp: Date())]
-        mergee.connectionStatus = [ConnectionStatus(connection: .cellular, available: [.cellular], timestamp: Date())]
-        mergee.ethernetStatus = [EthernetStatus(macAddress: "", ipAddress: "", errors: [], timestamp: Date())]
-        mergee.cellularStatus = [CellularStatus(signalStrength: 78, errors: [], timestamp: Date())]
+        mergee.touch              = [TouchEvent(timestamp: Date())]
+        mergee.temperature        = [TemperatureEvent(value: 67, timestamp: Date())]
+        mergee.objectPresent      = [ObjectPresentEvent(objectPresent: true, timestamp: Date())]
+        mergee.humidity           = [HumidityEvent(temperature: 67, relativeHumidity: 90, timestamp: Date())]
+        mergee.objectPresentCount = [ObjectPresentCountEvent(total: 67, timestamp: Date())]
+        mergee.touchCount         = [TouchCountEvent(total: 88, timestamp: Date())]
+        mergee.waterPresent       = [WaterPresentEvent(waterPresent: true, timestamp: Date())]
+        mergee.networkStatus      = [NetworkStatusEvent(signalStrength: 22, rssi: 33, timestamp: Date(), cloudConnectors: [], transmissionMode: .standard)]
+        mergee.batteryStatus      = [BatteryStatusEvent(percentage: 87, timestamp: Date())]
+        mergee.connectionStatus   = [ConnectionStatusEvent(connection: .cellular, available: [.cellular], timestamp: Date())]
+        mergee.ethernetStatus     = [EthernetStatusEvent(macAddress: "", ipAddress: "", errors: [], timestamp: Date())]
+        mergee.cellularStatus     = [CellularStatusEvent(signalStrength: 78, errors: [], timestamp: Date())]
         
         var events = Events()
         events.merge(with: mergee)
