@@ -60,7 +60,7 @@ public struct TemperatureEvent: Decodable, Equatable {
 }
 
 public struct ObjectPresentEvent: Decodable, Equatable {
-    public let objectPresent: Bool?
+    public let objectPresent: Bool
     public let timestamp: Date
     
     private enum CodingKeys: String, CodingKey {
@@ -68,7 +68,7 @@ public struct ObjectPresentEvent: Decodable, Equatable {
         case timestamp = "updateTime"
     }
     
-    public init(objectPresent: Bool?, timestamp: Date) {
+    public init(objectPresent: Bool, timestamp: Date) {
         self.objectPresent = objectPresent
         self.timestamp = timestamp
     }
@@ -86,8 +86,8 @@ public struct ObjectPresentEvent: Decodable, Equatable {
             case "NOT_PRESENT": self.objectPresent = false
             case "PRESENT"    : self.objectPresent = true
             
-            // "UNKNOWN"
-            default           : self.objectPresent = nil
+            // Likely "UNKNOWN"
+            default: throw ParseError.eventType(type: "ObjectPresent: \(stateString)")
         }
     }
 }
@@ -175,7 +175,7 @@ public struct TouchCountEvent: Decodable, Equatable {
 }
 
 public struct WaterPresentEvent: Decodable, Equatable {
-    public let waterPresent: Bool?
+    public let waterPresent: Bool
     public let timestamp: Date
     
     private enum CodingKeys: String, CodingKey {
@@ -200,7 +200,9 @@ public struct WaterPresentEvent: Decodable, Equatable {
         switch stateString {
             case "NOT_PRESENT": self.waterPresent = false
             case "PRESENT"    : self.waterPresent = true
-            default           : self.waterPresent = nil
+            
+            // Likely "UNKNOWN"
+            default: throw ParseError.eventType(type: "WaterPresent: \(stateString)")
         }
     }
 }
@@ -231,7 +233,6 @@ public struct NetworkStatusEvent: Decodable, Equatable {
     }
     
     public enum TransmissionMode: String, Decodable, Equatable {
-        case unknown  = "UNKNOWN_MODE"
         case standard = "LOW_POWER_STANDARD_MODE"
         case boost    = "HIGH_POWER_BOOST_MODE"
     }
