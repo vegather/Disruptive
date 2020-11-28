@@ -24,22 +24,27 @@ jobs:
     #  run: cat coverage.json
     #- name: Extract Coverage Percentage
     #  run: cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5 > coverage_percentage.txt
-    - name: Extract Coverage Percentage
+    - name: Extract Coverage Percentage First
+      id: first
       run: echo "##[set-output name=coverage;]$(cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5)"
+    - name: Extract Coverage Percentage
+      id: coverage_step
+      run: echo "::set-output name=coverage::$(cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5)"
+
     - name: Create Status Badge
       uses: emibcn/badge-action@v1
       with:
         label: 'Code Coverage'
-        status: ${{ steps.date.outputs.coverage }}%
+        status: ${{ steps.coverage_step.outputs.coverage }}%
         color: 'success'
         path: '.github/badges/coverage.svg'
-    #- name: Create Status Badge 2
-    #  uses: emibcn/badge-action@v1
-    #  with:
-    #    label: 'Code Coverage 2'
-    #    status: $(cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5)
-    #    color: 'success'
-    #    path: '.github/badges/coverage2.svg'
+    - name: Create Status Badge 2
+      uses: emibcn/badge-action@v1
+      with:
+       label: 'Code Coverage 2'
+       status: ${{ steps.first.outputs.coverage }}
+       color: 'success'
+       path: '.github/badges/coverage2.svg'
     - name: Push Back Status Badge
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
