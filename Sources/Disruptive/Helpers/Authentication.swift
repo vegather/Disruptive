@@ -41,6 +41,7 @@ public struct Auth {
     /// will be called first.
     public let expirationDate: Date
     
+    /// Creates a new `Auth` instance
     public init(token: String, expirationDate: Date) {
         self.token = token
         self.expirationDate = expirationDate
@@ -129,9 +130,10 @@ internal extension AuthProvider {
 /**
  An `AuthProvider` that logs in a service account using basic auth.
  
- Only the initializer (`init(account:)`) is relevant externally.
+ See [AuthProvider](../AuthProvider) for more details about the properties
+ and methods. Only the initializer (`init(account:)`) is relevant externally.
  
- __Note__: This should only be used for development/testing. For production use-cases `JWTAuthSerivecAccount` should be used.
+ __Note__: This should only be used for development/testing. For production use-cases the [`OAuth2Authenticator`](../OAuth2Authenticator) should be used.
  
  Example:
  ```
@@ -142,7 +144,8 @@ internal extension AuthProvider {
  */
 public struct BasicAuthAuthenticator: AuthProvider {
     private let account : ServiceAccount
-        
+    
+    /// The authentication details. Will always be set
     public var auth: Auth? {
         return Auth(
             token: "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString(),
@@ -150,8 +153,8 @@ public struct BasicAuthAuthenticator: AuthProvider {
         )
     }
     
-    // A basic auth provider is always logged in
-    public var shouldBeLoggedIn: Bool { return true }
+    /// A basic authenticator is always logged in
+    public let shouldBeLoggedIn = true
     
     /**
      Initializes a `BasicAuthAuthenticator` using a `ServiceAccount`
@@ -178,10 +181,11 @@ public struct BasicAuthAuthenticator: AuthProvider {
 /**
  An `AuthProvider` that logs in a service account using OAuth2.
  
+ See [AuthProvider](../AuthProvider) for more details about the properties
+ and methods. Only the initializer (`init(account:)`) is relevant externally.
+ 
  This is a more secure flow than the basic auth counter-part, and is the
  recommended way to authenticate a service account in a production environment.
- 
- Only the initializer (`init(account:)`) is relevant externally.
  
  Example:
  ```

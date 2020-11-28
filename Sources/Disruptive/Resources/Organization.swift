@@ -11,7 +11,7 @@ import Foundation
 /**
  Represents an organization registered with Disruptive Technologies.
  
- Relevant methods for `Organization` can be found in [Disruptive](../Disruptive):
+ Relevant methods for `Organization` can be found on the [Disruptive](../Disruptive) struct.
  */
 public struct Organization: Codable, Equatable {
     

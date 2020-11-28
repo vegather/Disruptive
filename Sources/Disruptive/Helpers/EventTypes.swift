@@ -126,7 +126,7 @@ public struct HumidityEvent: Decodable, Equatable {
     /// The temperature value in celcius
     public let temperature: Float
     
-    /// The relative humidity in as a percentage
+    /// The relative humidity as a percentage
     public let relativeHumidity: Float
     
     /// The timestamp the humidity event was generated
@@ -433,7 +433,7 @@ public struct BatteryStatusEvent: Decodable, Equatable {
     }
 }
 
-/// This will only be available when subscribing to an event stream on a sensor, or through a data connector
+// This will only be available when subscribing to an event stream on a sensor, or through a data connector
 // TODO: This does not work! `labelsChanged` is not a key in the `data` field as expected
 //public struct LabelsChangedEvent: Decodable {
 //    public let added    : [String: String]
@@ -602,7 +602,7 @@ public struct EthernetStatusEvent: Decodable, Equatable {
  */
 public struct CellularStatusEvent: Decodable, Equatable {
     
-    /// The current signal strength of the Cloud Connector to the cellular network
+    /// The current signal strength of the Cloud Connector to the cellular network as a percentage
     public let signalStrength: Int
     
     /// Any errors related to connecting to the cellular network

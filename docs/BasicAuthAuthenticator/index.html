@@ -43,9 +43,10 @@
 
 </div>
 <div class="discussion">
-    <p>Only the initializer (<code>init(account:)</code>) is relevant externally.</p>
+    <p>See <a href="../AuthProvider">AuthProvider</a> for more details about the properties
+and methods. Only the initializer (<code>init(account:)</code>) is relevant externally.</p>
 
-<p><strong>Note</strong>: This should only be used for development/testing. For production use-cases <code>JWTAuthSerivecAccount</code> should be used.</p>
+<p><strong>Note</strong>: This should only be used for development/testing. For production use-cases the <a href="../OAuth2Authenticator"><code>OAuth2Authenticator</code></a> should be used.</p>
 
 <p>Example:</p>
 
@@ -145,12 +146,20 @@
         <code>auth</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">auth</span>: <a href="https://vegather.github.io/Disruptive/Auth"><span class="type">Auth</span></a>?</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The authentication details. Will always be set</p>
+
+</div>
 </div>
 <div role="article" class="variable" id="basicauthauthenticator.shouldbeloggedin">
     <h3>
         <code>should​BeLogged​In</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">shouldBeLoggedIn</span>: <span class="type">Bool</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">shouldBeLoggedIn</span> = <span class="keyword">true</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>A basic authenticator is always logged in</p>
+
+</div>
 </div>
     </section>
     <section id="methods">
@@ -183,7 +192,7 @@
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-28T15:34:11+0100">28 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-28T16:22:07+0100">28 November 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

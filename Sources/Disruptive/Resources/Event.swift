@@ -11,7 +11,7 @@ import Foundation
 /**
  Contains a array of events for each type of event for a specific `Device`.  Detailed documentation for each event type can be found on Disruptive Technologies' [developer website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events)
  
- Relevant methods for `Events` can be found in [Disruptive](../Disruptive):
+ Relevant methods for `Events` can be found on the [Disruptive](../Disruptive) struct.
  */
 public struct Events: Equatable {
     // Events
@@ -49,11 +49,11 @@ extension Disruptive {
      
      If `startDate` or `endDate` is not specified, it defaults to the last 24 hours.
      
-     - Parameter projectID: The identifier of the project where the device is
-     - Parameter deviceID: The identifier of the device to get events from
-     - Parameter startDate: The timestamp of the first event to fetch. Defaults to 24 hours ago
-     - Parameter endDate: The timestamp of the last event to fetch. Defaults to now
-     - Parameter eventTypes: A list of event types to fetch. Defaults to fetching all events for specified device
+     - Parameter projectID: The identifier of the project where the device is.
+     - Parameter deviceID: The identifier of the device to get events from.
+     - Parameter startDate: The timestamp of the first event to fetch. Defaults to 24 hours ago.
+     - Parameter endDate: The timestamp of the last event to fetch. Defaults to now.
+     - Parameter eventTypes: A list of event types to fetch. Defaults to fetching all events for specified device.
      - Parameter completion: The completion handler that is called when data is returned from the server. This is a `Result` type where the success case is a list of `Events`, and the failure case is a `DisruptiveError`.
      - Parameter result: `Result<Events, DisruptiveError>`
      */

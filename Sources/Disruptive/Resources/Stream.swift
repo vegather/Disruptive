@@ -21,7 +21,7 @@ extension Disruptive {
      }
      ```
      
-     - Parameter projectID: The identifier of the project that contains the device(s)
+     - Parameter projectID: The identifier of the project that contains the device(s).
      - Parameter deviceIDs: An array of device identifiers to subscribe to. If not specified (or `nil`), all the devices in the project will be subscribed to.
      - Parameter deviceTypes: An array of device types to subscribe to. This is useful if `nil` is specified for the `deviceIDs` argument.
      - Parameter labelFilters: An array of label filter expressions that filters the set of devices for the results. Each expression takes the form labelKey=labelValue.
@@ -63,7 +63,7 @@ extension Disruptive {
     /**
         Convenience function to subscribe to just a single device. See `subscribeToDevices` for more details.
      
-        - Parameter device: The device to subscribe to
+        - Parameter device: The device to subscribe to.
         - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
      */
     public func subscribeToDevice(_ device: Device, eventTypes: [EventType]? = nil) -> DeviceEventStream? {
@@ -77,8 +77,8 @@ extension Disruptive {
     /**
      Convenience function to subscribe to just a single device. See `subscribeToDevices` for more details.
      
-     - Parameter projectID: The identifier of the project the device is currently in
-     - Parameter deviceID: The identifier of the device to subscribe to
+     - Parameter projectID: The identifier of the project the device is currently in.
+     - Parameter deviceID: The identifier of the device to subscribe to.
      - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
      */
     public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> DeviceEventStream? {

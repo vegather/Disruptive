@@ -11,32 +11,32 @@ import Foundation
 /**
  Represents a project within an `Organization`
  
- Relevant methods for `Project` can be found in [Disruptive](../Disruptive):
+ Relevant methods for `Project` can be found on the [Disruptive](../Disruptive) struct.
  */
 public struct Project: Codable, Equatable {
     
-    /// The unique identifier of the project
+    /// The unique identifier of the project.
     public let identifier: String
     
-    /// The display name of the project
+    /// The display name of the project.
     public var displayName: String
     
     /// Specifies whether or not the project is the inventory project. The inventory project in an organization is the project where newly purchased devices will be placed.
     public let isInventory: Bool
     
-    /// The identifier of the organization the project is in
+    /// The identifier of the organization the project is in.
     public let organizationID: String
     
-    /// The display name of the organization the project is in
+    /// The display name of the organization the project is in.
     public let organizationDisplayName: String
     
-    /// The number of Sensors currently in the project
+    /// The number of Sensors currently in the project.
     public let sensorCount: Int
     
-    /// The number of Cloud Connectors currently in the project
+    /// The number of Cloud Connectors currently in the project.
     public let cloudConnectorCount: Int
     
-    /// Creates a new `Project`. Creating a new project can be useful for testing purposes
+    /// Creates a new `Project`. Creating a new project can be useful for testing purposes.
     public init(identifier: String, displayName: String, isInventory: Bool, organizationID: String, organizationDisplayName: String, sensorCount: Int, cloudConnectorCount: Int) {
         self.identifier = identifier
         self.displayName = displayName
@@ -55,7 +55,7 @@ extension Disruptive {
      
      - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch all the project the authenticated account has access to.
      - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), all projects will be returned.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Project], DisruptiveError>`
      */
     public func getProjects(
@@ -80,9 +80,9 @@ extension Disruptive {
     }
     
     /**
-     Gets details for a specific project
+     Gets details for a specific project.
      
-     - Parameter projectID: The identifier of the project to get details for
+     - Parameter projectID: The identifier of the project to get details for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
@@ -100,8 +100,8 @@ extension Disruptive {
     /**
      Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful
      
-     - Parameter displayName: The display name of the new project
-     - Parameter organizationID: The identifier of the organization to create the project in
+     - Parameter displayName: The display name of the new project.
+     - Parameter organizationID: The identifier of the organization to create the project in.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
@@ -129,10 +129,10 @@ extension Disruptive {
     }
     
     /**
-     Updates the display name of a project, and returns the new project (with the updated name) if successful
+     Updates the display name of a project, and returns the new project (with the updated name) if successful.
      
-     - Parameter projectID: The identifier of the project to update the display name of
-     - Parameter newDisplayName: The new display name to set for the project
+     - Parameter projectID: The identifier of the project to update the display name of.
+     - Parameter newDisplayName: The new display name to set for the project.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project` with the updated display name. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
