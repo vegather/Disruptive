@@ -27,7 +27,7 @@ jobs:
 
     - name: Extract Coverage Percentage
       id: coverage_step
-      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter
+      # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter 
       run: echo "::set-output name=coverage::$(cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5)"
 
     - name: Create Status Badge
@@ -67,7 +67,7 @@ jobs:
           module-name: Disruptive
           format: html
           output: docs
-          
+
       - name: Push Back docs/
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
