@@ -34,8 +34,8 @@ jobs:
     - name: Create Status Badge 2
       uses: emibcn/badge-action@v1
       with:
-        label: 'Code Coverage'
-        status: ${{cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5}}
+        label: 'Code Coverage 2'
+        status: "${{cat coverage.json | jq -r '.data[0].totals.lines.percent' | head -c 5}}"
         color: 'success'
         path: '.github/badges/coverage2.svg'
     - name: Push Back Status Badge
