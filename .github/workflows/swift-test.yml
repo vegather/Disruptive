@@ -46,6 +46,7 @@ jobs:
         commit_message: "CI: Updated Swift documentation"
         commit_user_name: "GitHub Action"
         commit_user_email: "action@github.com"
+        push_options: --force
 
   
 
@@ -77,3 +78,4 @@ jobs:
           commit_message: "CI: Updated Swift documentation"
           commit_user_name: "GitHub Action"
           commit_user_email: "action@github.com"
+          push_options: --force
