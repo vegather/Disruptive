@@ -1,4 +1,4 @@
-name: Swift Tests
+name: Swift
 
 on:
   pull_request:
@@ -10,11 +10,6 @@ jobs:
     steps:
 
     - uses: actions/checkout@v2
-      # with:
-      #     # Fetches the code in the current branch
-      #     # https://github.com/marketplace/actions/git-auto-commit#checkout-the-correct-branch
-      #     ref: ${{ github.head_ref }}
-      #     token: ${{ secrets.PAT_TOKEN }}
 
     - name: Build
       run: swift build -v
@@ -59,11 +54,6 @@ jobs:
     steps:
 
       - uses: actions/checkout@v2
-        # with:
-        #   # Fetches the code in the current branch
-        #   # https://github.com/marketplace/actions/git-auto-commit#checkout-the-correct-branch
-        #   ref: ${{ github.head_ref }}
-        #   token: ${{ secrets.PAT_TOKEN }}
 
       - name: Generate Documentation
         uses: SwiftDocOrg/swift-doc@master
