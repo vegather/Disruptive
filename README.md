@@ -2,8 +2,14 @@
 
 # Disruptive - Swift API
 
+![Swift Tests](https://github.com/vegather/Disruptive/workflows/Swift%20Tests/badge.svg)
+![Swift Version](https://img.shields.io/badge/Swift%20Version-5.3-blue)
+[![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://vegather.github.io/Disruptive/)
+[![Licence](https://img.shields.io/badge/Licence-MIT-222)](https://github.com/vegather/Disruptive/blob/master/LICENSE)
+
 Swift library for accessing data from [Disruptive Technologies](https://disruptive-technologies.com).
 
+---
 
 - [API Documentation](#api-documentation)
 - [Installation](#installation)
