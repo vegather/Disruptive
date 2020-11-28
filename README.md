@@ -205,7 +205,7 @@ The following is a list of all the available endpoints in the Disruptive Technol
 - [x] ~~GET /projects/{project}/devices/{device}~~
 - [x] ~~POST /projects/{project}/devices/{device}/labels (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
 - [x] ~~PATCH /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
-- [ ] DELETE /projects/{project}/devices/{device}/labels/{label}
+- [x] ~~DELETE /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
 - [x] ~~GET /projects/{project}/devices/{device}/events~~
 - [x] ~~GET /projects/{project}/devices:stream~~
 - [x] ~~GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)~~

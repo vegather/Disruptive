@@ -164,6 +164,47 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
+    func testRemoveDeviceLabel() {
+        let reqProjectID = "proj1"
+        let reqDeviceID = "dev1"
+        let reqLabelKeyToRemove = "labelKey"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices:batchUpdate")
+        let reqBody = """
+        {
+            "devices": ["projects/\(reqProjectID)/devices/\(reqDeviceID)"],
+            "addLabels": {},
+            "removeLabels": ["\(reqLabelKeyToRemove)"]
+        }
+        """.data(using: .utf8)!
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "POST",
+                queryParams   : [:],
+                url           : reqURL,
+                body          : reqBody
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (nil, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.removeDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
+            switch result {
+                case .success():
+                    break
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
     func testSetDeviceLabel() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"

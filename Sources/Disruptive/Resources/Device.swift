@@ -102,6 +102,18 @@ extension Disruptive {
         )
     }
     
+    public func removeDeviceLabel(
+        projectID  : String,
+        deviceID   : String,
+        labelKey   : String,
+        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    {
+        batchUpdateDeviceLabels(
+            projectID      : projectID,
+            deviceIDs      : [deviceID],
+            labelsToSet    : [:],
+            labelsToRemove : [labelKey],
+            completion     : completion
         )
     }
     
