@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: macos-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Build
@@ -33,3 +31,11 @@ jobs:
         status: '53.4%'
         color: 'blue,555,daf'
         path: '.github/badges/coverage.svg'
+    - name: Push Back Status Badge
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        branch: master
+        file_pattern: ".github/badges"
+        commit_message: "CI: Updated Swift documentation"
+        commit_user_name: "GitHub Action"
+        commit_user_email: "action@github.com"
