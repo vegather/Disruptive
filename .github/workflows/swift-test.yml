@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  code_coverage:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -28,9 +28,16 @@ jobs:
       uses: emibcn/badge-action@v1
       with:
         label: 'Code Coverage'
-        status: '53.4%'
-        color: 'blue,555,daf'
+        status: '${cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5}'
+        color: 'success'
         path: '.github/badges/coverage.svg'
+    - name: Create Status Badge 2
+      uses: emibcn/badge-action@v1
+      with:
+        label: 'Code Coverage'
+        status: ${{cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5}}
+        color: 'success'
+        path: '.github/badges/coverage2.svg'
     - name: Push Back Status Badge
       uses: stefanzweifel/git-auto-commit-action@v4
       with:

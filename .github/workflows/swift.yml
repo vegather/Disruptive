@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  publish_swift_docs:
+  generate_swift_docs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
