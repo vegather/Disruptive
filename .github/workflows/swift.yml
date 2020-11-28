@@ -1,34 +1,34 @@
-name: Swift
+# name: Swift
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
 
-jobs:
-  generate_swift_docs:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          # Fetches the code in the current branch
-          # https://github.com/marketplace/actions/git-auto-commit#checkout-the-correct-branch
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT_TOKEN }}
-      - name: Generate Documentation
-        uses: SwiftDocOrg/swift-doc@master
-        with:
-          # Generates HTML documentation, and writes to the `docs` dir
-          module-name: Disruptive
-          format: html
-          output: docs
-      - name: Push Back docs/
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          # Pushes the `docs` dir to the `master` branch
-          branch: master
-          file_pattern: docs
-          commit_message: "CI: Updated Swift documentation"
-          commit_user_name: "GitHub Action"
-          commit_user_email: "action@github.com"
+# jobs:
+#   generate_swift_docs:
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           # Fetches the code in the current branch
+#           # https://github.com/marketplace/actions/git-auto-commit#checkout-the-correct-branch
+#           ref: ${{ github.head_ref }}
+#           token: ${{ secrets.PAT_TOKEN }}
+#       - name: Generate Documentation
+#         uses: SwiftDocOrg/swift-doc@master
+#         with:
+#           # Generates HTML documentation, and writes to the `docs` dir
+#           module-name: Disruptive
+#           format: html
+#           output: docs
+#       - name: Push Back docs/
+#         uses: stefanzweifel/git-auto-commit-action@v4
+#         with:
+#           # Pushes the `docs` dir to the `master` branch
+#           branch: master
+#           file_pattern: docs
+#           commit_message: "CI: Updated Swift documentation"
+#           commit_user_name: "GitHub Action"
+#           commit_user_email: "action@github.com"
