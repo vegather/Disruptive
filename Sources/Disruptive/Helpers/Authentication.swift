@@ -34,12 +34,12 @@ public struct ServiceAccount: Codable {
 public struct Auth {
     /// The current token to use for authentication. This `String` needs to
     /// be prefixed with the authentication scheme. Eg: "Basic ..." or "Bearer ..."
-    let token: String
+    public let token: String
     
     /// The expiration date of the `authToken`. If there is less than a minute until
     /// expiration, and a request is made on the network, the `authenticate` function
     /// will be called first.
-    let expirationDate: Date
+    public let expirationDate: Date
     
     public init(token: String, expirationDate: Date) {
         self.token = token

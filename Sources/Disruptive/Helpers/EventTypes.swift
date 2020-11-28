@@ -560,10 +560,10 @@ public struct EthernetStatusEvent: Decodable, Equatable {
     /// Indicates an error related to connecting to the local network
     public struct ErrorMessage: Decodable, Equatable {
         /// The error code
-        let code: String
+        public let code: String
         
         /// The error message
-        let message: String
+        public let message: String
     }
     
     /// Creates a new `EthernetStatusEvent`. Creating a new ethernet status event can be useful for testing purposes.
@@ -615,10 +615,10 @@ public struct CellularStatusEvent: Decodable, Equatable {
     /// Indicates an error related to connecting to the cellular network
     public struct ErrorMessage: Decodable, Equatable {
         /// The error code
-        let code: String
+        public let code: String
         
         /// The error message
-        let message: String
+        public let message: String
     }
     
     
