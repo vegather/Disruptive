@@ -1,0 +1,35 @@
+name: Swift Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: swift build -v
+    - name: Run tests
+      run: swift test --enable-code-coverage
+    - name: Code Coverage
+      uses: maxep/spm-lcov-action@0.3.1
+      with:
+        output-file: coverage.json
+        file-format: text
+    - name: Print Full Code Coverage
+      run: cat coverage.json
+    - name: Extract Coverage Percentage
+      run: cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5 > coverage_percentage.txt
+    - name: Create Status Badge
+      uses: emibcn/badge-action@v1
+      with:
+        label: 'Code Coverage'
+        status: '53.4%'
+        color: 'blue,555,daf'
+        path: '.github/badges/coverage.svg'
