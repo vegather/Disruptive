@@ -9,7 +9,7 @@
 import CryptoKit
 import Foundation
 
-struct JWT {
+internal struct JWT {
     /// Produces a JWT token that is suitable for a Disruptive service account.
     /// Docs: https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication
     internal static func serviceAccount(authURL: String, account: ServiceAccount) -> String? {

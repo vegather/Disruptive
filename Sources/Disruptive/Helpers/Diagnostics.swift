@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct RequestDiagnostics {
+internal struct RequestDiagnostics {
     private let request      : Request
     private var networkStart : CFAbsoluteTime?
     private var networkEnd   : CFAbsoluteTime?
