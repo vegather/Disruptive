@@ -93,12 +93,15 @@ extension Disruptive {
         newDisplayName : String,
         completion     : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
-        setDeviceLabel(
-            projectID  : projectID,
-            deviceID   : deviceID,
-            key        : "name",
-            value      : newDisplayName,
-            completion : completion
+        batchUpdateDeviceLabels(
+            projectID      : projectID,
+            deviceIDs      : [deviceID],
+            labelsToSet    : ["name": newDisplayName],
+            labelsToRemove : [],
+            completion     : completion
+        )
+    }
+    
         )
     }
     
@@ -107,17 +110,33 @@ extension Disruptive {
      
      - Parameter projectID: The identifier for the project the device is in
      - Parameter deviceID: The identifier of the device to set the label for
-     - Parameter key: The key of the label
-     - Parameter value: The new value of the label
+     - Parameter labelKey: The key of the label
+     - Parameter labelValue: The new value of the label
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
     public func setDeviceLabel(
         projectID  : String,
         deviceID   : String,
-        key        : String,
-        value      : String,
+        labelKey   : String,
+        labelValue : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    {
+        batchUpdateDeviceLabels(
+            projectID      : projectID,
+            deviceIDs      : [deviceID],
+            labelsToSet    : [labelKey: labelValue],
+            labelsToRemove : [],
+            completion     : completion
+        )
+    }
+    
+    public func batchUpdateDeviceLabels(
+        projectID      : String,
+        deviceIDs      : [String],
+        labelsToSet    : [String: String],
+        labelsToRemove : [String],
+        completion     : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
         // Create the body
         struct Body: Codable {
@@ -126,9 +145,9 @@ extension Disruptive {
             let removeLabels: [String]
         }
         let body = Body(
-            devices: ["projects/\(projectID)/devices/\(deviceID)"],
-            addLabels: [key: value],
-            removeLabels: []
+            devices: deviceIDs.map { "projects/\(projectID)/devices/\($0)" },
+            addLabels: labelsToSet,
+            removeLabels: labelsToRemove
         )
         
         do {
@@ -177,30 +196,6 @@ extension Disruptive {
             DTLog("Failed to initialize move devices request with payload: \(body). Error: \(error)", isError: true)
             completion(.failure(.unknownError))
         }
-    }
-    
-    /**
-     Moves a list of devices from one project to another. The authenticated account must be an admin
-     in the `toProject`, or an organization admin in which the `toProject` resides.
-     
-     - Parameter devices: A list of the devices to move from one project to another
-     - Parameter fromProject: The project to move the devices from
-     - Parameter toProject: The project to move the devices to
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
-     - Parameter result: `Result<Void, DisruptiveError>`
-     */
-    public func moveDevices(
-        _ devices   : [Device],
-        fromProject : Project,
-        toProject   : Project,
-        completion  : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
-        moveDevices(
-            deviceIDs     : devices.map { $0.identifier },
-            fromProjectID : fromProject.identifier,
-            toProjectID   : toProject.identifier,
-            completion    : completion
-        )
     }
 }
 

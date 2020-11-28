@@ -206,6 +206,49 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
+    func testBatchUpdateDeviceLabels() {
+        let reqProjectID = "proj1"
+        let reqDeviceID = "dev1"
+        let reqLabelKeyToSet = "key"
+        let reqLabelValueToSet = "value"
+        let reqLabelKeyToRemove = "labelToRemove"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices:batchUpdate")
+        let reqBody = """
+        {
+            "devices": ["projects/\(reqProjectID)/devices/\(reqDeviceID)"],
+            "addLabels": {"\(reqLabelKeyToSet)": "\(reqLabelValueToSet)"},
+            "removeLabels": ["\(reqLabelKeyToRemove)"]
+        }
+        """.data(using: .utf8)!
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "POST",
+                queryParams   : [:],
+                url           : reqURL,
+                body          : reqBody
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (nil, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.batchUpdateDeviceLabels(projectID: reqProjectID, deviceIDs: [reqDeviceID], labelsToSet: [reqLabelKeyToSet: reqLabelValueToSet], labelsToRemove: [reqLabelKeyToRemove]) { result in
+            switch result {
+                case .success():
+                    break
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
     func testMoveDevicesByIDs() {
         let reqFromProjectID = "proj1"
         let reqToProjectID = "proj2"
@@ -232,68 +275,6 @@ class DeviceTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         disruptive.moveDevices(deviceIDs: reqDeviceIDs, fromProjectID: reqFromProjectID, toProjectID: reqToProjectID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
-    }
-    
-    func testMoveDevicesByStructs() {
-        let reqFromProject = Project(
-            identifier          : "proj1",
-            displayName         : "",
-            isInventory         : true,
-            orgID               : "",
-            orgDisplayName      : "",
-            sensorCount         : 0,
-            cloudConnectorCount : 0
-        )
-        let reqToProject = Project(
-            identifier          : "proj2",
-            displayName         : "",
-            isInventory         : true,
-            orgID               : "",
-            orgDisplayName      : "",
-            sensorCount         : 0,
-            cloudConnectorCount : 0
-        )
-        let reqDevices = ["dev1", "dev2"].map {
-            Device(
-                identifier     : $0,
-                displayName    : "",
-                projectID      : reqFromProject.identifier,
-                labels         : [:],
-                type           : .temperature,
-                reportedEvents : Device.ReportedEvents()
-            )
-        }
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
-            .appendingPathComponent("projects/\(reqToProject.identifier)/devices:transfer")
-        let reqBody = try! JSONEncoder().encode([
-            "devices": reqDevices.map { "projects/\(reqFromProject.identifier)/devices/\($0.identifier)" }
-        ])
-        
-        MockURLProtocol.requestHandler = { request in
-            self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                url           : reqURL,
-                body          : reqBody
-            )
-            
-            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return (nil, resp, nil)
-        }
-        
-        let exp = expectation(description: "")
-        disruptive.moveDevices(reqDevices, fromProject: reqFromProject, toProject: reqToProject) { result in
             switch result {
                 case .success():
                     break
