@@ -236,7 +236,7 @@ extension Request {
         
         // Cast response to HTTPURLResponse
         guard let httpResponse = response as? HTTPURLResponse else {
-            DTLog("Request: \(url) resulted in HTTP Error: \(String(describing: error))", isError: true)
+            DTLog("Request: \(url) resulted in HTTP Error: \(String(describing: error)). Response: \(String(describing: response))", isError: true)
             return .unknownError
         }
         
@@ -318,7 +318,7 @@ extension Disruptive {
         _ request: Request,
         completion: @escaping (Result<Request, DisruptiveError>) -> ())
     {
-        authProvider.getNonExpiredAuthToken { result in
+        authProvider.getActiveAccessToken { result in
             switch result {
             case .success(let token):
                 var req = request

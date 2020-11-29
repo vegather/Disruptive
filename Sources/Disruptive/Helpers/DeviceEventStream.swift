@@ -163,7 +163,7 @@ public class DeviceEventStream: NSObject {
     private func restartStream() {
         guard hasBeenClosed == false else { return }
         
-        authProvider.getNonExpiredAuthToken { [weak self] result in
+        authProvider.getActiveAccessToken { [weak self] result in
             guard let self = self else { return }
             
             switch result {

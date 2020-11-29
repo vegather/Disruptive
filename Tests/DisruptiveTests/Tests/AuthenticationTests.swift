@@ -12,46 +12,205 @@ class AuthenticationTests: DisruptiveTests {
     
     func testBasicAuth() {
         let serviceAccount = ServiceAccount(email: "email", key: "key", secret: "secret")
-        let provider = BasicAuthAuthenticator(account: serviceAccount)
+        let authenticator = BasicAuthAuthenticator(account: serviceAccount)
         
-        XCTAssertNotNil(provider.auth)
-        XCTAssertTrue(provider.auth!.token.hasPrefix("Basic "))
-        XCTAssertGreaterThan(provider.auth!.expirationDate.timeIntervalSince1970, Date().timeIntervalSince1970)
-        XCTAssertTrue(provider.shouldBeLoggedIn)
         
-        let canGetTokenExp = expectation(description: "")
-        provider.getNonExpiredAuthToken { result in
-            switch result {
-                case .success(let token):
-                    XCTAssertEqual(token, provider.auth!.token)
-                case .failure(_):
-                    XCTFail()
-            }
-            canGetTokenExp.fulfill()
+        
+        // Should not be authenticated to begin with
+        XCTAssertNil(authenticator.auth)
+        XCTAssertTrue(authenticator.shouldAutoRefreshAccessToken)
+        
+        
+        
+        // Should successfully authenticate
+        var exp = expectation(description: "")
+        authenticator.refreshAccessToken { result in
+            guard case .success = result else { XCTFail(); return }
+            exp.fulfill()
         }
+        wait(for: [exp], timeout: 1)
+        XCTAssertTrue(authenticator.shouldAutoRefreshAccessToken)
+        XCTAssertNotNil(authenticator.auth)
+        XCTAssertGreaterThan(
+            authenticator.auth!.expirationDate.timeIntervalSince1970,
+            Date().timeIntervalSince1970
+        )
+        XCTAssertEqual(authenticator.auth!.token, "Basic a2V5OnNlY3JldA==")
+
         
-        let canReauthenticateExp = expectation(description: "")
-        provider.reauthenticate { result in
-            if case .failure = result { XCTFail() }
-            canReauthenticateExp.fulfill()
+        
+        // Log out
+        exp = expectation(description: "")
+        authenticator.logout { result in
+            guard case .success = result else { XCTFail(); return }
+            exp.fulfill()
         }
+        wait(for: [exp], timeout: 1)
+        XCTAssertFalse(authenticator.shouldAutoRefreshAccessToken)
+        XCTAssertNil(authenticator.auth)
         
-        let canLoginExp = expectation(description: "")
-        provider.login { result in
-            if case .failure = result { XCTFail() }
-            canLoginExp.fulfill()
+        
+        
+        // Log back in
+        exp = expectation(description: "")
+        authenticator.login { result in
+            guard case .success = result else { XCTFail(); return }
+            exp.fulfill()
         }
-        
-        let canLogoutExp = expectation(description: "")
-        provider.logout { result in
-            if case .failure = result { XCTFail() }
-            canLogoutExp.fulfill()
-        }
-        
-        wait(for: [canGetTokenExp, canReauthenticateExp, canLoginExp, canLogoutExp], timeout: 1)
+        wait(for: [exp], timeout: 1)
+        XCTAssertTrue(authenticator.shouldAutoRefreshAccessToken)
+        XCTAssertNotNil(authenticator.auth)
+        XCTAssertGreaterThan(
+            authenticator.auth!.expirationDate.timeIntervalSince1970,
+            Date().timeIntervalSince1970
+        )
+        XCTAssertEqual(authenticator.auth!.token, "Basic a2V5OnNlY3JldA==")
     }
     
     func testOAuth2() {
+        let reqKey = "key"
+        let reqEmail = "email"
+        let reqURL = Disruptive.defaultAuthURL
         
+        let respAccessToken = "dummy_token"
+        let respPayload = """
+        {
+            "access_token": "\(respAccessToken)",
+            "token_type": "bearer",
+            "expires_in": 3600
+        }
+        """.data(using: .utf8)!
+        
+        let serviceAccount = ServiceAccount(email: reqEmail, key: reqKey, secret: "secret")
+        let auth = OAuth2Authenticator(account: serviceAccount)
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : false,
+                method        : "POST",
+                queryParams   : [:],
+                headers       : ["Content-Type": "application/x-www-form-urlencoded"],
+                url           : URL(string: reqURL)!,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: URL(string: reqURL)!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            
+            guard let body = request.httpBodyStream?.readData(), let bodyStr = String(data: body, encoding: .utf8) else {
+                XCTFail()
+                return (respPayload, resp, nil)
+            }
+
+            let parts = bodyStr.components(separatedBy: "&")
+            XCTAssertEqual(parts.count, 2)
+
+            for part in parts {
+                let subParts = part.components(separatedBy: "=")
+                XCTAssertEqual(subParts.count, 2)
+
+                switch subParts[0] {
+                    case "grant_type":
+                        XCTAssertEqual(subParts[1], "urn:ietf:params:oauth:grant-type:jwt-bearer")
+
+                    case "assertion":
+                        // JWT
+                        let jwtParts = subParts[1].components(separatedBy: ".")
+                        XCTAssertEqual(jwtParts.count, 3)
+
+                        let headerData = """
+                        { "alg":"HS256", "kid":"\(reqKey)" }
+                        """.data(using: .utf8)!
+                        self.assertJSONDatasAreEqual(
+                            a: headerData,
+                            b: jwtParts[0].base64Decoded()!.data(using: .utf8)!
+                        )
+                        
+                        struct JWTPayload: Decodable {
+                            let iat: Int
+                            let exp: Int
+                            let aud: String
+                            let iss: String
+                        }
+                        guard
+                            let base64Decoded = (jwtParts[1] + "=").base64Decoded(), // Extra "=" was determined empirically
+                            let payloadData = base64Decoded.data(using: .utf8),
+                            let jwtPayload = try? JSONDecoder().decode(JWTPayload.self, from: payloadData)
+                        else {
+                            XCTFail()
+                            return (respPayload, resp, nil)
+                        }
+                        XCTAssertEqual(jwtPayload.aud, reqURL)
+                        XCTAssertEqual(jwtPayload.iss, reqEmail)
+                        XCTAssertEqual(jwtPayload.exp - jwtPayload.iat, 3600)
+
+                    default:
+                        XCTFail("Unexpected part: \(subParts[0]), value: \(subParts[1])")
+                }
+            }
+            
+            
+            
+            
+            print("RETURNING")
+            
+            return (respPayload, resp, nil)
+        }
+        
+        // Should not be authenticated to begin with
+        XCTAssertNil(auth.auth)
+        XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
+        
+        
+        // Should successfully authenticate
+        var exp = expectation(description: "")
+        auth.refreshAccessToken { result in
+            guard case .success = result else { XCTFail(); return }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+        XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
+        XCTAssertNotNil(auth.auth)
+        XCTAssertGreaterThan(
+            auth.auth!.expirationDate.timeIntervalSince1970,
+            Date().timeIntervalSince1970
+        )
+        XCTAssertEqual(auth.auth?.token, "Bearer \(respAccessToken)")
+        
+        
+        // Log out
+        exp = expectation(description: "")
+        auth.logout { result in
+            guard case .success = result else { XCTFail(); return }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+        XCTAssertFalse(auth.shouldAutoRefreshAccessToken)
+        XCTAssertNil(auth.auth)
+
+
+        // Log back in
+        exp = expectation(description: "")
+        auth.login { result in
+            guard case .success = result else { XCTFail(); return }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+        XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
+        XCTAssertNotNil(auth.auth)
+        XCTAssertGreaterThan(
+            auth.auth!.expirationDate.timeIntervalSince1970,
+            Date().timeIntervalSince1970
+        )
+        XCTAssertEqual(auth.auth?.token, "Bearer \(respAccessToken)")
+    }
+    
+    
+}
+
+private extension String {
+    func base64Decoded() -> String? {
+        guard let decodedData = Data(base64Encoded: self) else { return nil }
+        return String(data: decodedData, encoding: .utf8)
     }
 }

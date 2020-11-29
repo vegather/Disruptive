@@ -36,6 +36,7 @@ class PermissionsTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )
@@ -71,6 +72,7 @@ class PermissionsTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )

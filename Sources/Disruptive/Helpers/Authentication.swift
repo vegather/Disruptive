@@ -28,17 +28,15 @@ public struct ServiceAccount: Codable {
 /**
  Encapsulates authentication details like access token and expiration date.
  
- This type is only useful to implement an `AuthProvider`, and does not
- need to be accessed or created in any other circumstances.
+ This type is only useful when implementing a type that conforms to `AuthProvider`,
+ and does not need to be accessed or created in any other circumstances.
  */
 public struct Auth {
     /// The current token to use for authentication. This `String` needs to
     /// be prefixed with the authentication scheme. Eg: "Basic ..." or "Bearer ..."
     public let token: String
     
-    /// The expiration date of the `authToken`. If there is less than a minute until
-    /// expiration, and a request is made on the network, the `authenticate` function
-    /// will be called first.
+    /// The expiration date of the `token`.
     public let expirationDate: Date
     
     /// Creates a new `Auth` instance
@@ -50,32 +48,42 @@ public struct Auth {
 
 /**
  Defines the interface required to authenticate the `Disruptive` struct.
+ 
+ Any conforming types needs a mechanism to aquire an access token that
+ can be used to authenticate against the Disruptive Technologies' REST API.
  */
 public protocol AuthProvider {
     
-    /// The authentication data (token, and expiration date)
+    /// The authentication data (token, and expiration date). This should be set by
+    /// a conforming type after a call to `refreshAccessToken()`.
     var auth: Auth? { get }
     
-    /// Indicates whether the `authProvider` should be logged in or not.
+    /// Indicates whether the auth provider should automatically attempt to
+    /// refresh the access token if the local one is expired, or if no local access token is available.
     /// This is intended to prevent any accidental reauthentications being made
     /// after the client has logged out.
-    var shouldBeLoggedIn: Bool { get }
+    var shouldAutoRefreshAccessToken: Bool { get }
     
     /// The completion closure type used by the auth functions
     typealias AuthHandler = (Result<Void, DisruptiveError>) -> ()
     
-    /// This will log the client in by calling the `reauthenticate()` function
-    /// (which sets the `auth` property), and set `shouldBeLoggedIn` to `true`.
+    /// A conforming type should call `refreshAccessToken()` to get an initial access token,
+    /// and if successful, set `shouldAutoRefreshAccessToken` to `true`.
     func login(completion: @escaping AuthHandler)
     
-    /// This will clear any local state related to logging in, including the `auth` property.
-    /// It may or may not invoke a URL to log the user out in the default browser as well,
-    /// depending on the implementation of the specific `AuthProvider`.
+    /// A conforming type should clear out any state that was created while logging in,
+    /// including setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
+    /// to `false`.
     func logout(completion: @escaping AuthHandler)
     
-    /// This will be called internally when the auth token has expired, or is close
-    /// to expiring.
-    func reauthenticate(completion: @escaping AuthHandler)
+    /// A conforming type should use a mechanism to aquire an access token than
+    /// can be used to authenticate against the Disruptive Technologies' REST API.
+    /// Once that token has been aquired, it should be stored in the `auth` property
+    /// along with a relevant expiration date.
+    ///
+    /// This will be called automatically when necessary as long as `shouldAutoRefreshAccessToken`
+    /// is set to `true`.
+    func refreshAccessToken(completion: @escaping AuthHandler)
 }
 
 internal extension AuthProvider {
@@ -83,7 +91,7 @@ internal extension AuthProvider {
     /// Returns the auth token if the auth token is non-nil, AND
     /// there's an expiration date that is further away than a minute.
     /// Otherwise returns nil.
-    private func getAuthToken() -> String? {
+    private func getLocalAuthToken() -> String? {
         if let auth = auth, auth.expirationDate.timeIntervalSinceNow > 60 {
             return auth.token
         } else {
@@ -91,31 +99,30 @@ internal extension AuthProvider {
         }
     }
     
-    /// If the auth provider is already authenticated, and the expiration date is far enough
-    /// in the future, this will succeed with the auth providers auth token.
-    /// If the auth provider is not authenticated, or the token is too close to expiring, this will
-    /// re-authenticate the auth provider and return the new auth token.
-    /// If the re-authentication fails, this will result in an error.
-    func getNonExpiredAuthToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
-        if shouldBeLoggedIn == false {
+    /// Will check things in the following order:
+    /// * If the auth provider is logged out, return a `loggedOut` error
+    /// * If there is a local auth token that is not expired (or less than a minute away from expiring), return it
+    /// * Attempt to refresh the auth token (and store it in `auth`). If successful, return the new token, otherwise return an error.
+    func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
+        if shouldAutoRefreshAccessToken == false {
             // We should no longer be logged in. Just return the `.loggedOut` error code
-            DTLog("The `authProvider` is not logged in. Call `login()` on the `authProvider` to log back in.")
+            DTLog("The `AuthProvider` is not logged in. Call `login()` on the `AuthProvider` to log back in.")
             completion(.failure(.loggedOut))
-        } else if let authToken = getAuthToken() {
+        } else if let authToken = getLocalAuthToken() {
             // There already exists a non-expired auth token
             completion(.success(authToken))
         } else {
             // The auth provider is either not authenticated, or the auth
             // token too close to getting expired. Will reauthenticate the auth provider
             DTLog("Authenticating the auth provider...")
-            reauthenticate { result in
+            refreshAccessToken { result in
                 switch result {
                 case .success():
-                    if let authToken = getAuthToken() {
+                    if let authToken = getLocalAuthToken() {
                         DTLog("Authentication successful")
                         completion(.success(authToken))
                     } else {
-                        DTLog("The auth provider authenticated successfully, but unexpectedly there was not a non-expired auth token available. Auth provider: \(self)", isError: true)
+                        DTLog("The auth provider authenticated successfully, but unexpectedly there was not a non-expired local access token available.", isError: true)
                         completion(.failure(.unknownError))
                     }
                 case .failure(let e):
@@ -130,8 +137,12 @@ internal extension AuthProvider {
 /**
  An `AuthProvider` that logs in a service account using basic auth.
  
+ A `BasicAuthAuthenticator` is authenticated by default, so there is no need to call `login()`.
+ However if you'd like it to no longer be authenticated, you can call `logout()`, and then `login()` if
+ you want it to be authenticated again.
+ 
  See [AuthProvider](../AuthProvider) for more details about the properties
- and methods. Only the initializer (`init(account:)`) is relevant externally.
+ and methods.
  
  __Note__: This should only be used for development/testing. For production use-cases the [`OAuth2Authenticator`](../OAuth2Authenticator) should be used.
  
@@ -142,22 +153,18 @@ internal extension AuthProvider {
  let disruptive = Disruptive(authProvider: authenticator)
  ```
  */
-public struct BasicAuthAuthenticator: AuthProvider {
-    private let account : ServiceAccount
+public class BasicAuthAuthenticator: AuthProvider {
+    public let account : ServiceAccount
     
-    /// The authentication details. Will always be set
-    public var auth: Auth? {
-        return Auth(
-            token: "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString(),
-            expirationDate: .distantFuture
-        )
-    }
+    /// The authentication details.
+    private(set) public var auth: Auth?
     
-    /// A basic authenticator is always logged in
-    public let shouldBeLoggedIn = true
+    /// A `BasicAuthAuthenticator` will default to automatically get a fresh access token.
+    /// This will be switched on and off when `logout()` and `login()` is called.
+    private(set) public var shouldAutoRefreshAccessToken = true
     
     /**
-     Initializes a `BasicAuthAuthenticator` using a `ServiceAccount`
+     Initializes a `BasicAuthAuthenticator` using a `ServiceAccount`.
      
      - Parameter account: The `ServiceAccount` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
      */
@@ -165,27 +172,45 @@ public struct BasicAuthAuthenticator: AuthProvider {
         self.account = account
     }
     
-    public func reauthenticate(completion: @escaping AuthHandler) {
-        completion(.success(()))
-    }
-    
+    /// Refreshes the access token, stores it in the `auth` property, and sets
+    /// `shouldAutoRefreshAccessToken` to `true`.
     public func login(completion: @escaping AuthHandler) {
+        refreshAccessToken { [weak self] result in
+            if case .success = result {
+                self?.shouldAutoRefreshAccessToken = true
+            }
+            completion(result)
+        }
+    }
+    
+    /// Logs out the auth provider by setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
+    /// to `false`. Call `login()` to log the auth provider back in again.
+    public func logout(completion: @escaping AuthHandler) {
+        auth = nil
+        shouldAutoRefreshAccessToken = false
         completion(.success(()))
     }
     
-    public func logout(completion: @escaping AuthHandler) {
+    /// Used internally to create a new access token from the service account passed in to the initializer.
+    /// This access token is stored in the `auth` property along with an expiration date in the `.distantFuture`.
+    public func refreshAccessToken(completion: @escaping AuthHandler) {
+        auth = Auth(
+            token: "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString(),
+            expirationDate: .distantFuture
+        )
         completion(.success(()))
     }
 }
 
 /**
- An `AuthProvider` that logs in a service account using OAuth2.
+ An `AuthProvider` that logs in a service account using OAuth2. This is a more
+ secure flow than the basic auth counter-part, and is the recommended way to authenticate
+ a service account in a production environment.
  
  See [AuthProvider](../AuthProvider) for more details about the properties
- and methods. Only the initializer (`init(account:)`) is relevant externally.
+ and methods.
  
- This is a more secure flow than the basic auth counter-part, and is the
- recommended way to authenticate a service account in a production environment.
+ See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication) for details about OAuth2 authentication using a Service Account.
  
  Example:
  ```
@@ -196,12 +221,19 @@ public struct BasicAuthAuthenticator: AuthProvider {
  */
 public class OAuth2Authenticator: AuthProvider {
 
-    private(set) public var auth: Auth?
-    private(set) public var shouldBeLoggedIn = false
-
+    /// The service account used to authenticate against the Disruptive Technologies' REST API.
+    public let account : ServiceAccount
     
-    private let account : ServiceAccount
-    private let authURL: String
+    /// The authentication endpoint to fetch the access token from.
+    public let authURL: String
+
+    /// The authentication details.
+    private(set) public var auth: Auth?
+    
+    /// An `OAuth2Authenticator` will default to automatically get a fresh access token.
+    /// This will be switched on and off when `logout()` and `login()` is called.
+    private(set) public var shouldAutoRefreshAccessToken = true
+
     
     
     /**
@@ -215,22 +247,29 @@ public class OAuth2Authenticator: AuthProvider {
         self.account = account
     }
     
-    // Fetches the auth token using the `reauthenticate` function, and
-    // sets `shouldBeLoggedIn` to `true` when done.
+    /// Refreshes the access token, stores it in the `auth` property, and sets
+    /// `shouldAutoRefreshAccessToken` to `true`.
     public func login(completion: @escaping AuthHandler) {
-        reauthenticate { [weak self] result in
-            self?.shouldBeLoggedIn = true
+        refreshAccessToken { [weak self] result in
+            self?.shouldAutoRefreshAccessToken = true
             completion(result)
         }
     }
     
+    /// Logs out the auth provider by setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
+    /// to `false`. Call `login()` to log the auth provider back in again.
     public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         auth = nil
-        shouldBeLoggedIn = false
+        shouldAutoRefreshAccessToken = false
         completion(.success(()))
     }
     
-    public func reauthenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+    /// Used internally to create a JWT from the service account passed in to the initializer, which is then exchanged
+    /// with an access token from the authentication endpoint. This access token is stored in the `auth` property
+    /// along with the received expiration date.
+    ///
+    /// This flow is described in more detail on the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication).
+    public func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         guard let authJWT = JWT.serviceAccount(authURL: authURL, account: account) else {
             DTLog("Failed to create a JWT from service account: \(account)", isError: true)
             completion(.failure(.unknownError))

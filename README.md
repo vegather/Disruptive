@@ -2,7 +2,7 @@
 
 # Disruptive - Swift API
 
-![Swift](https://github.com/vegather/Disruptive/workflows/Swift/badge.svg?branch=master))
+![Swift](https://github.com/vegather/Disruptive/workflows/Swift/badge.svg?branch=master)
 ![Code Coverage](https://raw.githubusercontent.com/vegather/Disruptive/master/.github/badges/coverage.svg)
 ![Swift Version](https://img.shields.io/badge/Swift%20Version-5.3-blue)
 [![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://vegather.github.io/Disruptive/)
@@ -41,7 +41,13 @@ Documentation for the Disruptive Technologies REST API is available [here](https
 
 This library is currently only available through the Swift Package Manager (SPM).
 
-To add this Swift Package as a dependency in Xcode, go to `File -> Swift Packages -> Add Package Dependency...`, and paste in the following URL: `https://github.com/vegather/Disruptive.git`
+To add this Swift Package as a dependency in Xcode:
+
+1. Go to `File -> Swift Packages -> Add Package Dependency...`
+2. Enter the following repository URL: `https://github.com/vegather/Disruptive`
+3. Specify the version of the API you want. The default should be fine
+4. Make sure your app target is selected, and click "Finish"
+5. You can now import the Disruptive Swift API with `import Disruptive`
 
 If you want to add it manually to your Swift project, you can add the following dependency to your `Package.swift`:
 
@@ -72,6 +78,8 @@ Authentication is done by initializing the `Disruptive` instance with a type tha
 Here's an example of how to authenticate a service account with the OAuth2 flow:
 
 ```swift
+import Disruptive
+
 let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
 let authenticator = OAuth2Authenticator(account: serviceAccount)
 let disruptive = Disruptive(authProvider: authenticator)
@@ -198,7 +206,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 ### Misc Tips
 
-* Some basic debug logs can be enabled by setting `disruptive.loggingEnabled = true` 
+* Some basic debug logs can be enabled by setting `Disruptive.loggingEnabled = true` 
 
 
 

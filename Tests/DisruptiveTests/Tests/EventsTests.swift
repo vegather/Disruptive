@@ -212,6 +212,7 @@ class EventsTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : reqQueryParams,
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )
@@ -269,6 +270,7 @@ class EventsTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : reqQueryParams,
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )

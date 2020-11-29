@@ -52,6 +52,7 @@ extension DisruptiveTests {
         authenticated: Bool,
         method: String,
         queryParams: [String: [String]],
+        headers: [String: String],
         url: URL,
         body: Data?
     ) {
@@ -65,11 +66,18 @@ extension DisruptiveTests {
         if authenticated {
             XCTAssertNotNil(request.allHTTPHeaderFields?["Authorization"])
         }
-        if let body = body { // Assumes body is JSON
-            let a = try! JSONSerialization.jsonObject(with: body) as! JSONValue
-            let b = try! JSONSerialization.jsonObject(with: request.httpBodyStream!.readData()) as! JSONValue
-            XCTAssertTrue(a.isEqual(to: b))
+        for (key, value) in headers {
+            XCTAssertEqual(request.allHTTPHeaderFields?[key], value)
         }
+        if let body = body { // Assumes body is JSON
+            assertJSONDatasAreEqual(a: body, b: request.httpBodyStream!.readData())
+        }
+    }
+    
+    func assertJSONDatasAreEqual(a: Data, b: Data) {
+        let jsonA = try! JSONSerialization.jsonObject(with: a) as! JSONValue
+        let jsonB = try! JSONSerialization.jsonObject(with: b) as! JSONValue
+        XCTAssertTrue(jsonA.isEqual(to: jsonB))
     }
 }
 
