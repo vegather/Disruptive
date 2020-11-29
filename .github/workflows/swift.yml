@@ -62,6 +62,7 @@ jobs:
           module-name: Disruptive
           format: html
           output: docs
+          base-url: https://vegather.github.io/Disruptive/
 
       - name: Push Back docs/
         uses: stefanzweifel/git-auto-commit-action@v4
