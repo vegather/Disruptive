@@ -318,7 +318,7 @@ extension Disruptive {
         _ request: Request,
         completion: @escaping (Result<Request, DisruptiveError>) -> ())
     {
-        authProvider.getNonExpiredAuthToken { result in
+        authProvider.getActiveAccessToken { result in
             switch result {
             case .success(let token):
                 var req = request

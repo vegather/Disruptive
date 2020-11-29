@@ -59,7 +59,7 @@ public protocol AuthProvider {
     /// Indicates whether the `authProvider` should be logged in or not.
     /// This is intended to prevent any accidental reauthentications being made
     /// after the client has logged out.
-    var shouldBeLoggedIn: Bool { get }
+    var shouldAutoRefreshAccessToken: Bool { get }
     
     /// The completion closure type used by the auth functions
     typealias AuthHandler = (Result<Void, DisruptiveError>) -> ()
@@ -83,7 +83,7 @@ internal extension AuthProvider {
     /// Returns the auth token if the auth token is non-nil, AND
     /// there's an expiration date that is further away than a minute.
     /// Otherwise returns nil.
-    private func getAuthToken() -> String? {
+    private func getLocalAuthToken() -> String? {
         if let auth = auth, auth.expirationDate.timeIntervalSinceNow > 60 {
             return auth.token
         } else {
@@ -96,22 +96,22 @@ internal extension AuthProvider {
     /// If the auth provider is not authenticated, or the token is too close to expiring, this will
     /// re-authenticate the auth provider and return the new auth token.
     /// If the re-authentication fails, this will result in an error.
-    func getNonExpiredAuthToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
-        if shouldBeLoggedIn == false {
+    func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
+        if shouldAutoRefreshAccessToken == false {
             // We should no longer be logged in. Just return the `.loggedOut` error code
             DTLog("The `authProvider` is not logged in. Call `login()` on the `authProvider` to log back in.")
             completion(.failure(.loggedOut))
-        } else if let authToken = getAuthToken() {
+        } else if let authToken = getLocalAuthToken() {
             // There already exists a non-expired auth token
             completion(.success(authToken))
         } else {
             // The auth provider is either not authenticated, or the auth
             // token too close to getting expired. Will reauthenticate the auth provider
             DTLog("Authenticating the auth provider...")
-            reauthenticate { result in
+            refreshAccessToken { result in
                 switch result {
                 case .success():
-                    if let authToken = getAuthToken() {
+                    if let authToken = getLocalAuthToken() {
                         DTLog("Authentication successful")
                         completion(.success(authToken))
                     } else {
@@ -142,19 +142,14 @@ internal extension AuthProvider {
  let disruptive = Disruptive(authProvider: authenticator)
  ```
  */
-public struct BasicAuthAuthenticator: AuthProvider {
-    private let account : ServiceAccount
+public class BasicAuthAuthenticator: AuthProvider {
+    public let account : ServiceAccount
     
     /// The authentication details. Will always be set
-    public var auth: Auth? {
-        return Auth(
-            token: "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString(),
-            expirationDate: .distantFuture
-        )
-    }
+    private(set) public var auth: Auth?
     
     /// A basic authenticator is always logged in
-    public let shouldBeLoggedIn = true
+    private(set) public var shouldAutoRefreshAccessToken = true
     
     /**
      Initializes a `BasicAuthAuthenticator` using a `ServiceAccount`
@@ -165,15 +160,26 @@ public struct BasicAuthAuthenticator: AuthProvider {
         self.account = account
     }
     
-    public func reauthenticate(completion: @escaping AuthHandler) {
-        completion(.success(()))
-    }
-    
     public func login(completion: @escaping AuthHandler) {
-        completion(.success(()))
+        refreshAccessToken { [weak self] result in
+            if case .success = result {
+                self?.shouldAutoRefreshAccessToken = true
+            }
+            completion(result)
+        }
     }
     
     public func logout(completion: @escaping AuthHandler) {
+        auth = nil
+        shouldAutoRefreshAccessToken = false
+        completion(.success(()))
+    }
+    
+    public func refreshAccessToken(completion: @escaping AuthHandler) {
+        auth = Auth(
+            token: "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString(),
+            expirationDate: .distantFuture
+        )
         completion(.success(()))
     }
 }
@@ -196,12 +202,13 @@ public struct BasicAuthAuthenticator: AuthProvider {
  */
 public class OAuth2Authenticator: AuthProvider {
 
-    private(set) public var auth: Auth?
-    private(set) public var shouldBeLoggedIn = false
+    public let account : ServiceAccount
+    public let authURL: String
 
+    private(set) public var auth: Auth?
     
-    private let account : ServiceAccount
-    private let authURL: String
+    private(set) public var shouldAutoRefreshAccessToken = true
+
     
     
     /**
@@ -218,19 +225,19 @@ public class OAuth2Authenticator: AuthProvider {
     // Fetches the auth token using the `reauthenticate` function, and
     // sets `shouldBeLoggedIn` to `true` when done.
     public func login(completion: @escaping AuthHandler) {
-        reauthenticate { [weak self] result in
-            self?.shouldBeLoggedIn = true
+        refreshAccessToken { [weak self] result in
+            self?.shouldAutoRefreshAccessToken = true
             completion(result)
         }
     }
     
     public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         auth = nil
-        shouldBeLoggedIn = false
+        shouldAutoRefreshAccessToken = false
         completion(.success(()))
     }
     
-    public func reauthenticate(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+    public func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         guard let authJWT = JWT.serviceAccount(authURL: authURL, account: account) else {
             DTLog("Failed to create a JWT from service account: \(account)", isError: true)
             completion(.failure(.unknownError))
