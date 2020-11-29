@@ -2,7 +2,7 @@
 
 # Disruptive - Swift API
 
-![Swift](https://github.com/vegather/Disruptive/workflows/Swift/badge.svg?branch=master))
+![Swift](https://github.com/vegather/Disruptive/workflows/Swift/badge.svg?branch=master)
 ![Code Coverage](https://raw.githubusercontent.com/vegather/Disruptive/master/.github/badges/coverage.svg)
 ![Swift Version](https://img.shields.io/badge/Swift%20Version-5.3-blue)
 [![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://vegather.github.io/Disruptive/)
