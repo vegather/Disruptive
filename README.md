@@ -278,6 +278,16 @@ Emulator
 - [ ] Provide better control of pagination. At the moment, this library will automatically fetch all pages before returning the data. Ideally, the caller would be able to decide whether or not they want this automatic behavior, or do it by themselves instead. This would be useful when there are a lot of items in a list, and paging all the items would take too much time.
 - [ ] Labels changed support. The `labelsChanged` event has a slightly different structure than the rest of the event types. It was added to this repo before this was realized, so the implementation is simply commented-out until proper parsing logic is implemented. 
 - [x] ~~Finish documenting all types, properties, and methods.~~
+- [ ] Improve `DTLog` to include file and line numbers in a nicely formatted output. At this point it could also be a public function.
+- [ ] Reach 90%+ code coverage for the unit tests.
+- Areas that still needs unit testing
+    - [ ] `Authentication.swift` - `getActiveAccessToken` and error handling in `OAuth2Authenticator.refreshAccessToken`
+    - [ ] `DeviceEventStream.swift`
+    - [ ] `EventTypes.swift`
+    - [ ] `Requests.swift`
+    - [ ] `RetryScheme.swift`
+    - [ ] `Stream.swift`
+    
 
 
 ## License
