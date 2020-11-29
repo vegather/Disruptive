@@ -33,7 +33,7 @@ jobs:
       with:
         label: 'Code Coverage'
         status: ${{ steps.coverage_step.outputs.coverage }}%
-        color: 'green'
+        color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
     - name: Push Back Status Badge
