@@ -53,7 +53,7 @@ If you want to add it manually to your Swift project, you can add the following 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vegather/Disruptive.git", from: "0.0.0")
+    .package(url: "https://github.com/vegather/Disruptive.git", from: "v1.0.0-beta.2")
 ]
 ```
 
