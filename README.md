@@ -274,10 +274,10 @@ Emulator
 
 ## Todo
 
-- [ ] Add unit tests. Would like to try to get a test harness set up based on `URLProtocol` as described in this blog post: https://medium.com/@dhawaldawar/how-to-mock-urlsession-using-urlprotocol-8b74f389a67a
+- [x] ~~Add unit tests. Would like to try to get a test harness set up based on `URLProtocol` as described in this blog post: https://medium.com/@dhawaldawar/how-to-mock-urlsession-using-urlprotocol-8b74f389a67a~~
 - [ ] Provide better control of pagination. At the moment, this library will automatically fetch all pages before returning the data. Ideally, the caller would be able to decide whether or not they want this automatic behavior, or do it by themselves instead. This would be useful when there are a lot of items in a list, and paging all the items would take too much time.
 - [ ] Labels changed support. The `labelsChanged` event has a slightly different structure than the rest of the event types. It was added to this repo before this was realized, so the implementation is simply commented-out until proper parsing logic is implemented. 
-- [ ] Finish documenting all types, properties, and methods.
+- [x] ~~Finish documenting all types, properties, and methods.~~
 
 
 ## License
