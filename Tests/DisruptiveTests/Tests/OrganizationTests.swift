@@ -30,6 +30,7 @@ class OrganizationTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )

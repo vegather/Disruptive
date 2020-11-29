@@ -34,6 +34,7 @@ class ProjectTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : reqParams,
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )
@@ -69,6 +70,7 @@ class ProjectTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )
@@ -108,6 +110,7 @@ class ProjectTests: DisruptiveTests {
                 authenticated : true,
                 method        : "POST",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : reqBody
             )
@@ -147,6 +150,7 @@ class ProjectTests: DisruptiveTests {
                 authenticated : true,
                 method        : "PATCH",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : reqBody
             )

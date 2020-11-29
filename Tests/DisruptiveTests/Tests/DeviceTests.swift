@@ -32,6 +32,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )
@@ -67,6 +68,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )
@@ -102,6 +104,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : nil
             )
@@ -143,6 +146,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "POST",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : reqBody
             )
@@ -184,6 +188,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "POST",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : reqBody
             )
@@ -226,6 +231,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "POST",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : reqBody
             )
@@ -269,6 +275,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "POST",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : reqBody
             )
@@ -306,6 +313,7 @@ class DeviceTests: DisruptiveTests {
                 authenticated : true,
                 method        : "POST",
                 queryParams   : [:],
+                headers       : [:],
                 url           : reqURL,
                 body          : reqBody
             )
