@@ -248,7 +248,7 @@ The following is a list of all the available endpoints in the Disruptive Technol
 - [ ] GET /roles
 - [ ] GET /roles/{role}
 - [x] ~~GET /organizations~~
-- [ ] GET /organizations/{organization}
+- [x] ~~GET /organizations/{organization}~~
 - [x] ~~GET /projects~~
 - [x] ~~POST /projects~~
 - [x] ~~GET /projects/{project}~~
