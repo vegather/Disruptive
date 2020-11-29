@@ -132,6 +132,39 @@ class ProjectTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
+    func testDeleteProject() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "DELETE",
+                queryParams   : [:],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (nil, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.deleteProject(projectID: reqProjectID) { result in
+            switch result {
+                case .success():
+                    break
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
     func testUpdateProjectDisplayName() {
         let reqProjectID = "abc"
         let reqDisplayName = "dummy"

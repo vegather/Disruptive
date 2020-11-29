@@ -253,7 +253,7 @@ The following is a list of all the available endpoints in the Disruptive Technol
 - [x] ~~POST /projects~~
 - [x] ~~GET /projects/{project}~~
 - [x] ~~PATCH /projects/{project}~~
-- [ ] DELETE /projects/{project}
+- [x] ~~DELETE /projects/{project}~~
 - [ ] GET /projects/{project}/serviceaccounts
 - [ ] POST /projects/{project}/serviceaccounts
 - [ ] GET /projects/{project}/serviceaccounts/{serviceaccount}
