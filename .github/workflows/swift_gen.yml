@@ -68,7 +68,7 @@ jobs:
 
       # Pull down any changes from the previous step that might not yet have propagated when we checked out
       - name: Pull latest changes
-        run: get pull
+        run: git pull
 
       - name: Push Back docs
         uses: stefanzweifel/git-auto-commit-action@v4
