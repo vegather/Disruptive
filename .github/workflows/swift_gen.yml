@@ -50,7 +50,7 @@ jobs:
 
   generate_swift_docs:
     runs-on: ubuntu-20.04
-    needs: code_coverage # The jobs have to run sequentially since they both push
+    needs: create_code_coverage_badge # The jobs have to run sequentially since they both push
     steps:
 
       - uses: actions/checkout@v2
