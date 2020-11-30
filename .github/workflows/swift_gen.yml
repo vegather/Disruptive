@@ -77,6 +77,13 @@ jobs:
           output: docs
           base-url: https://vegather.github.io/Disruptive/
 
+      - run: git status
+      - run: ls -lah docs
+      - run: ls -lah docs/Role
+      - run: cat docs/Role/index.html
+      - run: git add docs/
+      - run: git status
+
       # - run: git status
       # - run: pwd
       # - run: ls -lah
