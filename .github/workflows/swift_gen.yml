@@ -77,17 +77,17 @@ jobs:
           output: docs
           base-url: https://vegather.github.io/Disruptive/
 
-      - run: git status
-      - run: pwd
-      - run: ls -lah
+      # - run: git status
+      # - run: pwd
+      # - run: ls -lah
 
-      # Pull down any changes from the previous step that might not yet have propagated when we checked out
-      - name: Pull latest changes
-        run: git pull
+      # # Pull down any changes from the previous step that might not yet have propagated when we checked out
+      # - name: Pull latest changes
+      #   run: git pull
 
-      - run: git status
-      - run: pwd
-      - run: ls -lah
+      # - run: git status
+      # - run: pwd
+      # - run: ls -lah
       
       # - name: Push changes
       #   uses: github-actions-x/commit@v2.6
