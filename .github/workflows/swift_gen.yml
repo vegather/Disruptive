@@ -35,21 +35,12 @@ jobs:
         status: ${{ steps.coverage_step.outputs.coverage }}%
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
-    
-    - name: Generate Documentation
-      uses: SwiftDocOrg/swift-doc@master
-      with:
-        # Generates HTML documentation, and writes to the `docs` dir
-        module-name: Disruptive
-        format: html
-        output: docs
-        base-url: https://vegather.github.io/Disruptive/
 
     - name: Push Back Status Badge
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         branch: master
-        file_pattern: .
+        file_pattern: ".github/badges"
         commit_message: "CI: Updated Swift documentation + Code Coverage badge"
         commit_user_name: "GitHub Action"
         commit_user_email: "action@github.com"
