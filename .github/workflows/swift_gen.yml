@@ -11,13 +11,10 @@ jobs:
 
     - uses: actions/checkout@v2
 
-    - name: Build
-      run: swift build -v
-
     - name: Run tests
       run: swift test --enable-code-coverage
 
-    - name: Code Coverage
+    - name: Calculate Code Coverage
       uses: maxep/spm-lcov-action@0.3.1
       with:
         output-file: coverage.json
@@ -36,24 +33,13 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
-    # - name: Push changes
-    #   uses: github-actions-x/commit@v2.6
-    #   with:
-    #     github-token: ${{ secrets.GITHUB_TOKEN }}
-    #     commit-message: "CI: Updated code coverage badge"
-    #     files: .github/badges/coverage.svg
-    #     email: "action@github.com"
-    #     name: "GitHub Action"
-
-    - run: git status
-
-    - name: Push Back docs
+    - name: Push Back Status Badge
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        # Pushes the `docs` dir to the `master` branch
+        # Pushes the `.github/badges/coverage.svg` file to the `master` branch
         branch: master
         file_pattern: .github/badges/coverage.svg
-        commit_message: "CI: Updated code coverage badge"
+        commit_message: "CI: Updated code coverage status badge"
         commit_user_name: "GitHub Action"
         commit_user_email: "action@github.com"
 
@@ -64,7 +50,7 @@ jobs:
 
       # Letting the push from previous step fully propagate
       - name: Let changes propagate
-        run: sleep 5
+        run: sleep 10
 
       - uses: actions/checkout@v2
 
@@ -77,36 +63,11 @@ jobs:
           output: docs
           base-url: https://vegather.github.io/Disruptive/
 
+      # Need to update permissions for `docs/*` since SwiftDocOrg/swift-doc@master
+      # will create files that have the permissions "-rw-------" (read-write for the
+      # root user only). These do not provide read access to the current user "runner".
       - name: Update Permissions
         run: 'sudo chown --recursive $USER docs'
-
-      - run: git status
-      - run: ls -lah docs
-      - run: ls -lah docs/Role
-      - run: cat docs/Role/index.html
-      - run: git add docs/
-      - run: git status
-
-      # - run: git status
-      # - run: pwd
-      # - run: ls -lah
-
-      # # Pull down any changes from the previous step that might not yet have propagated when we checked out
-      # - name: Pull latest changes
-      #   run: git pull
-
-      # - run: git status
-      # - run: pwd
-      # - run: ls -lah
-      
-      # - name: Push changes
-      #   uses: github-actions-x/commit@v2.6
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     commit-message: "CI: Updated Swift documentation"
-      #     files: docs/
-      #     email: "action@github.com"
-      #     name: "GitHub Action"
 
       - name: Push Back docs
         uses: stefanzweifel/git-auto-commit-action@v4
