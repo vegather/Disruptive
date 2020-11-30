@@ -36,15 +36,17 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
-    - name: Push Back Code Coverage Badge
-      uses: stefanzweifel/git-auto-commit-action@v4
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "CI: Updated code coverage badge" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
       with:
-        branch: master
-        file_pattern: ".github/badges"
-        commit_message: "CI: Updated code coverage badge"
-        commit_user_name: "GitHub Action"
-        commit_user_email: "action@github.com"
-        push_options: --force
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
 
   generate_swift_docs:
     runs-on: ubuntu-20.04
@@ -70,13 +72,14 @@ jobs:
       - name: Pull latest changes
         run: git pull
 
-      - name: Push Back docs
-        uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "CI: Updated Swift documentation" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          # Pushes the `docs` dir to the `master` branch
-          branch: master
-          file_pattern: docs
-          commit_message: "CI: Updated Swift documentation"
-          commit_user_name: "GitHub Action"
-          commit_user_email: "action@github.com"
-          push_options: --force
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
