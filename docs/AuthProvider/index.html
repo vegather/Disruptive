@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disruptive - AuthProvider</title>
-    <link rel="stylesheet" type="text/css" href="./all.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://vegather.github.io/Disruptive/all.css" media="all" />
 </head>
 <body>
     <header>
-        <a href="./">
+        <a href="https://vegather.github.io/Disruptive/">
             <strong>
                 Disruptive
             </strong>
@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Types Conforming to Auth​Provider</a></li></ul></li><li><a href="#requirements">Requirements</a><ul><li class="variable"><a href="#authprovider.auth">auth</a></li><li class="variable"><a href="#authprovider.shouldbeloggedin">should​BeLogged​In</a></li><li class="function"><a href="#authprovider.login(completion:)">login(completion:​)</a></li><li class="function"><a href="#authprovider.logout(completion:)">logout(completion:​)</a></li><li class="function"><a href="#authprovider.reauthenticate(completion:)">reauthenticate(completion:​)</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Types Conforming to Auth​Provider</a></li></ul></li><li><a href="#requirements">Requirements</a><ul><li class="variable"><a href="#authprovider.auth">auth</a></li><li class="variable"><a href="#authprovider.shouldautorefreshaccesstoken">should​Auto​Refresh​Access​Token</a></li><li class="function"><a href="#authprovider.login(completion:)">login(completion:​)</a></li><li class="function"><a href="#authprovider.logout(completion:)">logout(completion:​)</a></li><li class="function"><a href="#authprovider.refreshaccesstoken(completion:)">refresh​Access​Token(completion:​)</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -40,6 +40,11 @@
 <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">protocol</span> <span class="type">AuthProvider</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Defines the interface required to authenticate the <code>Disruptive</code> struct.</p>
+
+</div>
+<div class="discussion">
+    <p>Any conforming types needs a mechanism to aquire an access token that
+can be used to authenticate against the Disruptive Technologies' REST API.</p>
 
 </div>
 <section id="relationships">
@@ -59,39 +64,39 @@
 <!-- AuthProvider -->
 <g id="node1" class="node protocol current">
 <title>AuthProvider</title>
-<g id="a_node1"><a xlink:href="./AuthProvider" xlink:title="AuthProvider">
+<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/AuthProvider" xlink:title="AuthProvider">
 <path fill="none" stroke="#000000" stroke-width="3" d="M528,-36C528,-36 336,-36 336,-36 330,-36 324,-30 324,-24 324,-24 324,-12 324,-12 324,-6 330,0 336,0 336,0 528,0 528,0 534,0 540,-6 540,-12 540,-12 540,-24 540,-24 540,-30 534,-36 528,-36"/>
 <text text-anchor="middle" x="432" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">AuthProvider</text>
 </a>
 </g>
 </g>
-<!-- OAuth2Authenticator -->
-<g id="node2" class="node class">
-<title>OAuth2Authenticator</title>
-<g id="a_node2"><a xlink:href="./OAuth2Authenticator" xlink:title="OAuth2Authenticator">
-<path fill="none" stroke="#000000" d="M303,-108C303,-108 111,-108 111,-108 105,-108 99,-102 99,-96 99,-96 99,-84 99,-84 99,-78 105,-72 111,-72 111,-72 303,-72 303,-72 309,-72 315,-78 315,-84 315,-84 315,-96 315,-96 315,-102 309,-108 303,-108"/>
-<text text-anchor="middle" x="207" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">OAuth2Authenticator</text>
-</a>
-</g>
-</g>
-<!-- OAuth2Authenticator&#45;&gt;AuthProvider -->
-<g id="edge1" class="edge conformsTo">
-<title>OAuth2Authenticator&#45;&gt;AuthProvider</title>
-<path fill="none" stroke="#000000" d="M263.4866,-71.9243C294.5129,-61.9959 333.1703,-49.6255 365.6306,-39.2382"/>
-<polygon fill="#000000" stroke="#000000" points="367.0327,-42.4645 375.4902,-36.0831 364.8992,-35.7975 367.0327,-42.4645"/>
-</g>
 <!-- BasicAuthAuthenticator -->
-<g id="node3" class="node structure">
+<g id="node2" class="node class">
 <title>BasicAuthAuthenticator</title>
-<g id="a_node3"><a xlink:href="./BasicAuthAuthenticator" xlink:title="BasicAuthAuthenticator">
-<path fill="none" stroke="#000000" d="M753,-108C753,-108 561,-108 561,-108 555,-108 549,-102 549,-96 549,-96 549,-84 549,-84 549,-78 555,-72 561,-72 561,-72 753,-72 753,-72 759,-72 765,-78 765,-84 765,-84 765,-96 765,-96 765,-102 759,-108 753,-108"/>
-<text text-anchor="middle" x="657" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">BasicAuthAuthenticator</text>
+<g id="a_node2"><a xlink:href="https://vegather.github.io/Disruptive/BasicAuthAuthenticator" xlink:title="BasicAuthAuthenticator">
+<path fill="none" stroke="#000000" d="M303,-108C303,-108 111,-108 111,-108 105,-108 99,-102 99,-96 99,-96 99,-84 99,-84 99,-78 105,-72 111,-72 111,-72 303,-72 303,-72 309,-72 315,-78 315,-84 315,-84 315,-96 315,-96 315,-102 309,-108 303,-108"/>
+<text text-anchor="middle" x="207" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">BasicAuthAuthenticator</text>
 </a>
 </g>
 </g>
 <!-- BasicAuthAuthenticator&#45;&gt;AuthProvider -->
-<g id="edge2" class="edge conformsTo">
+<g id="edge1" class="edge conformsTo">
 <title>BasicAuthAuthenticator&#45;&gt;AuthProvider</title>
+<path fill="none" stroke="#000000" d="M263.4866,-71.9243C294.5129,-61.9959 333.1703,-49.6255 365.6306,-39.2382"/>
+<polygon fill="#000000" stroke="#000000" points="367.0327,-42.4645 375.4902,-36.0831 364.8992,-35.7975 367.0327,-42.4645"/>
+</g>
+<!-- OAuth2Authenticator -->
+<g id="node3" class="node class">
+<title>OAuth2Authenticator</title>
+<g id="a_node3"><a xlink:href="https://vegather.github.io/Disruptive/OAuth2Authenticator" xlink:title="OAuth2Authenticator">
+<path fill="none" stroke="#000000" d="M753,-108C753,-108 561,-108 561,-108 555,-108 549,-102 549,-96 549,-96 549,-84 549,-84 549,-78 555,-72 561,-72 561,-72 753,-72 753,-72 759,-72 765,-78 765,-84 765,-84 765,-96 765,-96 765,-102 759,-108 753,-108"/>
+<text text-anchor="middle" x="657" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">OAuth2Authenticator</text>
+</a>
+</g>
+</g>
+<!-- OAuth2Authenticator&#45;&gt;AuthProvider -->
+<g id="edge2" class="edge conformsTo">
+<title>OAuth2Authenticator&#45;&gt;AuthProvider</title>
 <path fill="none" stroke="#000000" d="M600.5134,-71.9243C569.4871,-61.9959 530.8297,-49.6255 498.3694,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="499.1008,-35.7975 488.5098,-36.0831 496.9673,-42.4645 499.1008,-35.7975"/>
 </g>
@@ -103,11 +108,13 @@
 </figure>
         <h3>Types Conforming to <code>Auth​Provider</code></h3>
 <dl>
-    <dt class="structure"><code><a href="./BasicAuthAuthenticator">BasicAuthAuthenticator</a></code></dt>
+    <dt class="class"><code><a href="https://vegather.github.io/Disruptive/BasicAuthAuthenticator">BasicAuthAuthenticator</a></code></dt>
 <dd><p>An <code>AuthProvider</code> that logs in a service account using basic auth.</p>
 </dd>
-<dt class="class"><code><a href="./OAuth2Authenticator">OAuth2Authenticator</a></code></dt>
-<dd><p>An <code>AuthProvider</code> that logs in a service account using OAuth2.</p>
+<dt class="class"><code><a href="https://vegather.github.io/Disruptive/OAuth2Authenticator">OAuth2Authenticator</a></code></dt>
+<dd><p>An <code>AuthProvider</code> that logs in a service account using OAuth2. This is a more
+secure flow than the basic auth counter-part, and is the recommended way to authenticate
+a service account in a production environment.</p>
 </dd>
 </dl>
 </section>
@@ -121,19 +128,21 @@
     <h3>
         <code>auth</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">auth</span>: <a href="./Auth"><span class="type">Auth</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">auth</span>: <a href="https://vegather.github.io/Disruptive/Auth"><span class="type">Auth</span></a>?</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>The authentication data (token, and expiration date)</p>
+    <p>The authentication data (token, and expiration date). This should be set by
+a conforming type after a call to <code>refreshAccessToken()</code>.</p>
 
 </div>
 </div>
-<div role="article" class="variable" id="authprovider.shouldbeloggedin">
+<div role="article" class="variable" id="authprovider.shouldautorefreshaccesstoken">
     <h3>
-        <code>should​BeLogged​In</code>
+        <code>should​Auto​Refresh​Access​Token</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">shouldBeLoggedIn</span>: <span class="type">Bool</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">shouldAutoRefreshAccessToken</span>: <span class="type">Bool</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Indicates whether the <code>authProvider</code> should be logged in or not.
+    <p>Indicates whether the auth provider should automatically attempt to
+refresh the access token if the local one is expired, or if no local access token is available.
 This is intended to prevent any accidental reauthentications being made
 after the client has logged out.</p>
 
@@ -145,8 +154,8 @@ after the client has logged out.</p>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">func</span> <span class="function">login</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> <span class="type">AuthHandler</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>This will log the client in by calling the <code>reauthenticate()</code> function
-(which sets the <code>auth</code> property), and set <code>shouldBeLoggedIn</code> to <code>true</code>.</p>
+    <p>A conforming type should call <code>refreshAccessToken()</code> to get an initial access token,
+and if successful, set <code>shouldAutoRefreshAccessToken</code> to <code>true</code>.</p>
 
 </div>
 </div>
@@ -156,20 +165,27 @@ after the client has logged out.</p>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">func</span> <span class="function">logout</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> <span class="type">AuthHandler</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>This will clear any local state related to logging in, including the <code>auth</code> property.
-It may or may not invoke a URL to log the user out in the default browser as well,
-depending on the implementation of the specific <code>AuthProvider</code>.</p>
+    <p>A conforming type should clear out any state that was created while logging in,
+including setting <code>auth</code> to <code>nil</code> and <code>shouldAutoRefreshAccessToken</code>
+to <code>false</code>.</p>
 
 </div>
 </div>
-<div role="article" class="function" id="authprovider.reauthenticate(completion:)">
+<div role="article" class="function" id="authprovider.refreshaccesstoken(completion:)">
     <h3>
-        <code>reauthenticate(completion:​)</code>
+        <code>refresh​Access​Token(completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">func</span> <span class="function">reauthenticate</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> <span class="type">AuthHandler</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">func</span> <span class="function">refreshAccessToken</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> <span class="type">AuthHandler</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>This will be called internally when the auth token has expired, or is close
-to expiring.</p>
+    <p>A conforming type should use a mechanism to aquire an access token than
+can be used to authenticate against the Disruptive Technologies' REST API.
+Once that token has been aquired, it should be stored in the <code>auth</code> property
+along with a relevant expiration date.</p>
+
+</div>
+<div class="discussion">
+    <p>This will be called automatically when necessary as long as <code>shouldAutoRefreshAccessToken</code>
+is set to <code>true</code>.</p>
 
 </div>
 </div>
@@ -179,7 +195,7 @@ to expiring.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-28T23:09:25+0000">November 28, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-29T19:58:11+0000">November 29, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
