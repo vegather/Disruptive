@@ -36,11 +36,16 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
+    - run: git status
+    - run: pwd
+    - run: ls -lah
+
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "CI: Updated code coverage badge" -a
+        git add coverage.svg
+        git commit -m "CI: Updated code coverage badge"
 
     - name: Push changes
       uses: ad-m/github-push-action@master
@@ -68,15 +73,24 @@ jobs:
           output: docs
           base-url: https://vegather.github.io/Disruptive/
 
+      - run: git status
+      - run: pwd
+      - run: ls -lah
+
       # Pull down any changes from the previous step that might not yet have propagated when we checked out
       - name: Pull latest changes
         run: git pull
+
+      - run: git status
+      - run: pwd
+      - run: ls -lah
 
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "CI: Updated Swift documentation" -a
+          git add docs/
+          git commit -m "CI: Updated Swift documentation"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
