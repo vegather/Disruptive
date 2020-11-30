@@ -45,7 +45,11 @@ a service account in a production environment.</p>
 
 </div>
 <div class="discussion">
-    <p>See <a href="../AuthProvider">AuthProvider</a> for more details about the properties
+    <p>An <code>OAuth2Authenticator</code> is authenticated by default, so there is no need to call <code>login()</code>.
+However if you'd like the authenticator to no longer be authenticated, you can call <code>logout()</code>,
+and then <code>login()</code> if you want it to be authenticated again.</p>
+
+<p>See <a href="../AuthProvider">AuthProvider</a> for more details about the properties
 and methods.</p>
 
 <p>See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication">Developer Website</a> for details about OAuth2 authentication using a Service Account.</p>
@@ -187,7 +191,7 @@ and methods.</p>
     <html><body><pre class="highlight"><code><span class="keyword">var</span> <span class="variable">shouldAutoRefreshAccessToken</span> = <span class="keyword">true</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>An <code>OAuth2Authenticator</code> will default to automatically get a fresh access token.
-This will be switched on and off when <code>logout()</code> and <code>login()</code> is called.</p>
+This will be switched on and off when <code>login()</code> and <code>logout()</code> is called respectively.</p>
 
 </div>
 </div>
@@ -242,7 +246,7 @@ along with the received expiration date.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-29T19:58:11+0000">November 29, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-30T18:13:35+0000">November 30, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
