@@ -1,11 +1,11 @@
-name: Swift
+name: Swift # Will also be the name of the build badge
 
 on:
-  pull_request:
+  push:
     branches: [ master ]
 
 jobs:
-  code_coverage:
+  create_code_coverage_badge:
     runs-on: macos-latest
     steps:
 
@@ -33,7 +33,7 @@ jobs:
       with:
         label: 'Code Coverage'
         status: ${{ steps.coverage_step.outputs.coverage }}%
-        color: 'green'
+        color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
     - name: Push Back Status Badge

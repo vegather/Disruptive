@@ -129,6 +129,26 @@ extension Disruptive {
     }
     
     /**
+     Deletes a project. Deleting a project can only be done if it has no devices, Service Cccounts, or
+     Data Connectors in it. Otherwise, an error will be returned
+     
+     - Parameter projectID: The identifier of the project to delete.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
+     - Parameter result: `Result<Void, DisruptiveError>`
+     */
+    public func deleteProject(
+        projectID  : String,
+        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
+    {
+        // Create the request
+        let endpoint = "projects/\(projectID)"
+        let request = Request(method: .delete, baseURL: baseURL, endpoint: endpoint)
+        
+        // Send the request
+        sendRequest(request) { completion($0) }
+    }
+    
+    /**
      Updates the display name of a project, and returns the new project (with the updated name) if successful.
      
      - Parameter projectID: The identifier of the project to update the display name of.

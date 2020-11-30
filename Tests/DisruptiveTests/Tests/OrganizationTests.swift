@@ -51,6 +51,42 @@ class OrganizationTests: DisruptiveTests {
         }
         wait(for: [exp], timeout: 1)
     }
+    
+    func testGetOrganization() {
+        let orgID = "dummy"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("organizations/\(orgID)")
+        
+        let respOrg = createDummyOrganization()
+        let respData = createOrganizationJSON(from: respOrg)
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : [:],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getOrganization(organizationID: orgID) { result in
+            switch result {
+                case .success(let org):
+                    XCTAssertEqual(org, respOrg)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
 }
 
 

@@ -138,8 +138,8 @@ internal extension AuthProvider {
  An `AuthProvider` that logs in a service account using basic auth.
  
  A `BasicAuthAuthenticator` is authenticated by default, so there is no need to call `login()`.
- However if you'd like it to no longer be authenticated, you can call `logout()`, and then `login()` if
- you want it to be authenticated again.
+ However if you'd like the authenticator to no longer be authenticated, you can call `logout()`,
+ and then `login()` if you want it to be authenticated again.
  
  See [AuthProvider](../AuthProvider) for more details about the properties
  and methods.
@@ -207,6 +207,10 @@ public class BasicAuthAuthenticator: AuthProvider {
  secure flow than the basic auth counter-part, and is the recommended way to authenticate
  a service account in a production environment.
  
+ An `OAuth2Authenticator` is authenticated by default, so there is no need to call `login()`.
+ However if you'd like the authenticator to no longer be authenticated, you can call `logout()`,
+ and then `login()` if you want it to be authenticated again.
+ 
  See [AuthProvider](../AuthProvider) for more details about the properties
  and methods.
  
@@ -231,7 +235,7 @@ public class OAuth2Authenticator: AuthProvider {
     private(set) public var auth: Auth?
     
     /// An `OAuth2Authenticator` will default to automatically get a fresh access token.
-    /// This will be switched on and off when `logout()` and `login()` is called.
+    /// This will be switched on and off when `login()` and `logout()` is called respectively.
     private(set) public var shouldAutoRefreshAccessToken = true
 
     

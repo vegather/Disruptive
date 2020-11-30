@@ -39,6 +39,25 @@ extension Disruptive {
         // Send the request
         sendRequest(request, pageingKey: "organizations") { completion($0) }
     }
+    
+    /**
+     Gets a single organization based on an organization identifier.
+     
+     - Parameter organizationID: The identifier of the organization to get.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Organization`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<Organization, DisruptiveError>`
+     */
+    public func getOrganization(
+        organizationID: String,
+        completion: @escaping (_ result: Result<Organization, DisruptiveError>) -> ())
+    {
+        // Create the request
+        let endpoint = "organizations/\(organizationID)"
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        
+        // Send the request
+        sendRequest(request) { completion($0) }
+    }
 }
 
 
