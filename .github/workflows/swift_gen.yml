@@ -28,6 +28,8 @@ jobs:
       # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter
       run: echo "::set-output name=coverage::$(cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5)"
 
+    - run: md5 .github/badges/coverage.svg
+
     - name: Create Status Badge
       uses: emibcn/badge-action@v1
       with:
@@ -36,15 +38,16 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
+    - run: md5 .github/badges/coverage.svg
     - run: git status
-    - run: pwd
-    - run: ls -lah
+    - run: coverage.json
+    - run: git status
 
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add coverage.svg
+        git add .github/badges/coverage.svg
         git commit -m "CI: Updated code coverage badge"
 
     - name: Push changes
