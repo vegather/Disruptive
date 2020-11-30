@@ -214,6 +214,8 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
 
+Progress: ![Progress](https://progress-bar.dev/19/?scale=54&suffix=%20%2f%2054)
+
 - [x] ~~GET /projects/{project}/devices~~
 - [x] ~~POST /projects/{project}/devices:batchUpdate~~
 - [x] ~~POST /projects/{project}/devices:transfer~~
