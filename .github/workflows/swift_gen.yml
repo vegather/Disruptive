@@ -40,7 +40,7 @@ jobs:
 
     - run: md5 .github/badges/coverage.svg
     - run: git status
-    - run: coverage.json
+    - run: rm coverage.json
     - run: git status
 
     - name: Commit files
