@@ -28,8 +28,6 @@ jobs:
       # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-output-parameter
       run: echo "::set-output name=coverage::$(cat coverage.json | jq -r ".data[0].totals.lines.percent" | head -c 5)"
 
-    - run: md5 .github/badges/coverage.svg
-
     - name: Create Status Badge
       uses: emibcn/badge-action@v1
       with:
@@ -38,23 +36,14 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
-    - run: md5 .github/badges/coverage.svg
-    - run: git status
-    - run: rm coverage.json
-    - run: git status
-
-    - name: Commit files
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add .github/badges/coverage.svg
-        git commit -m "CI: Updated code coverage badge"
-
     - name: Push changes
-      uses: ad-m/github-push-action@master
+      uses: github-actions-x/commit@v2.6
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "CI: Updated code coverage badge"
+        files: .github/badges/coverage.svg
+        email: "action@github.com"
+        name: "GitHub Action"
 
   generate_swift_docs:
     runs-on: ubuntu-20.04
@@ -87,16 +76,12 @@ jobs:
       - run: git status
       - run: pwd
       - run: ls -lah
-
-      - name: Commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add docs/
-          git commit -m "CI: Updated Swift documentation"
-
+      
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: github-actions-x/commit@v2.6
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "CI: Updated Swift documentation"
+          files: docs/
+          email: "action@github.com"
+          name: "GitHub Action"
