@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disruptive - WaterPresentEvent</title>
+    <title>Disruptive - Role</title>
     <link rel="stylesheet" type="text/css" href="https://vegather.github.io/Disruptive/all.css" media="all" />
 </head>
 <body>
@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#waterpresentevent.init(waterpresent:timestamp:)">init(water​Present:​timestamp:​)</a></li><li class="initializer"><a href="#waterpresentevent.init(from:)">init(from:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#waterpresentevent.waterpresent">water​Present</a></li><li class="variable"><a href="#waterpresentevent.timestamp">timestamp</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#role.init(from:)">init(from:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#role.identifier">identifier</a></li><li class="variable"><a href="#role.displayname">display​Name</a></li><li class="variable"><a href="#role.description">description</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -34,17 +34,19 @@
         <article>
             <h1>
     <small>Structure</small>
-    <code class="name">Water​Present​Event</code>
+    <code class="name">Role</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">WaterPresentEvent</span>: <span class="type">Decodable</span>, <span class="type">Equatable</span></code></pre></body></html>
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">Role</span>: <span class="type">Codable</span>, <span class="type">Equatable</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>An event that indicates whether or not water is present to a Water Detector sensor.
-This event is sent every heartbeat, and when the sensor is touched.</p>
+    <p>Represents a role that a user can have within a project or an organization.</p>
 
 </div>
 <div class="discussion">
-    <p>See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_fbe6f0b1-a42c-4072-aaa1-46d117c0be99">Developer Website</a> for more details.</p>
+    <p>A <code>Role</code> is typically used when inviting a new member to a project or an organization, or when
+listing out the members of a project or an organization.</p>
+
+<p>Relevant methods for <code>Role</code> can be found on the <a href="../Disruptive">Disruptive</a> struct.</p>
 
 </div>
 <section id="relationships">
@@ -61,36 +63,36 @@ This event is sent every heartbeat, and when the sensor is touched.</p>
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
 <title>%3</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 868,-112 868,4 -4,4"/>
-<!-- WaterPresentEvent -->
+<!-- Role -->
 <g id="node1" class="node structure current">
-<title>WaterPresentEvent</title>
-<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/WaterPresentEvent" xlink:title="WaterPresentEvent">
+<title>Role</title>
+<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/Role" xlink:title="Role">
 <path fill="none" stroke="#000000" stroke-width="3" d="M528,-108C528,-108 336,-108 336,-108 330,-108 324,-102 324,-96 324,-96 324,-84 324,-84 324,-78 330,-72 336,-72 336,-72 528,-72 528,-72 534,-72 540,-78 540,-84 540,-84 540,-96 540,-96 540,-102 534,-108 528,-108"/>
-<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">WaterPresentEvent</text>
+<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">Role</text>
 </a>
 </g>
 </g>
-<!-- Decodable -->
+<!-- Equatable -->
 <g id="node2" class="node unknown">
-<title>Decodable</title>
+<title>Equatable</title>
 <path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
-<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Decodable</text>
+<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
 </g>
-<!-- WaterPresentEvent&#45;&gt;Decodable -->
+<!-- Role&#45;&gt;Equatable -->
 <g id="edge1" class="edge conformsTo">
-<title>WaterPresentEvent&#45;&gt;Decodable</title>
+<title>Role&#45;&gt;Equatable</title>
 <path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
 </g>
-<!-- Equatable -->
+<!-- Codable -->
 <g id="node3" class="node unknown">
-<title>Equatable</title>
+<title>Codable</title>
 <path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
-<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
+<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Codable</text>
 </g>
-<!-- WaterPresentEvent&#45;&gt;Equatable -->
+<!-- Role&#45;&gt;Codable -->
 <g id="edge2" class="edge conformsTo">
-<title>WaterPresentEvent&#45;&gt;Equatable</title>
+<title>Role&#45;&gt;Codable</title>
 <path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
 </g>
@@ -98,28 +100,18 @@ This event is sent every heartbeat, and when the sensor is touched.</p>
 </svg>
 
 
-    <figcaption hidden>Inheritance graph for WaterPresentEvent.</figcaption>
+    <figcaption hidden>Inheritance graph for Role.</figcaption>
 </figure>
         <h3>Conforms To</h3>
 <dl>
-    <dt class="unknown"><code>Decodable</code></dt>
+    <dt class="unknown"><code>Codable</code></dt>
 <dt class="unknown"><code>Equatable</code></dt>
 </dl>
 </section>
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="waterpresentevent.init(waterpresent:timestamp:)">
-    <h3>
-        <code>init(water​Present:​timestamp:​)</code>
-    </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">waterPresent</span>: <span class="type">Bool</span>, <span class="variable">timestamp</span>: <span class="type">Date</span>)</code></pre></body></html>
-<div class="summary" role="doc-abstract">
-    <p>Creates a new <code>WaterPresentEvent</code>. Creating a new water present event can be useful for testing purposes</p>
-
-</div>
-</div>
-<div role="article" class="initializer" id="waterpresentevent.init(from:)">
+        <div role="article" class="initializer" id="role.init(from:)">
     <h3>
         <code>init(from:​)</code>
     </h3>
@@ -129,23 +121,33 @@ This event is sent every heartbeat, and when the sensor is touched.</p>
     <section id="properties">
         <h2>Properties</h2>
 
-        <div role="article" class="variable" id="waterpresentevent.waterpresent">
+        <div role="article" class="variable" id="role.identifier">
     <h3>
-        <code>water​Present</code>
+        <code>identifier</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">waterPresent</span>: <span class="type">Bool</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">identifier</span>: <span class="type">String</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Whether or not water was detected close to the sensor</p>
+    <p>The identifier of the <code>Role</code>. Will be in the format <code>&lt;resource&gt;.&lt;role&gt;</code>. Example: <code>project.user</code>.</p>
 
 </div>
 </div>
-<div role="article" class="variable" id="waterpresentevent.timestamp">
+<div role="article" class="variable" id="role.displayname">
     <h3>
-        <code>timestamp</code>
+        <code>display​Name</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">timestamp</span>: <span class="type">Date</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">displayName</span>: <span class="type">String</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>The timestamp of when the state of water presence was changed</p>
+    <p>The display name of the <code>Role</code>. Example: <code>Project user</code>.</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="role.description">
+    <h3>
+        <code>description</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">description</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The description of the <code>Role</code>. Example: <code>User in project</code>.</p>
 
 </div>
 </div>
