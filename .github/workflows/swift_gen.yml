@@ -78,7 +78,7 @@ jobs:
           base-url: https://vegather.github.io/Disruptive/
 
       - name: Update Permissions
-        run: 'sudo chown --recursive $USER Documentation'
+        run: 'sudo chown --recursive $USER docs'
 
       - run: git status
       - run: ls -lah docs
