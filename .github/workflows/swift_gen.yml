@@ -51,6 +51,10 @@ jobs:
     needs: create_code_coverage_badge # The jobs have to run sequentially since they both push
     steps:
 
+      # Letting the push from previous step fully propagate
+      - name: Let changes propagate
+        run: sleep 5
+
       - uses: actions/checkout@v2
 
       - name: Generate Documentation
@@ -61,6 +65,10 @@ jobs:
           format: html
           output: docs
           base-url: https://vegather.github.io/Disruptive/
+
+      # Pull down any changes from the previous step that might not yet have propagated when we checked out
+      - name: Pull latest changes
+        run: get pull
 
       - name: Push Back docs
         uses: stefanzweifel/git-auto-commit-action@v4
