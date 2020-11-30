@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disruptive - Disruptive</title>
-    <link rel="stylesheet" type="text/css" href="./all.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://vegather.github.io/Disruptive/all.css" media="all" />
 </head>
 <body>
     <header>
-        <a href="./">
+        <a href="https://vegather.github.io/Disruptive/">
             <strong>
                 Disruptive
             </strong>
@@ -57,7 +57,7 @@ so all requests are authenticated.</p>
     <h3>
         <code>init(auth​Provider:​base​URL:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">authProvider</span>: <a href="./AuthProvider"><span class="type">AuthProvider</span></a>, <span class="variable">baseURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultBaseURL</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">authProvider</span>: <a href="https://vegather.github.io/Disruptive/AuthProvider"><span class="type">AuthProvider</span></a>, <span class="variable">baseURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultBaseURL</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Initializes a <code>Disruptive</code> instance.</p>
 
@@ -136,7 +136,7 @@ so all requests are authenticated.</p>
     <h3>
         <code>auth​Provider</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">authProvider</span>: <a href="./AuthProvider"><span class="type">AuthProvider</span></a></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">authProvider</span>: <a href="https://vegather.github.io/Disruptive/AuthProvider"><span class="type">AuthProvider</span></a></code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>The authentication mechanism used by <code>Disruptive</code>. This will be
 checked to see if it has a non-expired <code>authToken</code> before every request
@@ -153,7 +153,7 @@ the <code>authenticate</code> method will be called before attempting to send th
     <h3>
         <code>get​Device(project​ID:​device​ID:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getDevice</span>(<span class="variable">projectID</span>: <span class="type">String</span>? = <span class="keyword">nil</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="./Device"><span class="type">Device</span></a>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getDevice</span>(<span class="variable">projectID</span>: <span class="type">String</span>? = <span class="keyword">nil</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Gets details for a specific device. This device could be found within a specific project, or if the <code>projectID</code> argument is not specified (or nil), throughout all the project available to the authenticated account.</p>
 
@@ -200,7 +200,7 @@ the <code>authenticate</code> method will be called before attempting to send th
     <h3>
         <code>get​Devices(project​ID:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getDevices</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="./Device"><span class="type">Device</span></a>], <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getDevices</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Gets a list of devices in a specific project.</p>
 
@@ -241,7 +241,7 @@ the <code>authenticate</code> method will be called before attempting to send th
     <h3>
         <code>update​Device​Display​Name(project​ID:​device​ID:​new​Display​Name:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">updateDeviceDisplayName</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">newDisplayName</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">updateDeviceDisplayName</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">newDisplayName</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Updates the display name of a device to a new value (overwrites it if a display name already exists).</p>
 
@@ -298,7 +298,7 @@ the <code>authenticate</code> method will be called before attempting to send th
     <h3>
         <code>remove​Device​Label(project​ID:​device​ID:​label​Key:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeDeviceLabel</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">labelKey</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeDeviceLabel</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">labelKey</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Removes the specified label for the device. Will return success if the label didn't exist.</p>
 
@@ -355,7 +355,7 @@ the <code>authenticate</code> method will be called before attempting to send th
     <h3>
         <code>set​Device​Label(project​ID:​device​ID:​label​Key:​label​Value:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">setDeviceLabel</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">labelKey</span>: <span class="type">String</span>, <span class="variable">labelValue</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">setDeviceLabel</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">labelKey</span>: <span class="type">String</span>, <span class="variable">labelValue</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Assigns a value to a label key for a specific device. If the label key doesn't already exists it will be created, otherwise the value for the key is updated. This is in effect an upsert.</p>
 
@@ -418,7 +418,7 @@ the <code>authenticate</code> method will be called before attempting to send th
     <h3>
         <code>batch​Update​Device​Labels(project​ID:​device​IDs:​labels​ToSet:​labels​ToRemove:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">batchUpdateDeviceLabels</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceIDs</span>: [<span class="type">String</span>], <span class="variable">labelsToSet</span>: [<span class="type">String</span>: <span class="type">String</span>], <span class="variable">labelsToRemove</span>: [<span class="type">String</span>], <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">batchUpdateDeviceLabels</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceIDs</span>: [<span class="type">String</span>], <span class="variable">labelsToSet</span>: [<span class="type">String</span>: <span class="type">String</span>], <span class="variable">labelsToRemove</span>: [<span class="type">String</span>], <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Performs a batch update to add or remove one or more labels to one or more devices in a project.</p>
 
@@ -477,7 +477,7 @@ the <code>authenticate</code> method will be called before attempting to send th
     <h3>
         <code>move​Devices(device​IDs:​from​Project​ID:​to​Project​ID:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">moveDevices</span>(<span class="variable">deviceIDs</span>: [<span class="type">String</span>], <span class="variable">fromProjectID</span>: <span class="type">String</span>, <span class="variable">toProjectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">moveDevices</span>(<span class="variable">deviceIDs</span>: [<span class="type">String</span>], <span class="variable">fromProjectID</span>: <span class="type">String</span>, <span class="variable">toProjectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Moves a list of devices from one project to another. The authenticated account must be an admin
 in the <code>toProjectID</code>, or an organization admin in which the <code>toProjectID</code> resides.</p>
@@ -531,7 +531,7 @@ in the <code>toProjectID</code>, or an organization admin in which the <code>toP
     <h3>
         <code>get​Events(project​ID:​device​ID:​start​Date:​end​Date:​event​Types:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getEvents</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">startDate</span>: <span class="type">Date</span>? = <span class="keyword">nil</span>, <span class="variable">endDate</span>: <span class="type">Date</span>? = <span class="keyword">nil</span>, <span class="variable">eventTypes</span>: [<a href="./EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="./Events"><span class="type">Events</span></a>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getEvents</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">startDate</span>: <span class="type">Date</span>? = <span class="keyword">nil</span>, <span class="variable">endDate</span>: <span class="type">Date</span>? = <span class="keyword">nil</span>, <span class="variable">eventTypes</span>: [<a href="https://vegather.github.io/Disruptive/EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Events"><span class="type">Events</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Fetches historical data for a specific device from the server. The events are
 returned with the oldest event at the beginning of the array, and the newest
@@ -606,7 +606,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>get​Organizations(completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getOrganizations</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="./Organization"><span class="type">Organization</span></a>], <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getOrganizations</span>(<span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Organization"><span class="type">Organization</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Gets a list of all the organizations available to the authenticated account.</p>
 
@@ -641,7 +641,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>get​Permissions(for​Organization​ID:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getPermissions</span>(<span class="variable">forOrganizationID</span> <span class="variable">orgID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="./Permission"><span class="type">Permission</span></a>], <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getPermissions</span>(<span class="variable">forOrganizationID</span> <span class="variable">orgID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Permission"><span class="type">Permission</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Gets all the permissions the currently logged in user has for the given organization.</p>
 
@@ -682,7 +682,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>get​Permissions(for​Project​ID:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getPermissions</span>(<span class="variable">forProjectID</span> <span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="./Permission"><span class="type">Permission</span></a>], <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getPermissions</span>(<span class="variable">forProjectID</span> <span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Permission"><span class="type">Permission</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Gets all the permissions the currently logged in user has for the given project.</p>
 
@@ -723,7 +723,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>get​Projects(organization​ID:​query:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getProjects</span>(<span class="variable">organizationID</span>: <span class="type">String</span>? = <span class="keyword">nil</span>, <span class="variable">query</span>: <span class="type">String</span>? = <span class="keyword">nil</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="./Project"><span class="type">Project</span></a>], <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getProjects</span>(<span class="variable">organizationID</span>: <span class="type">String</span>? = <span class="keyword">nil</span>, <span class="variable">query</span>: <span class="type">String</span>? = <span class="keyword">nil</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Project"><span class="type">Project</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Gets a list of projects. If an <code>organizationID</code> is specified, only projects within this organization is fetched. Otherwise, all the projects the authenticated account has access to is returned.</p>
 
@@ -770,7 +770,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>get​Project(project​ID:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getProject</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="./Project"><span class="type">Project</span></a>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getProject</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Project"><span class="type">Project</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Gets details for a specific project.</p>
 
@@ -811,7 +811,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>create​Project(display​Name:​organization​ID:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">createProject</span>(<span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="./Project"><span class="type">Project</span></a>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">createProject</span>(<span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Project"><span class="type">Project</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful</p>
 
@@ -858,7 +858,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>update​Project​Display​Name(project​ID:​new​Display​Name:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">updateProjectDisplayName</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">newDisplayName</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="./Project"><span class="type">Project</span></a>, <a href="./DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">updateProjectDisplayName</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">newDisplayName</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Project"><span class="type">Project</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Updates the display name of a project, and returns the new project (with the updated name) if successful.</p>
 
@@ -905,7 +905,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>subscribe​ToDevices(project​ID:​device​IDs:​device​Types:​label​Filters:​event​Types:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">subscribeToDevices</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceIDs</span>: [<span class="type">String</span>]? = <span class="keyword">nil</span>, <span class="variable">deviceTypes</span>: [<a href="./Device"><span class="type">Device</span></a>.<span class="type">DeviceType</span>]? = <span class="keyword">nil</span>, <span class="variable">labelFilters</span>: [<span class="type">String</span>]? = <span class="keyword">nil</span>, <span class="variable">eventTypes</span>: [<a href="./EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>) -&gt; <a href="./DeviceEventStream"><span class="type">DeviceEventStream</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">subscribeToDevices</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceIDs</span>: [<span class="type">String</span>]? = <span class="keyword">nil</span>, <span class="variable">deviceTypes</span>: [<a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>.<span class="type">DeviceType</span>]? = <span class="keyword">nil</span>, <span class="variable">labelFilters</span>: [<span class="type">String</span>]? = <span class="keyword">nil</span>, <span class="variable">eventTypes</span>: [<a href="https://vegather.github.io/Disruptive/EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>) -&gt; <a href="https://vegather.github.io/Disruptive/DeviceEventStream"><span class="type">DeviceEventStream</span></a>?</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Sets up a device stream to one or more devices in a specific project using server-sent-events. By default, all events for all the devices in the specified project will be subscribed to. The various arguments are ways to limit which devices and event types gets subscribed to.</p>
 
@@ -970,7 +970,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>subscribe​ToDevice(_:​event​Types:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">subscribeToDevice</span>(<span class="keyword">_</span> <span class="variable">device</span>: <a href="./Device"><span class="type">Device</span></a>, <span class="variable">eventTypes</span>: [<a href="./EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>) -&gt; <a href="./DeviceEventStream"><span class="type">DeviceEventStream</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">subscribeToDevice</span>(<span class="keyword">_</span> <span class="variable">device</span>: <a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>, <span class="variable">eventTypes</span>: [<a href="https://vegather.github.io/Disruptive/EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>) -&gt; <a href="https://vegather.github.io/Disruptive/DeviceEventStream"><span class="type">DeviceEventStream</span></a>?</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Convenience function to subscribe to just a single device. See <code>subscribeToDevices</code> for more details.</p>
 
@@ -1005,7 +1005,7 @@ Note that not all event types are available for all devices.</p>
     <h3>
         <code>subscribe​ToDevice(project​ID:​device​ID:​event​Types:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">subscribeToDevice</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">eventTypes</span>: [<a href="./EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>) -&gt; <a href="./DeviceEventStream"><span class="type">DeviceEventStream</span></a>?</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">subscribeToDevice</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">eventTypes</span>: [<a href="https://vegather.github.io/Disruptive/EventType"><span class="type">EventType</span></a>]? = <span class="keyword">nil</span>) -&gt; <a href="https://vegather.github.io/Disruptive/DeviceEventStream"><span class="type">DeviceEventStream</span></a>?</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Convenience function to subscribe to just a single device. See <code>subscribeToDevices</code> for more details.</p>
 
@@ -1051,7 +1051,7 @@ Note that not all event types are available for all devices.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-28T23:09:25+0000">November 28, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-29T19:58:11+0000">November 29, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disruptive - Auth</title>
-    <link rel="stylesheet" type="text/css" href="./all.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://vegather.github.io/Disruptive/all.css" media="all" />
 </head>
 <body>
     <header>
-        <a href="./">
+        <a href="https://vegather.github.io/Disruptive/">
             <strong>
                 Disruptive
             </strong>
@@ -43,8 +43,8 @@
 
 </div>
 <div class="discussion">
-    <p>This type is only useful to implement an <code>AuthProvider</code>, and does not
-need to be accessed or created in any other circumstances.</p>
+    <p>This type is only useful when implementing a type that conforms to <code>AuthProvider</code>,
+and does not need to be accessed or created in any other circumstances.</p>
 
 </div>
 
@@ -82,9 +82,7 @@ be prefixed with the authentication scheme. Eg: &quot;Basic ...&quot; or &quot;B
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">expirationDate</span>: <span class="type">Date</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>The expiration date of the <code>authToken</code>. If there is less than a minute until
-expiration, and a request is made on the network, the <code>authenticate</code> function
-will be called first.</p>
+    <p>The expiration date of the <code>token</code>.</p>
 
 </div>
 </div>
@@ -97,7 +95,7 @@ will be called first.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-11-28T23:09:25+0000">November 28, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-11-29T19:58:11+0000">November 29, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
