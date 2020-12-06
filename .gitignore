@@ -4,3 +4,4 @@
 /*.xcodeproj
 xcuserdata/
 /.swiftpm
+/generate_docs.sh
