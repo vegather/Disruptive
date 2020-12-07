@@ -289,6 +289,8 @@ Emulator
     - [ ] `Requests.swift`
     - [ ] `RetryScheme.swift`
     - [ ] `Stream.swift`
+- [ ] Add Combine support for server sent events.
+- [ ] Add global option not wait for re-attempts when rate-limiting, and just return the error instead.
     
 
 
