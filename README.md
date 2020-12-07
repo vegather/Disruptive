@@ -214,7 +214,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
 
-Progress: ![Progress](https://progress-bar.dev/21/?scale=54&suffix=%20%2f%2054)
+Progress: ![Progress](https://progress-bar.dev/28/?scale=54&suffix=%20%2f%2054)
 
 - [x] ~~GET /projects/{project}/devices~~
 - [x] ~~POST /projects/{project}/devices:batchUpdate~~
@@ -226,13 +226,13 @@ Progress: ![Progress](https://progress-bar.dev/21/?scale=54&suffix=%20%2f%2054)
 - [x] ~~GET /projects/{project}/devices/{device}/events~~
 - [x] ~~GET /projects/{project}/devices:stream~~
 - [x] ~~GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)~~
-- [ ] GET /projects/{project}/dataconnectors
-- [ ] POST /projects/{project}/dataconnectors
-- [ ] GET /projects/{project}/dataconnectors/{dataconnector}
-- [ ] PATCH /projects/{project}/dataconnectors/{dataconnector}
-- [ ] DELETE /projects/{project}/dataconnectors/{dataconnector}
-- [ ] GET /projects/{project}/dataconnectors/{dataconnector}:metrics
-- [ ] POST /projects/{project}/dataconnectors/{dataconnector}:sync
+- [x] GET /projects/{project}/dataconnectors
+- [x] POST /projects/{project}/dataconnectors
+- [x] GET /projects/{project}/dataconnectors/{dataconnector}
+- [x] PATCH /projects/{project}/dataconnectors/{dataconnector}
+- [x] DELETE /projects/{project}/dataconnectors/{dataconnector}
+- [x] GET /projects/{project}/dataconnectors/{dataconnector}:metrics
+- [x] POST /projects/{project}/dataconnectors/{dataconnector}:sync
 - [ ] GET /organizations/{organization}/members
 - [ ] POST /organizations/{organization}/members
 - [ ] GET /organizations/{organization}/members/{member}

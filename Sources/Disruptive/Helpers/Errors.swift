@@ -181,4 +181,6 @@ internal enum ParseError: Error {
     case identifier(path: String)
     case dateFormat(date: String)
     case eventType(type: String)
+    case unexpectedEnumCase(string: String)
+    case durationFormat(format: String)
 }
