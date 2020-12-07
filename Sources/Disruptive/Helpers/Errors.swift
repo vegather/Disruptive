@@ -149,7 +149,7 @@ internal enum InternalError: Error {
      
         See 500 - Internal Server Error.
      */
-    case serviceUnavailale
+    case serviceUnavailable
     
     /**
      # Error Code: 503 - Gateway Timeout
@@ -171,7 +171,7 @@ internal enum InternalError: Error {
             
             // TODO: Retry scheme with exponential backoff
             case .internalServerError   : return .serverError
-            case .serviceUnavailale     : return .serverError
+            case .serviceUnavailable    : return .serverError
             case .gatewayTimeout        : return .serverError
         }
     }
@@ -181,4 +181,6 @@ internal enum ParseError: Error {
     case identifier(path: String)
     case dateFormat(date: String)
     case eventType(type: String)
+    case unexpectedEnumCase(string: String)
+    case durationFormat(format: String)
 }

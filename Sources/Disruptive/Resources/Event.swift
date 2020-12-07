@@ -86,7 +86,7 @@ extension Disruptive {
         let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices/\(deviceID)/events", params: params)
         
         // Send the request
-        sendRequest(request, pageingKey: "events") { (response: Result<[EventContainer], DisruptiveError>) in
+        sendRequest(request, pagingKey: "events") { (response: Result<[EventContainer], DisruptiveError>) in
             switch response {
                 case .success(let eventContainers):
                     // The events are returned from the server with the newest event at the beginning.

@@ -251,7 +251,7 @@ extension Request {
             case 404: return .notFound
             case 409: return .conflict
             case 500: return .internalServerError
-            case 501: return .serviceUnavailale
+            case 501: return .serviceUnavailable
             case 503: return .gatewayTimeout
             case 429:
                 // Read "Retry-After" header for how long we need to wait
@@ -381,13 +381,13 @@ extension Disruptive {
     /// all the available pages before returning.
     internal func sendRequest<T: Decodable>(
         _ request: Request,
-        pageingKey: String,
+        pagingKey: String,
         completion: @escaping (Result<[T], DisruptiveError>) -> ())
     {
         // Prepare a decoder for decoding paginated results
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .custom { keys in
-            if keys.last!.stringValue == pageingKey {
+            if keys.last!.stringValue == pagingKey {
                 return PagedKey(stringValue: "results")!
             } else {
                 return keys.last!
@@ -453,6 +453,6 @@ extension Disruptive {
             }
         }
         
-        fetchPages(request: request, cumulativeResults: [], pageingKey: pageingKey) { completion($0) }
+        fetchPages(request: request, cumulativeResults: [], pageingKey: pagingKey) { completion($0) }
     }
 }

@@ -64,7 +64,7 @@ dependencies: [
 
 To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be your entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors.
 
-The endpoints implemented on the `Disruptive` struct asynchronous, and will typically a closure you provide with an argument of type `Result` (read more about that type [here](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This `Result` will contain the value you requested on `.success` (`Void` if no values makes sense), or a `DisruptiveError` on `.failure`.
+The endpoints implemented on the `Disruptive` struct are asynchronous, and will return its results in a  closure you provide with an argument of type `Result` (read more about the `Result` type [on Apple's developer site](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This `Result` will contain the value you requested on `.success` (`Void` if no values makes sense), or a `DisruptiveError` on `.failure`.
 
 **Note**: The callback with the `Result` will always be called on the `main` queue, even if networking/processing is done in a background queue.
 
@@ -214,7 +214,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
 
-Progress: ![Progress](https://progress-bar.dev/21/?scale=54&suffix=%20%2f%2054)
+Progress: ![Progress](https://progress-bar.dev/28/?scale=54&suffix=%20%2f%2054)
 
 - [x] ~~GET /projects/{project}/devices~~
 - [x] ~~POST /projects/{project}/devices:batchUpdate~~
@@ -226,13 +226,13 @@ Progress: ![Progress](https://progress-bar.dev/21/?scale=54&suffix=%20%2f%2054)
 - [x] ~~GET /projects/{project}/devices/{device}/events~~
 - [x] ~~GET /projects/{project}/devices:stream~~
 - [x] ~~GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)~~
-- [ ] GET /projects/{project}/dataconnectors
-- [ ] POST /projects/{project}/dataconnectors
-- [ ] GET /projects/{project}/dataconnectors/{dataconnector}
-- [ ] PATCH /projects/{project}/dataconnectors/{dataconnector}
-- [ ] DELETE /projects/{project}/dataconnectors/{dataconnector}
-- [ ] GET /projects/{project}/dataconnectors/{dataconnector}:metrics
-- [ ] POST /projects/{project}/dataconnectors/{dataconnector}:sync
+- [x] GET /projects/{project}/dataconnectors
+- [x] POST /projects/{project}/dataconnectors
+- [x] GET /projects/{project}/dataconnectors/{dataconnector}
+- [x] PATCH /projects/{project}/dataconnectors/{dataconnector}
+- [x] DELETE /projects/{project}/dataconnectors/{dataconnector}
+- [x] GET /projects/{project}/dataconnectors/{dataconnector}:metrics
+- [x] POST /projects/{project}/dataconnectors/{dataconnector}:sync
 - [ ] GET /organizations/{organization}/members
 - [ ] POST /organizations/{organization}/members
 - [ ] GET /organizations/{organization}/members/{member}
@@ -289,6 +289,8 @@ Emulator
     - [ ] `Requests.swift`
     - [ ] `RetryScheme.swift`
     - [ ] `Stream.swift`
+- [ ] Add Combine support for server sent events.
+- [ ] Add global option not wait for re-attempts when rate-limiting, and just return the error instead.
     
 
 

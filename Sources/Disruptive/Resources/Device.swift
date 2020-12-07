@@ -52,7 +52,7 @@ extension Disruptive {
      
      - Parameter projectID: The identifier of the project to find the device in. If default value (nil) is used, a wildcard character will be used for the projectID that searches through all the project the authenticated account has access to.
      - Parameter deviceID: The identifier of the device to get details on.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Device, DisruptiveError>`
      */
     public func getDevice(
@@ -72,7 +72,7 @@ extension Disruptive {
      Gets a list of devices in a specific project.
      
      - Parameter projectID: The identifier of the project to get devices from.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
     public func getDevices(
@@ -83,7 +83,7 @@ extension Disruptive {
         let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices")
         
         // Send the request
-        sendRequest(request, pageingKey: "devices") { completion($0) }
+        sendRequest(request, pagingKey: "devices") { completion($0) }
     }
     
     /**
@@ -256,7 +256,7 @@ extension Device {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
-        // Device identifiers are formatted as "projects/b7s3umd0fee000ba5di0/devices/b5rj9ed7rihk942p48og"
+        // Device resource names are formatted as "projects/b7s3umd0fee000ba5di0/devices/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
         let projectResourceName = try values.decode(String.self, forKey: .identifier)
         let resourceNameComponents = projectResourceName.components(separatedBy: "/")
