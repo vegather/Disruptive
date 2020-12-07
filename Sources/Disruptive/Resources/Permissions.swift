@@ -157,7 +157,7 @@ extension Disruptive {
         let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations/\(orgID)/permissions")
         
         // Send the request
-        sendRequest(request, pageingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
+        sendRequest(request, pagingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
             switch response {
                 case .success(let wrappers) : completion(.success(wrappers.compactMap { $0.permission }))
                 case .failure(let error)    : completion(.failure(error))
@@ -180,7 +180,7 @@ extension Disruptive {
         let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/permissions")
         
         // Send the request
-        sendRequest(request, pageingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
+        sendRequest(request, pagingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
             switch response {
                 case .success(let wrappers) : completion(.success(wrappers.compactMap { $0.permission }))
                 case .failure(let error)    : completion(.failure(error))

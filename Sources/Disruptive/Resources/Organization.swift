@@ -37,7 +37,7 @@ extension Disruptive {
         let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations")
         
         // Send the request
-        sendRequest(request, pageingKey: "organizations") { completion($0) }
+        sendRequest(request, pagingKey: "organizations") { completion($0) }
     }
     
     /**
