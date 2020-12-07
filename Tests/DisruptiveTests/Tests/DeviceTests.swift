@@ -350,6 +350,7 @@ class DeviceTests: DisruptiveTests {
 
 extension DeviceTests {
     
+    // Only supports temp events for now
     private func createDeviceJSONString(from device: Device) -> String {
         return """
         {
@@ -383,6 +384,7 @@ extension DeviceTests {
         """.data(using: .utf8)!
     }
     
+    // Only supports temp events for now
     fileprivate func createDummyDevice() -> Device {
         var reportedEvents = Device.ReportedEvents()
         reportedEvents.temperature = TemperatureEvent(

@@ -64,7 +64,7 @@ dependencies: [
 
 To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be your entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors.
 
-The endpoints implemented on the `Disruptive` struct asynchronous, and will typically a closure you provide with an argument of type `Result` (read more about that type [here](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This `Result` will contain the value you requested on `.success` (`Void` if no values makes sense), or a `DisruptiveError` on `.failure`.
+The endpoints implemented on the `Disruptive` struct are asynchronous, and will return its results in a  closure you provide with an argument of type `Result` (read more about the `Result` type [on Apple's developer site](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This `Result` will contain the value you requested on `.success` (`Void` if no values makes sense), or a `DisruptiveError` on `.failure`.
 
 **Note**: The callback with the `Result` will always be called on the `main` queue, even if networking/processing is done in a background queue.
 

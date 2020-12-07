@@ -77,7 +77,8 @@ extension DisruptiveTests {
     func assertJSONDatasAreEqual(a: Data, b: Data) {
         let jsonA = try! JSONSerialization.jsonObject(with: a) as! JSONValue
         let jsonB = try! JSONSerialization.jsonObject(with: b) as! JSONValue
-        XCTAssertTrue(jsonA.isEqual(to: jsonB))
+//        XCTAssertTrue(jsonA.isEqual(to: jsonB), "\(String(describing: String(data: a, encoding: .utf8))) does not equal \(String(describing: String(data: b, encoding: .utf8)))")
+        XCTAssertTrue(jsonA.isEqual(to: jsonB), "\(jsonA) does not equal \(jsonB)")
     }
 }
 
