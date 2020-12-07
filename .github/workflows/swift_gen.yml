@@ -33,15 +33,26 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
+    - run: git status
+    - run: git log
+    - run: git branch
+
     - name: Push Back Status Badge
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        # Pushes the `.github/badges/coverage.svg` file to the `master` branch
-        branch: master
-        file_pattern: .github/badges/coverage.svg
-        commit_message: "CI: Updated code coverage status badge"
-        commit_user_name: "GitHub Action"
-        commit_user_email: "action@github.com"
+      run: |
+        git pull
+        git config user.name "GitHub Action"
+        git config user.email "action@github.com"
+        git add .github/badges/coverage.svg
+        git commit -m "CI: Updated code coverage status badge"
+        git push
+      # uses: stefanzweifel/git-auto-commit-action@v4
+      # with:
+      #   # Pushes the `.github/badges/coverage.svg` file to the `master` branch
+      #   branch: master
+      #   file_pattern: .github/badges/coverage.svg
+      #   commit_message: "CI: Updated code coverage status badge"
+      #   commit_user_name: "GitHub Action"
+      #   commit_user_email: "action@github.com"
 
   generate_swift_docs:
     runs-on: ubuntu-20.04
@@ -69,12 +80,25 @@ jobs:
       - name: Update Permissions
         run: 'sudo chown --recursive $USER docs'
 
+      - run: git status
+      - run: git log
+      - run: git branch
+
       - name: Push Back docs
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          # Pushes the `docs` dir to the `master` branch
-          branch: master
-          file_pattern: docs/
-          commit_message: "CI: Updated Swift documentation"
-          commit_user_name: "GitHub Action"
-          commit_user_email: "action@github.com"
+        run: |
+          git pull
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add docs/
+          git commit -m "CI: Updated Swift documentation"
+          git push
+
+      # - name: Push Back docs
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     # Pushes the `docs` dir to the `master` branch
+      #     branch: master
+      #     file_pattern: docs/
+      #     commit_message: "CI: Updated Swift documentation"
+      #     commit_user_name: "GitHub Action"
+      #     commit_user_email: "action@github.com"
