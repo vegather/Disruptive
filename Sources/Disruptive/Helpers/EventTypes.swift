@@ -655,7 +655,7 @@ public struct CellularStatusEvent: Decodable, Equatable {
 // -------------------------------
 
 /// An enumeration of all the possible types of events that a device can emit.
-public enum EventType: String, Encodable, CodingKey, CaseIterable {
+public enum EventType: String, Decodable, CodingKey, CaseIterable {
     // Events
     case touch
     case temperature
