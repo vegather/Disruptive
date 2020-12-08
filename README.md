@@ -226,13 +226,13 @@ Progress: ![Progress](https://progress-bar.dev/28/?scale=54&suffix=%20%2f%2054)
 - [x] ~~GET /projects/{project}/devices/{device}/events~~
 - [x] ~~GET /projects/{project}/devices:stream~~
 - [x] ~~GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)~~
-- [x] GET /projects/{project}/dataconnectors
-- [x] POST /projects/{project}/dataconnectors
-- [x] GET /projects/{project}/dataconnectors/{dataconnector}
-- [x] PATCH /projects/{project}/dataconnectors/{dataconnector}
-- [x] DELETE /projects/{project}/dataconnectors/{dataconnector}
-- [x] GET /projects/{project}/dataconnectors/{dataconnector}:metrics
-- [x] POST /projects/{project}/dataconnectors/{dataconnector}:sync
+- [x] ~~GET /projects/{project}/dataconnectors~~
+- [x] ~~POST /projects/{project}/dataconnectors~~
+- [x] ~~GET /projects/{project}/dataconnectors/{dataconnector}~~
+- [x] ~~PATCH /projects/{project}/dataconnectors/{dataconnector}~~
+- [x] ~~DELETE /projects/{project}/dataconnectors/{dataconnector}~~
+- [x] ~~GET /projects/{project}/dataconnectors/{dataconnector}:metrics~~
+- [x] ~~POST /projects/{project}/dataconnectors/{dataconnector}:sync~~
 - [ ] GET /organizations/{organization}/members
 - [ ] POST /organizations/{organization}/members
 - [ ] GET /organizations/{organization}/members/{member}
