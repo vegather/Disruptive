@@ -33,24 +33,11 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
-    # - run: git status
-    # - run: git log
-    # - run: git branch
-
-    # - name: Push Back Status Badge
-    #   run: |
-    #     git pull
-    #     git config user.name "GitHub Action"
-    #     git config user.email "action@github.com"
-    #     git add .github/badges/coverage.svg
-    #     git commit -m "CI: Updated code coverage status badge"
-    #     git push
-
     - name: Push Back Status Badge
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         # Pushes the `.github/badges/coverage.svg` file to the `codecov` branch
-        branch: codecov_badge
+        branch: codecov
         file_pattern: .github/badges/coverage.svg
         commit_message: "CI: Updated code coverage status badge"
         commit_user_name: "GitHub Action"
@@ -60,10 +47,6 @@ jobs:
     runs-on: ubuntu-20.04
     needs: create_code_coverage_badge # The jobs have to run sequentially since they both push
     steps:
-
-      # Letting the push from previous step fully propagate
-      - name: Let changes propagate
-        run: sleep 10
 
       - uses: actions/checkout@v2
 
@@ -81,19 +64,6 @@ jobs:
       # root user only). These do not provide read access to the current user "runner".
       - name: Update Permissions
         run: 'sudo chown --recursive $USER docs'
-
-      # - run: git status
-      # - run: git log
-      # - run: git branch
-
-      # - name: Push Back docs
-      #   run: |
-      #     git pull
-      #     git config user.name "GitHub Action"
-      #     git config user.email "action@github.com"
-      #     git add docs/
-      #     git commit -m "CI: Updated Swift documentation"
-      #     git push
 
       - name: Push Back docs
         uses: stefanzweifel/git-auto-commit-action@v4
