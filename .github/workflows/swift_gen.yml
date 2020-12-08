@@ -47,7 +47,9 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "Github Action"
         git add .github/badges/coverage.svg
+        set +e                                                   # Ignores errors if no files were changed
         git commit -m "CI: Updated code coverage status badge"
+        set -e                                                   # Stop ignoring errors
 
     - name: Push Back Status Badge
       uses: ad-m/github-push-action@master
