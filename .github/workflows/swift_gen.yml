@@ -9,7 +9,11 @@ jobs:
     runs-on: macos-latest
     steps:
 
-    - uses: actions/checkout@v2
+    - name: Git Checkout
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+        fetch-depth: 0
 
     - name: Run tests
       run: swift test --enable-code-coverage
@@ -33,22 +37,39 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
+    - name: Commit Files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Github Action"
+        git add .github/badges/coverage.svg
+        git commit -m "CI: Updated code coverage status badge"
+
     - name: Push Back Status Badge
-      uses: stefanzweifel/git-auto-commit-action@v4
+      uses: ad-m/github-push-action@master
       with:
-        # Pushes the `.github/badges/coverage.svg` file to the `codecov` branch
-        branch: codecov
-        file_pattern: .github/badges/coverage.svg
-        commit_message: "CI: Updated code coverage status badge"
-        commit_user_name: "GitHub Action"
-        commit_user_email: "action@github.com"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+
+    # - name: Push Back Status Badge
+    #   uses: stefanzweifel/git-auto-commit-action@v4
+    #   with:
+    #     # Pushes the `.github/badges/coverage.svg` file to the `codecov` branch
+    #     branch: codecov
+    #     file_pattern: .github/badges/coverage.svg
+    #     commit_message: "CI: Updated code coverage status badge"
+    #     commit_user_name: "GitHub Action"
+    #     commit_user_email: "action@github.com"
 
   generate_swift_docs:
     runs-on: ubuntu-20.04
     needs: create_code_coverage_badge # The jobs have to run sequentially since they both push
     steps:
 
-      - uses: actions/checkout@v2
+      - name: Git Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Generate Documentation
         uses: SwiftDocOrg/swift-doc@master
@@ -65,12 +86,25 @@ jobs:
       - name: Update Permissions
         run: 'sudo chown --recursive $USER docs'
 
+      - name: Commit Files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
+          git add docs/
+          git commit -m "CI: Updated Swift documentation"
+
       - name: Push Back docs
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: ad-m/github-push-action@master
         with:
-          # Pushes the `docs` dir to the `documentation` branch
-          branch: documentation
-          file_pattern: docs/
-          commit_message: "CI: Updated Swift documentation"
-          commit_user_name: "GitHub Action"
-          commit_user_email: "action@github.com"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+      # - name: Push Back docs
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     # Pushes the `docs` dir to the `documentation` branch
+      #     branch: documentation
+      #     file_pattern: docs/
+      #     commit_message: "CI: Updated Swift documentation"
+      #     commit_user_name: "GitHub Action"
+      #     commit_user_email: "action@github.com"
