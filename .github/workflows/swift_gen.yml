@@ -37,6 +37,11 @@ jobs:
         color: 'orange' #'green'
         path: '.github/badges/coverage.svg'
 
+    # The coverage.json file generated in a previous step caused errors 
+    # for the `git commit ...` command below
+    - name: Remove coverage.json
+      run: rm coverage.json
+
     - name: Commit Files
       run: |
         git config --local user.email "action@github.com"
