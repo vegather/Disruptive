@@ -4,9 +4,10 @@
 
 ![Swift](https://github.com/vegather/Disruptive/workflows/Swift/badge.svg?branch=master)
 ![Code Coverage](https://raw.githubusercontent.com/vegather/Disruptive/master/.github/badges/coverage.svg)
-![Swift Version](https://img.shields.io/badge/Swift%20Version-5.3-blue)
-[![API Docs](https://img.shields.io/badge/API-Documentation-blue)](https://vegather.github.io/Disruptive/)
-[![Licence](https://img.shields.io/badge/Licence-MIT-222)](https://github.com/vegather/Disruptive/blob/master/LICENSE)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvegather%2FDisruptive%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/vegather/Disruptive)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvegather%2FDisruptive%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/vegather/Disruptive)
+[![API Docs](https://img.shields.io/badge/API-Documentation-333)](https://vegather.github.io/Disruptive/)
+[![Licence](https://img.shields.io/badge/Licence-MIT-333)](https://github.com/vegather/Disruptive/blob/master/LICENSE)
 
 Swift library for accessing data from [Disruptive Technologies](https://disruptive-technologies.com).
 
@@ -289,8 +290,10 @@ Emulator
     - [ ] `Requests.swift`
     - [ ] `RetryScheme.swift`
     - [ ] `Stream.swift`
+    - [ ] Network Tests: pagination, errors
 - [ ] Add Combine support for server sent events.
 - [ ] Add global option not wait for re-attempts when rate-limiting, and just return the error instead.
+- [ ] Handle 5XX errors from the backend. These shows up as `InternalError`s, and should have a retry-policy with an exponential backoff.
     
 
 

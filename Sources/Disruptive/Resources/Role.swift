@@ -50,7 +50,7 @@ extension Disruptive {
      Get the details for a specific role by its identifier.
      
      - Parameter roleID: The identifier of the role to get.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Role`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Role`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Role, DisruptiveError>`
      */
     public func getRole(

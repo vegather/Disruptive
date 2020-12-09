@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- Represents a project within an `Organization`
+ Represents a project within an `Organization`.
  
  Relevant methods for `Project` can be found on the [Disruptive](../Disruptive) struct.
  */
@@ -55,7 +55,7 @@ extension Disruptive {
      
      - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch all the project the authenticated account has access to.
      - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), all projects will be returned.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Project], DisruptiveError>`
      */
     public func getProjects(
@@ -83,7 +83,7 @@ extension Disruptive {
      Gets details for a specific project.
      
      - Parameter projectID: The identifier of the project to get details for.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
     public func getProject(
@@ -98,11 +98,11 @@ extension Disruptive {
     }
     
     /**
-     Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful
+     Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful.
      
      - Parameter displayName: The display name of the new project.
      - Parameter organizationID: The identifier of the organization to create the project in.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
     public func createProject(
@@ -129,8 +129,8 @@ extension Disruptive {
     }
     
     /**
-     Deletes a project. Deleting a project can only be done if it has no devices, Service Cccounts, or
-     Data Connectors in it. Otherwise, an error will be returned
+     Deletes a project. Deleting a project can only be done if it has no devices, Service Accounts, or
+     Data Connectors in it. Otherwise, an error will be returned.
      
      - Parameter projectID: The identifier of the project to delete.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
@@ -153,7 +153,7 @@ extension Disruptive {
      
      - Parameter projectID: The identifier of the project to update the display name of.
      - Parameter newDisplayName: The new display name to set for the project.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project` with the updated display name. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project` with the updated display name. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
     public func updateProjectDisplayName(

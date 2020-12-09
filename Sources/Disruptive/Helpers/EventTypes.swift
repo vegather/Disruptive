@@ -77,7 +77,7 @@ public struct TemperatureEvent: Decodable, Equatable {
 
 /// An event that is sent whenever an object is close to a proximity sensor or not.
 ///
-///  See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#objectpresentevent) for more detaills.
+///  See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#objectpresentevent) for more details.
 public struct ObjectPresentEvent: Decodable, Equatable {
     
     /// Whether or not an object is close to the proximity sensor
@@ -123,7 +123,7 @@ public struct ObjectPresentEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#humidityevent) for more details.
 public struct HumidityEvent: Decodable, Equatable {
     
-    /// The temperature value in celcius
+    /// The temperature value in celsius
     public let temperature: Float
     
     /// The relative humidity as a percentage
@@ -300,7 +300,7 @@ public struct NetworkStatusEvent: Decodable, Equatable {
     /// See [Wikipedia](https://en.wikipedia.org/wiki/Received_signal_strength_indication) for more details.
     public let rssi: Int
     
-    /// The timestamp the event was generated
+    /// The timestamp the event was generated.
     public let timestamp: Date
     
     /// The Cloud Connector(s) that picked up this event.
@@ -313,22 +313,22 @@ public struct NetworkStatusEvent: Decodable, Equatable {
     /// list all the Cloud Connectors that were in range.
     public let cloudConnectors: [CloudConnector]
     
-    /// Which transmission mode the sensor was in when sending this network status event
+    /// Which transmission mode the sensor was in when sending this network status event.
     public let transmissionMode: TransmissionMode
     
     
     
     
-    /// A Cloud Connector that picked a network status event for a sensor
+    /// A Cloud Connector that picked a network status event for a sensor.
     public struct CloudConnector: Decodable, Equatable {
         
-        /// The identifier of the Cloud Connector that picked up the network status event
+        /// The identifier of the Cloud Connector that picked up the network status event.
         public let identifier: String
         
-        /// The signal strength received by this Cloud Connector as a percentage
+        /// The signal strength received by this Cloud Connector as a percentage.
         public let signalStrength: Int
         
-        /// The raw signal strength received by this Cloud Connector
+        /// The raw signal strength received by this Cloud Connector.
         public let rssi: Int
         
         
@@ -350,7 +350,7 @@ public struct NetworkStatusEvent: Decodable, Equatable {
     /// transmission modes when the sensor has low connectivity to a Cloud Connector.
     /// See the [Help Center](https://support.disruptive-technologies.com/hc/en-us/articles/360003182914-What-is-Boost-high-power-usage-) for more details.
     public enum TransmissionMode: String, Decodable, Equatable {
-        /// The normal transmission mode for a sensor. This consumes less energy, but has a lower range
+        /// The normal transmission mode for a sensor. This consumes less energy, but has a lower range.
         case standard = "LOW_POWER_STANDARD_MODE"
         
         /// Boost mode is used when a sensor has low connectivity to a Cloud Connector. It uses more energy, but has better range.
@@ -402,10 +402,10 @@ public struct NetworkStatusEvent: Decodable, Equatable {
  */
 public struct BatteryStatusEvent: Decodable, Equatable {
     
-    /// The amount of battery life left in the sensor as a percentage
+    /// The amount of battery life left in the sensor as a percentage.
     public let percentage: Int
     
-    /// The timestamp the battery status event was generated
+    /// The timestamp the battery status event was generated.
     public let timestamp: Date
     
     
@@ -465,25 +465,25 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
     /// `cellular` is available, the Cloud Connector will prefer `ethernet`.
     public let connection: Connection
     
-    /// An array of the available `Connection`s for the Cloud Connector
+    /// An array of the available `Connection`s for the Cloud Connector.
     public let available: [Available]
     
-    /// The timestamp the event was generated
+    /// The timestamp the event was generated.
     public let timestamp: Date
     
-    /// Indicates the current connectivity of a Cloud Connector
+    /// Indicates the current connectivity of a Cloud Connector.
     public enum Connection: String, Decodable, Equatable {
         
-        /// Indicates that the Cloud Connector is currently offline
+        /// Indicates that the Cloud Connector is currently offline.
         case offline  = "OFFLINE"
         
-        /// Indicates that the Cloud Connector will send its data over Ethernet
+        /// Indicates that the Cloud Connector will send its data over Ethernet.
         case ethernet = "ETHERNET"
         
-        /// Indicates that the Cloud Connector will send its data over Cellular
+        /// Indicates that the Cloud Connector will send its data over Cellular.
         case cellular = "CELLULAR"
         
-        /// Return a `String` representation of the `Connection` that is suited for presenting to a user on screen
+        /// Return a `String` representation of the `Connection` that is suited for presenting to a user on screen.
         public func displayName() -> String {
             switch self {
                 case .offline : return "Offline"
@@ -493,16 +493,16 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
         }
     }
     
-    /// Indicates a connectivity that is available for a Cloud Connector
+    /// Indicates a connectivity that is available for a Cloud Connector.
     public enum Available: String, Decodable, Equatable {
         
-        /// Indicates that ethernet connectivity is available for a Cloud Connector
+        /// Indicates that ethernet connectivity is available for a Cloud Connector.
         case ethernet = "ETHERNET"
         
-        /// Indicates that cellular connectivity is available for a Cloud Connector
+        /// Indicates that cellular connectivity is available for a Cloud Connector.
         case cellular = "CELLULAR"
         
-        /// Return a `String` representation of the `Available` that is suited for presenting to a user on screen
+        /// Return a `String` representation of the `Available` that is suited for presenting to a user on screen.
         public func displayName() -> String {
             switch self {
                 case .ethernet: return "Ethernet"
@@ -538,31 +538,31 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
 }
 
 /**
- Details about the current ethernet connection status of a Cloud Connector
+ Details about the current ethernet connection status of a Cloud Connector.
  
  See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#ethernetstatusevent) for more details.
  */
 public struct EthernetStatusEvent: Decodable, Equatable {
     
-    /// The MAC address of the Cloud Connector
+    /// The MAC address of the Cloud Connector.
     public let macAddress: String
     
-    /// The current IP address of the Cloud Connector
+    /// The current IP address of the Cloud Connector.
     public let ipAddress: String
     
-    /// Any errors related to connecting to the local network
+    /// Any errors related to connecting to the local network.
     public let errors: [ErrorMessage]
     
-    /// The timestamp the event was generated
+    /// The timestamp the event was generated.
     public let timestamp: Date
     
     
-    /// Indicates an error related to connecting to the local network
+    /// Indicates an error related to connecting to the local network.
     public struct ErrorMessage: Decodable, Equatable {
-        /// The error code
+        /// The error code.
         public let code: String
         
-        /// The error message
+        /// The error message.
         public let message: String
     }
     
@@ -602,17 +602,17 @@ public struct EthernetStatusEvent: Decodable, Equatable {
  */
 public struct CellularStatusEvent: Decodable, Equatable {
     
-    /// The current signal strength of the Cloud Connector to the cellular network as a percentage
+    /// The current signal strength of the Cloud Connector to the cellular network as a percentage.
     public let signalStrength: Int
     
-    /// Any errors related to connecting to the cellular network
+    /// Any errors related to connecting to the cellular network.
     public let errors: [ErrorMessage]
     
-    /// The timestamp the event was generated
+    /// The timestamp the event was generated.
     public let timestamp: Date
     
     
-    /// Indicates an error related to connecting to the cellular network
+    /// Indicates an error related to connecting to the cellular network.
     public struct ErrorMessage: Decodable, Equatable {
         /// The error code
         public let code: String
@@ -676,7 +676,7 @@ public enum EventType: String, Decodable, CodingKey, CaseIterable {
     case cellularStatus
 }
 
-/// Used to simplify event JSON parsing
+/// Used to simplify event JSON parsing.
 internal enum EventContainer: Decodable, Equatable {
     // Events
     case touch              (deviceID: String, event: TouchEvent)

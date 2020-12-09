@@ -10,7 +10,7 @@ import Foundation
 
 
 /**
- Represent an event stream for a device, and is implemented using [Server-Sent Events](https://www.w3.org/TR/eventsource/)
+ Represent an event stream for a device, and is implemented using [Server-Sent Events](https://www.w3.org/TR/eventsource/).
  
  Has callbacks that can be set for each type of event. Note that which event type is available for a device depends on the device type.
  
@@ -271,10 +271,6 @@ extension DeviceEventStream: URLSessionDataDelegate {
         task: URLSessionTask,
         didCompleteWithError error: Error?)
     {
-        // Primitive error handling for now. Just logs the error,
-        // and closes the connection.
-        // TODO: Figure out an appropriate reconnect scheme
-        
         let statusCode = (task.response as? HTTPURLResponse)?.statusCode
         let errorMessage = error?.localizedDescription ?? ""
         

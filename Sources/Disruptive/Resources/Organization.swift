@@ -27,7 +27,7 @@ extension Disruptive {
     /**
      Gets a list of all the organizations available to the authenticated account.
      
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Organization`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Organization`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Organization], DisruptiveError>`
      */
     public func getOrganizations(
@@ -44,7 +44,7 @@ extension Disruptive {
      Gets a single organization based on an organization identifier.
      
      - Parameter organizationID: The identifier of the organization to get.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Organization`. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Organization`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Organization, DisruptiveError>`
      */
     public func getOrganization(
