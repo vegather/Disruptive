@@ -56,7 +56,7 @@ internal struct Request {
         self.params = params
     }
     
-    /// Overrides an existing header if it already exists, otherwise creates a new header
+    /// Overrides an existing header if it already exists, otherwise creates a new header.
     mutating func setHeader(field: String, value: String) {
         let newHeader = HTTPHeader(field: field, value: value)
         
@@ -104,7 +104,7 @@ internal struct Request {
 }
 
 extension Request {
-    /// Creates a URL session with a 20 second timeout
+    /// Creates a URL session with a 20 second timeout.
     static var defaultSession: URLSession = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest  = 20
@@ -128,7 +128,7 @@ extension Request {
      (eg. `Void`), use the `EmptyResponse` type as the generic success type, and just replace it with `Void` if the
      request was successful.
      
-     - Parameter decoder: If some custom decoding is required (eg. pagination), this default decoder can be replaced with a custom one
+     - Parameter decoder: If some custom decoding is required (eg. pagination), this default decoder can be replaced with a custom one.
      */
     internal func send<T: Decodable>(decoder: JSONDecoder = JSONDecoder(), completion: @escaping (Result<T, DisruptiveError>) -> ()) {
         

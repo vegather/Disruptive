@@ -51,7 +51,7 @@ internal struct JWT {
             .replacingOccurrences(of: "=", with: "")
     }
     
-    /// JSON encodes and base64 encodes a `Dictionary` to a JWT compatible `String`
+    /// JSON encodes and base64 encodes a `Dictionary` to a JWT compatible `String`.
     private static func jsonEncode(_ input: [String: Any]) -> String? {
         guard let data = try? JSONSerialization.data(withJSONObject: input) else { return nil }
         return base64Encode(data)

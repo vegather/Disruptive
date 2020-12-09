@@ -442,7 +442,7 @@ extension DataConnector {
          
          * `url`: The URL of the external service that the HTTP POST requests will be pushed to.
          * `signatureSecret`: Used to sign each event pushed from the Data Connector. See details above.
-         * `headers`: Any additional headers that should be included with every event pushed from the Data Connector
+         * `headers`: Any additional headers that should be included with every event pushed from the Data Connector.
          */
         case httpPush(url: String, signatureSecret: String, headers: [String: String])
     }
