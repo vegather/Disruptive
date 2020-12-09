@@ -78,6 +78,8 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
+      - run: git pull
+
       - name: Generate Documentation
         uses: SwiftDocOrg/swift-doc@master
         with:
