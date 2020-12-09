@@ -1026,7 +1026,7 @@ Note that not all event types are available for all devices.</p>
     <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;[Organization], Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain an array of <code>Organization</code>s. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain an array of <code>Organization</code>s. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1067,7 +1067,7 @@ Note that not all event types are available for all devices.</p>
 <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;Organization, Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Organization</code>. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Organization</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1196,7 +1196,7 @@ Note that not all event types are available for all devices.</p>
 <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;[Project], Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain an array of <code>Project</code>s. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain an array of <code>Project</code>s. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1237,7 +1237,7 @@ Note that not all event types are available for all devices.</p>
 <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;Project, Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Project</code>. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Project</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1255,7 +1255,7 @@ Note that not all event types are available for all devices.</p>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">createProject</span>(<span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Project"><span class="type">Project</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful</p>
+    <p>Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful.</p>
 
 </div>
 <h4>Parameters</h4>
@@ -1284,7 +1284,7 @@ Note that not all event types are available for all devices.</p>
 <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;Project, Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Project</code>. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Project</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1302,8 +1302,8 @@ Note that not all event types are available for all devices.</p>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">deleteProject</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Deletes a project. Deleting a project can only be done if it has no devices, Service Cccounts, or
-Data Connectors in it. Otherwise, an error will be returned</p>
+    <p>Deletes a project. Deleting a project can only be done if it has no devices, Service Accounts, or
+Data Connectors in it. Otherwise, an error will be returned.</p>
 
 </div>
 <h4>Parameters</h4>
@@ -1373,7 +1373,7 @@ Data Connectors in it. Otherwise, an error will be returned</p>
 <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;Project, Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Project</code> with the updated display name. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Project</code> with the updated display name. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1449,7 +1449,7 @@ Data Connectors in it. Otherwise, an error will be returned</p>
 <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;Role, Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Role</code>. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Role</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1611,7 +1611,7 @@ Data Connectors in it. Otherwise, an error will be returned</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-12-08T19:56:48+0000">December 8, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-12-09T17:30:44+0000">December 9, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
