@@ -271,10 +271,6 @@ extension DeviceEventStream: URLSessionDataDelegate {
         task: URLSessionTask,
         didCompleteWithError error: Error?)
     {
-        // Primitive error handling for now. Just logs the error,
-        // and closes the connection.
-        // TODO: Figure out an appropriate reconnect scheme
-        
         let statusCode = (task.response as? HTTPURLResponse)?.statusCode
         let errorMessage = error?.localizedDescription ?? ""
         
