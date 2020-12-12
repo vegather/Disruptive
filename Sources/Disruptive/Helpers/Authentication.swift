@@ -49,7 +49,7 @@ public struct Auth {
 /**
  Defines the interface required to authenticate the `Disruptive` struct.
  
- Any conforming types needs a mechanism to aquire an access token that
+ Any conforming types needs a mechanism to acquire an access token that
  can be used to authenticate against the Disruptive Technologies' REST API.
  */
 public protocol AuthProvider {
@@ -76,9 +76,9 @@ public protocol AuthProvider {
     /// to `false`.
     func logout(completion: @escaping AuthHandler)
     
-    /// A conforming type should use a mechanism to aquire an access token than
+    /// A conforming type should use a mechanism to acquire an access token than
     /// can be used to authenticate against the Disruptive Technologies' REST API.
-    /// Once that token has been aquired, it should be stored in the `auth` property
+    /// Once that token has been acquired, it should be stored in the `auth` property
     /// along with a relevant expiration date.
     ///
     /// This will be called automatically when necessary as long as `shouldAutoRefreshAccessToken`

@@ -7,7 +7,7 @@
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvegather%2FDisruptive%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/vegather/Disruptive)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvegather%2FDisruptive%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/vegather/Disruptive)
 [![API Docs](https://img.shields.io/badge/API-Documentation-333)](https://vegather.github.io/Disruptive/)
-[![Licence](https://img.shields.io/badge/Licence-MIT-333)](https://github.com/vegather/Disruptive/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/Licence-MIT-333)](https://github.com/vegather/Disruptive/blob/master/LICENSE)
 
 Swift library for accessing data from [Disruptive Technologies](https://disruptive-technologies.com).
 
