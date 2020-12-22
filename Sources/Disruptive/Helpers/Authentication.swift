@@ -60,7 +60,7 @@ public protocol AuthProvider {
     
     /// Indicates whether the auth provider should automatically attempt to
     /// refresh the access token if the local one is expired, or if no local access token is available.
-    /// This is intended to prevent any accidental reauthentications being made
+    /// This is intended to prevent any accidental re-authentications being made
     /// after the client has logged out.
     var shouldAutoRefreshAccessToken: Bool { get }
     
@@ -113,7 +113,7 @@ internal extension AuthProvider {
             completion(.success(authToken))
         } else {
             // The auth provider is either not authenticated, or the auth
-            // token too close to getting expired. Will reauthenticate the auth provider
+            // token too close to getting expired. Will re-authenticate the auth provider
             DTLog("Authenticating the auth provider...")
             refreshAccessToken { result in
                 switch result {

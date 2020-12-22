@@ -15,7 +15,8 @@ import Foundation
  */
 public struct Device: Decodable, Equatable {
     
-    /// The unique identifier of the device. This will be different from the REST API in that it is just the identifier without the `projects/*/devices/` prefix.
+    /// The unique identifier of the device. This will be different from the `name` field in the REST API
+    /// in that it is just the identifier without the `projects/*/devices/` prefix.
     public let identifier: String
     
     /// The display name of the device.

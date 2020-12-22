@@ -15,7 +15,8 @@ import Foundation
  */
 public struct Project: Codable, Equatable {
     
-    /// The unique identifier of the project.
+    /// The unique identifier of the project. This will be different from the `name` field in the REST API
+    /// in that it is just the identifier without the `projects/` prefix.
     public let identifier: String
     
     /// The display name of the project.

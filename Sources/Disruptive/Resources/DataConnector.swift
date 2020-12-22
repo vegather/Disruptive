@@ -18,7 +18,7 @@ import Foundation
  */
 public struct DataConnector: Decodable, Equatable {
     
-    /// The unique identifier of the Data Connector. This will be different from the REST API
+    /// The unique identifier of the Data Connector. This will be different from the`name` field in the REST API
     /// in that it is just the identifier without the `projects/*/dataconnectors/` prefix.
     public let identifier: String
     
