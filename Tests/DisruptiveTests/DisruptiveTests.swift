@@ -10,8 +10,8 @@ class DisruptiveTests: XCTestCase {
         configuration.protocolClasses = [MockURLProtocol.self]
         Request.defaultSession = URLSession(configuration: configuration)
         
-        let sa = ServiceAccount(email: "", key: "", secret: "")
-        let auth = BasicAuthAuthenticator(account: sa)
+        let creds = ServiceAccountCredentials(email: "", key: "", secret: "")
+        let auth = BasicAuthAuthenticator(credentials: creds)
         disruptive = Disruptive(authProvider: auth)
         Disruptive.loggingEnabled = true
     }

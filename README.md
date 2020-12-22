@@ -81,8 +81,8 @@ Here's an example of how to authenticate a service account with the OAuth2 flow:
 ```swift
 import Disruptive
 
-let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
-let authenticator = OAuth2Authenticator(account: serviceAccount)
+let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+let authenticator = OAuth2Authenticator(credentials: credentials)
 let disruptive = Disruptive(authProvider: authenticator)
 
 // All methods called on the disruptive instance will be authenticated
