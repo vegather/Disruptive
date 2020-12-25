@@ -527,7 +527,13 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
         
         // Extract the other values
         self.connection = try values.decode(Connection.self, forKey: .connection)
-        self.available  = try values.decode([Available].self, forKey: .available)
+        
+        // Extracting the list of `available` network interfaces as the REST API
+        // might occasionally return "OFFLINE" in the `available` array, even
+        // though this is not a valid value. This can happen when sending a
+        // `ConnectionStatusEvent` on an emulated Cloud Connector in Studio.
+        let availableStrings = try values.decode([String].self, forKey: .available)
+        self.available = availableStrings.compactMap { Available(rawValue: $0) }
     }
     
     private enum CodingKeys: String, CodingKey {

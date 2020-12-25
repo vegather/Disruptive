@@ -11,8 +11,8 @@ import XCTest
 class AuthenticationTests: DisruptiveTests {
     
     func testBasicAuth() {
-        let serviceAccount = ServiceAccount(email: "email", key: "key", secret: "secret")
-        let authenticator = BasicAuthAuthenticator(account: serviceAccount)
+        let creds = ServiceAccountCredentials(email: "email", key: "key", secret: "secret")
+        let authenticator = BasicAuthAuthenticator(credentials: creds)
         
         
         
@@ -81,8 +81,8 @@ class AuthenticationTests: DisruptiveTests {
         }
         """.data(using: .utf8)!
         
-        let serviceAccount = ServiceAccount(email: reqEmail, key: reqKey, secret: "secret")
-        let auth = OAuth2Authenticator(account: serviceAccount)
+        let creds = ServiceAccountCredentials(email: reqEmail, key: reqKey, secret: "secret")
+        let auth = OAuth2Authenticator(credentials: creds)
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -148,12 +148,7 @@ class AuthenticationTests: DisruptiveTests {
                         XCTFail("Unexpected part: \(subParts[0]), value: \(subParts[1])")
                 }
             }
-            
-            
-            
-            
-            print("RETURNING")
-            
+                        
             return (respPayload, resp, nil)
         }
         

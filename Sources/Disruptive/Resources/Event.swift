@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- Contains a array of events for each type of event for a specific `Device`.  Detailed documentation for each event type can be found on Disruptive Technologies' [developer website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events).
+ Contains an array of events for each type of event for a specific `Device`.  Detailed documentation for each event type can be found on Disruptive Technologies' [developer website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events).
  
  Relevant methods for `Events` can be found on the [Disruptive](../Disruptive) struct.
  */

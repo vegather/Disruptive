@@ -39,7 +39,7 @@ public struct Disruptive {
     /**
      Initializes a `Disruptive` instance.
      
-     - Parameter authProvider: Used to authenticate against the Disruptive Technologies REST API. It is recommended to pass an `OAuth2ServiceAccount` instance to this parameter.
+     - Parameter authProvider: Used to authenticate against the Disruptive Technologies REST API. It is recommended to pass an `OAuth2Authenticator` instance to this parameter.
      - Parameter baseURL: Optional parameter. The base URL for the REST API. The default value is `Disruptive.defaultBaseURL`.
      */
     public init(authProvider: AuthProvider, baseURL: String = Disruptive.defaultBaseURL) {

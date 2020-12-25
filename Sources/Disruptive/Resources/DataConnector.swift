@@ -18,7 +18,7 @@ import Foundation
  */
 public struct DataConnector: Decodable, Equatable {
     
-    /// The unique identifier of the Data Connector. This will be different from the REST API
+    /// The unique identifier of the Data Connector. This will be different from the`name` field in the REST API
     /// in that it is just the identifier without the `projects/*/dataconnectors/` prefix.
     public let identifier: String
     
@@ -166,7 +166,7 @@ extension Disruptive {
      
      ```
      // Deactivates a Data Connector by only using the `active` parameter
-     updateDataConnector(
+     disruptive.updateDataConnector(
          projectID       : "<PROJECT_ID>",
          dataConnectorID : "<DC_ID>",
          active          : false)
@@ -175,7 +175,7 @@ extension Disruptive {
      }
   
      // Updates the signature secret of a Data Connector, and nothing else
-     updateDataConnector(
+     disruptive.updateDataConnector(
          projectID       : "<PROJECT_ID>",
          dataConnectorID : "<DC_ID>",
          httpPush        : (url: nil, signatureSecret: "NEW_SECRET", headers: nil))
@@ -191,7 +191,7 @@ extension Disruptive {
      - Parameter isActive: The new active status of the Data Connector. Will be ignored if not set (or `nil`). Defaults to `nil`.
      - Parameter eventTypes: The new list of event types the Data Connector will send out. Will be ignored if not set (or `nil`). Defaults to `nil`.
      - Parameter labels: The new labels that will be included for every event pushed to an external service by the Data Connector. Will be ignored if not set (or `nil`). **Note:** if you want the display name of the device to be included in the events to the external service, you need to include the `name` label in this list. The default value of this parameter is `nil`.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `DataConnector`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
     public func updateDataConnector(

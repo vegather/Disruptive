@@ -15,7 +15,8 @@ import Foundation
  */
 public struct Organization: Codable, Equatable {
     
-    /// The unique identifier for the organization. This will be different from the REST API in that it is just the identifier without the `organizations/` prefix.
+    /// The unique identifier for the organization. This will be different from the `name` field in the REST API
+    /// in that it is just the identifier without the `organizations/` prefix.
     public let identifier: String
     
     /// The display name of the organization.

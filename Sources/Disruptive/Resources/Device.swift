@@ -15,7 +15,8 @@ import Foundation
  */
 public struct Device: Decodable, Equatable {
     
-    /// The unique identifier of the device. This will be different from the REST API in that it is just the identifier without the `projects/*/devices/` prefix.
+    /// The unique identifier of the device. This will be different from the `name` field in the REST API
+    /// in that it is just the identifier without the `projects/*/devices/` prefix.
     public let identifier: String
     
     /// The display name of the device.
@@ -247,10 +248,10 @@ extension Disruptive {
 
 extension Device {
     private enum CodingKeys: String, CodingKey {
-        case identifier = "name"
+        case name
         case labels
         case type
-        case reportedEvents = "reported"
+        case reported
     }
     
     public init(from decoder: Decoder) throws {
@@ -258,7 +259,7 @@ extension Device {
         
         // Device resource names are formatted as "projects/b7s3umd0fee000ba5di0/devices/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
-        let projectResourceName = try values.decode(String.self, forKey: .identifier)
+        let projectResourceName = try values.decode(String.self, forKey: .name)
         let resourceNameComponents = projectResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: projectResourceName)
@@ -273,7 +274,7 @@ extension Device {
         // The name of the device comes in a label (if set)
         self.displayName = self.labels["name", default: ""]
         
-        self.reportedEvents = try values.decode(ReportedEvents.self, forKey: .reportedEvents)
+        self.reportedEvents = try values.decode(ReportedEvents.self, forKey: .reported)
     }
 }
 

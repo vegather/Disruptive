@@ -7,7 +7,7 @@
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvegather%2FDisruptive%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/vegather/Disruptive)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvegather%2FDisruptive%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/vegather/Disruptive)
 [![API Docs](https://img.shields.io/badge/API-Documentation-333)](https://vegather.github.io/Disruptive/)
-[![Licence](https://img.shields.io/badge/Licence-MIT-333)](https://github.com/vegather/Disruptive/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/Licence-MIT-333)](https://github.com/vegather/Disruptive/blob/master/LICENSE)
 
 Swift library for accessing data from [Disruptive Technologies](https://disruptive-technologies.com).
 
@@ -54,7 +54,7 @@ If you want to add it manually to your Swift project, you can add the following 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vegather/Disruptive.git", from: "0.2.0")
+    .package(url: "https://github.com/vegather/Disruptive.git", from: "0.3.0")
 ]
 ```
 
@@ -81,8 +81,8 @@ Here's an example of how to authenticate a service account with the OAuth2 flow:
 ```swift
 import Disruptive
 
-let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
-let authenticator = OAuth2Authenticator(account: serviceAccount)
+let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+let authenticator = OAuth2Authenticator(credentials: credentials)
 let disruptive = Disruptive(authProvider: authenticator)
 
 // All methods called on the disruptive instance will be authenticated
@@ -215,7 +215,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
 
-Progress: ![Progress](https://progress-bar.dev/28/?scale=54&suffix=%20%2f%2054)
+Progress: ![Progress](https://progress-bar.dev/37/?scale=54&suffix=%20%2f%2054)
 
 - [x] ~~GET /projects/{project}/devices~~
 - [x] ~~POST /projects/{project}/devices:batchUpdate~~
@@ -257,15 +257,15 @@ Progress: ![Progress](https://progress-bar.dev/28/?scale=54&suffix=%20%2f%2054)
 - [x] ~~GET /projects/{project}~~
 - [x] ~~PATCH /projects/{project}~~
 - [x] ~~DELETE /projects/{project}~~
-- [ ] GET /projects/{project}/serviceaccounts
-- [ ] POST /projects/{project}/serviceaccounts
-- [ ] GET /projects/{project}/serviceaccounts/{serviceaccount}
-- [ ] PATCH /projects/{project}/serviceaccounts/{serviceaccount}
-- [ ] DELETE /projects/{project}/serviceaccounts/{serviceaccount}
-- [ ] GET /projects/{project}/serviceaccounts/{serviceaccount}/keys
-- [ ] POST /projects/{project}/serviceaccounts/{serviceaccount}/keys
-- [ ] GET /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}
-- [ ] DELETE /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}
+- [x] ~~GET /projects/{project}/serviceaccounts~~
+- [x] ~~POST /projects/{project}/serviceaccounts~~
+- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}~~
+- [x] ~~PATCH /projects/{project}/serviceaccounts/{serviceaccount}~~
+- [x] ~~DELETE /projects/{project}/serviceaccounts/{serviceaccount}~~
+- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}/keys~~
+- [x] ~~POST /projects/{project}/serviceaccounts/{serviceaccount}/keys~~
+- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}~~
+- [x] ~~DELETE /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}~~
 
 Emulator
 - [ ] GET /projects/{project}/devices

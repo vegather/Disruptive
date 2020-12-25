@@ -9,11 +9,11 @@
 import Foundation
 
 /**
- A ServiceAccount is used to authenticate against the Disruptive Technologies API.
+ A set of `ServiceAccountCredentials` is used to authenticate against the Disruptive Technologies API.
  It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking
- the `Service Account` tab under `API Integrations` in the side menu.
+ the `Service Account` tab under `API Integrations` in the side menu, and creating a new key.
  */
-public struct ServiceAccount: Codable {
+public struct ServiceAccountCredentials: Codable {
     public let email  : String
     public let key    : String
     public let secret : String
@@ -49,7 +49,7 @@ public struct Auth {
 /**
  Defines the interface required to authenticate the `Disruptive` struct.
  
- Any conforming types needs a mechanism to aquire an access token that
+ Any conforming types needs a mechanism to acquire an access token that
  can be used to authenticate against the Disruptive Technologies' REST API.
  */
 public protocol AuthProvider {
@@ -60,7 +60,7 @@ public protocol AuthProvider {
     
     /// Indicates whether the auth provider should automatically attempt to
     /// refresh the access token if the local one is expired, or if no local access token is available.
-    /// This is intended to prevent any accidental reauthentications being made
+    /// This is intended to prevent any accidental re-authentications being made
     /// after the client has logged out.
     var shouldAutoRefreshAccessToken: Bool { get }
     
@@ -76,9 +76,9 @@ public protocol AuthProvider {
     /// to `false`.
     func logout(completion: @escaping AuthHandler)
     
-    /// A conforming type should use a mechanism to aquire an access token than
+    /// A conforming type should use a mechanism to acquire an access token than
     /// can be used to authenticate against the Disruptive Technologies' REST API.
-    /// Once that token has been aquired, it should be stored in the `auth` property
+    /// Once that token has been acquired, it should be stored in the `auth` property
     /// along with a relevant expiration date.
     ///
     /// This will be called automatically when necessary as long as `shouldAutoRefreshAccessToken`
@@ -113,7 +113,7 @@ internal extension AuthProvider {
             completion(.success(authToken))
         } else {
             // The auth provider is either not authenticated, or the auth
-            // token too close to getting expired. Will reauthenticate the auth provider
+            // token too close to getting expired. Will re-authenticate the auth provider
             DTLog("Authenticating the auth provider...")
             refreshAccessToken { result in
                 switch result {
@@ -148,13 +148,13 @@ internal extension AuthProvider {
  
  Example:
  ```
- let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
- let authenticator = BasicAuthAuthenticater(account: serviceAccount)
+ let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+ let authenticator = BasicAuthAuthenticator(credentials: credentials)
  let disruptive = Disruptive(authProvider: authenticator)
  ```
  */
 public class BasicAuthAuthenticator: AuthProvider {
-    public let account : ServiceAccount
+    public let credentials : ServiceAccountCredentials
     
     /// The authentication details.
     private(set) public var auth: Auth?
@@ -164,12 +164,12 @@ public class BasicAuthAuthenticator: AuthProvider {
     private(set) public var shouldAutoRefreshAccessToken = true
     
     /**
-     Initializes a `BasicAuthAuthenticator` using a `ServiceAccount`.
+     Initializes a `BasicAuthAuthenticator` using a set of `ServiceAccountCredentials`.
      
-     - Parameter account: The `ServiceAccount` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+     - Parameter credentials: The `ServiceAccountCredentials` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
      */
-    public init(account: ServiceAccount) {
-        self.account = account
+    public init(credentials: ServiceAccountCredentials) {
+        self.credentials = credentials
     }
     
     /// Refreshes the access token, stores it in the `auth` property, and sets
@@ -191,11 +191,11 @@ public class BasicAuthAuthenticator: AuthProvider {
         completion(.success(()))
     }
     
-    /// Used internally to create a new access token from the service account passed in to the initializer.
+    /// Used internally to create a new access token from the service account credentials passed in to the initializer.
     /// This access token is stored in the `auth` property along with an expiration date in the `.distantFuture`.
     public func refreshAccessToken(completion: @escaping AuthHandler) {
         auth = Auth(
-            token: "Basic " + "\(account.key):\(account.secret)".data(using: .utf8)!.base64EncodedString(),
+            token: "Basic " + "\(credentials.key):\(credentials.secret)".data(using: .utf8)!.base64EncodedString(),
             expirationDate: .distantFuture
         )
         completion(.success(()))
@@ -218,15 +218,15 @@ public class BasicAuthAuthenticator: AuthProvider {
  
  Example:
  ```
- let serviceAccount = ServiceAccount(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
- let authenticator = OAuth2Authenticator(account: serviceAccount)
+ let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+ let authenticator = OAuth2Authenticator(credentials: credentials)
  let disruptive = Disruptive(authProvider: authenticator)
  ```
  */
 public class OAuth2Authenticator: AuthProvider {
 
     /// The service account used to authenticate against the Disruptive Technologies' REST API.
-    public let account : ServiceAccount
+    public let credentials : ServiceAccountCredentials
     
     /// The authentication endpoint to fetch the access token from.
     public let authURL: String
@@ -241,14 +241,14 @@ public class OAuth2Authenticator: AuthProvider {
     
     
     /**
-     Initializes an `OAuth2Authenticator` using a `ServiceAccount`
+     Initializes an `OAuth2Authenticator` using a set of `ServiceAccountCredentials`.
      
-     - Parameter account: The `ServiceAccount` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
-     - Parameter authURL: Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is `Disruptive.defaultAuthURL`
+     - Parameter credentials: The `ServiceAccountCredentials` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+     - Parameter authURL: Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is `Disruptive.defaultAuthURL`.
      */
-    public init(account: ServiceAccount, authURL: String = Disruptive.defaultAuthURL) {
+    public init(credentials: ServiceAccountCredentials, authURL: String = Disruptive.defaultAuthURL) {
         self.authURL = authURL
-        self.account = account
+        self.credentials = credentials
     }
     
     /// Refreshes the access token, stores it in the `auth` property, and sets
@@ -274,8 +274,8 @@ public class OAuth2Authenticator: AuthProvider {
     ///
     /// This flow is described in more detail on the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication).
     public func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
-        guard let authJWT = JWT.serviceAccount(authURL: authURL, account: account) else {
-            DTLog("Failed to create a JWT from service account: \(account)", isError: true)
+        guard let authJWT = JWT.serviceAccount(authURL: authURL, credentials: credentials) else {
+            DTLog("Failed to create a JWT from service account credentials: \(credentials)", isError: true)
             completion(.failure(.unknownError))
             return
         }
