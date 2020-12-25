@@ -148,12 +148,7 @@ class AuthenticationTests: DisruptiveTests {
                         XCTFail("Unexpected part: \(subParts[0]), value: \(subParts[1])")
                 }
             }
-            
-            
-            
-            
-            print("RETURNING")
-            
+                        
             return (respPayload, resp, nil)
         }
         
