@@ -17,6 +17,13 @@ class DeviceTests: DisruptiveTests {
         XCTAssertEqual(deviceIn, deviceOut)
     }
     
+    func testDecodeEmulatedDevice() {
+        let deviceIn = createDummyDevice(isEmulated: true)
+        let deviceOut = try! JSONDecoder().decode(Device.self, from: createDeviceJSON(from: deviceIn))
+        
+        XCTAssertEqual(deviceIn, deviceOut)
+    }
+    
     func testGetDevice() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
@@ -385,7 +392,7 @@ extension DeviceTests {
     }
     
     // Only supports temp events for now
-    fileprivate func createDummyDevice() -> Device {
+    fileprivate func createDummyDevice(isEmulated: Bool = false) -> Device {
         var reportedEvents = Device.ReportedEvents()
         reportedEvents.temperature = TemperatureEvent(
             value: 56,
@@ -393,12 +400,13 @@ extension DeviceTests {
         )
         
         return Device(
-            identifier: "b5rj9ed7rihk942p48og",
+            identifier: (isEmulated ? "emu" : "") + "b5rj9ed7rihk942p48og",
             displayName: "Dummy project",
             projectID: "b7s3umd0fee000ba5di0",
             labels: ["name": "Dummy project"],
             type: .temperature,
-            reportedEvents: reportedEvents
+            reportedEvents: reportedEvents,
+            isEmulatedDevice: isEmulated
         )
     }
 }
