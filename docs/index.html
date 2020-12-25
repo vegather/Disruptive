@@ -79,14 +79,14 @@ a service account in a production environment.</p>
 
 </dd>
 <dt class="structure">
-    <a href="https://vegather.github.io/Disruptive/ServiceAccount" title="structure - ServiceAccount">
-        Service​Account
+    <a href="https://vegather.github.io/Disruptive/ServiceAccountCredentials" title="structure - ServiceAccountCredentials">
+        Service​Account​Credentials
     </a>
 </dt>
 <dd>
-    <p>A ServiceAccount is used to authenticate against the Disruptive Technologies API.
+    <p>A set of <code>ServiceAccountCredentials</code> is used to authenticate against the Disruptive Technologies API.
 It can be created in <a href="https://studio.disruptive-technologies.com">DT Studio</a> by clicking
-the <code>Service Account</code> tab under <code>API Integrations</code> in the side menu.</p>
+the <code>Service Account</code> tab under <code>API Integrations</code> in the side menu, and creating a new key.</p>
 
 </dd>
 <dt class="structure">
@@ -285,7 +285,7 @@ HTTP POST request.</p>
     </a>
 </dt>
 <dd>
-    <p>Contains a array of events for each type of event for a specific <code>Device</code>.  Detailed documentation for each event type can be found on Disruptive Technologies' <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events">developer website</a>.</p>
+    <p>Contains an array of events for each type of event for a specific <code>Device</code>.  Detailed documentation for each event type can be found on Disruptive Technologies' <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events">developer website</a>.</p>
 
 </dd>
 <dt class="structure">
@@ -313,6 +313,34 @@ HTTP POST request.</p>
 </dt>
 <dd>
     <p>Represents a role that a user can have within a project or an organization.</p>
+
+</dd>
+<dt class="structure">
+    <a href="https://vegather.github.io/Disruptive/ServiceAccount" title="structure - ServiceAccount">
+        Service​Account
+    </a>
+</dt>
+<dd>
+    <p>All programmatic interaction with the Disruptive Technologies API is done via a logged-in Service Account.</p>
+
+</dd>
+<dt class="structure">
+    <a href="https://vegather.github.io/Disruptive/ServiceAccount_Key" title="structure - ServiceAccount.Key">
+        Service​Account.​Key
+    </a>
+</dt>
+<dd>
+    <p>A key that can be used to authenticate a Service Account.</p>
+
+</dd>
+<dt class="structure">
+    <a href="https://vegather.github.io/Disruptive/ServiceAccount_KeySecret" title="structure - ServiceAccount.KeySecret">
+        Service​Account.​Key​Secret
+    </a>
+</dt>
+<dd>
+    <p>A secret along with the corresponding key used to authenticate a Service Account.
+This is the response value for when a new key is created for a Service Account.</p>
 
 </dd>
         </dl>
@@ -426,7 +454,7 @@ a specific project or organization.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-12-09T17:30:45+0000">December 9, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-12-25T10:20:16+0000">December 25, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

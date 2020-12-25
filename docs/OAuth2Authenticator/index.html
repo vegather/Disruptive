@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#oauth2authenticator.init(account:authurl:)">init(account:​auth​URL:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#oauth2authenticator.account">account</a></li><li class="variable"><a href="#oauth2authenticator.authurl">auth​URL</a></li><li class="variable"><a href="#oauth2authenticator.auth">auth</a></li><li class="variable"><a href="#oauth2authenticator.shouldautorefreshaccesstoken">should​Auto​Refresh​Access​Token</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#oauth2authenticator.login(completion:)">login(completion:​)</a></li><li class="function"><a href="#oauth2authenticator.logout(completion:)">logout(completion:​)</a></li><li class="function"><a href="#oauth2authenticator.refreshaccesstoken(completion:)">refresh​Access​Token(completion:​)</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#oauth2authenticator.init(credentials:authurl:)">init(credentials:​auth​URL:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#oauth2authenticator.credentials">credentials</a></li><li class="variable"><a href="#oauth2authenticator.authurl">auth​URL</a></li><li class="variable"><a href="#oauth2authenticator.auth">auth</a></li><li class="variable"><a href="#oauth2authenticator.shouldautorefreshaccesstoken">should​Auto​Refresh​Access​Token</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#oauth2authenticator.login(completion:)">login(completion:​)</a></li><li class="function"><a href="#oauth2authenticator.logout(completion:)">logout(completion:​)</a></li><li class="function"><a href="#oauth2authenticator.refreshaccesstoken(completion:)">refresh​Access​Token(completion:​)</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -56,8 +56,8 @@ and methods.</p>
 
 <p>Example:</p>
 
-<html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">serviceAccount</span> = <span class="variable">ServiceAccount</span>(<span class="variable">email</span>: <span class="string literal">"</span><span class="string literal">&lt;EMAIL&gt;</span><span class="string literal">"</span>, <span class="variable">key</span>: <span class="string literal">"</span><span class="string literal">&lt;KEY_ID&gt;</span><span class="string literal">"</span>, <span class="variable">secret</span>: <span class="string literal">"</span><span class="string literal">&lt;SECRET&gt;</span><span class="string literal">"</span>)
-<span class="keyword">let</span> <span class="variable">authenticator</span> = <span class="variable">OAuth2Authenticator</span>(<span class="variable">account</span>: <span class="type">serviceAccount</span>)
+<html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">credentials</span> = <span class="variable">ServiceAccountCredentials</span>(<span class="variable">email</span>: <span class="string literal">"</span><span class="string literal">&lt;EMAIL&gt;</span><span class="string literal">"</span>, <span class="variable">key</span>: <span class="string literal">"</span><span class="string literal">&lt;KEY_ID&gt;</span><span class="string literal">"</span>, <span class="variable">secret</span>: <span class="string literal">"</span><span class="string literal">&lt;SECRET&gt;</span><span class="string literal">"</span>)
+<span class="keyword">let</span> <span class="variable">authenticator</span> = <span class="variable">OAuth2Authenticator</span>(<span class="variable">credentials</span>: <span class="type">credentials</span>)
 <span class="keyword">let</span> <span class="variable">disruptive</span> = <span class="variable">Disruptive</span>(<span class="variable">authProvider</span>: <span class="type">authenticator</span>)
 </code></pre></body></html>
 </div>
@@ -115,13 +115,13 @@ and methods.</p>
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="oauth2authenticator.init(account:authurl:)">
+        <div role="article" class="initializer" id="oauth2authenticator.init(credentials:authurl:)">
     <h3>
-        <code>init(account:​auth​URL:​)</code>
+        <code>init(credentials:​auth​URL:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">account</span>: <a href="https://vegather.github.io/Disruptive/ServiceAccount"><span class="type">ServiceAccount</span></a>, <span class="variable">authURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultAuthURL</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">credentials</span>: <a href="https://vegather.github.io/Disruptive/ServiceAccountCredentials"><span class="type">ServiceAccountCredentials</span></a>, <span class="variable">authURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultAuthURL</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Initializes an <code>OAuth2Authenticator</code> using a <code>ServiceAccount</code></p>
+    <p>Initializes an <code>OAuth2Authenticator</code> using a set of <code>ServiceAccountCredentials</code>.</p>
 
 </div>
 <h4>Parameters</h4>
@@ -136,15 +136,15 @@ and methods.</p>
   </thead>
   <tbody>
     <tr>
-    <th>account</th>
-    <td><code class="type">Service​Account</code></td>
-    <td><p>The <code>ServiceAccount</code> to use for authentication. It can be created in <a href="https://studio.disruptive-technologies.com">DT Studio</a> by clicking the <code>Service Account</code> tab under <code>API Integrations</code> in the side menu.</p>
+    <th>credentials</th>
+    <td><code class="type">Service​Account​Credentials</code></td>
+    <td><p>The <code>ServiceAccountCredentials</code> to use for authentication. It can be created in <a href="https://studio.disruptive-technologies.com">DT Studio</a> by clicking the <code>Service Account</code> tab under <code>API Integrations</code> in the side menu.</p>
 </td>
 </tr>
 <tr>
     <th>auth​URL</th>
     <td><code class="type">String</code></td>
-    <td><p>Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is <code>Disruptive.defaultAuthURL</code></p>
+    <td><p>Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is <code>Disruptive.defaultAuthURL</code>.</p>
 </td>
 </tr>
   </tbody>
@@ -154,11 +154,11 @@ and methods.</p>
     <section id="properties">
         <h2>Properties</h2>
 
-        <div role="article" class="variable" id="oauth2authenticator.account">
+        <div role="article" class="variable" id="oauth2authenticator.credentials">
     <h3>
-        <code>account</code>
+        <code>credentials</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">account</span>: <a href="https://vegather.github.io/Disruptive/ServiceAccount"><span class="type">ServiceAccount</span></a></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">credentials</span>: <a href="https://vegather.github.io/Disruptive/ServiceAccountCredentials"><span class="type">ServiceAccountCredentials</span></a></code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>The service account used to authenticate against the Disruptive Technologies' REST API.</p>
 
@@ -246,7 +246,7 @@ along with the received expiration date.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-12-09T17:30:45+0000">December 9, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-12-25T10:20:16+0000">December 25, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

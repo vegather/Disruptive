@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#serviceaccount.init(email:key:secret:)">init(email:​key:​secret:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#serviceaccount.email">email</a></li><li class="variable"><a href="#serviceaccount.key">key</a></li><li class="variable"><a href="#serviceaccount.secret">secret</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Nested Types</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#serviceaccount.init(from:)">init(from:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#serviceaccount.identifier">identifier</a></li><li class="variable"><a href="#serviceaccount.projectid">project​ID</a></li><li class="variable"><a href="#serviceaccount.email">email</a></li><li class="variable"><a href="#serviceaccount.displayname">display​Name</a></li><li class="variable"><a href="#serviceaccount.basicauthenabled">basic​Auth​Enabled</a></li><li class="variable"><a href="#serviceaccount.createtime">create​Time</a></li><li class="variable"><a href="#serviceaccount.updatetime">update​Time</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -37,11 +37,13 @@
     <code class="name">Service​Account</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">ServiceAccount</span>: <span class="type">Codable</span></code></pre></body></html>
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">ServiceAccount</span>: <span class="type">Decodable</span>, <span class="type">Equatable</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>A ServiceAccount is used to authenticate against the Disruptive Technologies API.
-It can be created in <a href="https://studio.disruptive-technologies.com">DT Studio</a> by clicking
-the <code>Service Account</code> tab under <code>API Integrations</code> in the side menu.</p>
+    <p>All programmatic interaction with the Disruptive Technologies API is done via a logged-in Service Account.</p>
+
+</div>
+<div class="discussion">
+    <p>To learn more about Service Accounts, see the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012295100-Service-Accounts">Service Account page on the developer website</a>.</p>
 
 </div>
 <section id="relationships">
@@ -67,17 +69,29 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
 </a>
 </g>
 </g>
-<!-- Codable -->
+<!-- Equatable -->
 <g id="node2" class="node unknown">
-<title>Codable</title>
-<path fill="none" stroke="#000000" d="M528,-36C528,-36 336,-36 336,-36 330,-36 324,-30 324,-24 324,-24 324,-12 324,-12 324,-6 330,0 336,0 336,0 528,0 528,0 534,0 540,-6 540,-12 540,-12 540,-24 540,-24 540,-30 534,-36 528,-36"/>
-<text text-anchor="middle" x="432" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Codable</text>
+<title>Equatable</title>
+<path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
+<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
 </g>
-<!-- ServiceAccount&#45;&gt;Codable -->
+<!-- ServiceAccount&#45;&gt;Equatable -->
 <g id="edge1" class="edge conformsTo">
-<title>ServiceAccount&#45;&gt;Codable</title>
-<path fill="none" stroke="#000000" d="M432,-71.8314C432,-64.131 432,-54.9743 432,-46.4166"/>
-<polygon fill="#000000" stroke="#000000" points="435.5001,-46.4132 432,-36.4133 428.5001,-46.4133 435.5001,-46.4132"/>
+<title>ServiceAccount&#45;&gt;Equatable</title>
+<path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
+<polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
+</g>
+<!-- Decodable -->
+<g id="node3" class="node unknown">
+<title>Decodable</title>
+<path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
+<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Decodable</text>
+</g>
+<!-- ServiceAccount&#45;&gt;Decodable -->
+<g id="edge2" class="edge conformsTo">
+<title>ServiceAccount&#45;&gt;Decodable</title>
+<path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
+<polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
 </g>
 </g>
 </svg>
@@ -85,41 +99,107 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
 
     <figcaption hidden>Inheritance graph for ServiceAccount.</figcaption>
 </figure>
-        <h3>Conforms To</h3>
+        <h3>Nested Types</h3>
 <dl>
-    <dt class="unknown"><code>Codable</code></dt>
+    <dt class="structure"><code><a href="https://vegather.github.io/Disruptive/ServiceAccount_Key">ServiceAccount.Key</a></code></dt>
+<dd><p>A key that can be used to authenticate a Service Account.</p>
+</dd>
+<dt class="structure"><code><a href="https://vegather.github.io/Disruptive/ServiceAccount_KeySecret">ServiceAccount.KeySecret</a></code></dt>
+<dd><p>A secret along with the corresponding key used to authenticate a Service Account.
+This is the response value for when a new key is created for a Service Account.</p>
+</dd>
+</dl>
+<h3>Conforms To</h3>
+<dl>
+    <dt class="unknown"><code>Decodable</code></dt>
+<dt class="unknown"><code>Equatable</code></dt>
 </dl>
 </section>
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="serviceaccount.init(email:key:secret:)">
+        <div role="article" class="initializer" id="serviceaccount.init(from:)">
     <h3>
-        <code>init(email:​key:​secret:​)</code>
+        <code>init(from:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">email</span>: <span class="type">String</span>, <span class="variable">key</span>: <span class="type">String</span>, <span class="variable">secret</span>: <span class="type">String</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">from</span> <span class="variable">decoder</span>: <span class="type">Decoder</span>) <span class="keyword">throws</span></code></pre></body></html>
 </div>
     </section>
     <section id="properties">
         <h2>Properties</h2>
 
-        <div role="article" class="variable" id="serviceaccount.email">
+        <div role="article" class="variable" id="serviceaccount.identifier">
+    <h3>
+        <code>identifier</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">identifier</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The unique identifier of the Service Account. This will be different from the <code>name</code> field in the REST API
+in that it is just the identifier without the <code>projects/*/serviceaccounts/</code> prefix.</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="serviceaccount.projectid">
+    <h3>
+        <code>project​ID</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">projectID</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The identifier of the project the Service Account is in.</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="serviceaccount.email">
     <h3>
         <code>email</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">email</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The email of the Service Accounts. Used for authenticating the Service Account.
+Has the format: <code>&lt;identifier&gt;@&lt;projectID&gt;.serviceaccount.d21s.com</code>.</p>
+
 </div>
-<div role="article" class="variable" id="serviceaccount.key">
-    <h3>
-        <code>key</code>
-    </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">key</span>: <span class="type">String</span></code></pre></body></html>
 </div>
-<div role="article" class="variable" id="serviceaccount.secret">
+<div role="article" class="variable" id="serviceaccount.displayname">
     <h3>
-        <code>secret</code>
+        <code>display​Name</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">secret</span>: <span class="type">String</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">displayName</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The display name of the Service Account.</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="serviceaccount.basicauthenabled">
+    <h3>
+        <code>basic​Auth​Enabled</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">basicAuthEnabled</span>: <span class="type">Bool</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Indicates whether or not the Service Account can be authenticated using HTTP basic auth.
+It is <em>not</em> recommended to have this enabled in a production environment.</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="serviceaccount.createtime">
+    <h3>
+        <code>create​Time</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">createTime</span>: <span class="type">Date</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The timestamp for when the Service Account was created.</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="serviceaccount.updatetime">
+    <h3>
+        <code>update​Time</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">updateTime</span>: <span class="type">Date</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The timestamp for when the Service Account was last updated.</p>
+
+</div>
 </div>
     </section>
 
@@ -130,7 +210,7 @@ the <code>Service Account</code> tab under <code>API Integrations</code> in the 
 
     <footer>
         <p>
-    Generated on <time datetime="2020-12-09T17:30:45+0000">December 9, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-12-25T10:20:16+0000">December 25, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
