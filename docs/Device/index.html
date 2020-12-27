@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Nested Types</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#device.init(identifier:displayname:projectid:labels:type:reportedevents:)">init(identifier:​display​Name:​project​ID:​labels:​type:​reported​Events:​)</a></li><li class="initializer"><a href="#device.init(from:)">init(from:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#device.identifier">identifier</a></li><li class="variable"><a href="#device.displayname">display​Name</a></li><li class="variable"><a href="#device.projectid">project​ID</a></li><li class="variable"><a href="#device.labels">labels</a></li><li class="variable"><a href="#device.type">type</a></li><li class="variable"><a href="#device.reportedevents">reported​Events</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Nested Types</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#device.init(identifier:displayname:projectid:labels:type:reportedevents:isemulateddevice:)">init(identifier:​display​Name:​project​ID:​labels:​type:​reported​Events:​is​Emulated​Device:​)</a></li><li class="initializer"><a href="#device.init(from:)">init(from:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#device.identifier">identifier</a></li><li class="variable"><a href="#device.displayname">display​Name</a></li><li class="variable"><a href="#device.projectid">project​ID</a></li><li class="variable"><a href="#device.labels">labels</a></li><li class="variable"><a href="#device.type">type</a></li><li class="variable"><a href="#device.reportedevents">reported​Events</a></li><li class="variable"><a href="#device.isemulateddevice">is​Emulated​Device</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -69,27 +69,27 @@
 </a>
 </g>
 </g>
-<!-- Decodable -->
-<g id="node2" class="node unknown">
-<title>Decodable</title>
-<path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
-<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Decodable</text>
-</g>
-<!-- Device&#45;&gt;Decodable -->
-<g id="edge1" class="edge conformsTo">
-<title>Device&#45;&gt;Decodable</title>
-<path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
-<polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
-</g>
 <!-- Equatable -->
-<g id="node3" class="node unknown">
+<g id="node2" class="node unknown">
 <title>Equatable</title>
-<path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
-<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
+<path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
+<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
 </g>
 <!-- Device&#45;&gt;Equatable -->
 <g id="edge2" class="edge conformsTo">
 <title>Device&#45;&gt;Equatable</title>
+<path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
+<polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
+</g>
+<!-- Decodable -->
+<g id="node3" class="node unknown">
+<title>Decodable</title>
+<path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
+<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Decodable</text>
+</g>
+<!-- Device&#45;&gt;Decodable -->
+<g id="edge1" class="edge conformsTo">
+<title>Device&#45;&gt;Decodable</title>
 <path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
 </g>
@@ -117,11 +117,11 @@
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="device.init(identifier:displayname:projectid:labels:type:reportedevents:)">
+        <div role="article" class="initializer" id="device.init(identifier:displayname:projectid:labels:type:reportedevents:isemulateddevice:)">
     <h3>
-        <code>init(identifier:​display​Name:​project​ID:​labels:​type:​reported​Events:​)</code>
+        <code>init(identifier:​display​Name:​project​ID:​labels:​type:​reported​Events:​is​Emulated​Device:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">identifier</span>: <span class="type">String</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">labels</span>: [<span class="type">String</span>: <span class="type">String</span>], <span class="variable">type</span>: <span class="type">DeviceType</span>, <span class="variable">reportedEvents</span>: <span class="type">ReportedEvents</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">identifier</span>: <span class="type">String</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">labels</span>: [<span class="type">String</span>: <span class="type">String</span>], <span class="variable">type</span>: <span class="type">DeviceType</span>, <span class="variable">reportedEvents</span>: <span class="type">ReportedEvents</span>, <span class="variable">isEmulatedDevice</span>: <span class="type">Bool</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Creates a new <code>Device</code>. Creating a new device can be useful for testing purposes.</p>
 
@@ -198,6 +198,16 @@ in that it is just the identifier without the <code>projects/*/devices/</code> p
 
 </div>
 </div>
+<div role="article" class="variable" id="device.isemulateddevice">
+    <h3>
+        <code>is​Emulated​Device</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">isEmulatedDevice</span>: <span class="type">Bool</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Indicates whether the device is a real physical device or an emulated one.</p>
+
+</div>
+</div>
     </section>
 
 
@@ -207,7 +217,7 @@ in that it is just the identifier without the <code>projects/*/devices/</code> p
 
     <footer>
         <p>
-    Generated on <time datetime="2020-12-25T10:20:16+0000">December 25, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2020-12-27T15:21:30+0000">December 27, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
