@@ -10,15 +10,14 @@ import Foundation
 
 
 /**
- Represent an event stream for a device, and is implemented using [Server-Sent Events](https://www.w3.org/TR/eventsource/).
+ Represent an event stream for a device, and is implemented using [Server-Sent Events](https://html.spec.whatwg.org/multipage/server-sent-events.html).
  
  Has callbacks that can be set for each type of event. Note that which event type is available for a device depends on the device type.
  
  Example:
  ```
- let stream = disruptive.subscribeToDevice(
-    projectID  : "<PROJECT_ID>",
-    deviceID   : "<DEVICE_ID>",
+ let stream = disruptive.subscribeToDevices(
+    projectID: "<PROJECT_ID>"
  )
  stream?.onTemperature = { deviceID, temperatureEvent in
     print("Got temperature \(temperatureEvent) for device with id \(deviceID)")
@@ -93,7 +92,7 @@ public class DeviceEventStream: NSObject {
     
     
     
-    private static var sseConfig: URLSessionConfiguration = {
+    internal static var sseConfig: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest  = .greatestFiniteMagnitude
         config.timeoutIntervalForResource = .greatestFiniteMagnitude
@@ -206,64 +205,89 @@ extension DeviceEventStream: URLSessionDataDelegate {
         dataTask: URLSessionDataTask,
         didReceive data: Data)
     {
-        // We got data, so reset the retry scheme
-        retryScheme.reset()
-        
-        // Somewhat clunky way to parse this data:
-        // - Convert to String
-        // - Split on "\n\n"
-        // - Remove empty strings
-        // - Remove the "data: " prefix
-        // - Convert back to Data
-        // - JSON decode the Data
-        
-        guard let payloadStr = String(data: data, encoding: .utf8) else {
+        guard let response = dataTask.response as? HTTPURLResponse,
+              let contentType = response.allHeaderFields["Content-Type"] as? String,
+              contentType == "text/event-stream",
+              response.statusCode == 200
+        else {
+            DTLog("Unexpected response: \(String(describing: dataTask.response))", isError: true)
             return
         }
         
-        let eventJSONs: [Data] = payloadStr.components(separatedBy: "\n\n").compactMap {
-            // Return nil it it's an empty string. compactMap(...) will remove it
-            if $0.count == 0 { return nil }
-            
-            // Remove the "data: " prefix, leaving just the event JSON
-            let jsonStr = $0.replacingOccurrences(of: "data: ", with: "")
-            
-            // Convert the JSON String to Data
-            return jsonStr.data(using: .utf8)
-        }
-        
-        let decoder = JSONDecoder()
-        for eventData in eventJSONs {
-            do {
-                let streamPacket = try decoder.decode(StreamPacket.self, from: eventData)
+        // We got data, so reset the retry scheme
+        retryScheme.reset()
                 
-                // Reading out the device ID and the event of each stream packet,
-                // and calling the appropriate callback closure
-                switch streamPacket.result.event {
-                    // Events
-                    case .touch              (let d, let e): onTouch?(d, e)
-                    case .temperature        (let d, let e): onTemperature?(d, e)
-                    case .objectPresent      (let d, let e): onObjectPresent?(d, e)
-                    case .humidity           (let d, let e): onHumidity?(d, e)
-                    case .objectPresentCount (let d, let e): onObjectPresentCount?(d, e)
-                    case .touchCount         (let d, let e): onTouchCount?(d, e)
-                    case .waterPresent       (let d, let e): onWaterPresent?(d, e)
-                    
-                    // Sensor status
-                    case .networkStatus      (let d, let e): onNetworkStatus?(d, e)
-                    case .batteryStatus      (let d, let e): onBatteryStatus?(d, e)
-//                    case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
-                    
-                    // Cloud connector
-                    case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)
-                    case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
-                    case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
-                }
-            } catch {
-                DTLog("Failed to decode: \(String(describing: String(data: data, encoding: .utf8))). Error: \(error)", isError: true)
-            }
+        guard let payloadStr = String(data: data, encoding: .utf8) else {
+            return
         }
-        
+                
+        // Decoding using scheme from:
+        // https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation
+        // Assumes all fields will be "data", and ignores event IDs. Only supports
+        // one event per block (data buffer), An event can be spread across
+        // multiple data fields, as long as it's all within the same block.
+        var dataBuffer = ""
+        for line in payloadStr.components(separatedBy: "\n") {
+            if line.count == 0 && dataBuffer.count > 0 {
+                // Dispatching the data buffer
+                handleNewDataBuffer(dataBuffer)
+                dataBuffer = ""
+                continue
+            }
+            if line.hasPrefix(":") {
+                continue // Comment
+            }
+            if line.contains(":") == false {
+                // Ignoring lines that doesn't contain ":", even though it's
+                // allowed by the spec.
+                continue
+            }
+            let field = line.components(separatedBy: ":")[0]
+            let value = line.dropFirst((field+":").count).trimmingCharacters(in: .whitespaces)
+            
+            // Only handling "data" fields
+            guard field == "data" else {
+                DTLog("Not handling unexpected field: \(field)", isError: true)
+                continue
+            }
+            
+            dataBuffer += value
+        }
+    }
+    
+    private func handleNewDataBuffer(_ dataBuffer: String) {
+        guard dataBuffer.count > 0, let data = dataBuffer.data(using: .utf8) else {
+            DTLog("Couldn't convert: \"\(dataBuffer)\" to Data")
+            return
+        }
+        do {
+            let streamPacket = try JSONDecoder().decode(StreamPacket.self, from: data)
+            
+            // Reading out the device ID and the event of each stream packet,
+            // and calling the appropriate callback closure
+            switch streamPacket.result.event {
+                // Events
+                case .touch              (let d, let e): onTouch?(d, e)
+                case .temperature        (let d, let e): onTemperature?(d, e)
+                case .objectPresent      (let d, let e): onObjectPresent?(d, e)
+                case .humidity           (let d, let e): onHumidity?(d, e)
+                case .objectPresentCount (let d, let e): onObjectPresentCount?(d, e)
+                case .touchCount         (let d, let e): onTouchCount?(d, e)
+                case .waterPresent       (let d, let e): onWaterPresent?(d, e)
+                    
+                // Sensor status
+                case .networkStatus      (let d, let e): onNetworkStatus?(d, e)
+                case .batteryStatus      (let d, let e): onBatteryStatus?(d, e)
+                //                    case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
+                
+                // Cloud connector
+                case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)
+                case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
+                case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
+            }
+        } catch {
+            DTLog("Failed to decode: \(dataBuffer). Error: \(error)", isError: true)
+        }
     }
     
     public func urlSession(

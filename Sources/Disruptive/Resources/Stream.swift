@@ -61,20 +61,6 @@ extension Disruptive {
     }
     
     /**
-        Convenience function to subscribe to just a single device. See `subscribeToDevices` for more details.
-     
-        - Parameter device: The device to subscribe to.
-        - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
-     */
-    public func subscribeToDevice(_ device: Device, eventTypes: [EventType]? = nil) -> DeviceEventStream? {
-        return subscribeToDevice(
-            projectID  : device.projectID,
-            deviceID   : device.identifier,
-            eventTypes : eventTypes
-        )
-    }
-    
-    /**
      Convenience function to subscribe to just a single device. See `subscribeToDevices` for more details.
      
      - Parameter projectID: The identifier of the project the device is currently in.

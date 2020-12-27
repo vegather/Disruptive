@@ -34,8 +34,11 @@ public struct Device: Decodable, Equatable {
     /// The last known reported event for each available event type for the device. Which of these are available is dependent on the device `type`.
     public var reportedEvents: ReportedEvents
     
+    /// Indicates whether the device is a real physical device or an emulated one.
+    public let isEmulatedDevice: Bool
+    
     /// Creates a new `Device`. Creating a new device can be useful for testing purposes.
-    public init(identifier: String, displayName: String, projectID: String, labels: [String: String], type: DeviceType, reportedEvents: ReportedEvents)
+    public init(identifier: String, displayName: String, projectID: String, labels: [String: String], type: DeviceType, reportedEvents: ReportedEvents, isEmulatedDevice: Bool)
     {
         self.identifier = identifier
         self.displayName = displayName
@@ -43,6 +46,7 @@ public struct Device: Decodable, Equatable {
         self.labels = labels
         self.type = type
         self.reportedEvents = reportedEvents
+        self.isEmulatedDevice = isEmulatedDevice
     }
 }
 
@@ -264,8 +268,9 @@ extension Device {
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: projectResourceName)
         }
+        let id = resourceNameComponents[3]
+        self.identifier = id
         self.projectID  = resourceNameComponents[1]
-        self.identifier = resourceNameComponents[3]
         
         // Getting the other properties without any modifications
         self.labels = try values.decode([String: String].self, forKey: .labels)
@@ -275,6 +280,8 @@ extension Device {
         self.displayName = self.labels["name", default: ""]
         
         self.reportedEvents = try values.decode(ReportedEvents.self, forKey: .reported)
+        
+        self.isEmulatedDevice = id.count == 23 && id.hasPrefix("emu")
     }
 }
 
