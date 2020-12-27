@@ -282,14 +282,14 @@ Emulator
 - [ ] Labels changed support. The `labelsChanged` event has a slightly different structure than the rest of the event types. It was added to this repo before this was realized, so the implementation is simply commented-out until proper parsing logic is implemented. 
 - [x] ~~Finish documenting all types, properties, and methods.~~
 - [ ] Improve `DTLog` to include file and line numbers in a nicely formatted output. At this point it could also be a public function.
-- [ ] Reach 90%+ code coverage for the unit tests.
+- [x] Reach 90%+ code coverage for the unit tests.
 - Areas that still needs unit testing
     - [ ] `Authentication.swift` - `getActiveAccessToken` and error handling in `OAuth2Authenticator.refreshAccessToken`
-    - [ ] `DeviceEventStream.swift`
+    - [x] `DeviceEventStream.swift`
     - [ ] `EventTypes.swift`
     - [ ] `Requests.swift`
     - [ ] `RetryScheme.swift`
-    - [ ] `Stream.swift`
+    - [x] `Stream.swift`
     - [ ] Network Tests: pagination, errors
 - [ ] Add Combine support for server sent events.
 - [ ] Add global option not wait for re-attempts when rate-limiting, and just return the error instead.
