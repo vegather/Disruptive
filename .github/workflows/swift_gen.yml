@@ -34,7 +34,7 @@ jobs:
       with:
         label: 'Code Coverage'
         status: ${{ steps.coverage_step.outputs.coverage }}%
-        color: 'orange' #'green'
+        color: 'green'
         path: '.github/badges/coverage.svg'
 
     # The coverage.json file generated in a previous step caused errors 
