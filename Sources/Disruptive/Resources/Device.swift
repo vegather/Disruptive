@@ -268,9 +268,10 @@ extension Device {
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: projectResourceName)
         }
+        self.projectID  = resourceNameComponents[1]
         let id = resourceNameComponents[3]
         self.identifier = id
-        self.projectID  = resourceNameComponents[1]
+        self.isEmulatedDevice = id.count == 23 && id.hasPrefix("emu")
         
         // Getting the other properties without any modifications
         self.labels = try values.decode([String: String].self, forKey: .labels)
@@ -280,8 +281,6 @@ extension Device {
         self.displayName = self.labels["name", default: ""]
         
         self.reportedEvents = try values.decode(ReportedEvents.self, forKey: .reported)
-        
-        self.isEmulatedDevice = id.count == 23 && id.hasPrefix("emu")
     }
 }
 

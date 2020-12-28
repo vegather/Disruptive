@@ -33,7 +33,7 @@ extension Disruptive {
     /**
      Get a list of all the available roles that can be assigned to a member of a project or an organization.
      
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the array of `Role`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the array of `Role`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Role], DisruptiveError>`
      */
     public func getRoles(

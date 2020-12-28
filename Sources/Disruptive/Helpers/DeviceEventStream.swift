@@ -228,10 +228,12 @@ extension DeviceEventStream: URLSessionDataDelegate {
         // multiple data fields, as long as it's all within the same block.
         var dataBuffer = ""
         for line in payloadStr.components(separatedBy: "\n") {
-            if line.count == 0 && dataBuffer.count > 0 {
-                // Dispatching the data buffer
-                handleNewDataBuffer(dataBuffer)
-                dataBuffer = ""
+            if line.count == 0 {
+                if dataBuffer.count > 0 {
+                    // Dispatching the data buffer
+                    handleNewDataBuffer(dataBuffer)
+                    dataBuffer = ""
+                }
                 continue
             }
             if line.hasPrefix(":") {

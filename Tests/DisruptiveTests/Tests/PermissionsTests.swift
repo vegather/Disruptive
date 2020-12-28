@@ -104,7 +104,6 @@ class PermissionsTests: DisruptiveTests {
 extension PermissionsTests {
     
     private func createPermissionJSONString(from permission: Permission) -> String {
-//        return "[\(permissions.map { "\"\($0.rawValue)\"" }.joined(separator: ","))]"
         return "\"\(permission.rawValue)\""
     }
     

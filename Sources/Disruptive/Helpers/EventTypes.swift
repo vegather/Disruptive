@@ -9,6 +9,31 @@
 import Foundation
 
 
+/// An enumeration of all the possible types of events that a device can emit.
+public enum EventType: String, Decodable, CodingKey, CaseIterable {
+    // Events
+    case touch
+    case temperature
+    case objectPresent
+    case humidity
+    case objectPresentCount
+    case touchCount
+    case waterPresent
+    
+    // Sensor status
+    case networkStatus
+    case batteryStatus
+    //    case labelsChanged
+    
+    // Cloud Connector
+    case connectionStatus
+    case ethernetStatus
+    case cellularStatus
+}
+
+
+
+
 // -------------------------------
 // MARK: Events
 // -------------------------------
@@ -45,7 +70,7 @@ public struct TouchEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#temperatureevent) for more details.
 public struct TemperatureEvent: Decodable, Equatable {
     
-    /// The temperature value in celcius
+    /// The temperature value in celsius
     public let value: Float
     
     /// The timestamp the temperature event was generated
@@ -659,28 +684,6 @@ public struct CellularStatusEvent: Decodable, Equatable {
 // -------------------------------
 // MARK: Events
 // -------------------------------
-
-/// An enumeration of all the possible types of events that a device can emit.
-public enum EventType: String, Decodable, CodingKey, CaseIterable {
-    // Events
-    case touch
-    case temperature
-    case objectPresent
-    case humidity
-    case objectPresentCount
-    case touchCount
-    case waterPresent
-    
-    // Sensor status
-    case networkStatus
-    case batteryStatus
-//    case labelsChanged
-    
-    // Cloud Connector
-    case connectionStatus
-    case ethernetStatus
-    case cellularStatus
-}
 
 /// Used to simplify event JSON parsing.
 internal enum EventContainer: Decodable, Equatable {
