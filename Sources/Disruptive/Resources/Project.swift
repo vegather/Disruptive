@@ -124,7 +124,7 @@ extension Disruptive {
             // Create the new project
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", isError: true)
+            DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", level: .error)
             completion(.failure(.unknownError))
         }
     }
@@ -173,7 +173,7 @@ extension Disruptive {
             // Update the project display name
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init the update project request with payload: \(payload). Error: \(error)", isError: true)
+            DTLog("Failed to init the update project request with payload: \(payload). Error: \(error)", level: .error)
             completion(.failure(.unknownError))
         }
     }

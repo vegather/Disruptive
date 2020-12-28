@@ -106,7 +106,7 @@ internal extension AuthProvider {
     func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
         if shouldAutoRefreshAccessToken == false {
             // We should no longer be logged in. Just return the `.loggedOut` error code
-            DTLog("The `AuthProvider` is not logged in. Call `login()` on the `AuthProvider` to log back in.")
+            DTLog("The `AuthProvider` is not logged in. Call `login()` on the `AuthProvider` to log back in.", level: .error)
             completion(.failure(.loggedOut))
         } else if let authToken = getLocalAuthToken() {
             // There already exists a non-expired auth token
@@ -122,11 +122,11 @@ internal extension AuthProvider {
                         DTLog("Authentication successful")
                         completion(.success(authToken))
                     } else {
-                        DTLog("The auth provider authenticated successfully, but unexpectedly there was not a non-expired local access token available.", isError: true)
+                        DTLog("The auth provider authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
                         completion(.failure(.unknownError))
                     }
                 case .failure(let e):
-                    DTLog("Failed to authenticate the auth provider with error: \(e)", isError: true)
+                    DTLog("Failed to authenticate the auth provider with error: \(e)", level: .error)
                     completion(.failure(e))
                 }
             }
@@ -275,7 +275,7 @@ public class OAuth2Authenticator: AuthProvider {
     /// This flow is described in more detail on the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication).
     public func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         guard let authJWT = JWT.serviceAccount(authURL: authURL, credentials: credentials) else {
-            DTLog("Failed to create a JWT from service account credentials: \(credentials)", isError: true)
+            DTLog("Failed to create a JWT from service account credentials: \(credentials)", level: .error)
             completion(.failure(.unknownError))
             return
         }
@@ -309,14 +309,14 @@ public class OAuth2Authenticator: AuthProvider {
                             completion(.success(()))
                         }
                     case .failure(let e):
-                        DTLog("OAuth2 authentication failed with error: \(e)")
+                        DTLog("OAuth2 authentication failed with error: \(e)", level: .error)
                         DispatchQueue.main.async {
                             completion(.failure(e))
                         }
                 }
             }
         } catch {
-            DTLog("Failed to encode body: \(body). Error: \(error)", isError: true)
+            DTLog("Failed to encode body: \(body). Error: \(error)", level: .error)
             completion(.failure(.unknownError))
             return
         }
