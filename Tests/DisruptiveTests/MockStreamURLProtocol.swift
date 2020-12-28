@@ -63,7 +63,7 @@ class MockStreamURLProtocol: URLProtocol {
             }
         }
         
-        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(100)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) {
             self.handleNextCallback()
         }
     }
