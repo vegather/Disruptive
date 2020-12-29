@@ -153,16 +153,7 @@ extension Disruptive {
         forOrganizationID orgID : String,
         completion            : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
-        // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations/\(orgID)/permissions")
-        
-        // Send the request
-        sendRequest(request, pagingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
-            switch response {
-                case .success(let wrappers) : completion(.success(wrappers.compactMap { $0.permission }))
-                case .failure(let error)    : completion(.failure(error))
-            }
-        }
+        getPermissions(endpoint: "organizations/\(orgID)/permissions") { completion($0) }
     }
     
     /**
@@ -176,8 +167,15 @@ extension Disruptive {
         forProjectID projectID : String,
         completion           : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
+        getPermissions(endpoint: "projects/\(projectID)/permissions") { completion($0) }
+    }
+    
+    private func getPermissions(
+        endpoint: String,
+        completion: @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
+    {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/permissions")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
         
         // Send the request
         sendRequest(request, pagingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
