@@ -390,6 +390,11 @@ extension DataConnector {
         /// It can be reactivated by calling the `updateDataConnector` function.
         case systemDisabled
         
+        /// The status received for the Data Connector was unknown.
+        /// Added for backwards compatibility in case a new status
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
+        
         
         // Used for testing, and internally for creating requests
         internal var rawValue: String {
@@ -397,6 +402,7 @@ extension DataConnector {
                 case .active         : return CodingKeys.active.rawValue
                 case .deactivated    : return CodingKeys.deactivated.rawValue
                 case .systemDisabled : return CodingKeys.systemDisabled.rawValue
+                case .unknown(let s) : return s
             }
         }
         
@@ -410,9 +416,8 @@ extension DataConnector {
         // Doing some custom decoding because "USER_DISABLED" is the same
         // as "DEACTIVATED" and is likely never actually used. This allows
         // for backwards compatibility in case we want to actually remove
-        // the case later (we can always add it later, harder to remove),
-        // while at the same time mitigating a potential crash if the case
-        // happens to be set at some point.
+        // the case later, while at the same time mitigating a potential
+        // crash if the case happens to be set at some point.
         public init(from decoder: Decoder) throws {
             let container    = try decoder.singleValueContainer()
             let statusString = try container.decode(String.self)
@@ -422,7 +427,7 @@ extension DataConnector {
                 case "DEACTIVATED"     : self = .deactivated
                 case "USER_DISABLED"   : self = .deactivated
                 case "SYSTEM_DISABLED" : self = .systemDisabled
-                default: throw ParseError.unexpectedEnumCase(string: statusString)
+                default                : self = .unknown(value: statusString)
             }
         }
     }
@@ -445,6 +450,11 @@ extension DataConnector {
          * `headers`: Any additional headers that should be included with every event pushed from the Data Connector.
          */
         case httpPush(url: String, signatureSecret: String, headers: [String: String])
+        
+        /// The push type received for the Data Connector was unknown.
+        /// Added for backwards compatibility in case a new push type
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
     }
     
     
@@ -489,20 +499,22 @@ extension DataConnector {
             case "HTTP_PUSH":
                 let httpConfig = try values.nestedContainer(keyedBy: HTTPConfigCodingKeys.self, forKey: .httpConfig)
                 
-                self.pushType = PushType.httpPush(
+                self.pushType = .httpPush(
                     url             : try httpConfig.decode(String.self, forKey: .url),
                     signatureSecret : try httpConfig.decode(String.self, forKey: .signatureSecret),
                     headers         : try httpConfig.decode([String: String].self, forKey: .headers)
                 )
             default:
-                throw ParseError.unexpectedEnumCase(string: typeString)
+                self.pushType = .unknown(value: typeString)
         }
         
+        // Only include the known event types
+        let eventStrings = try values.decode([String].self, forKey: .events)
+        self.events = eventStrings.compactMap { EventType(rawValue: $0) }
         
         // Getting the other properties without any modifications
         self.displayName = try values.decode(String.self, forKey: .displayName)
         self.status      = try values.decode(Status.self, forKey: .status)
-        self.events      = try values.decode([EventType].self, forKey: .events)
         self.labels      = try values.decode([String].self, forKey: .labels)
     }
 

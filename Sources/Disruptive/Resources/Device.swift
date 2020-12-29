@@ -288,17 +288,58 @@ extension Device {
     
     /**
      Represents the type of a `Device`.
+     
+     For more details about the various sensors, see the [DT product page](https://www.disruptive-technologies.com/products/wireless-sensors).
      */
-    public enum DeviceType: String, Codable, CaseIterable {
-        case temperature      = "temperature"
-        case touch            = "touch"
-        case proximity        = "proximity"
-        case humidity         = "humidity"
-        case touchCounter     = "touchCounter"
-        case proximityCounter = "proximityCounter"
-        case waterDetector    = "waterDetector"
-        case cloudConnector   = "ccon"
-        case unknown
+    public enum DeviceType: Decodable, Equatable {
+        case temperature
+        case touch
+        case proximity
+        case humidity
+        case touchCounter
+        case proximityCounter
+        case waterDetector
+        case cloudConnector
+        
+        /// The type received for the device was unknown.
+        /// Added for backwards compatibility in case a new device type
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
+        
+        // This is a slightly clunky setup to let the `DeviceType` be
+        // backwards compatible in case new device types gets added
+        // to the backend.
+        public init(from decoder: Decoder) throws {
+            let str = try decoder.singleValueContainer().decode(String.self)
+            
+            switch str {
+                case "temperature"      : self = .temperature
+                case "touch"            : self = .touch
+                case "proximity"        : self = .proximity
+                case "humidity"         : self = .humidity
+                case "touchCounter"     : self = .touchCounter
+                case "proximityCounter" : self = .proximityCounter
+                case "waterDetector"    : self = .waterDetector
+                case "ccon"             : self = .cloudConnector
+                default                 : self = .unknown(value: str)
+            }
+        }
+        
+        /// Used internally to create requests and for testing.
+        /// Returns `nil` for the `.unknown` device type.
+        internal var rawValue: String? {
+            switch self {
+                case .temperature      : return "temperature"
+                case .touch            : return "touch"
+                case .proximity        : return "proximity"
+                case .humidity         : return "humidity"
+                case .touchCounter     : return "touchCounter"
+                case .proximityCounter : return "proximityCounter"
+                case .waterDetector    : return "waterDetector"
+                case .cloudConnector   : return "ccon"
+                case .unknown          : return nil
+            }
+        }
         
         /// Returns a `String` representation of the device type that is suited for presenting to a user on screen.
         public func displayName() -> String {
@@ -311,7 +352,7 @@ extension Device {
                 case .proximityCounter : return "Proximity Counter"
                 case .waterDetector    : return "Water Detector"
                 case .cloudConnector   : return "Cloud Connector"
-                case .unknown          : return "Unknown"
+                case .unknown(let s)   : return "Unknown (\(s))"
             }
         }
     }

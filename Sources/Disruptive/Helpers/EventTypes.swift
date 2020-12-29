@@ -132,7 +132,7 @@ public struct ObjectPresentEvent: Decodable, Equatable {
             case "PRESENT"    : self.objectPresent = true
             
             // Likely "UNKNOWN"
-            default: throw ParseError.eventType(type: "ObjectPresent: \(stateString)")
+            default: throw ParseError.stateValue(eventType: .objectPresent, state: stateString)
         }
     }
     
@@ -290,7 +290,7 @@ public struct WaterPresentEvent: Decodable, Equatable {
             case "PRESENT"    : self.waterPresent = true
             
             // Likely "UNKNOWN"
-            default: throw ParseError.eventType(type: "WaterPresent: \(stateString)")
+            default: throw ParseError.stateValue(eventType: .waterPresent, state: stateString)
         }
     }
     
@@ -705,6 +705,11 @@ internal enum EventContainer: Decodable, Equatable {
     case connectionStatus   (deviceID: String, event: ConnectionStatusEvent)
     case ethernetStatus     (deviceID: String, event: EthernetStatusEvent)
     case cellularStatus     (deviceID: String, event: CellularStatusEvent)
+    
+    /// Used for backward compatibility in case a new event
+    /// is added on the backend before being added to this
+    /// client library.
+    case unknown(value: String)
 }
 
 extension EventContainer {
@@ -720,7 +725,8 @@ extension EventContainer {
         let eventTypeString = try container.decode(String.self, forKey: .eventType)
         
         guard let eventType = EventType(rawValue: eventTypeString) else {
-            throw ParseError.eventType(type: eventTypeString)
+            self = .unknown(value: "\(eventTypeString)")
+            return
         }
         
         let targetName = try container.decode(String.self, forKey: .targetName)

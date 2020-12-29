@@ -286,6 +286,8 @@ extension DeviceEventStream: URLSessionDataDelegate {
                 case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)
                 case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
                 case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
+                    
+                case .unknown(let eventType): DTLog("Unknown event type: \(eventType)", level: .warning)
             }
         } catch {
             DTLog("Failed to decode: \(dataBuffer). Error: \(error)", level: .error)

@@ -17,11 +17,67 @@ class DeviceTests: DisruptiveTests {
         XCTAssertEqual(deviceIn, deviceOut)
     }
     
+    func testDecodeDeviceWithUnknownValues() {
+        let data = """
+        {
+          "name": "projects/proj1/devices/dev1",
+          "type": "unknownDeviceType",
+          "labels": {
+            "name": "Device"
+          },
+          "reported": {
+            "unknownEvent": {
+              "value": "Some Value",
+              "updateTime": "\(Date().iso8601String())"
+            },
+            "temperature": {
+              "value": 25,
+              "updateTime": "\(Date().iso8601String())"
+            }
+          }
+        }
+        """.data(using: .utf8)!
+        
+        
+        XCTAssertNoThrow(try JSONDecoder().decode(Device.self, from: data))
+    }
+    
     func testDecodeEmulatedDevice() {
         let deviceIn = createDummyDevice(isEmulated: true)
         let deviceOut = try! JSONDecoder().decode(Device.self, from: createDeviceJSON(from: deviceIn))
         
         XCTAssertEqual(deviceIn, deviceOut)
+    }
+    
+    func testDecodeDeviceType() {
+        func assert(_ str: String, equals type: Device.DeviceType) {
+            XCTAssertEqual(
+                try! JSONDecoder().decode(Device.DeviceType.self, from: "\"\(str)\"".data(using: .utf8)!),
+                type
+            )
+        }
+        
+        assert("proximity",        equals: .proximity)
+        assert("touch",            equals: .touch)
+        assert("temperature",      equals: .temperature)
+        assert("proximityCounter", equals: .proximityCounter)
+        assert("touchCounter",     equals: .touchCounter)
+        assert("humidity",         equals: .humidity)
+        assert("ccon",             equals: .cloudConnector)
+        assert("waterDetector",    equals: .waterDetector)
+        assert("shinyNewSensor",   equals: .unknown(value: "shinyNewSensor"))
+    }
+    
+    func testDeviceTypeRawValue() {
+        XCTAssertEqual(Device.DeviceType.proximity         .rawValue, "proximity")
+        XCTAssertEqual(Device.DeviceType.touch             .rawValue, "touch")
+        XCTAssertEqual(Device.DeviceType.temperature       .rawValue, "temperature")
+        XCTAssertEqual(Device.DeviceType.proximityCounter  .rawValue, "proximityCounter")
+        XCTAssertEqual(Device.DeviceType.touchCounter      .rawValue, "touchCounter")
+        XCTAssertEqual(Device.DeviceType.humidity          .rawValue, "humidity")
+        XCTAssertEqual(Device.DeviceType.cloudConnector    .rawValue, "ccon")
+        XCTAssertEqual(Device.DeviceType.waterDetector     .rawValue, "waterDetector")
+        XCTAssertEqual(Device.DeviceType.unknown(value: "").rawValue, nil)
     }
     
     func testGetDevice() {
@@ -343,8 +399,20 @@ class DeviceTests: DisruptiveTests {
     }
     
     func testDeviceTypeDisplayName() {
-        Device.DeviceType.allCases.forEach {
-            XCTAssertTrue($0.displayName().count > 0)
+        let types: [Device.DeviceType] = [
+            .temperature,
+            .touch,
+            .proximity,
+            .humidity,
+            .touchCounter,
+            .proximityCounter,
+            .waterDetector,
+            .cloudConnector,
+            .unknown(value: "Dummy")
+        ]
+        
+        types.forEach {
+            XCTAssertGreaterThan($0.displayName().count, 0)
         }
     }
 }

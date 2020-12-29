@@ -17,6 +17,23 @@ class RoleTests: DisruptiveTests {
         XCTAssertEqual(roleIn, roleOut)
     }
     
+    func testDecodeAccessLevel() {
+        func assert(accessLevel: Role.AccessLevel, equals input: String) {
+            XCTAssertEqual(
+                accessLevel,
+                try! JSONDecoder().decode(Role.AccessLevel.self, from: "\"\(input)\"".data(using: .utf8)!)
+            )
+        }
+
+        assert(accessLevel: .projectUser,       equals: "roles/project.user")
+        assert(accessLevel: .projectDeveloper,  equals: "roles/project.developer")
+        assert(accessLevel: .projectAdmin,      equals: "roles/project.admin")
+        assert(accessLevel: .organizationAdmin, equals: "roles/organization.admin")
+        assert(accessLevel: .unknown(value: "roles/not.a.role"), equals: "roles/not.a.role")
+        
+        XCTAssertThrowsError(try JSONDecoder().decode(Role.AccessLevel.self, from: "\"bad format\"".data(using: .utf8)!))
+    }
+    
     func testGetRoles() {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("roles")
@@ -96,12 +113,13 @@ class RoleTests: DisruptiveTests {
 
 extension RoleTests {
     
+    // Only supports org admin access level
     private func createRoleJSONString(from role: Role) -> String {
         return """
         {
-            "name": "roles/\(role.identifier)",
+            "name": "roles/organization.admin",
             "displayName": "\(role.displayName)",
-            "description": "\(role.description)"
+            "description": "\(role.description)",
         }
         """
     }
@@ -123,9 +141,9 @@ extension RoleTests {
     
     fileprivate func createDummyRole() -> Role {
         return Role(
-            identifier  : "organization.admin",
+            accessLevel : .organizationAdmin,
             displayName : "Organization administrator",
-            description : "Administrator in organization"
+            description : "Administrator in organization",
         )
     }
 }

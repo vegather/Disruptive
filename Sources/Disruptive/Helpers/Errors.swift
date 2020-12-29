@@ -180,7 +180,6 @@ internal enum InternalError: Error {
 internal enum ParseError: Error {
     case identifier(path: String)
     case dateFormat(date: String)
-    case eventType(type: String)
-    case unexpectedEnumCase(string: String)
+    case stateValue(eventType: EventType, state: String)
     case durationFormat(format: String)
 }

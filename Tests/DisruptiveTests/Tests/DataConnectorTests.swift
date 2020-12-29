@@ -17,6 +17,24 @@ class DataConnectorTests: DisruptiveTests {
         XCTAssertEqual(dcIn, dcOut)
     }
     
+    func testDecodeDataConnectorUnknownValues() {
+        let data = """
+        {
+            "name": "projects/proj1/dataconnectors/dc1",
+            "displayName": "DC",
+            "status": "UNKNOWN_DC_STATUS",
+            "events": ["temperature", "networkStatus", "unknownEvent"],
+            "labels": [],
+            "type": "UNKNOWN_PUSH_TYPE"
+        }
+        """.data(using: .utf8)!
+        
+        let dc = try! JSONDecoder().decode(DataConnector.self, from: data)
+        XCTAssertEqual(dc.status, DataConnector.Status.unknown(value: "UNKNOWN_DC_STATUS"))
+        XCTAssertEqual(dc.events, [.temperature, .networkStatus])
+        XCTAssertEqual(dc.pushType, .unknown(value: "UNKNOWN_PUSH_TYPE"))
+    }
+    
     func testDecodeMetrics() {
         let metricsData = """
         {
@@ -36,26 +54,18 @@ class DataConnectorTests: DisruptiveTests {
     }
     
     func testDecodeStatus() {
-        struct StatusContainer: Decodable, Equatable {
-            let status: DataConnector.Status
+        func assert(status: DataConnector.Status, equals input: String) {
+            XCTAssertEqual(
+                status,
+                try! JSONDecoder().decode(DataConnector.Status.self, from: "\"\(input)\"".data(using: .utf8)!)
+            )
         }
         
-        XCTAssertEqual(
-            StatusContainer(status: .active),
-            try! JSONDecoder().decode(StatusContainer.self, from: "{\"status\": \"ACTIVE\"}".data(using: .utf8)!)
-        )
-        XCTAssertEqual(
-            StatusContainer(status: .deactivated),
-            try! JSONDecoder().decode(StatusContainer.self, from: "{\"status\": \"DEACTIVATED\"}".data(using: .utf8)!)
-        )
-        XCTAssertEqual(
-            StatusContainer(status: .deactivated),
-            try! JSONDecoder().decode(StatusContainer.self, from: "{\"status\": \"USER_DISABLED\"}".data(using: .utf8)!)
-        )
-        XCTAssertEqual(
-            StatusContainer(status: .systemDisabled),
-            try! JSONDecoder().decode(StatusContainer.self, from: "{\"status\": \"SYSTEM_DISABLED\"}".data(using: .utf8)!)
-        )
+        assert(status: .active, equals: "ACTIVE")
+        assert(status: .deactivated, equals: "DEACTIVATED")
+        assert(status: .deactivated, equals: "USER_DISABLED")
+        assert(status: .systemDisabled, equals: "SYSTEM_DISABLED")
+        assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: "UNKNOWN_STATUS")
     }
     
     func testGetDataConnectors() {

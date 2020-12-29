@@ -15,10 +15,10 @@ import Foundation
  
  Relevant methods for `Role` can be found on the [Disruptive](../Disruptive) struct.
  */
-public struct Role: Codable, Equatable {
+public struct Role: Decodable, Equatable {
     
-    /// The identifier of the `Role`. Will be in the format `<resource>.<role>`. Example: `project.user`.
-    public let identifier: String
+    /// The level of access that is given to the role.
+    public let accessLevel: AccessLevel
     
     /// The display name of the `Role`. Example: `Project user`.
     public let displayName: String
@@ -66,22 +66,61 @@ extension Disruptive {
 }
 
 extension Role {
+    
+    /// The level of access that is given to a role.
+    public enum AccessLevel: Decodable, Equatable {
+        
+        /// Can only view data in projects, no editing rights.
+        case projectUser
+        
+        /// Can edit devices and project settings.
+        case projectDeveloper
+        
+        /// Can move devices between projects inside the organization.
+        /// Can add and remove users in the project.
+        case projectAdmin
+        
+        /// Can create new Projects and have Project administrator access in all
+        /// Projects of the Organization.
+        case organizationAdmin
+        
+        /// The access level received for the role was unknown.
+        /// Added for backwards compatibility in case a new access level
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
+        
+        // Assumes the data to decode is a role resource name.
+        // Format: "roles/organization.admin"
+        public init(from decoder: Decoder) throws {
+            let resourceName = try decoder
+                .singleValueContainer()
+                .decode(String.self)
+            let parts = resourceName.components(separatedBy: "/")
+            
+            guard parts.count == 2, parts[0] == "roles" else {
+                throw ParseError.identifier(path: resourceName)
+            }
+            switch parts[1] {
+                case "project.user"       : self = .projectUser
+                case "project.developer"  : self = .projectDeveloper
+                case "project.admin"      : self = .projectAdmin
+                case "organization.admin" : self = .organizationAdmin
+                default                   : self = .unknown(value: resourceName)
+            }
+        }
+    }
+    
     private enum CodingKeys: String, CodingKey {
-        case identifier = "name"
+        case accessLevel = "name"
         case displayName
         case description
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        // Role identifiers are formatted as "role/organization.admin"
-        // Setting the identifier to the last component of the resource name
-        let roleResourceName = try values.decode(String.self, forKey: .identifier)
-        self.identifier = roleResourceName.components(separatedBy: "/").last ?? ""
-        
-        // Getting the display name and description properties without any modifications
-        self.displayName = try values .decode(String.self, forKey: .displayName)
-        self.description = try values .decode(String.self, forKey: .description)
+        self.accessLevel = try container.decode(AccessLevel.self, forKey: .accessLevel)
+        self.displayName = try container.decode(String.self,      forKey: .displayName)
+        self.description = try container.decode(String.self,      forKey: .description)
     }
 }

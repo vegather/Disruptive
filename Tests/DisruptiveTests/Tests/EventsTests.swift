@@ -292,6 +292,62 @@ class EventsTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
+    func testGetUnknownEvents() {
+        let reqProjectID = "proj1"
+        let reqDeviceID = "dev1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)/events")
+        let reqQueryParams: [String: [String]] = [
+            "page_size": ["1000"]
+        ]
+        
+        let respData = """
+        {
+            "events": [
+                {
+                    "eventId": "bjehn6sdm92f9pd7f4s0",
+                    "targetName": "projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg",
+                    "eventType": "unknownEvent",
+                    "data": {
+                      "unknownEvent": {
+                        "updateTime": "2019-05-16T08:13:15.361624Z"
+                      }
+                    },
+                    "timestamp": "2019-05-16T08:13:15.361624Z"
+                }
+            ],
+            "nextPageToken": ""
+        }
+        """.data(using: .utf8)!
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : reqQueryParams,
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
+            switch result {
+                case .success(let events):
+                    XCTAssertEqual(events, Events())
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
     func testMergeNothing() {
         var events = Events()
         events.temperature = [TemperatureEvent(value: 67, timestamp: Date())]

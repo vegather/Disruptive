@@ -365,4 +365,38 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         wait(for: [exp], timeout: 0.1)
     }
+    
+    func testUnknownEvent() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
+        
+        let payload = """
+        data: {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/dev1","eventType":"unknownEvent","data":{"unknownEvent":{"value":0,"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
+
+        """.data(using: .utf8)!
+        
+        MockStreamURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : [:],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "text/event-stream"])!
+            return [(payload, resp, nil)]
+        }
+        
+        let exp = expectation(description: "")
+        exp.isInverted = true
+        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+        stream?.onTemperature = { _, _ in exp.fulfill() }
+        stream?.onError = { _ in exp.fulfill()}
+        
+        wait(for: [exp], timeout: 1)
+    }
 }
