@@ -25,6 +25,10 @@ public struct Role: Decodable, Equatable {
     
     /// The description of the `Role`. Example: `User in project`.
     public let description: String
+    
+    /// A list of permissions the role has. Indicates which actions can be
+    /// taken on various resources
+    public let permissions: [Permission]
 }
 
 
@@ -114,6 +118,7 @@ extension Role {
         case accessLevel = "name"
         case displayName
         case description
+        case permissions
     }
     
     public init(from decoder: Decoder) throws {
@@ -122,5 +127,8 @@ extension Role {
         self.accessLevel = try container.decode(AccessLevel.self, forKey: .accessLevel)
         self.displayName = try container.decode(String.self,      forKey: .displayName)
         self.description = try container.decode(String.self,      forKey: .description)
+        self.permissions = try container
+            .decode([PermissionWrapper].self, forKey: .permissions)
+            .compactMap { $0.permission }
     }
 }

@@ -120,6 +120,7 @@ extension RoleTests {
             "name": "roles/organization.admin",
             "displayName": "\(role.displayName)",
             "description": "\(role.description)",
+            "permissions": [\(role.permissions.map { "\"\($0.rawValue)\"" }.joined(separator: ","))]
         }
         """
     }
@@ -144,6 +145,7 @@ extension RoleTests {
             accessLevel : .organizationAdmin,
             displayName : "Organization administrator",
             description : "Administrator in organization",
+            permissions: [.organizationRead, .organizationUpdate]
         )
     }
 }
