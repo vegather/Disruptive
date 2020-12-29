@@ -13,7 +13,7 @@ import Foundation
  
  Relevant methods for `Organization` can be found on the [Disruptive](../Disruptive) struct.
  */
-public struct Organization: Codable, Equatable {
+public struct Organization: Decodable, Equatable {
     
     /// The unique identifier for the organization. This will be different from the `name` field in the REST API
     /// in that it is just the identifier without the `organizations/` prefix.

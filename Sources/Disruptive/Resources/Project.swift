@@ -13,7 +13,7 @@ import Foundation
  
  Relevant methods for `Project` can be found on the [Disruptive](../Disruptive) struct.
  */
-public struct Project: Codable, Equatable {
+public struct Project: Decodable, Equatable {
     
     /// The unique identifier of the project. This will be different from the `name` field in the REST API
     /// in that it is just the identifier without the `projects/` prefix.
