@@ -14,7 +14,9 @@ class MockStreamURLProtocol: URLProtocol {
         didSet {
             // Resetting callbacks when the requestHandler is reset. Likely
             // due to a new test running.
-            callbacks = nil
+            Self.callbacksQ.sync {
+                callbacks = nil
+            }
         }
     }
     
@@ -52,6 +54,8 @@ class MockStreamURLProtocol: URLProtocol {
             
             if let error = callback.error {
                 client?.urlProtocol(self, didFailWithError: error)
+                client?.urlProtocolDidFinishLoading(self)
+                return
             }
             
             if let response = callback.response {
