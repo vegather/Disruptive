@@ -64,7 +64,7 @@ extension Disruptive {
 
 extension Organization {
     private enum CodingKeys: String, CodingKey {
-        case identifier = "name"
+        case resourceName = "name"
         case displayName
     }
     
@@ -73,7 +73,7 @@ extension Organization {
         
         // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
         // Setting the identifier to the last component of the resource name
-        let orgResourceName = try values.decode(String.self, forKey: .identifier)
+        let orgResourceName = try values.decode(String.self, forKey: .resourceName)
         self.identifier = orgResourceName.components(separatedBy: "/").last ?? ""
         
         // Getting the display name property without any modifications

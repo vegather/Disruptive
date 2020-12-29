@@ -182,7 +182,7 @@ extension Disruptive {
 
 extension Project {
     private enum CodingKeys: String, CodingKey {
-        case identifier              = "name"
+        case resourceName            = "name"
         case displayName
         case isInventory             = "inventory"
         case organizationID          = "organization"
@@ -196,7 +196,7 @@ extension Project {
         
         // Project identifiers are formatted as "projects/b7s3e550fee000ba5dhg"
         // Setting the identifier to the last component of the resource name
-        let projectResourceName = try values.decode(String.self, forKey: .identifier)
+        let projectResourceName = try values.decode(String.self, forKey: .resourceName)
         self.identifier = projectResourceName.components(separatedBy: "/").last ?? ""
         
         // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"

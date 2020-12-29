@@ -365,7 +365,7 @@ extension ServiceAccount.Key {
 
 extension ServiceAccount {
     private enum CodingKeys: String, CodingKey {
-        case name
+        case resourceName = "name"
         case email
         case displayName
         case enableBasicAuth
@@ -379,7 +379,7 @@ extension ServiceAccount {
         // Service Account resource names are formatted as
         // "projects/b7s3umd0fee000ba5di0/serviceaccounts/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
-        let saResourceName = try container.decode(String.self, forKey: .name)
+        let saResourceName = try container.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = saResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: saResourceName)

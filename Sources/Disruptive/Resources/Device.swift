@@ -252,7 +252,7 @@ extension Disruptive {
 
 extension Device {
     private enum CodingKeys: String, CodingKey {
-        case name
+        case resourceName = "name"
         case labels
         case type
         case reported
@@ -263,7 +263,7 @@ extension Device {
         
         // Device resource names are formatted as "projects/b7s3umd0fee000ba5di0/devices/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
-        let projectResourceName = try values.decode(String.self, forKey: .name)
+        let projectResourceName = try values.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = projectResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: projectResourceName)
