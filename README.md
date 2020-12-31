@@ -215,7 +215,7 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
 
-Progress: ![Progress](https://progress-bar.dev/37/?scale=54&suffix=%20%2f%2054)
+Progress: ![Progress](https://progress-bar.dev/48/?scale=54&suffix=%20%2f%2054)
 
 - [x] ~~GET /projects/{project}/devices~~
 - [x] ~~POST /projects/{project}/devices:batchUpdate~~
@@ -234,19 +234,19 @@ Progress: ![Progress](https://progress-bar.dev/37/?scale=54&suffix=%20%2f%2054)
 - [x] ~~DELETE /projects/{project}/dataconnectors/{dataconnector}~~
 - [x] ~~GET /projects/{project}/dataconnectors/{dataconnector}:metrics~~
 - [x] ~~POST /projects/{project}/dataconnectors/{dataconnector}:sync~~
-- [ ] GET /organizations/{organization}/members
-- [ ] POST /organizations/{organization}/members
-- [ ] GET /organizations/{organization}/members/{member}
+- [x] ~~GET /organizations/{organization}/members~~
+- [x] ~~POST /organizations/{organization}/members~~
+- [x] ~~GET /organizations/{organization}/members/{member}~~
 - [ ] PATCH /organizations/{organization}/members/{member}
-- [ ] DELETE /organizations/{organization}/members/{member}
-- [ ] GET /organizations/{organization}/members/{member}:getInviteUrl
+- [x] ~~DELETE /organizations/{organization}/members/{member}~~
+- [x] ~~GET /organizations/{organization}/members/{member}:getInviteUrl~~
 - [x] ~~GET /organizations/{organization}/permissions~~
-- [ ] GET /projects/{project}/members
-- [ ] POST /projects/{project}/members
-- [ ] GET /projects/{project}/members/{member}
-- [ ] PATCH /projects/{project}/members/{member}
-- [ ] DELETE /projects/{project}/members/{member}
-- [ ] GET /projects/{project}/members/{member}:getInviteUrl
+- [x] ~~GET /projects/{project}/members~~
+- [x] ~~POST /projects/{project}/members~~
+- [x] ~~GET /projects/{project}/members/{member}~~
+- [x] ~~PATCH /projects/{project}/members/{member}~~
+- [x] ~~DELETE /projects/{project}/members/{member}~~
+- [x] ~~GET /projects/{project}/members/{member}:getInviteUrl~~
 - [x] ~~GET /projects/{project}/permissions~~
 - [x] ~~GET /roles~~
 - [x] ~~GET /roles/{role}~~
