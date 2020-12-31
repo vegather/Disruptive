@@ -17,21 +17,38 @@ class RoleTests: DisruptiveTests {
         XCTAssertEqual(roleIn, roleOut)
     }
     
-    func testDecodeAccessLevel() {
-        func assert(accessLevel: Role.AccessLevel, equals input: String) {
+    func testDecodeRoleType() {
+        func assert(type: Role.RoleType, equals input: String) {
             XCTAssertEqual(
-                accessLevel,
-                try! JSONDecoder().decode(Role.AccessLevel.self, from: "\"\(input)\"".data(using: .utf8)!)
+                type,
+                try! JSONDecoder().decode(Role.RoleType.self, from: "\"\(input)\"".data(using: .utf8)!)
             )
         }
 
-        assert(accessLevel: .projectUser,       equals: "roles/project.user")
-        assert(accessLevel: .projectDeveloper,  equals: "roles/project.developer")
-        assert(accessLevel: .projectAdmin,      equals: "roles/project.admin")
-        assert(accessLevel: .organizationAdmin, equals: "roles/organization.admin")
-        assert(accessLevel: .unknown(value: "roles/not.a.role"), equals: "roles/not.a.role")
+        assert(type: .projectUser,       equals: "roles/project.user")
+        assert(type: .projectDeveloper,  equals: "roles/project.developer")
+        assert(type: .projectAdmin,      equals: "roles/project.admin")
+        assert(type: .organizationAdmin, equals: "roles/organization.admin")
+        assert(type: .unknown(value: "roles/not.a.role"), equals: "roles/not.a.role")
         
-        XCTAssertThrowsError(try JSONDecoder().decode(Role.AccessLevel.self, from: "\"bad format\"".data(using: .utf8)!))
+        XCTAssertThrowsError(try JSONDecoder().decode(Role.RoleType.self, from: "\"bad format\"".data(using: .utf8)!))
+    }
+    
+    func testEncodeRoleType() {
+        func assert(type: Role.RoleType, equals input: String) {
+            XCTAssertEqual(
+                "\"\(input)\"".data(using: .utf8)!,
+                try! JSONEncoder().encode(type)
+            )
+        }
+        
+        // The JSONEncoder will escape the "/"'es, so the result is "roles\/project.user".
+        assert(type: .projectUser,       equals: "roles\\/project.user")
+        assert(type: .projectDeveloper,  equals: "roles\\/project.developer")
+        assert(type: .projectAdmin,      equals: "roles\\/project.admin")
+        assert(type: .organizationAdmin, equals: "roles\\/organization.admin")
+        
+        XCTAssertThrowsError(try JSONEncoder().encode(Role.RoleType.unknown(value: "")))
     }
     
     func testGetRoles() {

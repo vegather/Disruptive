@@ -18,7 +18,7 @@ import Foundation
 public struct Role: Decodable, Equatable {
     
     /// The level of access that is given to the role.
-    public let accessLevel: AccessLevel
+    public let accessLevel: RoleType
     
     /// The display name of the `Role`. Example: `Project user`.
     public let displayName: String
@@ -72,7 +72,7 @@ extension Disruptive {
 extension Role {
     
     /// The level of access that is given to a role.
-    public enum AccessLevel: Decodable, Equatable {
+    public enum RoleType: Codable, Equatable {
         
         /// Can only view data in projects, no editing rights.
         case projectUser
@@ -112,6 +112,18 @@ extension Role {
                 default                   : self = .unknown(value: resourceName)
             }
         }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            
+            switch self {
+                case .projectUser       : try container.encode("roles/project.user")
+                case .projectDeveloper  : try container.encode("roles/project.developer")
+                case .projectAdmin      : try container.encode("roles/project.admin")
+                case .organizationAdmin : try container.encode("roles/organization.admin")
+                case .unknown           : throw DisruptiveError.badRequest
+            }
+        }
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -124,7 +136,7 @@ extension Role {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self.accessLevel = try container.decode(AccessLevel.self, forKey: .accessLevel)
+        self.accessLevel = try container.decode(RoleType.self, forKey: .accessLevel)
         self.displayName = try container.decode(String.self,      forKey: .displayName)
         self.description = try container.decode(String.self,      forKey: .description)
         self.permissions = try container
