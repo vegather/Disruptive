@@ -154,7 +154,7 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init create data connector request with payload \(payload). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init create data connector request with payload \(payload). Error: \(error)", level: .error)
             completion(.failure(.unknownError))
         }
     }
@@ -266,7 +266,7 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init updateDataConnector request with payload: \(patch). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init updateDataConnector request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure(.unknownError))
         }
     }

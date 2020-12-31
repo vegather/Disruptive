@@ -174,7 +174,7 @@ public class DeviceEventStream: NSObject {
                 
                 // Convert to URLRequest
                 guard let urlRequest = req.urlRequest() else {
-                    DTLog("Failed to create URLRequest to restart the ServerSentEvents stream", level: .error)
+                    Disruptive.log("Failed to create URLRequest to restart the ServerSentEvents stream", level: .error)
                     self.onError?(.unknownError)
                     return
                 }
@@ -183,7 +183,7 @@ public class DeviceEventStream: NSObject {
                 self.task = self.session.dataTask(with: urlRequest)
                 self.task?.resume()
             case .failure(let e):
-                DTLog("Failed to authenticate the ServerSentEvents stream. Error: \(e)", level: .error)
+                Disruptive.log("Failed to authenticate the ServerSentEvents stream. Error: \(e)", level: .error)
                 self.onError?(e)
             }
         }
@@ -210,7 +210,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
               contentType == "text/event-stream",
               response.statusCode == 200
         else {
-            DTLog("Unexpected response: \(String(describing: dataTask.response))", level: .error)
+            Disruptive.log("Unexpected response: \(String(describing: dataTask.response))", level: .error)
             return
         }
         
@@ -249,7 +249,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
             
             // Only handling "data" fields
             guard field == "data" else {
-                DTLog("Not handling unexpected field: \(field)", level: .warning)
+                Disruptive.log("Not handling unexpected field: \(field)", level: .warning)
                 continue
             }
             
@@ -259,7 +259,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
     
     private func handleNewDataBuffer(_ dataBuffer: String) {
         guard dataBuffer.count > 0, let data = dataBuffer.data(using: .utf8) else {
-            DTLog("Couldn't convert: \"\(dataBuffer)\" to Data", level: .warning)
+            Disruptive.log("Couldn't convert: \"\(dataBuffer)\" to Data", level: .warning)
             return
         }
         do {
@@ -287,10 +287,10 @@ extension DeviceEventStream: URLSessionDataDelegate {
                 case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
                 case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
                     
-                case .unknown(let eventType): DTLog("Unknown event type: \(eventType)", level: .warning)
+                case .unknown(let eventType): Disruptive.log("Unknown event type: \(eventType)", level: .warning)
             }
         } catch {
-            DTLog("Failed to decode: \(dataBuffer). Error: \(error)", level: .error)
+            Disruptive.log("Failed to decode: \(dataBuffer). Error: \(error)", level: .error)
         }
     }
     
@@ -303,14 +303,14 @@ extension DeviceEventStream: URLSessionDataDelegate {
         let errorMessage = error?.localizedDescription ?? ""
         
         if hasBeenClosed {
-            DTLog("Stream closed")
+            Disruptive.log("Stream closed")
             return
         }
         
-        DTLog("The event stream closed with message: \"\(errorMessage)\". Status code: \(String(describing: statusCode))", level: .warning)
+        Disruptive.log("The event stream closed with message: \"\(errorMessage)\". Status code: \(String(describing: statusCode))", level: .warning)
         
         let backoff = retryScheme.nextBackoff()
-        DTLog("Reconnecting to the event stream in \(backoff)s...")
+        Disruptive.log("Reconnecting to the event stream in \(backoff)s...")
         DispatchQueue.global().asyncAfter(deadline: .now() + backoff) { [weak self] in
             self?.restartStream()
         }

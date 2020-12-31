@@ -115,7 +115,7 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init create service account request with payload \(payload). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init create service account request with payload \(payload). Error: \(error)", level: .error)
             completion(.failure(.unknownError))
         }
     }
@@ -186,7 +186,7 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init updateServiceAccount request with payload: \(patch). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init updateServiceAccount request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure(.unknownError))
         }
     }

@@ -8,22 +8,20 @@
 
 import Foundation
 
-internal enum LogLevel {
+public enum LogLevel {
     case debug
     case info
     case warning
     case error
 }
 
-internal func DTLog(
+public func DTLog(
     _ message   : Any      = "",
     level       : LogLevel = .info,
     filePath    : String   = #file,
     functionName: String   = #function,
     lineNumber  : Int      = #line)
 {
-    guard Disruptive.loggingEnabled else { return }
-    
     let fileNameWidth = 20
     let functionNameWidth = 30
     let lineNumberWidth = 7
@@ -86,4 +84,28 @@ internal func DTLog(
     printString += String(describing: message)
     
     print(printString)
+}
+
+
+internal extension Disruptive {
+    
+    /// Used for internal logging. Lets the `DTLog` global function be public while
+    /// respecting the `Disruptive.loggingEnabled` flag only for internal logging.
+    static func log(
+        _ message   : Any      = "",
+        level       : LogLevel = .info,
+        filePath    : String   = #file,
+        functionName: String   = #function,
+        lineNumber  : Int      = #line)
+    {
+        guard Disruptive.loggingEnabled else { return }
+        
+        DTLog(
+            message,
+            level        : level,
+            filePath     : filePath,
+            functionName : functionName,
+            lineNumber   : lineNumber
+        )
+    }
 }

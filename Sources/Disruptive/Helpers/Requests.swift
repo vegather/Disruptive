@@ -133,7 +133,7 @@ extension Request {
     internal func send<T: Decodable>(decoder: JSONDecoder = JSONDecoder(), completion: @escaping (Result<T, DisruptiveError>) -> ()) {
         
         guard let urlReq = urlRequest() else {
-            DTLog("Failed to create URLRequest from request: \(self)", level: .error)
+            Disruptive.log("Failed to create URLRequest from request: \(self)", level: .error)
             DispatchQueue.main.async {
                 completion(.failure(.unknownError))
             }
@@ -156,7 +156,7 @@ extension Request {
             {
                 // If this error can be converted to a disruptive error
                 if let dtErr = internalError.disruptiveError() {
-                    DTLog("Request to \(urlString) resulted in error: \(dtErr)", level: .error)
+                    Disruptive.log("Request to \(urlString) resulted in error: \(dtErr)", level: .error)
                     DispatchQueue.main.async {
                         completion(.failure(dtErr))
                     }
@@ -165,7 +165,7 @@ extension Request {
                 
                 // Check if we've been rate limited
                 if case .tooManyRequests(let retryAfter) = internalError {
-                    DTLog("Request got rate limited, waiting \(retryAfter) seconds before retrying", level: .warning)
+                    Disruptive.log("Request got rate limited, waiting \(retryAfter) seconds before retrying", level: .warning)
                     
                     // Dispatch the same request again after waiting
                     DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(retryAfter)) {
@@ -176,7 +176,7 @@ extension Request {
                 }
                 
                 // Unhandled error
-                DTLog("The internal error \(internalError) was not handled for \(urlString)", level: .error)
+                Disruptive.log("The internal error \(internalError) was not handled for \(urlString)", level: .error)
                 DispatchQueue.main.async {
                     completion(.failure(.unknownError))
                 }
@@ -200,7 +200,7 @@ extension Request {
             // Parse the returned data
             guard let result: T = Request.parsePayload(data, decoder: decoder) else {
                 DispatchQueue.main.async {
-                    DTLog("Failed to parse the response JSON from \(urlString)", level: .error)
+                    Disruptive.log("Failed to parse the response JSON from \(urlString)", level: .error)
                     completion(.failure(.unknownError))
                 }
                 return
@@ -230,19 +230,19 @@ extension Request {
     {
         // Check if there is an error (server probably not accessible)
         if let error = error {
-            DTLog("Request: \(url) resulted in error: \(error) (code: \(String(describing: (error as? URLError)?.code))), response: \(String(describing: response))", level: .error)
+            Disruptive.log("Request: \(url) resulted in error: \(error) (code: \(String(describing: (error as? URLError)?.code))), response: \(String(describing: response))", level: .error)
             return .serverUnavailable
         }
         
         // Cast response to HTTPURLResponse
         guard let httpResponse = response as? HTTPURLResponse else {
-            DTLog("Request: \(url) resulted in HTTP Error: \(String(describing: error)). Response: \(String(describing: response))", level: .error)
+            Disruptive.log("Request: \(url) resulted in HTTP Error: \(String(describing: error)). Response: \(String(describing: response))", level: .error)
             return .unknownError
         }
         
         // Check if the status code is outside the 2XX range
         guard httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 else {
-            DTLog("Request: \(url) resulted in status code: \(httpResponse.statusCode)", level: .error)
+            Disruptive.log("Request: \(url) resulted in status code: \(httpResponse.statusCode)", level: .error)
             
             switch httpResponse.statusCode {
             case 400: return .badRequest
@@ -260,7 +260,7 @@ extension Request {
                 let retryAfter = Int(retryAfterStr) ?? 5
                 return .tooManyRequests(retryAfter: retryAfter)
             default:
-                DTLog("Unexpected status code: \(httpResponse.statusCode)", level: .error)
+                Disruptive.log("Unexpected status code: \(httpResponse.statusCode)", level: .error)
                 return .unknownError
             }
         }
@@ -276,7 +276,7 @@ extension Request {
     private static func parsePayload<T: Decodable>(_ payload: Data?, decoder: JSONDecoder) -> T? {
         // Unwrap payload
         guard let payload = payload else {
-            DTLog("Didn't get a body in the response as expected", level: .error)
+            Disruptive.log("Didn't get a body in the response as expected", level: .error)
             return nil
         }
         
@@ -286,10 +286,10 @@ extension Request {
         } catch {
             // Failed to decode payload
             if let str = String(data: payload, encoding: .utf8) {
-                DTLog("Failed to parse JSON: \(str)", level: .error)
-                DTLog("Error: \(error)", level: .error)
+                Disruptive.log("Failed to parse JSON: \(str)", level: .error)
+                Disruptive.log("Error: \(error)", level: .error)
             } else {
-                DTLog("Failed to parse payload data: \(payload)", level: .error)
+                Disruptive.log("Failed to parse payload data: \(payload)", level: .error)
             }
             
             return nil
@@ -429,7 +429,7 @@ extension Disruptive {
                                 var nextRequest = req
                                 nextRequest.params["pageToken"] = [pagedResult.nextPageToken]
                                 
-                                DTLog("Still more pages to load for \(String(describing: nextRequest.urlRequest()?.url))")
+                                Disruptive.log("Still more pages to load for \(String(describing: nextRequest.urlRequest()?.url))")
                                 
                                 // Fetch the next page
                                 fetchPages(
