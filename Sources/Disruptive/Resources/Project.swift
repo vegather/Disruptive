@@ -185,30 +185,30 @@ extension Project {
         case resourceName            = "name"
         case displayName
         case isInventory             = "inventory"
-        case organizationID          = "organization"
-        case organizationDisplayName = "organizationDisplayName"
+        case orgResourceName         = "organization"
+        case organizationDisplayName
         case sensorCount
         case cloudConnectorCount
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Project identifiers are formatted as "projects/b7s3e550fee000ba5dhg"
         // Setting the identifier to the last component of the resource name
-        let projectResourceName = try values.decode(String.self, forKey: .resourceName)
+        let projectResourceName = try container.decode(String.self, forKey: .resourceName)
         self.identifier = projectResourceName.components(separatedBy: "/").last ?? ""
         
         // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
         // Setting the identifier to the last component of the resource name
-        let orgResourceName = try values.decode(String.self, forKey: .organizationID)
+        let orgResourceName = try container.decode(String.self, forKey: .orgResourceName)
         self.organizationID = orgResourceName.components(separatedBy: "/").last ?? ""
         
         // Getting the other properties without any modifications
-        self.displayName             = try values.decode(String.self, forKey: .displayName)
-        self.isInventory             = try values.decode(Bool.self,   forKey: .isInventory)
-        self.organizationDisplayName = try values.decode(String.self, forKey: .organizationDisplayName)
-        self.sensorCount             = try values.decode(Int.self,    forKey: .sensorCount)
-        self.cloudConnectorCount     = try values.decode(Int.self,    forKey: .cloudConnectorCount)
+        self.displayName             = try container.decode(String.self, forKey: .displayName)
+        self.isInventory             = try container.decode(Bool.self,   forKey: .isInventory)
+        self.organizationDisplayName = try container.decode(String.self, forKey: .organizationDisplayName)
+        self.sensorCount             = try container.decode(Int.self,    forKey: .sensorCount)
+        self.cloudConnectorCount     = try container.decode(Int.self,    forKey: .cloudConnectorCount)
     }
 }
