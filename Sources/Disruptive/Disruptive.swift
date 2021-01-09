@@ -24,7 +24,7 @@ public struct Disruptive {
     /// The default base URL for authenticating against the Disruptive Technologies REST API in the production environment.
     public static let defaultAuthURL = "https://identity.disruptive-technologies.com/oauth2/token"
     
-    /// The base URL for the Disruptive REST API.
+    /// The base URL for the Disruptive Technologies REST API.
     public let baseURL: String
     
     /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`.

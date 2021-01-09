@@ -43,7 +43,7 @@ public enum EventType: String, Decodable, CodingKey, CaseIterable {
 ///
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_e9491be1-b53d-447b-9c21-de436175a0e1) for more details.
 public struct TouchEvent: Decodable, Equatable {
-    /// The timestamp of when the device was touched
+    /// The timestamp of when the device was touched.
     public let timestamp: Date
     
     
@@ -70,10 +70,10 @@ public struct TouchEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#temperatureevent) for more details.
 public struct TemperatureEvent: Decodable, Equatable {
     
-    /// The temperature value in celsius
+    /// The temperature value in celsius.
     public let value: Float
     
-    /// The timestamp the temperature event was generated
+    /// The timestamp the temperature event was generated.
     public let timestamp: Date
     
     
@@ -105,10 +105,10 @@ public struct TemperatureEvent: Decodable, Equatable {
 ///  See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#objectpresentevent) for more details.
 public struct ObjectPresentEvent: Decodable, Equatable {
     
-    /// Whether or not an object is close to the proximity sensor
     public let objectPresent: Bool
+    /// Whether or not an object is close to the proximity sensor.
     
-    /// The timestamp of when the presence of an object switched state
+    /// The timestamp of when the presence of an object switched state.
     public let timestamp: Date
     
     
@@ -148,13 +148,13 @@ public struct ObjectPresentEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#humidityevent) for more details.
 public struct HumidityEvent: Decodable, Equatable {
     
-    /// The temperature value in celsius
+    /// The temperature value in celsius.
     public let temperature: Float
     
-    /// The relative humidity as a percentage
+    /// The relative humidity as a percentage.
     public let relativeHumidity: Float
     
-    /// The timestamp the humidity event was generated
+    /// The timestamp the humidity event was generated.
     public let timestamp: Date
     
     
@@ -191,10 +191,10 @@ public struct HumidityEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_cc5229d5-adb4-46fb-9293-2f4178494e6d) for more details.
 public struct ObjectPresentCountEvent: Decodable, Equatable {
     
-    /// The total accumulated state switches for this sensor
+    /// The total accumulated state switches for this sensor.
     public let total: Int
     
-    /// The timestamp the event was generated
+    /// The timestamp the event was generated.
     public let timestamp: Date
     
     
@@ -227,10 +227,10 @@ public struct ObjectPresentCountEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_942dab91-0826-458a-a0bb-2c28ab92d21b) for more details.
 public struct TouchCountEvent: Decodable, Equatable {
     
-    /// The total accumulated number of touches for this sensor
+    /// The total accumulated number of touches for this sensor.
     public let total: Int
     
-    /// The timestamp the event was generated
+    /// The timestamp the event was generated.
     public let timestamp: Date
     
     
@@ -263,10 +263,10 @@ public struct TouchCountEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_fbe6f0b1-a42c-4072-aaa1-46d117c0be99) for more details.
 public struct WaterPresentEvent: Decodable, Equatable {
     
-    /// Whether or not water was detected close to the sensor
     public let waterPresent: Bool
+    /// Whether or not water was detected close to the sensor.
     
-    /// The timestamp of when the state of water presence was changed
+    /// The timestamp of when the state of water presence was changed.
     public let timestamp: Date
     
     
@@ -645,10 +645,10 @@ public struct CellularStatusEvent: Decodable, Equatable {
     
     /// Indicates an error related to connecting to the cellular network.
     public struct ErrorMessage: Decodable, Equatable {
-        /// The error code
+        /// The error code.
         public let code: String
         
-        /// The error message
+        /// The error message.
         public let message: String
     }
     

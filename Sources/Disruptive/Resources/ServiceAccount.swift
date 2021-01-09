@@ -82,8 +82,11 @@ extension Disruptive {
     }
     
     /**
-     Creates a new Service Account within a specific project. This Service Account will by default not
-     have access to any resources, it will just have the specified project as its parent.
+     Creates a new Service Account within a specific project.
+     
+     __NOTE__: This Service Account will by default not have access to any resources.
+     In order to allow the Service Account to send API requests, add it as a `Member` to a project
+     or an organization.
      
      - Parameter projectID: The identifier of the project to create the Service Account in.
      - Parameter displayName: The display name to give the Service Account.

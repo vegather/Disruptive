@@ -56,7 +56,7 @@ extension Disruptive {
      Gets details for a specific device. This device could be found within a specific project, or if the `projectID` argument is not specified (or nil), throughout all the project available to the authenticated account.
      
      - Parameter projectID: The identifier of the project to find the device in. If default value (nil) is used, a wildcard character will be used for the projectID that searches through all the project the authenticated account has access to.
-     - Parameter deviceID: The identifier of the device to get details on.
+     - Parameter deviceID: The identifier of the device to get details for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Device, DisruptiveError>`
      */
@@ -74,7 +74,7 @@ extension Disruptive {
     }
     
     /**
-     Gets a list of devices in a specific project.
+     Gets all the devices in a specific project (including emulated devices).
      
      - Parameter projectID: The identifier of the project to get devices from.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
