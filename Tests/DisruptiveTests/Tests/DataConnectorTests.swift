@@ -51,6 +51,18 @@ class DataConnectorTests: DisruptiveTests {
         XCTAssertEqual(decoded.successCount, 526)
         XCTAssertEqual(decoded.errorCount, 0)
         XCTAssertEqual(decoded.latency99p, 0.239)
+        
+        let invalidMetricsData = """
+        {
+          "metrics": {
+            "successCount": 526,
+            "errorCount": 0,
+            "latency99p": "invalid"
+          }
+        }
+        """.data(using: .utf8)!
+        
+        XCTAssertThrowsError(try JSONDecoder().decode(DataConnector.Metrics.self, from: invalidMetricsData))
     }
     
     func testDecodeStatus() {
