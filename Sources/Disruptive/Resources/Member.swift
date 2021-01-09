@@ -365,7 +365,7 @@ extension Disruptive {
         memberID        : String,
         completion      : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
     {
-        getMemberInviteURL(endpoint: "organizations/\(organizationID)/members/\(memberID)") { completion($0) }
+        getMemberInviteURL(endpoint: "organizations/\(organizationID)/members/\(memberID):getInviteUrl") { completion($0) }
     }
     
     /**
@@ -387,7 +387,7 @@ extension Disruptive {
         memberID   : String,
         completion : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
     {
-        getMemberInviteURL(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
+        getMemberInviteURL(endpoint: "projects/\(projectID)/members/\(memberID):getInviteUrl") { completion($0) }
     }
     
     private func getMemberInviteURL(

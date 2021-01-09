@@ -416,7 +416,7 @@ class MemberTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
-            .appendingPathComponent("projects/\(reqProjectID)/members/\(reqMemberID)")
+            .appendingPathComponent("projects/\(reqProjectID)/members/\(reqMemberID):getInviteUrl")
         
         let respURL = "https://identity.disruptive-technologies.com/account/invite/foo/bar/?next=https%3A%2F%2Fstudio.disruptive-technologies.com"
         let respData = """
@@ -457,7 +457,7 @@ class MemberTests: DisruptiveTests {
         let reqOrgID = "org1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
-            .appendingPathComponent("organizations/\(reqOrgID)/members/\(reqMemberID)")
+            .appendingPathComponent("organizations/\(reqOrgID)/members/\(reqMemberID):getInviteUrl")
         
         let respURL = "https://identity.disruptive-technologies.com/account/invite/foo/bar/?next=https%3A%2F%2Fstudio.disruptive-technologies.com"
         let respData = """
