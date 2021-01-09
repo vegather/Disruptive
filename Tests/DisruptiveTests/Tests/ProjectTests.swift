@@ -120,7 +120,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.createProject(displayName: reqDisplayName, organizationID: reqOrgID) { result in
+        disruptive.createProject(organizationID: reqOrgID, displayName: reqDisplayName) { result in
             switch result {
                 case .success(let p):
                     XCTAssertEqual(p, respProject)

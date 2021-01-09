@@ -101,14 +101,14 @@ extension Disruptive {
     /**
      Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful.
      
-     - Parameter displayName: The display name of the new project.
      - Parameter organizationID: The identifier of the organization to create the project in.
+     - Parameter displayName: The display name of the new project.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
     public func createProject(
-        displayName    : String,
         organizationID : String,
+        displayName    : String,
         completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
         // Create body for new project
