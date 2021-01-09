@@ -153,16 +153,7 @@ extension Disruptive {
         forOrganizationID orgID : String,
         completion            : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
-        // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations/\(orgID)/permissions")
-        
-        // Send the request
-        sendRequest(request, pagingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
-            switch response {
-                case .success(let wrappers) : completion(.success(wrappers.compactMap { $0.permission }))
-                case .failure(let error)    : completion(.failure(error))
-            }
-        }
+        getPermissions(endpoint: "organizations/\(orgID)/permissions") { completion($0) }
     }
     
     /**
@@ -176,8 +167,15 @@ extension Disruptive {
         forProjectID projectID : String,
         completion           : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
+        getPermissions(endpoint: "projects/\(projectID)/permissions") { completion($0) }
+    }
+    
+    private func getPermissions(
+        endpoint: String,
+        completion: @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
+    {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/permissions")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
         
         // Send the request
         sendRequest(request, pagingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
@@ -199,10 +197,17 @@ internal struct PermissionWrapper: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         
-        if let str = try? container.decode(String.self) {
-            self.permission = Permission(rawValue: str)
-        } else {
+        guard let str = try? container.decode(String.self) else {
+            Disruptive.log("Can't get String from expected Permission value", level: .warning)
             self.permission = nil
+            return
         }
+        guard let permission = Permission(rawValue: str) else {
+            Disruptive.log("Unknown permission type: \(str)", level: .warning)
+            self.permission = nil
+            return
+        }
+        
+        self.permission = permission
     }
 }

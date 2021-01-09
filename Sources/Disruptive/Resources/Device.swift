@@ -56,7 +56,7 @@ extension Disruptive {
      Gets details for a specific device. This device could be found within a specific project, or if the `projectID` argument is not specified (or nil), throughout all the project available to the authenticated account.
      
      - Parameter projectID: The identifier of the project to find the device in. If default value (nil) is used, a wildcard character will be used for the projectID that searches through all the project the authenticated account has access to.
-     - Parameter deviceID: The identifier of the device to get details on.
+     - Parameter deviceID: The identifier of the device to get details for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Device, DisruptiveError>`
      */
@@ -74,7 +74,7 @@ extension Disruptive {
     }
     
     /**
-     Gets a list of devices in a specific project.
+     Gets all the devices in a specific project (including emulated devices).
      
      - Parameter projectID: The identifier of the project to get devices from.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
@@ -118,17 +118,17 @@ extension Disruptive {
     }
     
     /**
-     Removes the specified label for the device. Will return success if the label didn't exist.
+     Deletes the specified label for the device. Will return success if the label didn't exist.
      
      This is a convenience function for `batchUpdateDeviceLabels`.
      
      - Parameter projectID: The identifier of the project the device is in.
-     - Parameter deviceID: The identifier of the device to remove a label from.
-     - Parameter labelKey: The key of the label to remove.
+     - Parameter deviceID: The identifier of the device to delete a label from.
+     - Parameter labelKey: The key of the label to delete.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func removeDeviceLabel(
+    public func deleteDeviceLabel(
         projectID  : String,
         deviceID   : String,
         labelKey   : String,
@@ -208,8 +208,8 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init setLabel request with payload: \(body). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to init setLabel request with payload: \(body). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -243,8 +243,8 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to initialize move devices request with payload: \(body). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to initialize move devices request with payload: \(body). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
 }
@@ -252,36 +252,40 @@ extension Disruptive {
 
 extension Device {
     private enum CodingKeys: String, CodingKey {
-        case name
+        case resourceName = "name"
         case labels
         case type
         case reported
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Device resource names are formatted as "projects/b7s3umd0fee000ba5di0/devices/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
-        let projectResourceName = try values.decode(String.self, forKey: .name)
+        let projectResourceName = try container.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = projectResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: projectResourceName)
         }
+        self.projectID  = resourceNameComponents[1]
         let id = resourceNameComponents[3]
         self.identifier = id
-        self.projectID  = resourceNameComponents[1]
+        self.isEmulatedDevice = id.count == 23 && id.hasPrefix("emu")
         
         // Getting the other properties without any modifications
-        self.labels = try values.decode([String: String].self, forKey: .labels)
-        self.type   = try values.decode(DeviceType.self,       forKey: .type)
+        self.labels = try container.decode([String: String].self, forKey: .labels)
+        self.type   = try container.decode(DeviceType.self,       forKey: .type)
         
         // The name of the device comes in a label (if set)
         self.displayName = self.labels["name", default: ""]
         
-        self.reportedEvents = try values.decode(ReportedEvents.self, forKey: .reported)
-        
-        self.isEmulatedDevice = id.count == 23 && id.hasPrefix("emu")
+        // An emulated device will initially not have any reported events
+        if let reported = try container.decodeIfPresent(ReportedEvents.self, forKey: .reported) {
+            self.reportedEvents = reported
+        } else {
+            self.reportedEvents = ReportedEvents()
+        }
     }
 }
 
@@ -289,17 +293,58 @@ extension Device {
     
     /**
      Represents the type of a `Device`.
+     
+     For more details about the various sensors, see the [DT product page](https://www.disruptive-technologies.com/products/wireless-sensors).
      */
-    public enum DeviceType: String, Codable, CaseIterable {
-        case temperature      = "temperature"
-        case touch            = "touch"
-        case proximity        = "proximity"
-        case humidity         = "humidity"
-        case touchCounter     = "touchCounter"
-        case proximityCounter = "proximityCounter"
-        case waterDetector    = "waterDetector"
-        case cloudConnector   = "ccon"
-        case unknown
+    public enum DeviceType: Decodable, Equatable {
+        case temperature
+        case touch
+        case proximity
+        case humidity
+        case touchCounter
+        case proximityCounter
+        case waterDetector
+        case cloudConnector
+        
+        /// The type received for the device was unknown.
+        /// Added for backwards compatibility in case a new device type
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
+        
+        // This is a slightly clunky setup to let the `DeviceType` be
+        // backwards compatible in case new device types gets added
+        // to the backend.
+        public init(from decoder: Decoder) throws {
+            let str = try decoder.singleValueContainer().decode(String.self)
+            
+            switch str {
+                case "temperature"      : self = .temperature
+                case "touch"            : self = .touch
+                case "proximity"        : self = .proximity
+                case "humidity"         : self = .humidity
+                case "touchCounter"     : self = .touchCounter
+                case "proximityCounter" : self = .proximityCounter
+                case "waterDetector"    : self = .waterDetector
+                case "ccon"             : self = .cloudConnector
+                default                 : self = .unknown(value: str)
+            }
+        }
+        
+        /// Used internally to create requests and for testing.
+        /// Returns `nil` for the `.unknown` device type.
+        internal var rawValue: String? {
+            switch self {
+                case .temperature      : return "temperature"
+                case .touch            : return "touch"
+                case .proximity        : return "proximity"
+                case .humidity         : return "humidity"
+                case .touchCounter     : return "touchCounter"
+                case .proximityCounter : return "proximityCounter"
+                case .waterDetector    : return "waterDetector"
+                case .cloudConnector   : return "ccon"
+                case .unknown          : return nil
+            }
+        }
         
         /// Returns a `String` representation of the device type that is suited for presenting to a user on screen.
         public func displayName() -> String {
@@ -312,7 +357,7 @@ extension Device {
                 case .proximityCounter : return "Proximity Counter"
                 case .waterDetector    : return "Water Detector"
                 case .cloudConnector   : return "Cloud Connector"
-                case .unknown          : return "Unknown"
+                case .unknown(let s)   : return "Unknown (\(s))"
             }
         }
     }

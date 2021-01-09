@@ -106,7 +106,7 @@ internal extension AuthProvider {
     func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
         if shouldAutoRefreshAccessToken == false {
             // We should no longer be logged in. Just return the `.loggedOut` error code
-            DTLog("The `AuthProvider` is not logged in. Call `login()` on the `AuthProvider` to log back in.")
+            Disruptive.log("The `AuthProvider` is not logged in. Call `login()` on the `AuthProvider` to log back in.", level: .error)
             completion(.failure(.loggedOut))
         } else if let authToken = getLocalAuthToken() {
             // There already exists a non-expired auth token
@@ -114,19 +114,19 @@ internal extension AuthProvider {
         } else {
             // The auth provider is either not authenticated, or the auth
             // token too close to getting expired. Will re-authenticate the auth provider
-            DTLog("Authenticating the auth provider...")
+            Disruptive.log("Authenticating the auth provider...")
             refreshAccessToken { result in
                 switch result {
                 case .success():
                     if let authToken = getLocalAuthToken() {
-                        DTLog("Authentication successful")
+                        Disruptive.log("Authentication successful")
                         completion(.success(authToken))
                     } else {
-                        DTLog("The auth provider authenticated successfully, but unexpectedly there was not a non-expired local access token available.", isError: true)
+                        Disruptive.log("The auth provider authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
                         completion(.failure(.unknownError))
                     }
                 case .failure(let e):
-                    DTLog("Failed to authenticate the auth provider with error: \(e)", isError: true)
+                    Disruptive.log("Failed to authenticate the auth provider with error: \(e)", level: .error)
                     completion(.failure(e))
                 }
             }
@@ -275,7 +275,7 @@ public class OAuth2Authenticator: AuthProvider {
     /// This flow is described in more detail on the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication).
     public func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         guard let authJWT = JWT.serviceAccount(authURL: authURL, credentials: credentials) else {
-            DTLog("Failed to create a JWT from service account credentials: \(credentials)", isError: true)
+            Disruptive.log("Failed to create a JWT from service account credentials: \(credentials)", level: .error)
             completion(.failure(.unknownError))
             return
         }
@@ -300,7 +300,7 @@ public class OAuth2Authenticator: AuthProvider {
             request.send { [weak self] (result: Result<AccessTokenResponse, DisruptiveError>) in
                 switch result {
                     case .success(let response):
-                        DTLog("OAuth2 authentication successful")
+                        Disruptive.log("OAuth2 authentication successful")
                         DispatchQueue.main.async {
                             self?.auth = Auth(
                                 token: "Bearer \(response.accessToken)",
@@ -309,16 +309,15 @@ public class OAuth2Authenticator: AuthProvider {
                             completion(.success(()))
                         }
                     case .failure(let e):
-                        DTLog("OAuth2 authentication failed with error: \(e)")
+                        Disruptive.log("OAuth2 authentication failed with error: \(e)", level: .error)
                         DispatchQueue.main.async {
                             completion(.failure(e))
                         }
                 }
             }
         } catch {
-            DTLog("Failed to encode body: \(body). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
-            return
+            Disruptive.log("Failed to encode body: \(body). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
 

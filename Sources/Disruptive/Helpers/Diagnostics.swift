@@ -52,6 +52,6 @@ internal struct RequestDiagnostics {
             str += "Parsed \(byteCount) bytes in \(parseDuration)"
         }
         
-        DTLog(str)
+        Disruptive.log(str, level: .debug)
     }
 }

@@ -82,8 +82,11 @@ extension Disruptive {
     }
     
     /**
-     Creates a new Service Account within a specific project. This Service Account will by default not
-     have access to any resources, it will just have the specified project as its parent.
+     Creates a new Service Account within a specific project.
+     
+     __NOTE__: This Service Account will by default not have access to any resources.
+     In order to allow the Service Account to send API requests, add it as a `Member` to a project
+     or an organization.
      
      - Parameter projectID: The identifier of the project to create the Service Account in.
      - Parameter displayName: The display name to give the Service Account.
@@ -115,8 +118,8 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init create service account request with payload \(payload). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to init create service account request with payload \(payload). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -186,8 +189,8 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init updateServiceAccount request with payload: \(patch). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to init updateServiceAccount request with payload: \(patch). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -365,7 +368,7 @@ extension ServiceAccount.Key {
 
 extension ServiceAccount {
     private enum CodingKeys: String, CodingKey {
-        case name
+        case resourceName = "name"
         case email
         case displayName
         case enableBasicAuth
@@ -379,7 +382,7 @@ extension ServiceAccount {
         // Service Account resource names are formatted as
         // "projects/b7s3umd0fee000ba5di0/serviceaccounts/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
-        let saResourceName = try container.decode(String.self, forKey: .name)
+        let saResourceName = try container.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = saResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: saResourceName)

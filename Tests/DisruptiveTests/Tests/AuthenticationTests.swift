@@ -182,6 +182,14 @@ class AuthenticationTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
         XCTAssertFalse(auth.shouldAutoRefreshAccessToken)
         XCTAssertNil(auth.auth)
+        
+        // getActiveAccessToken should return .loggedOut
+        exp = expectation(description: "")
+        auth.getActiveAccessToken { result in
+            guard case .failure(let err) = result, err == .loggedOut else { XCTFail(); return }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
 
 
         // Log back in
@@ -199,8 +207,6 @@ class AuthenticationTests: DisruptiveTests {
         )
         XCTAssertEqual(auth.auth?.token, "Bearer \(respAccessToken)")
     }
-    
-    
 }
 
 private extension String {

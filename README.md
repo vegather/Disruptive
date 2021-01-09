@@ -26,7 +26,6 @@ Swift library for accessing data from [Disruptive Technologies](https://disrupti
     - [Requesting Historical Events](#requesting-historical-events)
     - [Subscribing to Device Events](#subscribing-to-device-events)
     - [Misc Tips](#misc-tips)
-- [Endpoints Implemented](#endpoints-implemented)
 - [Todo](#todo)
 - [License](#license)
 
@@ -211,86 +210,21 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 
 
-## Endpoints Implemented
-
-The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
-
-Progress: ![Progress](https://progress-bar.dev/37/?scale=54&suffix=%20%2f%2054)
-
-- [x] ~~GET /projects/{project}/devices~~
-- [x] ~~POST /projects/{project}/devices:batchUpdate~~
-- [x] ~~POST /projects/{project}/devices:transfer~~
-- [x] ~~GET /projects/{project}/devices/{device}~~
-- [x] ~~POST /projects/{project}/devices/{device}/labels (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
-- [x] ~~PATCH /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
-- [x] ~~DELETE /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
-- [x] ~~GET /projects/{project}/devices/{device}/events~~
-- [x] ~~GET /projects/{project}/devices:stream~~
-- [x] ~~GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)~~
-- [x] ~~GET /projects/{project}/dataconnectors~~
-- [x] ~~POST /projects/{project}/dataconnectors~~
-- [x] ~~GET /projects/{project}/dataconnectors/{dataconnector}~~
-- [x] ~~PATCH /projects/{project}/dataconnectors/{dataconnector}~~
-- [x] ~~DELETE /projects/{project}/dataconnectors/{dataconnector}~~
-- [x] ~~GET /projects/{project}/dataconnectors/{dataconnector}:metrics~~
-- [x] ~~POST /projects/{project}/dataconnectors/{dataconnector}:sync~~
-- [ ] GET /organizations/{organization}/members
-- [ ] POST /organizations/{organization}/members
-- [ ] GET /organizations/{organization}/members/{member}
-- [ ] PATCH /organizations/{organization}/members/{member}
-- [ ] DELETE /organizations/{organization}/members/{member}
-- [ ] GET /organizations/{organization}/members/{member}:getInviteUrl
-- [x] ~~GET /organizations/{organization}/permissions~~
-- [ ] GET /projects/{project}/members
-- [ ] POST /projects/{project}/members
-- [ ] GET /projects/{project}/members/{member}
-- [ ] PATCH /projects/{project}/members/{member}
-- [ ] DELETE /projects/{project}/members/{member}
-- [ ] GET /projects/{project}/members/{member}:getInviteUrl
-- [x] ~~GET /projects/{project}/permissions~~
-- [x] ~~GET /roles~~
-- [x] ~~GET /roles/{role}~~
-- [x] ~~GET /organizations~~
-- [x] ~~GET /organizations/{organization}~~
-- [x] ~~GET /projects~~
-- [x] ~~POST /projects~~
-- [x] ~~GET /projects/{project}~~
-- [x] ~~PATCH /projects/{project}~~
-- [x] ~~DELETE /projects/{project}~~
-- [x] ~~GET /projects/{project}/serviceaccounts~~
-- [x] ~~POST /projects/{project}/serviceaccounts~~
-- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}~~
-- [x] ~~PATCH /projects/{project}/serviceaccounts/{serviceaccount}~~
-- [x] ~~DELETE /projects/{project}/serviceaccounts/{serviceaccount}~~
-- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}/keys~~
-- [x] ~~POST /projects/{project}/serviceaccounts/{serviceaccount}/keys~~
-- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}~~
-- [x] ~~DELETE /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}~~
-
-Emulator
-- [ ] GET /projects/{project}/devices
-- [ ] POST /projects/{project}/devices
-- [ ] GET /projects/{project}/devices/{device}
-- [ ] DELETE /projects/{project}/devices/{device}
-- [ ] POST /projects/{project}/devices/{device}:publish
-
-
 ## Todo
 
 - [x] ~~Add unit tests. Would like to try to get a test harness set up based on `URLProtocol` as described in this blog post: https://medium.com/@dhawaldawar/how-to-mock-urlsession-using-urlprotocol-8b74f389a67a~~
 - [ ] Provide better control of pagination. At the moment, this library will automatically fetch all pages before returning the data. Ideally, the caller would be able to decide whether or not they want this automatic behavior, or do it by themselves instead. This would be useful when there are a lot of items in a list, and paging all the items would take too much time.
 - [ ] Labels changed support. The `labelsChanged` event has a slightly different structure than the rest of the event types. It was added to this repo before this was realized, so the implementation is simply commented-out until proper parsing logic is implemented. 
 - [x] ~~Finish documenting all types, properties, and methods.~~
-- [ ] Improve `DTLog` to include file and line numbers in a nicely formatted output. At this point it could also be a public function.
+- [x] Improve `DTLog` to include file and line numbers in a nicely formatted output. At this point it could also be a public function.
 - [x] Reach 90%+ code coverage for the unit tests.
 - Areas that still needs unit testing
     - [ ] `Authentication.swift` - `getActiveAccessToken` and error handling in `OAuth2Authenticator.refreshAccessToken`
     - [x] `DeviceEventStream.swift`
-    - [ ] `EventTypes.swift`
-    - [ ] `Requests.swift`
+    - [x] `EventTypes.swift`
+    - [ ] `Requests.swift` including pagination, errors
     - [ ] `RetryScheme.swift`
     - [x] `Stream.swift`
-    - [ ] Network Tests: pagination, errors
 - [ ] Add Combine support for server sent events.
 - [ ] Add global option not wait for re-attempts when rate-limiting, and just return the error instead.
 - [ ] Handle 5XX errors from the backend. These shows up as `InternalError`s, and should have a retry-policy with an exponential backoff.

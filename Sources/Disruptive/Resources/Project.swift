@@ -13,7 +13,7 @@ import Foundation
  
  Relevant methods for `Project` can be found on the [Disruptive](../Disruptive) struct.
  */
-public struct Project: Codable, Equatable {
+public struct Project: Decodable, Equatable {
     
     /// The unique identifier of the project. This will be different from the `name` field in the REST API
     /// in that it is just the identifier without the `projects/` prefix.
@@ -101,14 +101,14 @@ extension Disruptive {
     /**
      Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful.
      
-     - Parameter displayName: The display name of the new project.
      - Parameter organizationID: The identifier of the organization to create the project in.
+     - Parameter displayName: The display name of the new project.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
     public func createProject(
-        displayName    : String,
         organizationID : String,
+        displayName    : String,
         completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
         // Create body for new project
@@ -124,8 +124,8 @@ extension Disruptive {
             // Create the new project
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init createProject request with payload: \(payload). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to init createProject request with payload: \(payload). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -173,8 +173,8 @@ extension Disruptive {
             // Update the project display name
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init the update project request with payload: \(payload). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to init the update project request with payload: \(payload). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
 }
@@ -182,33 +182,33 @@ extension Disruptive {
 
 extension Project {
     private enum CodingKeys: String, CodingKey {
-        case identifier              = "name"
+        case resourceName            = "name"
         case displayName
         case isInventory             = "inventory"
-        case organizationID          = "organization"
-        case organizationDisplayName = "organizationDisplayName"
+        case orgResourceName         = "organization"
+        case organizationDisplayName
         case sensorCount
         case cloudConnectorCount
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Project identifiers are formatted as "projects/b7s3e550fee000ba5dhg"
         // Setting the identifier to the last component of the resource name
-        let projectResourceName = try values.decode(String.self, forKey: .identifier)
+        let projectResourceName = try container.decode(String.self, forKey: .resourceName)
         self.identifier = projectResourceName.components(separatedBy: "/").last ?? ""
         
         // Organization identifiers are formatted as "organizations/b7s3e550fee000ba5dhg"
         // Setting the identifier to the last component of the resource name
-        let orgResourceName = try values.decode(String.self, forKey: .organizationID)
+        let orgResourceName = try container.decode(String.self, forKey: .orgResourceName)
         self.organizationID = orgResourceName.components(separatedBy: "/").last ?? ""
         
         // Getting the other properties without any modifications
-        self.displayName             = try values.decode(String.self, forKey: .displayName)
-        self.isInventory             = try values.decode(Bool.self,   forKey: .isInventory)
-        self.organizationDisplayName = try values.decode(String.self, forKey: .organizationDisplayName)
-        self.sensorCount             = try values.decode(Int.self,    forKey: .sensorCount)
-        self.cloudConnectorCount     = try values.decode(Int.self,    forKey: .cloudConnectorCount)
+        self.displayName             = try container.decode(String.self, forKey: .displayName)
+        self.isInventory             = try container.decode(Bool.self,   forKey: .isInventory)
+        self.organizationDisplayName = try container.decode(String.self, forKey: .organizationDisplayName)
+        self.sensorCount             = try container.decode(Int.self,    forKey: .sensorCount)
+        self.cloudConnectorCount     = try container.decode(Int.self,    forKey: .cloudConnectorCount)
     }
 }

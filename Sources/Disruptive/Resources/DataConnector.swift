@@ -114,17 +114,16 @@ extension Disruptive {
             fatalError("PushType \(pushType) is currently not supported")
         }
         
-        // Since the initial status can only be active or deactivated, the argument is
-        // a Bool instead of a Status. This just converts that back to a Status, and
-        // gets the rawValue (a String) to send to the REST API.
-        let initialStatus = (isActive ? DataConnector.Status.active : .deactivated).rawValue
+        // Since the initial status can only be active or user disabled, the argument is
+        // a Bool instead of a Status. This just converts that back to a Status.
+        let initialStatus = isActive ? DataConnector.Status.active : .userDisabled
         
         struct DataConnectorPayload: Encodable {
             let displayName: String
             let events: [String]
             let labels: [String]
             let type: String
-            let status: String
+            let status: DataConnector.Status
             let httpConfig: HTTPConfig
             
             struct HTTPConfig: Encodable {
@@ -154,8 +153,8 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init create data connector request with payload \(payload). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to init create data connector request with payload \(payload). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -245,7 +244,7 @@ extension Disruptive {
             patch.httpConfig = httpConfig
         }
         if let isActive = isActive {
-            patch.status = (isActive ? DataConnector.Status.active : .deactivated).rawValue
+            patch.status = (isActive ? DataConnector.Status.active : .userDisabled).rawValue
             updateMask.append("status")
         }
         if let eventTypes = eventTypes {
@@ -266,8 +265,8 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            DTLog("Failed to init updateDataConnector request with payload: \(patch). Error: \(error)", isError: true)
-            completion(.failure(.unknownError))
+            Disruptive.log("Failed to init updateDataConnector request with payload: \(patch). Error: \(error)", level: .error)
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -376,53 +375,55 @@ extension DataConnector {
     
     /// The current status of a Data Connector. This will indicate whether or
     /// not the Data Connector is currently sending out events.
-    public enum Status: Decodable, Equatable {
+    public enum Status: Codable, Equatable {
         
         /// The Data Connector is currently active, and will push out events for the devices in the project
         /// to an external service.
         case active
         
         /// The Data Connector is deactivated. It can be reactivated by calling the `updateDataConnector` function.
-        case deactivated
+        case userDisabled
         
         /// The Data Connector will be set to this state by the system if it has received
         /// too many errors recently, or if it keeps seeing errors for a prolonged period of time.
         /// It can be reactivated by calling the `updateDataConnector` function.
         case systemDisabled
         
+        /// The status received for the Data Connector was unknown.
+        /// Added for backwards compatibility in case a new status
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
+        
         
         // Used for testing, and internally for creating requests
-        internal var rawValue: String {
+        internal var rawValue: String? {
             switch self {
-                case .active         : return CodingKeys.active.rawValue
-                case .deactivated    : return CodingKeys.deactivated.rawValue
-                case .systemDisabled : return CodingKeys.systemDisabled.rawValue
+                case .active         : return "ACTIVE"
+                case .userDisabled   : return "USER_DISABLED"
+                case .systemDisabled : return "SYSTEM_DISABLED"
+                case .unknown        : return nil
             }
         }
         
-        private enum CodingKeys: String, CodingKey {
-            case active         = "ACTIVE"
-            case deactivated    = "DEACTIVATED"
-            case userDisabled   = "USER_DISABLED"
-            case systemDisabled = "SYSTEM_DISABLED"
-        }
-        
-        // Doing some custom decoding because "USER_DISABLED" is the same
-        // as "DEACTIVATED" and is likely never actually used. This allows
-        // for backwards compatibility in case we want to actually remove
-        // the case later (we can always add it later, harder to remove),
-        // while at the same time mitigating a potential crash if the case
-        // happens to be set at some point.
         public init(from decoder: Decoder) throws {
             let container    = try decoder.singleValueContainer()
             let statusString = try container.decode(String.self)
             
             switch statusString {
                 case "ACTIVE"          : self = .active
-                case "DEACTIVATED"     : self = .deactivated
-                case "USER_DISABLED"   : self = .deactivated
+                case "USER_DISABLED"   : self = .userDisabled
                 case "SYSTEM_DISABLED" : self = .systemDisabled
-                default: throw ParseError.unexpectedEnumCase(string: statusString)
+                default                : self = .unknown(value: statusString)
+            }
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            if let rawValue = rawValue {
+                var container = encoder.singleValueContainer()
+                try container.encode(rawValue)
+            } else {
+                Disruptive.log("Can't encode DataConnector.Status with case .unknown", level: .error)
+                throw DisruptiveError.badRequest
             }
         }
     }
@@ -445,11 +446,16 @@ extension DataConnector {
          * `headers`: Any additional headers that should be included with every event pushed from the Data Connector.
          */
         case httpPush(url: String, signatureSecret: String, headers: [String: String])
+        
+        /// The push type received for the Data Connector was unknown.
+        /// Added for backwards compatibility in case a new push type
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
     }
     
     
     private enum CodingKeys: String, CodingKey {
-        case identifier = "name"
+        case resourceName = "name"
         case type
         case displayName
         case status
@@ -470,7 +476,7 @@ extension DataConnector {
         
         // Data Connector resource names are formatted as "projects/b7s3umd0fee000ba5di0/dataconnectors/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
-        let dcResourceName = try values.decode(String.self, forKey: .identifier)
+        let dcResourceName = try values.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = dcResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: dcResourceName)
@@ -489,20 +495,22 @@ extension DataConnector {
             case "HTTP_PUSH":
                 let httpConfig = try values.nestedContainer(keyedBy: HTTPConfigCodingKeys.self, forKey: .httpConfig)
                 
-                self.pushType = PushType.httpPush(
+                self.pushType = .httpPush(
                     url             : try httpConfig.decode(String.self, forKey: .url),
                     signatureSecret : try httpConfig.decode(String.self, forKey: .signatureSecret),
                     headers         : try httpConfig.decode([String: String].self, forKey: .headers)
                 )
             default:
-                throw ParseError.unexpectedEnumCase(string: typeString)
+                self.pushType = .unknown(value: typeString)
         }
         
+        // Only include the known event types
+        let eventStrings = try values.decode([String].self, forKey: .events)
+        self.events = eventStrings.compactMap { EventType(rawValue: $0) }
         
         // Getting the other properties without any modifications
         self.displayName = try values.decode(String.self, forKey: .displayName)
         self.status      = try values.decode(Status.self, forKey: .status)
-        self.events      = try values.decode([EventType].self, forKey: .events)
         self.labels      = try values.decode([String].self, forKey: .labels)
     }
 

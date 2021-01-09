@@ -37,8 +37,6 @@ extension Disruptive {
         eventTypes   : [EventType]?         = nil)
         -> DeviceEventStream?
     {
-        DTLog("Subscribing to \(projectID)")
-        
         // Construct parameters
         var params: [String: [String]] = [:]
         if let deviceIDs = deviceIDs {
@@ -48,7 +46,7 @@ extension Disruptive {
             params["label_filters"] = labelFilters
         }
         if let deviceTypes = deviceTypes {
-            params["device_types"] = deviceTypes.map { $0.rawValue }
+            params["device_types"] = deviceTypes.compactMap { $0.rawValue }
         }
         if let eventTypes = eventTypes {
             params["event_types"] = eventTypes.map { $0.rawValue }

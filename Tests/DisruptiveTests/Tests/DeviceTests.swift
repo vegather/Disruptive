@@ -11,17 +11,73 @@ import XCTest
 class DeviceTests: DisruptiveTests {
     
     func testDecodeDevice() {
-        let deviceIn = createDummyDevice()
-        let deviceOut = try! JSONDecoder().decode(Device.self, from: createDeviceJSON(from: deviceIn))
+        let deviceIn = DeviceTests.createDummyDevice()
+        let deviceOut = try! JSONDecoder().decode(Device.self, from: DeviceTests.createDeviceJSON(from: deviceIn))
         
         XCTAssertEqual(deviceIn, deviceOut)
     }
     
+    func testDecodeDeviceWithUnknownValues() {
+        let data = """
+        {
+          "name": "projects/proj1/devices/dev1",
+          "type": "unknownDeviceType",
+          "labels": {
+            "name": "Device"
+          },
+          "reported": {
+            "unknownEvent": {
+              "value": "Some Value",
+              "updateTime": "\(Date().iso8601String())"
+            },
+            "temperature": {
+              "value": 25,
+              "updateTime": "\(Date().iso8601String())"
+            }
+          }
+        }
+        """.data(using: .utf8)!
+        
+        
+        XCTAssertNoThrow(try JSONDecoder().decode(Device.self, from: data))
+    }
+    
     func testDecodeEmulatedDevice() {
-        let deviceIn = createDummyDevice(isEmulated: true)
-        let deviceOut = try! JSONDecoder().decode(Device.self, from: createDeviceJSON(from: deviceIn))
+        let deviceIn = DeviceTests.createDummyDevice(isEmulated: true)
+        let deviceOut = try! JSONDecoder().decode(Device.self, from: DeviceTests.createDeviceJSON(from: deviceIn))
         
         XCTAssertEqual(deviceIn, deviceOut)
+    }
+    
+    func testDecodeDeviceType() {
+        func assert(_ str: String, equals type: Device.DeviceType) {
+            XCTAssertEqual(
+                try! JSONDecoder().decode(Device.DeviceType.self, from: "\"\(str)\"".data(using: .utf8)!),
+                type
+            )
+        }
+        
+        assert("proximity",        equals: .proximity)
+        assert("touch",            equals: .touch)
+        assert("temperature",      equals: .temperature)
+        assert("proximityCounter", equals: .proximityCounter)
+        assert("touchCounter",     equals: .touchCounter)
+        assert("humidity",         equals: .humidity)
+        assert("ccon",             equals: .cloudConnector)
+        assert("waterDetector",    equals: .waterDetector)
+        assert("shinyNewSensor",   equals: .unknown(value: "shinyNewSensor"))
+    }
+    
+    func testDeviceTypeRawValue() {
+        XCTAssertEqual(Device.DeviceType.proximity         .rawValue, "proximity")
+        XCTAssertEqual(Device.DeviceType.touch             .rawValue, "touch")
+        XCTAssertEqual(Device.DeviceType.temperature       .rawValue, "temperature")
+        XCTAssertEqual(Device.DeviceType.proximityCounter  .rawValue, "proximityCounter")
+        XCTAssertEqual(Device.DeviceType.touchCounter      .rawValue, "touchCounter")
+        XCTAssertEqual(Device.DeviceType.humidity          .rawValue, "humidity")
+        XCTAssertEqual(Device.DeviceType.cloudConnector    .rawValue, "ccon")
+        XCTAssertEqual(Device.DeviceType.waterDetector     .rawValue, "waterDetector")
+        XCTAssertEqual(Device.DeviceType.unknown(value: "").rawValue, nil)
     }
     
     func testGetDevice() {
@@ -30,8 +86,8 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)")
         
-        let respDevice = createDummyDevice()
-        let respData = createDeviceJSON(from: respDevice)
+        let respDevice = DeviceTests.createDummyDevice()
+        let respData = DeviceTests.createDeviceJSON(from: respDevice)
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -51,8 +107,8 @@ class DeviceTests: DisruptiveTests {
         let exp = expectation(description: "")
         disruptive.getDevice(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
-                case .success(_):
-                    break
+                case .success(let device):
+                    XCTAssertEqual(device, respDevice)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -66,8 +122,8 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/-/devices/\(reqDeviceID)")
         
-        let respDevice = createDummyDevice()
-        let respData = createDeviceJSON(from: respDevice)
+        let respDevice = DeviceTests.createDummyDevice()
+        let respData = DeviceTests.createDeviceJSON(from: respDevice)
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -87,8 +143,8 @@ class DeviceTests: DisruptiveTests {
         let exp = expectation(description: "")
         disruptive.getDevice(deviceID: reqDeviceID) { result in
             switch result {
-                case .success(_):
-                    break
+                case .success(let device):
+                    XCTAssertEqual(device, respDevice)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -102,8 +158,8 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         
-        let respDevices = [createDummyDevice(), createDummyDevice()]
-        let respData = createDevicesJSON(from: respDevices)
+        let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
+        let respData = DeviceTests.createDevicesJSON(from: respDevices)
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -205,7 +261,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.removeDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
+        disruptive.deleteDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
             switch result {
                 case .success():
                     break
@@ -343,8 +399,20 @@ class DeviceTests: DisruptiveTests {
     }
     
     func testDeviceTypeDisplayName() {
-        Device.DeviceType.allCases.forEach {
-            XCTAssertTrue($0.displayName().count > 0)
+        let types: [Device.DeviceType] = [
+            .temperature,
+            .touch,
+            .proximity,
+            .humidity,
+            .touchCounter,
+            .proximityCounter,
+            .waterDetector,
+            .cloudConnector,
+            .unknown(value: "Dummy")
+        ]
+        
+        types.forEach {
+            XCTAssertGreaterThan($0.displayName().count, 0)
         }
     }
 }
@@ -358,29 +426,35 @@ class DeviceTests: DisruptiveTests {
 extension DeviceTests {
     
     // Only supports temp events for now
-    private func createDeviceJSONString(from device: Device) -> String {
+    private static func createDeviceJSONString(from device: Device) -> String {
+        var reported = ""
+        if device.reportedEvents.temperature != nil {
+            reported = """
+            ,"reported": {
+                "temperature": {
+                    "value": \(device.reportedEvents.temperature?.value ?? 0),
+                    "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")"
+                }
+            }
+            """
+        }
         return """
         {
           "name": "projects/\(device.projectID)/devices/\(device.identifier)",
           "type": "temperature",
           "labels": {
             "name": "\(device.displayName)"
-          },
-          "reported": {
-            "temperature": {
-              "value": \(device.reportedEvents.temperature?.value ?? 0),
-              "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")"
-            }
           }
+          \(reported)
         }
         """
     }
     
-    fileprivate func createDeviceJSON(from device: Device) -> Data {
+    static func createDeviceJSON(from device: Device) -> Data {
         return createDeviceJSONString(from: device).data(using: .utf8)!
     }
     
-    fileprivate func createDevicesJSON(from devices: [Device]) -> Data {
+    static func createDevicesJSON(from devices: [Device]) -> Data {
         return """
         {
             "devices": [
@@ -392,12 +466,14 @@ extension DeviceTests {
     }
     
     // Only supports temp events for now
-    fileprivate func createDummyDevice(isEmulated: Bool = false) -> Device {
+    static func createDummyDevice(isEmulated: Bool = false) -> Device {
         var reportedEvents = Device.ReportedEvents()
-        reportedEvents.temperature = TemperatureEvent(
-            value: 56,
-            timestamp: Date(timeIntervalSince1970: 1605999873)
-        )
+        if isEmulated == false {
+            reportedEvents.temperature = TemperatureEvent(
+                value: 56,
+                timestamp: Date(timeIntervalSince1970: 1605999873)
+            )
+        }
         
         return Device(
             identifier: (isEmulated ? "emu" : "") + "b5rj9ed7rihk942p48og",

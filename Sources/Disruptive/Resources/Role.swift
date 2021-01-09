@@ -15,16 +15,20 @@ import Foundation
  
  Relevant methods for `Role` can be found on the [Disruptive](../Disruptive) struct.
  */
-public struct Role: Codable, Equatable {
+public struct Role: Decodable, Equatable {
     
-    /// The identifier of the `Role`. Will be in the format `<resource>.<role>`. Example: `project.user`.
-    public let identifier: String
+    /// The level of access that is given to the role.
+    public let roleType: RoleType
     
     /// The display name of the `Role`. Example: `Project user`.
     public let displayName: String
     
     /// The description of the `Role`. Example: `User in project`.
     public let description: String
+    
+    /// A list of permissions the role has. Indicates which actions can be
+    /// taken on various resources
+    public let permissions: [Permission]
 }
 
 
@@ -33,7 +37,7 @@ extension Disruptive {
     /**
      Get a list of all the available roles that can be assigned to a member of a project or an organization.
      
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the array of `Role`s. If a failure occured, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the array of `Role`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Role], DisruptiveError>`
      */
     public func getRoles(
@@ -54,11 +58,17 @@ extension Disruptive {
      - Parameter result: `Result<Role, DisruptiveError>`
      */
     public func getRole(
-        roleID: String,
+        roleType: Role.RoleType,
         completion: @escaping (_ result: Result<Role, DisruptiveError>) -> ())
     {
+        guard let resourceName = roleType.resourceName else {
+            Disruptive.log("Can't get role for roleType: \(roleType)", level: .error)
+            completion(.failure(.badRequest))
+            return
+        }
+        
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "roles/\(roleID)")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: resourceName)
         
         // Send the request
         sendRequest(request) { completion($0) }
@@ -66,22 +76,85 @@ extension Disruptive {
 }
 
 extension Role {
+    
+    /// The level of access that is given to a role.
+    public enum RoleType: Codable, Equatable {
+        
+        /// Can only view data in projects, no editing rights.
+        case projectUser
+        
+        /// Can edit devices and project settings.
+        case projectDeveloper
+        
+        /// Can move devices between projects inside the organization.
+        /// Can add and remove users in the project.
+        case projectAdmin
+        
+        /// Can create new Projects and have Project administrator access in all
+        /// Projects of the Organization.
+        case organizationAdmin
+        
+        /// The access level received for the role was unknown.
+        /// Added for backwards compatibility in case a new access level
+        /// is added on the backend, and not yet added to this client library.
+        case unknown(value: String)
+        
+        // Assumes the data to decode is a role resource name.
+        // Format: "roles/organization.admin"
+        public init(from decoder: Decoder) throws {
+            let resourceName = try decoder
+                .singleValueContainer()
+                .decode(String.self)
+            let parts = resourceName.components(separatedBy: "/")
+            
+            guard parts.count == 2, parts[0] == "roles" else {
+                throw ParseError.identifier(path: resourceName)
+            }
+            switch parts[1] {
+                case "project.user"       : self = .projectUser
+                case "project.developer"  : self = .projectDeveloper
+                case "project.admin"      : self = .projectAdmin
+                case "organization.admin" : self = .organizationAdmin
+                default                   : self = .unknown(value: resourceName)
+            }
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            if let resourceName = resourceName {
+                var container = encoder.singleValueContainer()
+                try container.encode(resourceName)
+            } else {
+                Disruptive.log("Can't encode Role.RoleType with case .unknown", level: .error)
+                throw DisruptiveError.badRequest
+            }
+        }
+        
+        internal var resourceName: String? {
+            switch self {
+                case .projectUser       : return "roles/project.user"
+                case .projectDeveloper  : return "roles/project.developer"
+                case .projectAdmin      : return "roles/project.admin"
+                case .organizationAdmin : return "roles/organization.admin"
+                case .unknown           : return nil
+            }
+        }
+    }
+    
     private enum CodingKeys: String, CodingKey {
-        case identifier = "name"
+        case resourceName = "name"
         case displayName
         case description
+        case permissions
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        // Role identifiers are formatted as "role/organization.admin"
-        // Setting the identifier to the last component of the resource name
-        let roleResourceName = try values.decode(String.self, forKey: .identifier)
-        self.identifier = roleResourceName.components(separatedBy: "/").last ?? ""
-        
-        // Getting the display name and description properties without any modifications
-        self.displayName = try values .decode(String.self, forKey: .displayName)
-        self.description = try values .decode(String.self, forKey: .description)
+        self.roleType    = try container.decode(RoleType.self, forKey: .resourceName)
+        self.displayName = try container.decode(String.self,   forKey: .displayName)
+        self.description = try container.decode(String.self,   forKey: .description)
+        self.permissions = try container
+            .decode([PermissionWrapper].self, forKey: .permissions)
+            .compactMap { $0.permission }
     }
 }

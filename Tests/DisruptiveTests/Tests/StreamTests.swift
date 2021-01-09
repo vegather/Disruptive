@@ -55,7 +55,7 @@ class StreamTests: DisruptiveTests {
                 queryParams   : [
                     "device_ids"    : reqDeviceIDs,
                     "label_filters" : reqLabelFilters,
-                    "device_types"  : reqDeviceTypes.map { $0.rawValue },
+                    "device_types"  : reqDeviceTypes.map { $0.rawValue! },
                     "event_types"   : reqEventTypes .map { $0.rawValue }
                 ],
                 headers       : [:],
