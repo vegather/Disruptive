@@ -62,6 +62,32 @@ class MemberTests: DisruptiveTests {
         XCTAssertEqual(secondMember.createTime, try! Date(iso8601String: "2020-12-30T23:04:16.017Z"))
     }
     
+    func testDecodeStatus() {
+        func assert(status: Member.Status, equals input: String) {
+            let output = try! JSONDecoder().decode(Member.Status.self, from: "\"\(input)\"".data(using: .utf8)!)
+            XCTAssertEqual(status, output)
+        }
+
+        assert(status: .pending,  equals: "PENDING")
+        assert(status: .accepted, equals: "ACCEPTED")
+        assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: "UNKNOWN_STATUS")
+    }
+
+    func testEncodeStatus() {
+        func assert(status: Member.Status, equals input: String?) {
+            if let input = input {
+                let encoded = try! JSONEncoder().encode(status)
+                XCTAssertEqual("\"\(input)\"", String(data: encoded, encoding: .utf8))
+            } else {
+                XCTAssertThrowsError(try JSONEncoder().encode(status))
+            }
+        }
+
+        assert(status: .pending,  equals: "PENDING")
+        assert(status: .accepted, equals: "ACCEPTED")
+        assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
+    }
+    
     func testGetProjectMembers() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
