@@ -207,6 +207,10 @@ private struct PublishBody: Encodable {
             case .connectionStatus   : connectionStatus   = event as? ConnectionStatusEvent
             case .ethernetStatus     : ethernetStatus     = event as? EthernetStatusEvent
             case .cellularStatus     : cellularStatus     = event as? CellularStatusEvent
+            case .labelsChanged:
+                // LabelsChangedEvent is not a `PublishableEvent` so this shouldn't happen.
+                DTLog("LabelsChangedEvent cannot be published", level: .error)
+                throw DisruptiveError.badRequest
         }
     }
 }

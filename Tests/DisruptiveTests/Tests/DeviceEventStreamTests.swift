@@ -111,6 +111,8 @@ class DeviceEventStreamTests: DisruptiveTests {
 
         data: {"result": {"event": {"eventId":"bjehr0ig1me000dm66s0","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"batteryStatus","data":{"batteryStatus":{"percentage":100,"updateTime":"2019-05-16T08:21:21.076013Z"}},"timestamp":"2019-05-16T08:21:21.076013Z"}}}
 
+        data: {"result": {"event": {"eventId":"bjehr0ig1me000dm66s0","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"labelsChanged","data":{"added":{"add":"added"},"modified":{"name":"Sensorname"},"removed":["removed"]},"timestamp":"2019-05-16T08:21:21.076013Z"}}}
+
         data: {"result": {"event": {"eventId":"bjehr0ig1me000dm66s0","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"connectionStatus","data":{"connectionStatus":{"connection":"ETHERNET","available":["CELLULAR","ETHERNET"],"updateTime":"2019-05-16T08:21:21.076013Z"}},"timestamp":"2019-05-16T08:21:21.076013Z"}}}
 
         data: {"result": {"event": {"eventId":"bjehr0ig1me000dm66s0","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"ethernetStatus","data":{"ethernetStatus":{"macAddress":"f0:b5:b7:00:0a:08","ipAddress":"10.0.0.1","errors":[],"updateTime":"2019-05-16T08:21:21.076013Z"}},"timestamp":"2019-05-16T08:21:21.076013Z"}}}
@@ -118,9 +120,6 @@ class DeviceEventStreamTests: DisruptiveTests {
         data: {"result": {"event": {"eventId":"bjehr0ig1me000dm66s0","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"cellularStatus","data":{"cellularStatus":{"signalStrength":80,"errors":[],"updateTime":"2019-05-16T08:21:21.076013Z"}},"timestamp":"2019-05-16T08:21:21.076013Z"}}}
 
         """.data(using: .utf8)!
-        
-        // TODO: Add back when `labelsChanged` is added
-//        data: {"result": {"event": {"eventId":"bjehr0ig1me000dm66s0","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"labelsChanged","data":{"added":{},"modified":{"name":"Sensorname"},"removed":[]},"timestamp":"2019-05-16T08:21:21.076013Z"}}}
         
         MockStreamURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -137,25 +136,29 @@ class DeviceEventStreamTests: DisruptiveTests {
             return [(payload, resp, nil)]
         }
         
-        let exp = expectation(description: "")
-        exp.expectedFulfillmentCount = 12 // TODO: 13
+        let expectations = EventType.allCases.reduce(into: [EventType: XCTestExpectation]()) {
+            $0[$1] = expectation(description: $1.rawValue)
+        }
+                
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
-        stream?.onTouch              = { _, _ in exp.fulfill() }
-        stream?.onTemperature        = { _, _ in exp.fulfill() }
-        stream?.onObjectPresent      = { _, _ in exp.fulfill() }
-        stream?.onHumidity           = { _, _ in exp.fulfill() }
-        stream?.onObjectPresentCount = { _, _ in exp.fulfill() }
-        stream?.onTouchCount         = { _, _ in exp.fulfill() }
-        stream?.onWaterPresent       = { _, _ in exp.fulfill() }
-        stream?.onNetworkStatus      = { _, _ in exp.fulfill() }
-        stream?.onBatteryStatus      = { _, _ in exp.fulfill() }
-//        stream?.onLabelsChanged = { _, _ in exp.fulfill() } // TODO: Add back
-        stream?.onConnectionStatus   = { _, _ in exp.fulfill() }
-        stream?.onEthernetStatus     = { _, _ in exp.fulfill() }
-        stream?.onCellularStatus     = { _, _ in exp.fulfill() }
+        stream?.onTouch              = { _, _ in expectations[.touch]!             .fulfill() }
+        stream?.onTemperature        = { _, _ in expectations[.temperature]!       .fulfill() }
+        stream?.onObjectPresent      = { _, _ in expectations[.objectPresent]!     .fulfill() }
+        stream?.onHumidity           = { _, _ in expectations[.humidity]!          .fulfill() }
+        stream?.onObjectPresentCount = { _, _ in expectations[.objectPresentCount]!.fulfill() }
+        stream?.onTouchCount         = { _, _ in expectations[.touchCount]!        .fulfill() }
+        stream?.onWaterPresent       = { _, _ in expectations[.waterPresent]!      .fulfill() }
+        stream?.onNetworkStatus      = { _, _ in expectations[.networkStatus]!     .fulfill() }
+        stream?.onBatteryStatus      = { _, _ in expectations[.batteryStatus]!     .fulfill() }
+        stream?.onLabelsChanged      = { _, _ in expectations[.labelsChanged]!     .fulfill() }
+        stream?.onConnectionStatus   = { _, _ in expectations[.ethernetStatus]!    .fulfill() }
+        stream?.onEthernetStatus     = { _, _ in expectations[.cellularStatus]!    .fulfill() }
+        stream?.onCellularStatus     = { _, _ in expectations[.connectionStatus]!  .fulfill() }
         
-        wait(for: [exp], timeout: 1)
+        wait(for: Array(expectations.values), timeout: 1)
     }
+    
+    
     
     // Makes sure it doesn't crash, and fails silently if it receives
     // an unexpected message (such as a gRPC error message)

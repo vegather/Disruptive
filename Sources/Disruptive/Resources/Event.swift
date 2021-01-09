@@ -26,7 +26,6 @@ public struct Events: Equatable {
     // Sensor Status
     public var networkStatus      : [NetworkStatusEvent]?
     public var batteryStatus      : [BatteryStatusEvent]?
-//    public var labelsChanged      : [LabelsChanged]?
     
     // Cloud Connector
     public var connectionStatus   : [ConnectionStatusEvent]?
@@ -120,10 +119,10 @@ extension Events {
                 case .waterPresent      (_, let event): Events.addToList(list: &waterPresent,       newItem: event)
                 case .networkStatus     (_, let event): Events.addToList(list: &networkStatus,      newItem: event)
                 case .batteryStatus     (_, let event): Events.addToList(list: &batteryStatus,      newItem: event)
-//                case .labelsChanged     (_, let event): Events.addToList(list: &labelsChanged,      newItem: event)
                 case .connectionStatus  (_, let event): Events.addToList(list: &connectionStatus,   newItem: event)
                 case .ethernetStatus    (_, let event): Events.addToList(list: &ethernetStatus,     newItem: event)
                 case .cellularStatus    (_, let event): Events.addToList(list: &cellularStatus,     newItem: event)
+                case .labelsChanged: break // LabelsChangedEvent will not be returned when fetching historical events
                 case .unknown(let eventType): Disruptive.log("Unknown event type: \(eventType)", level: .warning)
             }
         }
@@ -164,7 +163,6 @@ extension Events {
         if let e = other.waterPresent       { self.waterPresent       = e }
         if let e = other.networkStatus      { self.networkStatus      = e }
         if let e = other.batteryStatus      { self.batteryStatus      = e }
-//        if let e = other.labelsChanged      { self.labelsChanged      = e }
         if let e = other.connectionStatus   { self.connectionStatus   = e }
         if let e = other.ethernetStatus     { self.ethernetStatus     = e }
         if let e = other.cellularStatus     { self.cellularStatus     = e }

@@ -65,7 +65,8 @@ public class DeviceEventStream: NSObject {
     /// Called with the device identifier and the event when a new `BatteryStatusEvent` is received
     public var onBatteryStatus      : ((DeviceID, BatteryStatusEvent) -> ())?
     
-//    public var onLabelsChanged      : ((DeviceID, LabelsChanged) -> ())?
+    /// Called with the device identifier and the event when a new `LabelsChangedEvent` is received
+    public var onLabelsChanged      : ((DeviceID, LabelsChangedEvent) -> ())?
     
     
     
@@ -286,7 +287,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
                 // Sensor status
                 case .networkStatus      (let d, let e): onNetworkStatus?(d, e)
                 case .batteryStatus      (let d, let e): onBatteryStatus?(d, e)
-                //                    case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
+                case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
                 
                 // Cloud connector
                 case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)

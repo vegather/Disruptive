@@ -23,7 +23,7 @@ public enum EventType: String, Decodable, CodingKey, CaseIterable {
     // Sensor status
     case networkStatus
     case batteryStatus
-    //    case labelsChanged
+    case labelsChanged
     
     // Cloud Connector
     case connectionStatus
@@ -602,19 +602,30 @@ public struct BatteryStatusEvent: Codable, Equatable {
     }
 }
 
-// This will only be available when subscribing to an event stream on a sensor, or through a data connector
-// TODO: This does not work! `labelsChanged` is not a key in the `data` field as expected
-//public struct LabelsChangedEvent: Decodable {
-//    public let added    : [String: String]
-//    public let modified : [String: String]
-//    public let removed  : [String]
-//
-//    public init(added: [String: String], modified: [String: String], removed: [String]) {
-//        self.added = added
-//        self.modified = modified
-//        self.removed = removed
-//    }
-//}
+/**
+ Labels changed events are sent when the labels for a device are changed (added, deleted, or modified).
+ 
+ Since the display name of a device is a label with the key "name" behind the scene, this event will also
+ be sent when the display name changes.
+ 
+ Note that this event will only be sent to a device stream (see `subscribeToDevices`), or a Data Connector.
+ It will not be available as historical events for a device (the current labels for a device can be found on
+ the `Device` itself).
+ 
+ Seed the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#labelschangedevent) for more details.
+ */
+public struct LabelsChangedEvent: Decodable, Equatable {
+    public let added    : [String: String]
+    public let modified : [String: String]
+    public let removed  : [String]
+
+    // Used for testing
+    internal init(added: [String: String], modified: [String: String], removed: [String]) {
+        self.added = added
+        self.modified = modified
+        self.removed = removed
+    }
+}
 
 
 
@@ -916,7 +927,7 @@ internal enum EventContainer: Decodable, Equatable {
     // Sensor Status
     case networkStatus      (deviceID: String, event: NetworkStatusEvent)
     case batteryStatus      (deviceID: String, event: BatteryStatusEvent)
-//    case labelsChanged      (deviceID: String, event: LabelsChanged)
+    case labelsChanged      (deviceID: String, event: LabelsChangedEvent)
     
     // Cloud Connector
     case connectionStatus   (deviceID: String, event: ConnectionStatusEvent)
@@ -982,9 +993,11 @@ extension EventContainer {
             case .batteryStatus:
                 let event = try eventContainer.decode(BatteryStatusEvent.self, forKey: .batteryStatus)
                 self = .batteryStatus(deviceID: deviceID, event: event)
-//            case .labelsChanged:
-//                let event = try eventContainer.decode(LabelsChanged.self, forKey: .labelsChanged)
-//                self = .labelsChanged(deviceID: deviceID, event: event)
+            case .labelsChanged:
+                // Labels changed events are nested one layer shallower than the other events,
+                // so getting it straight out of the root container keyed by "data".
+                let event = try container.decode(LabelsChangedEvent.self, forKey: .data)
+                self = .labelsChanged(deviceID: deviceID, event: event)
                 
             // Cloud Connector
             case .connectionStatus:
