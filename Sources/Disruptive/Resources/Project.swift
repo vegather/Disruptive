@@ -125,7 +125,7 @@ extension Disruptive {
             sendRequest(request) { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init createProject request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure(.unknownError))
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -174,7 +174,7 @@ extension Disruptive {
             sendRequest(request) { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init the update project request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure(.unknownError))
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
 }

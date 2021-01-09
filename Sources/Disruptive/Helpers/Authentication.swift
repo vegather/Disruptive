@@ -317,8 +317,7 @@ public class OAuth2Authenticator: AuthProvider {
             }
         } catch {
             Disruptive.log("Failed to encode body: \(body). Error: \(error)", level: .error)
-            completion(.failure(.unknownError))
-            return
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
 

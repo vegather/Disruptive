@@ -209,7 +209,7 @@ extension Disruptive {
             sendRequest(request) { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init setLabel request with payload: \(body). Error: \(error)", level: .error)
-            completion(.failure(.unknownError))
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
     
@@ -244,7 +244,7 @@ extension Disruptive {
             sendRequest(request) { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to initialize move devices request with payload: \(body). Error: \(error)", level: .error)
-            completion(.failure(.unknownError))
+            completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
 }
