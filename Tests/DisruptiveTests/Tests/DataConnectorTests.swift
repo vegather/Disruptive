@@ -55,17 +55,37 @@ class DataConnectorTests: DisruptiveTests {
     
     func testDecodeStatus() {
         func assert(status: DataConnector.Status, equals input: String) {
-            XCTAssertEqual(
-                status,
-                try! JSONDecoder().decode(DataConnector.Status.self, from: "\"\(input)\"".data(using: .utf8)!)
-            )
+            let output = try! JSONDecoder().decode(DataConnector.Status.self, from: "\"\(input)\"".data(using: .utf8)!)
+            
+            XCTAssertEqual(status, output)
+            if case .unknown = output {
+                XCTAssertNil(output.rawValue)
+            } else {
+                XCTAssertNotNil(output.rawValue)
+                XCTAssertGreaterThan(output.rawValue!.count, 0)
+            }
         }
         
         assert(status: .active, equals: "ACTIVE")
-        assert(status: .deactivated, equals: "DEACTIVATED")
-        assert(status: .deactivated, equals: "USER_DISABLED")
+        assert(status: .userDisabled, equals: "USER_DISABLED")
         assert(status: .systemDisabled, equals: "SYSTEM_DISABLED")
         assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: "UNKNOWN_STATUS")
+    }
+    
+    func testEncodeStatus() {
+        func assert(status: DataConnector.Status, equals input: String?) {
+            if let input = input {
+                let encoded = try! JSONEncoder().encode(status)
+                XCTAssertEqual("\"\(input)\"", String(data: encoded, encoding: .utf8))
+            } else {
+                XCTAssertThrowsError(try JSONEncoder().encode(status))
+            }
+        }
+        
+        assert(status: .active,         equals: "ACTIVE")
+        assert(status: .userDisabled,   equals: "USER_DISABLED")
+        assert(status: .systemDisabled, equals: "SYSTEM_DISABLED")
+        assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
     }
     
     func testGetDataConnectors() {
@@ -150,7 +170,7 @@ class DataConnectorTests: DisruptiveTests {
         let reqPushType = DataConnector.PushType.httpPush(url: reqPushURL, signatureSecret: reqPushSecret, headers: reqPushHeaders)
         let reqEventTypes = [EventType.temperature, .batteryStatus, .networkStatus]
         let reqLabels = ["building_nr"]
-        let reqStatus = DataConnector.Status.deactivated
+        let reqStatus = DataConnector.Status.userDisabled
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
         let reqBody = """
@@ -159,7 +179,7 @@ class DataConnectorTests: DisruptiveTests {
           "events": [\(reqEventTypes.map { "\"\($0.rawValue)\"" }.joined(separator: ","))],
           "labels": [\(reqLabels    .map { "\"\($0)\"" }         .joined(separator: ","))],
           "type": "HTTP_PUSH",
-          "status": "\(reqStatus.rawValue)",
+          "status": "\(reqStatus.rawValue!)",
           "httpConfig": {
             "url": "\(reqPushURL)",
             "signatureSecret": "\(reqPushSecret)",
@@ -227,7 +247,7 @@ class DataConnectorTests: DisruptiveTests {
         let reqPushType = DataConnector.PushType.httpPush(url: reqPushURL, signatureSecret: reqPushSecret, headers: reqPushHeaders)
         let reqEventTypes = [EventType.temperature, .batteryStatus, .networkStatus]
         let reqLabels = ["building_nr"]
-        let reqStatus = DataConnector.Status.deactivated
+        let reqStatus = DataConnector.Status.userDisabled
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors/\(reqDcID)")
         let reqBody = """
@@ -235,7 +255,7 @@ class DataConnectorTests: DisruptiveTests {
           "displayName": "\(reqDisplayName)",
           "events": [\(reqEventTypes.map { "\"\($0.rawValue)\"" }.joined(separator: ","))],
           "labels": [\(reqLabels    .map { "\"\($0)\"" }         .joined(separator: ","))],
-          "status": "\(reqStatus.rawValue)",
+          "status": "\(reqStatus.rawValue!)",
           "httpConfig": {
             "url": "\(reqPushURL)",
             "signatureSecret": "\(reqPushSecret)",
@@ -480,7 +500,7 @@ extension DataConnectorTests {
         {
             "name": "projects/\(dc.projectID)/dataconnectors/\(dc.identifier)",
             "displayName": "\(dc.displayName)",
-            "status": "\(dc.status.rawValue)",
+            "status": "\(dc.status.rawValue!)",
             "events": [\(dc.events.map({ "\"\($0.rawValue)\"" }).joined(separator: ","))],
             "labels": [\(dc.labels.map({ "\"\($0)\"" }).joined(separator: ","))],
             "type": "HTTP_PUSH",

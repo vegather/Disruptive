@@ -114,17 +114,16 @@ extension Disruptive {
             fatalError("PushType \(pushType) is currently not supported")
         }
         
-        // Since the initial status can only be active or deactivated, the argument is
-        // a Bool instead of a Status. This just converts that back to a Status, and
-        // gets the rawValue (a String) to send to the REST API.
-        let initialStatus = (isActive ? DataConnector.Status.active : .deactivated).rawValue
+        // Since the initial status can only be active or user disabled, the argument is
+        // a Bool instead of a Status. This just converts that back to a Status.
+        let initialStatus = isActive ? DataConnector.Status.active : .userDisabled
         
         struct DataConnectorPayload: Encodable {
             let displayName: String
             let events: [String]
             let labels: [String]
             let type: String
-            let status: String
+            let status: DataConnector.Status
             let httpConfig: HTTPConfig
             
             struct HTTPConfig: Encodable {
@@ -245,7 +244,7 @@ extension Disruptive {
             patch.httpConfig = httpConfig
         }
         if let isActive = isActive {
-            patch.status = (isActive ? DataConnector.Status.active : .deactivated).rawValue
+            patch.status = (isActive ? DataConnector.Status.active : .userDisabled).rawValue
             updateMask.append("status")
         }
         if let eventTypes = eventTypes {
@@ -376,14 +375,14 @@ extension DataConnector {
     
     /// The current status of a Data Connector. This will indicate whether or
     /// not the Data Connector is currently sending out events.
-    public enum Status: Decodable, Equatable {
+    public enum Status: Codable, Equatable {
         
         /// The Data Connector is currently active, and will push out events for the devices in the project
         /// to an external service.
         case active
         
         /// The Data Connector is deactivated. It can be reactivated by calling the `updateDataConnector` function.
-        case deactivated
+        case userDisabled
         
         /// The Data Connector will be set to this state by the system if it has received
         /// too many errors recently, or if it keeps seeing errors for a prolonged period of time.
@@ -397,37 +396,34 @@ extension DataConnector {
         
         
         // Used for testing, and internally for creating requests
-        internal var rawValue: String {
+        internal var rawValue: String? {
             switch self {
-                case .active         : return CodingKeys.active.rawValue
-                case .deactivated    : return CodingKeys.deactivated.rawValue
-                case .systemDisabled : return CodingKeys.systemDisabled.rawValue
-                case .unknown(let s) : return s
+                case .active         : return "ACTIVE"
+                case .userDisabled   : return "USER_DISABLED"
+                case .systemDisabled : return "SYSTEM_DISABLED"
+                case .unknown        : return nil
             }
         }
         
-        private enum CodingKeys: String, CodingKey {
-            case active         = "ACTIVE"
-            case deactivated    = "DEACTIVATED"
-            case userDisabled   = "USER_DISABLED"
-            case systemDisabled = "SYSTEM_DISABLED"
-        }
-        
-        // Doing some custom decoding because "USER_DISABLED" is the same
-        // as "DEACTIVATED" and is likely never actually used. This allows
-        // for backwards compatibility in case we want to actually remove
-        // the case later, while at the same time mitigating a potential
-        // crash if the case happens to be set at some point.
         public init(from decoder: Decoder) throws {
             let container    = try decoder.singleValueContainer()
             let statusString = try container.decode(String.self)
             
             switch statusString {
                 case "ACTIVE"          : self = .active
-                case "DEACTIVATED"     : self = .deactivated
-                case "USER_DISABLED"   : self = .deactivated
+                case "USER_DISABLED"   : self = .userDisabled
                 case "SYSTEM_DISABLED" : self = .systemDisabled
                 default                : self = .unknown(value: statusString)
+            }
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            if let rawValue = rawValue {
+                var container = encoder.singleValueContainer()
+                try container.encode(rawValue)
+            } else {
+                Disruptive.log("Can't encode DataConnector.Status with case .unknown", level: .error)
+                throw DisruptiveError.badRequest
             }
         }
     }
