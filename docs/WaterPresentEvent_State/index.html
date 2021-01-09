@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disruptive - NetworkStatusEvent.TransmissionMode</title>
+    <title>Disruptive - WaterPresentEvent.State</title>
     <link rel="stylesheet" type="text/css" href="https://vegather.github.io/Disruptive/all.css" media="all" />
 </head>
 <body>
@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Member Of</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#networkstatusevent.transmissionmode.init(from:)">init(from:​)</a></li></ul></li><li><a href="#enumeration cases">Enumeration Cases</a><ul><li class="case"><a href="#networkstatusevent.transmissionmode.standard">standard</a></li><li class="case"><a href="#networkstatusevent.transmissionmode.boost">boost</a></li><li class="case"><a href="#networkstatusevent.transmissionmode.unknown">unknown</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#networkstatusevent.transmissionmode.encode(to:)">encode(to:​)</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Member Of</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#waterpresentevent.state.init(from:)">init(from:​)</a></li></ul></li><li><a href="#enumeration cases">Enumeration Cases</a><ul><li class="case"><a href="#waterpresentevent.state.waterpresent">water​Present</a></li><li class="case"><a href="#waterpresentevent.state.waternotpresent">water​Not​Present</a></li><li class="case"><a href="#waterpresentevent.state.unknown">unknown</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#waterpresentevent.state.encode(to:)">encode(to:​)</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -34,14 +34,12 @@
         <article>
             <h1>
     <small>Enumeration</small>
-    <code class="name">Network​Status​Event.​Transmission​Mode</code>
+    <code class="name">Water​Present​Event.​State</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">enum</span> <span class="type">TransmissionMode</span></code></pre></body></html>
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">enum</span> <span class="type">State</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>The transmission mode the sensor is currently in. The sensor will automatically switch
-transmission modes when the sensor has low connectivity to a Cloud Connector.
-See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360003182914-What-is-Boost-high-power-usage-">Help Center</a> for more details.</p>
+    <p>The water presence state of a sensor.</p>
 
 </div>
 <section id="relationships">
@@ -58,12 +56,12 @@ See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/3
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
 <title>%3</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 868,-112 868,4 -4,4"/>
-<!-- NetworkStatusEvent.TransmissionMode -->
+<!-- WaterPresentEvent.State -->
 <g id="node1" class="node enumeration current">
-<title>NetworkStatusEvent.TransmissionMode</title>
-<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/NetworkStatusEvent_TransmissionMode" xlink:title="NetworkStatusEvent.TransmissionMode">
-<path fill="none" stroke="#000000" stroke-width="3" d="M569.5,-108C569.5,-108 294.5,-108 294.5,-108 288.5,-108 282.5,-102 282.5,-96 282.5,-96 282.5,-84 282.5,-84 282.5,-78 288.5,-72 294.5,-72 294.5,-72 569.5,-72 569.5,-72 575.5,-72 581.5,-78 581.5,-84 581.5,-84 581.5,-96 581.5,-96 581.5,-102 575.5,-108 569.5,-108"/>
-<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">NetworkStatusEvent.TransmissionMode</text>
+<title>WaterPresentEvent.State</title>
+<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/WaterPresentEvent_State" xlink:title="WaterPresentEvent.State">
+<path fill="none" stroke="#000000" stroke-width="3" d="M528,-108C528,-108 336,-108 336,-108 330,-108 324,-102 324,-96 324,-96 324,-84 324,-84 324,-78 330,-72 336,-72 336,-72 528,-72 528,-72 534,-72 540,-78 540,-84 540,-84 540,-96 540,-96 540,-102 534,-108 528,-108"/>
+<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">WaterPresentEvent.State</text>
 </a>
 </g>
 </g>
@@ -73,9 +71,9 @@ See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/3
 <path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
 <text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
 </g>
-<!-- NetworkStatusEvent.TransmissionMode&#45;&gt;Equatable -->
-<g id="edge2" class="edge conformsTo">
-<title>NetworkStatusEvent.TransmissionMode&#45;&gt;Equatable</title>
+<!-- WaterPresentEvent.State&#45;&gt;Equatable -->
+<g id="edge1" class="edge conformsTo">
+<title>WaterPresentEvent.State&#45;&gt;Equatable</title>
 <path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
 </g>
@@ -85,9 +83,9 @@ See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/3
 <path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
 <text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Codable</text>
 </g>
-<!-- NetworkStatusEvent.TransmissionMode&#45;&gt;Codable -->
-<g id="edge1" class="edge conformsTo">
-<title>NetworkStatusEvent.TransmissionMode&#45;&gt;Codable</title>
+<!-- WaterPresentEvent.State&#45;&gt;Codable -->
+<g id="edge2" class="edge conformsTo">
+<title>WaterPresentEvent.State&#45;&gt;Codable</title>
 <path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
 </g>
@@ -95,13 +93,13 @@ See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/3
 </svg>
 
 
-    <figcaption hidden>Inheritance graph for NetworkStatusEvent.TransmissionMode.</figcaption>
+    <figcaption hidden>Inheritance graph for WaterPresentEvent.State.</figcaption>
 </figure>
         <h3>Member Of</h3>
 <dl>
-    <dt class="structure"><code><a href="https://vegather.github.io/Disruptive/NetworkStatusEvent">NetworkStatusEvent</a></code></dt>
-<dd><p>A network status event describes which Cloud Connectors a sensor is connected to, and how strong
-that connection is. A network status event is sent on every heartbeat, as well as when a sensor is touched.</p>
+    <dt class="structure"><code><a href="https://vegather.github.io/Disruptive/WaterPresentEvent">WaterPresentEvent</a></code></dt>
+<dd><p>An event that indicates whether or not water is present to a Water Detector sensor.
+This event is sent every heartbeat, and when the sensor is touched.</p>
 </dd>
 </dl>
 <h3>Conforms To</h3>
@@ -113,7 +111,7 @@ that connection is. A network status event is sent on every heartbeat, as well a
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="networkstatusevent.transmissionmode.init(from:)">
+        <div role="article" class="initializer" id="waterpresentevent.state.init(from:)">
     <h3>
         <code>init(from:​)</code>
     </h3>
@@ -123,34 +121,35 @@ that connection is. A network status event is sent on every heartbeat, as well a
     <section id="enumeration cases">
         <h2>Enumeration Cases</h2>
 
-        <div role="article" class="case" id="networkstatusevent.transmissionmode.standard">
+        <div role="article" class="case" id="waterpresentevent.state.waterpresent">
     <h3>
-        <code>standard</code>
+        <code>water​Present</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">standard</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">waterPresent</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>The normal transmission mode for a sensor. This consumes less energy, but has a lower range.</p>
+    <p>The sensor has detected the presence of water.</p>
 
 </div>
 </div>
-<div role="article" class="case" id="networkstatusevent.transmissionmode.boost">
+<div role="article" class="case" id="waterpresentevent.state.waternotpresent">
     <h3>
-        <code>boost</code>
+        <code>water​Not​Present</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">boost</span></code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">waterNotPresent</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Boost mode is used when a sensor has low connectivity to a Cloud Connector. It uses more energy, but has better range.</p>
+    <p>The sensor has not detected the presence of water.</p>
 
 </div>
 </div>
-<div role="article" class="case" id="networkstatusevent.transmissionmode.unknown">
+<div role="article" class="case" id="waterpresentevent.state.unknown">
     <h3>
         <code>unknown</code>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">unknown</span>(<span class="variable">value</span>: <span class="type">String</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Used for backward compatibility in case a new transmission mode
-is added on the backend before being added to this client library.</p>
+    <p>Used for backward compatibility in case a new state
+is added on the backend before being added to this
+client library.</p>
 
 </div>
 </div>
@@ -158,7 +157,7 @@ is added on the backend before being added to this client library.</p>
     <section id="methods">
         <h2>Methods</h2>
 
-        <div role="article" class="function" id="networkstatusevent.transmissionmode.encode(to:)">
+        <div role="article" class="function" id="waterpresentevent.state.encode(to:)">
     <h3>
         <code>encode(to:​)</code>
     </h3>
@@ -173,7 +172,7 @@ is added on the backend before being added to this client library.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2021-01-09T12:32:35+0000">January 9, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-01-09T12:32:34+0000">January 9, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

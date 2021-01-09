@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#disruptive.init(authprovider:baseurl:)">init(auth​Provider:​base​URL:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#disruptive.defaultbaseurl">default​Base​URL</a></li><li class="variable"><a href="#disruptive.defaultauthurl">default​Auth​URL</a></li><li class="variable"><a href="#disruptive.baseurl">base​URL</a></li><li class="variable"><a href="#disruptive.loggingenabled">logging​Enabled</a></li><li class="variable"><a href="#disruptive.authprovider">auth​Provider</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#disruptive.getdataconnectors(projectid:completion:)">get​Data​Connectors(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdataconnector(projectid:dataconnectorid:completion:)">get​Data​Connector(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createdataconnector(projectid:displayname:pushtype:eventtypes:labels:isactive:completion:)">create​Data​Connector(project​ID:​display​Name:​push​Type:​event​Types:​labels:​is​Active:​completion:​)</a></li><li class="function"><a href="#disruptive.updatedataconnector(projectid:dataconnectorid:displayname:httppush:isactive:eventtypes:labels:completion:)">update​Data​Connector(project​ID:​data​Connector​ID:​display​Name:​http​Push:​is​Active:​event​Types:​labels:​completion:​)</a></li><li class="function"><a href="#disruptive.deletedataconnector(projectid:dataconnectorid:completion:)">delete​Data​Connector(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdataconnectormetrics(projectid:dataconnectorid:completion:)">get​Data​Connector​Metrics(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.syncdataconnector(projectid:dataconnectorid:completion:)">sync​Data​Connector(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdevice(projectid:deviceid:completion:)">get​Device(project​ID:​device​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdevices(projectid:completion:)">get​Devices(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.updatedevicedisplayname(projectid:deviceid:newdisplayname:completion:)">update​Device​Display​Name(project​ID:​device​ID:​new​Display​Name:​completion:​)</a></li><li class="function"><a href="#disruptive.removedevicelabel(projectid:deviceid:labelkey:completion:)">remove​Device​Label(project​ID:​device​ID:​label​Key:​completion:​)</a></li><li class="function"><a href="#disruptive.setdevicelabel(projectid:deviceid:labelkey:labelvalue:completion:)">set​Device​Label(project​ID:​device​ID:​label​Key:​label​Value:​completion:​)</a></li><li class="function"><a href="#disruptive.batchupdatedevicelabels(projectid:deviceids:labelstoset:labelstoremove:completion:)">batch​Update​Device​Labels(project​ID:​device​IDs:​labels​ToSet:​labels​ToRemove:​completion:​)</a></li><li class="function"><a href="#disruptive.movedevices(deviceids:fromprojectid:toprojectid:completion:)">move​Devices(device​IDs:​from​Project​ID:​to​Project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:)">get​Events(project​ID:​device​ID:​start​Date:​end​Date:​event​Types:​completion:​)</a></li><li class="function"><a href="#disruptive.getorganizations(completion:)">get​Organizations(completion:​)</a></li><li class="function"><a href="#disruptive.getorganization(organizationid:completion:)">get​Organization(organization​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getpermissions(fororganizationid:completion:)">get​Permissions(for​Organization​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getpermissions(forprojectid:completion:)">get​Permissions(for​Project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getprojects(organizationid:query:completion:)">get​Projects(organization​ID:​query:​completion:​)</a></li><li class="function"><a href="#disruptive.getproject(projectid:completion:)">get​Project(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createproject(displayname:organizationid:completion:)">create​Project(display​Name:​organization​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.deleteproject(projectid:completion:)">delete​Project(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.updateprojectdisplayname(projectid:newdisplayname:completion:)">update​Project​Display​Name(project​ID:​new​Display​Name:​completion:​)</a></li><li class="function"><a href="#disruptive.getroles(completion:)">get​Roles(completion:​)</a></li><li class="function"><a href="#disruptive.getrole(roleid:completion:)">get​Role(role​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccounts(projectid:completion:)">get​Service​Accounts(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccount(projectid:serviceaccountid:completion:)">get​Service​Account(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createserviceaccount(projectid:displayname:basicauthenabled:completion:)">create​Service​Account(project​ID:​display​Name:​basic​Auth​Enabled:​completion:​)</a></li><li class="function"><a href="#disruptive.updateserviceaccount(projectid:serviceaccountid:displayname:basicauthenabled:completion:)">update​Service​Account(project​ID:​service​Account​ID:​display​Name:​basic​Auth​Enabled:​completion:​)</a></li><li class="function"><a href="#disruptive.deleteserviceaccount(projectid:serviceaccountid:completion:)">delete​Service​Account(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccountkeys(projectid:serviceaccountid:completion:)">get​Service​Account​Keys(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccountkey(projectid:serviceaccountid:keyid:completion:)">get​Service​Account​Key(project​ID:​service​Account​ID:​key​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createserviceaccountkey(projectid:serviceaccountid:completion:)">create​Service​Account​Key(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.deleteserviceaccountkey(projectid:serviceaccountid:keyid:completion:)">delete​Service​Account​Key(project​ID:​service​Account​ID:​key​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.subscribetodevices(projectid:deviceids:devicetypes:labelfilters:eventtypes:)">subscribe​ToDevices(project​ID:​device​IDs:​device​Types:​label​Filters:​event​Types:​)</a></li><li class="function"><a href="#disruptive.subscribetodevice(projectid:deviceid:eventtypes:)">subscribe​ToDevice(project​ID:​device​ID:​event​Types:​)</a></li></ul></li></ol>
+            <ol><li><a href="#initializers">Initializers</a><ul><li class="initializer"><a href="#disruptive.init(authprovider:baseurl:emulatorbaseurl:)">init(auth​Provider:​base​URL:​emulator​Base​URL:​)</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#disruptive.defaultbaseurl">default​Base​URL</a></li><li class="variable"><a href="#disruptive.defaultbaseemulatorurl">default​Base​Emulator​URL</a></li><li class="variable"><a href="#disruptive.defaultauthurl">default​Auth​URL</a></li><li class="variable"><a href="#disruptive.baseurl">base​URL</a></li><li class="variable"><a href="#disruptive.emulatorbaseurl">emulator​Base​URL</a></li><li class="variable"><a href="#disruptive.loggingenabled">logging​Enabled</a></li><li class="variable"><a href="#disruptive.authprovider">auth​Provider</a></li></ul></li><li><a href="#methods">Methods</a><ul><li class="function"><a href="#disruptive.getdataconnectors(projectid:completion:)">get​Data​Connectors(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdataconnector(projectid:dataconnectorid:completion:)">get​Data​Connector(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createdataconnector(projectid:displayname:pushtype:eventtypes:labels:isactive:completion:)">create​Data​Connector(project​ID:​display​Name:​push​Type:​event​Types:​labels:​is​Active:​completion:​)</a></li><li class="function"><a href="#disruptive.updatedataconnector(projectid:dataconnectorid:displayname:httppush:isactive:eventtypes:labels:completion:)">update​Data​Connector(project​ID:​data​Connector​ID:​display​Name:​http​Push:​is​Active:​event​Types:​labels:​completion:​)</a></li><li class="function"><a href="#disruptive.deletedataconnector(projectid:dataconnectorid:completion:)">delete​Data​Connector(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdataconnectormetrics(projectid:dataconnectorid:completion:)">get​Data​Connector​Metrics(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.syncdataconnector(projectid:dataconnectorid:completion:)">sync​Data​Connector(project​ID:​data​Connector​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdevice(projectid:deviceid:completion:)">get​Device(project​ID:​device​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getdevices(projectid:completion:)">get​Devices(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.updatedevicedisplayname(projectid:deviceid:newdisplayname:completion:)">update​Device​Display​Name(project​ID:​device​ID:​new​Display​Name:​completion:​)</a></li><li class="function"><a href="#disruptive.deletedevicelabel(projectid:deviceid:labelkey:completion:)">delete​Device​Label(project​ID:​device​ID:​label​Key:​completion:​)</a></li><li class="function"><a href="#disruptive.setdevicelabel(projectid:deviceid:labelkey:labelvalue:completion:)">set​Device​Label(project​ID:​device​ID:​label​Key:​label​Value:​completion:​)</a></li><li class="function"><a href="#disruptive.batchupdatedevicelabels(projectid:deviceids:labelstoset:labelstoremove:completion:)">batch​Update​Device​Labels(project​ID:​device​IDs:​labels​ToSet:​labels​ToRemove:​completion:​)</a></li><li class="function"><a href="#disruptive.movedevices(deviceids:fromprojectid:toprojectid:completion:)">move​Devices(device​IDs:​from​Project​ID:​to​Project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getemulateddevice(projectid:deviceid:completion:)">get​Emulated​Device(project​ID:​device​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getemulateddevices(projectid:completion:)">get​Emulated​Devices(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createemulateddevice(projectid:devicetype:displayname:labels:completion:)">create​Emulated​Device(project​ID:​device​Type:​display​Name:​labels:​completion:​)</a></li><li class="function"><a href="#disruptive.deleteemulateddevice(projectid:deviceid:completion:)">delete​Emulated​Device(project​ID:​device​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.publishemulatedevent(projectid:deviceid:event:completion:)">publish​Emulated​Event(project​ID:​device​ID:​event:​completion:​)</a></li><li class="function"><a href="#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:)">get​Events(project​ID:​device​ID:​start​Date:​end​Date:​event​Types:​completion:​)</a></li><li class="function"><a href="#disruptive.getmembers(organizationid:completion:)">get​Members(organization​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getmembers(projectid:completion:)">get​Members(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getmember(organizationid:memberid:completion:)">get​Member(organization​ID:​member​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getmember(projectid:memberid:completion:)">get​Member(project​ID:​member​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.invitemember(organizationid:roles:email:completion:)">invite​Member(organization​ID:​roles:​email:​completion:​)</a></li><li class="function"><a href="#disruptive.invitemember(projectid:roles:email:completion:)">invite​Member(project​ID:​roles:​email:​completion:​)</a></li><li class="function"><a href="#disruptive.updatemember(projectid:memberid:roles:completion:)">update​Member(project​ID:​member​ID:​roles:​completion:​)</a></li><li class="function"><a href="#disruptive.deletemember(organizationid:memberid:completion:)">delete​Member(organization​ID:​member​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.deletemember(projectid:memberid:completion:)">delete​Member(project​ID:​member​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getmemberinviteurl(organizationid:memberid:completion:)">get​Member​Invite​URL(organization​ID:​member​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getmemberinviteurl(projectid:memberid:completion:)">get​Member​Invite​URL(project​ID:​member​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getorganizations(completion:)">get​Organizations(completion:​)</a></li><li class="function"><a href="#disruptive.getorganization(organizationid:completion:)">get​Organization(organization​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getpermissions(fororganizationid:completion:)">get​Permissions(for​Organization​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getpermissions(forprojectid:completion:)">get​Permissions(for​Project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getprojects(organizationid:query:completion:)">get​Projects(organization​ID:​query:​completion:​)</a></li><li class="function"><a href="#disruptive.getproject(projectid:completion:)">get​Project(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createproject(organizationid:displayname:completion:)">create​Project(organization​ID:​display​Name:​completion:​)</a></li><li class="function"><a href="#disruptive.deleteproject(projectid:completion:)">delete​Project(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.updateprojectdisplayname(projectid:newdisplayname:completion:)">update​Project​Display​Name(project​ID:​new​Display​Name:​completion:​)</a></li><li class="function"><a href="#disruptive.getroles(completion:)">get​Roles(completion:​)</a></li><li class="function"><a href="#disruptive.getrole(roletype:completion:)">get​Role(role​Type:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccounts(projectid:completion:)">get​Service​Accounts(project​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccount(projectid:serviceaccountid:completion:)">get​Service​Account(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createserviceaccount(projectid:displayname:basicauthenabled:completion:)">create​Service​Account(project​ID:​display​Name:​basic​Auth​Enabled:​completion:​)</a></li><li class="function"><a href="#disruptive.updateserviceaccount(projectid:serviceaccountid:displayname:basicauthenabled:completion:)">update​Service​Account(project​ID:​service​Account​ID:​display​Name:​basic​Auth​Enabled:​completion:​)</a></li><li class="function"><a href="#disruptive.deleteserviceaccount(projectid:serviceaccountid:completion:)">delete​Service​Account(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccountkeys(projectid:serviceaccountid:completion:)">get​Service​Account​Keys(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.getserviceaccountkey(projectid:serviceaccountid:keyid:completion:)">get​Service​Account​Key(project​ID:​service​Account​ID:​key​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.createserviceaccountkey(projectid:serviceaccountid:completion:)">create​Service​Account​Key(project​ID:​service​Account​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.deleteserviceaccountkey(projectid:serviceaccountid:keyid:completion:)">delete​Service​Account​Key(project​ID:​service​Account​ID:​key​ID:​completion:​)</a></li><li class="function"><a href="#disruptive.subscribetodevices(projectid:deviceids:devicetypes:labelfilters:eventtypes:)">subscribe​ToDevices(project​ID:​device​IDs:​device​Types:​label​Filters:​event​Types:​)</a></li><li class="function"><a href="#disruptive.subscribetodevice(projectid:deviceid:eventtypes:)">subscribe​ToDevice(project​ID:​device​ID:​event​Types:​)</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -53,11 +53,11 @@ so all requests are authenticated.</p>
     <section id="initializers">
         <h2>Initializers</h2>
 
-        <div role="article" class="initializer" id="disruptive.init(authprovider:baseurl:)">
+        <div role="article" class="initializer" id="disruptive.init(authprovider:baseurl:emulatorbaseurl:)">
     <h3>
-        <code>init(auth​Provider:​base​URL:​)</code>
+        <code>init(auth​Provider:​base​URL:​emulator​Base​URL:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">authProvider</span>: <a href="https://vegather.github.io/Disruptive/AuthProvider"><span class="type">AuthProvider</span></a>, <span class="variable">baseURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultBaseURL</span>)</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">authProvider</span>: <a href="https://vegather.github.io/Disruptive/AuthProvider"><span class="type">AuthProvider</span></a>, <span class="variable">baseURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultBaseURL</span>, <span class="variable">emulatorBaseURL</span>: <span class="type">String</span> = <span class="variable">Disruptive</span>.<span class="type">defaultBaseEmulatorURL</span>)</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Initializes a <code>Disruptive</code> instance.</p>
 
@@ -102,6 +102,16 @@ so all requests are authenticated.</p>
 
 </div>
 </div>
+<div role="article" class="variable" id="disruptive.defaultbaseemulatorurl">
+    <h3>
+        <code>default​Base​Emulator​URL</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">defaultBaseEmulatorURL</span> = <span class="string literal">"</span><span class="string literal">https://emulator.disruptive-technologies.com/v2/</span><span class="string literal">"</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The default base URL for the Disruptive Technologies emulator REST API in the production environment.</p>
+
+</div>
+</div>
 <div role="article" class="variable" id="disruptive.defaultauthurl">
     <h3>
         <code>default​Auth​URL</code>
@@ -118,7 +128,17 @@ so all requests are authenticated.</p>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">baseURL</span>: <span class="type">String</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>The base URL for the Disruptive REST API.</p>
+    <p>The base URL for the Disruptive Technologies REST API.</p>
+
+</div>
+</div>
+<div role="article" class="variable" id="disruptive.emulatorbaseurl">
+    <h3>
+        <code>emulator​Base​URL</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">emulatorBaseURL</span>: <span class="type">String</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>The base URL for the Disruptive Technologies emulator REST API.</p>
 
 </div>
 </div>
@@ -579,7 +599,7 @@ set up an external service to receive the events that are sent out by a Data Con
 <tr>
     <th>device​ID</th>
     <td><code class="type">String</code></td>
-    <td><p>The identifier of the device to get details on.</p>
+    <td><p>The identifier of the device to get details for.</p>
 </td>
 </tr>
 <tr>
@@ -603,7 +623,7 @@ set up an external service to receive the events that are sent out by a Data Con
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getDevices</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Gets a list of devices in a specific project.</p>
+    <p>Gets all the devices in a specific project (including emulated devices).</p>
 
 </div>
 <h4>Parameters</h4>
@@ -695,13 +715,13 @@ set up an external service to receive the events that are sent out by a Data Con
   </tbody>
 </table>
 </div>
-<div role="article" class="function" id="disruptive.removedevicelabel(projectid:deviceid:labelkey:completion:)">
+<div role="article" class="function" id="disruptive.deletedevicelabel(projectid:deviceid:labelkey:completion:)">
     <h3>
-        <code>remove​Device​Label(project​ID:​device​ID:​label​Key:​completion:​)</code>
+        <code>delete​Device​Label(project​ID:​device​ID:​label​Key:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">removeDeviceLabel</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">labelKey</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">deleteDeviceLabel</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">labelKey</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Removes the specified label for the device. Will return success if the label didn't exist.</p>
+    <p>Deletes the specified label for the device. Will return success if the label didn't exist.</p>
 
 </div>
 <div class="discussion">
@@ -728,13 +748,13 @@ set up an external service to receive the events that are sent out by a Data Con
 <tr>
     <th>device​ID</th>
     <td><code class="type">String</code></td>
-    <td><p>The identifier of the device to remove a label from.</p>
+    <td><p>The identifier of the device to delete a label from.</p>
 </td>
 </tr>
 <tr>
     <th>label​Key</th>
     <td><code class="type">String</code></td>
-    <td><p>The key of the label to remove.</p>
+    <td><p>The key of the label to delete.</p>
 </td>
 </tr>
 <tr>
@@ -928,6 +948,271 @@ in the <code>toProjectID</code>, or an organization admin in which the <code>toP
   </tbody>
 </table>
 </div>
+<div role="article" class="function" id="disruptive.getemulateddevice(projectid:deviceid:completion:)">
+    <h3>
+        <code>get​Emulated​Device(project​ID:​device​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getEmulatedDevice</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Gets details for a specific emulated device within a project.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project to find the device in.</p>
+</td>
+</tr>
+<tr>
+    <th>device​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the emulated device to get details for.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Device, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Device</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Device, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.getemulateddevices(projectid:completion:)">
+    <h3>
+        <code>get​Emulated​Devices(project​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getEmulatedDevices</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Gets all the emulated devices in a specific project (without any physical devices).</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project to get emulated devices from.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;[Device], Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain an array of <code>Device</code>s. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;[Device], DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.createemulateddevice(projectid:devicetype:displayname:labels:completion:)">
+    <h3>
+        <code>create​Emulated​Device(project​ID:​device​Type:​display​Name:​labels:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">createEmulatedDevice</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceType</span>: <a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>.<span class="type">DeviceType</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">labels</span>: [<span class="type">String</span>: <span class="type">String</span>] = [:], <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Device"><span class="type">Device</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Creates a new emulated device in a specific project.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project to create the emulated device in.</p>
+</td>
+</tr>
+<tr>
+    <th>device​Type</th>
+    <td><code class="type">Device.​Device​Type</code></td>
+    <td><p>The type of device the emulated device should emulate.</p>
+</td>
+</tr>
+<tr>
+    <th>display​Name</th>
+    <td><code class="type">String</code></td>
+    <td><p>The display name of the new emulated device. This will be added as a label with the key <code>name</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>labels</th>
+    <td><code class="type">[String:​ String]</code></td>
+    <td><p>A set of keys and values to use as labels for the emulated device.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Device, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the newly created <code>Device</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Device, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.deleteemulateddevice(projectid:deviceid:completion:)">
+    <h3>
+        <code>delete​Emulated​Device(project​ID:​device​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">deleteEmulatedDevice</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Deletes an emulated device.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project to delete the emulated device from.</p>
+</td>
+</tr>
+<tr>
+    <th>device​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the emulated device to delete.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Void, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> result case is returned, otherwise a <code>DisruptiveError</code> is returned in the <code>.failure</code> case.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Void, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.publishemulatedevent(projectid:deviceid:event:completion:)">
+    <h3>
+        <code>publish​Emulated​Event(project​ID:​device​ID:​event:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">publishEmulatedEvent</span>&lt;<span class="variable">Event</span>: <a href="https://vegather.github.io/Disruptive/PublishableEvent"><span class="type">PublishableEvent</span></a>&gt;(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">deviceID</span>: <span class="type">String</span>, <span class="variable">event</span>: <span class="type">Event</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Publishes a new event to an emulated device.</p>
+
+</div>
+<div class="discussion">
+    <p>Any of the event types in <code>Sources/Disruptive/Helpers/EventTypes.swift</code> can be published,
+although not all event types can be published for every device type. For example, an emulated temperature sensor
+cannot publish an <code>EthernetStatusEvent</code>.
+For more details about the different event types, see the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events">Developer Website</a>.</p>
+
+<p>Example:</p>
+
+<html><body><pre class="highlight"><code><span class="comment">// Publish a temperature event</span>
+<span class="variable">publishEmulatedEvent</span>(
+    <span class="variable">projectID</span> : <span class="string literal">"</span><span class="string literal">&lt;PROJECT_ID&gt;</span><span class="string literal">"</span>,
+    <span class="variable">deviceID</span>  : <span class="string literal">"</span><span class="string literal">&lt;DEVICE_ID&gt;</span><span class="string literal">"</span>,
+    <span class="variable">event</span>     : <a href="https://vegather.github.io/Disruptive/TemperatureEvent"><span class="type">TemperatureEvent</span></a>(<span class="variable">value</span>: <span class="number literal">10</span>, <span class="variable">timestamp</span>: <span class="type">Date</span>())
+{ <span class="variable">result</span> <span class="keyword">in</span>
+    ...
+}
+</code></pre></body></html>
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project the emulated device is in.</p>
+</td>
+</tr>
+<tr>
+    <th>device​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the emulated device to publish the event to.</p>
+</td>
+</tr>
+<tr>
+    <th>event</th>
+    <td><code class="type">Event</code></td>
+    <td><p>The event to publish to the emulated device. This can be any event type such as <code>TemperatureEvent</code>, <code>TouchEvent</code>, <code>NetworkStatusEvent</code>, <code>ObjectPresentEvent</code>, etc.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Void, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> result case is returned, otherwise a <code>DisruptiveError</code> is returned in the <code>.failure</code> case.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Void, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
 <div role="article" class="function" id="disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:)">
     <h3>
         <code>get​Events(project​ID:​device​ID:​start​Date:​end​Date:​event​Types:​completion:​)</code>
@@ -998,6 +1283,571 @@ Note that not all event types are available for all devices.</p>
     <th>result</th>
     <td></td>
     <td><p><code>Result&lt;Events, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.getmembers(organizationid:completion:)">
+    <h3>
+        <code>get​Members(organization​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getMembers</span>(<span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Member"><span class="type">Member</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Gets a list of Members for a specific organization.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>organization​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the organization to get Members for.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;[Member], Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain an array of <code>Member</code>s. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;[Member], DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.getmembers(projectid:completion:)">
+    <h3>
+        <code>get​Members(project​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getMembers</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;[<a href="https://vegather.github.io/Disruptive/Member"><span class="type">Member</span></a>], <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Gets a list of Members for a specific project.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project to get Members for.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;[Member], Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain an array of <code>Member</code>s. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;[Member], DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.getmember(organizationid:memberid:completion:)">
+    <h3>
+        <code>get​Member(organization​ID:​member​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getMember</span>(<span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">memberID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Member"><span class="type">Member</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Gets a specific Member within an organization by its identifier.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>organization​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the organization to get the Member from.</p>
+</td>
+</tr>
+<tr>
+    <th>member​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the Member to get within the specific organization.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Member, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Member</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Member, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.getmember(projectid:memberid:completion:)">
+    <h3>
+        <code>get​Member(project​ID:​member​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getMember</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">memberID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Member"><span class="type">Member</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Gets a specific Member within a project by its identifier.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project to get the Member from.</p>
+</td>
+</tr>
+<tr>
+    <th>member​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the Member to get within the specific project.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Member, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the <code>Member</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Member, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.invitemember(organizationid:roles:email:completion:)">
+    <h3>
+        <code>invite​Member(organization​ID:​roles:​email:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">inviteMember</span>(<span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">roles</span>: [<a href="https://vegather.github.io/Disruptive/Role"><span class="type">Role</span></a>.<span class="type">RoleType</span>], <span class="variable">email</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Member"><span class="type">Member</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Invites a new member to an organization.</p>
+
+</div>
+<div class="discussion">
+    <p>If the email belongs to a user that already has an account or a service account, the member
+will get the status <code>.accepted</code> immediately. Otherwise, the member will get the status <code>.pending</code>,
+and an invite email will be sent to the user.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>organization​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the organization to invite a member to.</p>
+</td>
+</tr>
+<tr>
+    <th>roles</th>
+    <td><code class="type">[Role.​Role​Type]</code></td>
+    <td><p>The list of roles for the member. Currently, only one role is allowed for a member. The role has to be an organization based role (ie. <code>.organizationAdmin</code>).</p>
+</td>
+</tr>
+<tr>
+    <th>email</th>
+    <td><code class="type">String</code></td>
+    <td><p>The email of the member to invite. Could be the email of a user or a service account.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Member, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the new <code>Member</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Member, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.invitemember(projectid:roles:email:completion:)">
+    <h3>
+        <code>invite​Member(project​ID:​roles:​email:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">inviteMember</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">roles</span>: [<a href="https://vegather.github.io/Disruptive/Role"><span class="type">Role</span></a>.<span class="type">RoleType</span>], <span class="variable">email</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Member"><span class="type">Member</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Invites a new member to a project.</p>
+
+</div>
+<div class="discussion">
+    <p>If the email belongs to a user that already has an account or a service account, the member
+will get the status <code>.accepted</code> immediately. Otherwise, the member will get the status <code>.pending</code>,
+and an invite email will be sent to the user.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project to invite a member to.</p>
+</td>
+</tr>
+<tr>
+    <th>roles</th>
+    <td><code class="type">[Role.​Role​Type]</code></td>
+    <td><p>The list of roles for the member. Currently, only one role is allowed for a member. The role has to be a project based role (ie. <code>.projectUser</code>).</p>
+</td>
+</tr>
+<tr>
+    <th>email</th>
+    <td><code class="type">String</code></td>
+    <td><p>The email of the member to invite. Could be the email of a user or a service account.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Member, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the new <code>Member</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Member, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.updatemember(projectid:memberid:roles:completion:)">
+    <h3>
+        <code>update​Member(project​ID:​member​ID:​roles:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">updateMember</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">memberID</span>: <span class="type">String</span>, <span class="variable">roles</span>: [<a href="https://vegather.github.io/Disruptive/Role"><span class="type">Role</span></a>.<span class="type">RoleType</span>], <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Member"><span class="type">Member</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Updates the Member of a project.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project the Member is in.</p>
+</td>
+</tr>
+<tr>
+    <th>member​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the Member to update.</p>
+</td>
+</tr>
+<tr>
+    <th>roles</th>
+    <td><code class="type">[Role.​Role​Type]</code></td>
+    <td><p>The new role to assign to the Member. Must be a role appropriate a project (ie. <code>.projectUser</code>).</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Member, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the updated <code>Member</code>. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Member, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.deletemember(organizationid:memberid:completion:)">
+    <h3>
+        <code>delete​Member(organization​ID:​member​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">deleteMember</span>(<span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">memberID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Deletes a member from an organization.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>organization​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the organization the member is a part of.</p>
+</td>
+</tr>
+<tr>
+    <th>member​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the member to delete.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Void, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> result case is returned, otherwise a <code>DisruptiveError</code> is returned in the <code>.failure</code> case.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Void, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.deletemember(projectid:memberid:completion:)">
+    <h3>
+        <code>delete​Member(project​ID:​member​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">deleteMember</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">memberID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">Void</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Deletes a member from a project.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project the member is a part of.</p>
+</td>
+</tr>
+<tr>
+    <th>member​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the member to delete.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;Void, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> result case is returned, otherwise a <code>DisruptiveError</code> is returned in the <code>.failure</code> case.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;Void, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.getmemberinviteurl(organizationid:memberid:completion:)">
+    <h3>
+        <code>get​Member​Invite​URL(organization​ID:​member​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getMemberInviteURL</span>(<span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">memberID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">URL</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Retrieves the invite URL that allows a new user to set up their account in an organization.</p>
+
+</div>
+<div class="discussion">
+    <aside class="note">
+    <p>An invite URL is only available for new users that have not yet accepted the invitation to create an account. If the following conditions are not true, a <code>.badRequest</code> error will be returned:</p>
+
+</aside>
+<ul>
+<li>
+<p>The <code>accountType</code> of the member must be <code>.user</code>.</p>
+</li>
+<li>
+<p>The <code>status</code> of the member must be <code>.pending</code>.</p>
+</li>
+</ul>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>organization​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the organization the member is a part of.</p>
+</td>
+</tr>
+<tr>
+    <th>member​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the member to get an invite URL for.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;URL, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> result case is returned with the invite URL as a <code>URL</code>, otherwise a <code>DisruptiveError</code> is returned in the <code>.failure</code> case.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;URL, DisruptiveError&gt;</code></p>
+</td>
+</tr>
+  </tbody>
+</table>
+</div>
+<div role="article" class="function" id="disruptive.getmemberinviteurl(projectid:memberid:completion:)">
+    <h3>
+        <code>get​Member​Invite​URL(project​ID:​member​ID:​completion:​)</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getMemberInviteURL</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">memberID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<span class="type">URL</span>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Retrieves the invite URL that allows a new user to set up their account in a project.</p>
+
+</div>
+<div class="discussion">
+    <aside class="note">
+    <p>An invite URL is only available for new users that have not yet accepted the invitation to create an account. If the following conditions are not true, a <code>.badRequest</code> error will be returned:</p>
+
+</aside>
+<ul>
+<li>
+<p>The <code>accountType</code> of the member must be <code>.user</code>.</p>
+</li>
+<li>
+<p>The <code>status</code> of the member must be <code>.pending</code>.</p>
+</li>
+</ul>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>project​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the project the member is a part of.</p>
+</td>
+</tr>
+<tr>
+    <th>member​ID</th>
+    <td><code class="type">String</code></td>
+    <td><p>The identifier of the member to get an invite URL for.</p>
+</td>
+</tr>
+<tr>
+    <th>completion</th>
+    <td><code class="type">@escaping (_ result:​ Result&lt;URL, Disruptive​Error&gt;) -&gt; ()</code></td>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> result case is returned with the invite URL as a <code>URL</code>, otherwise a <code>DisruptiveError</code> is returned in the <code>.failure</code> case.</p>
+</td>
+</tr>
+<tr>
+    <th>result</th>
+    <td></td>
+    <td><p><code>Result&lt;URL, DisruptiveError&gt;</code></p>
 </td>
 </tr>
   </tbody>
@@ -1249,11 +2099,11 @@ Note that not all event types are available for all devices.</p>
   </tbody>
 </table>
 </div>
-<div role="article" class="function" id="disruptive.createproject(displayname:organizationid:completion:)">
+<div role="article" class="function" id="disruptive.createproject(organizationid:displayname:completion:)">
     <h3>
-        <code>create​Project(display​Name:​organization​ID:​completion:​)</code>
+        <code>create​Project(organization​ID:​display​Name:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">createProject</span>(<span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Project"><span class="type">Project</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">createProject</span>(<span class="variable">organizationID</span>: <span class="type">String</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Project"><span class="type">Project</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Creates a new project in a specific organization. The newly created project will be returned (including it's identifier, etc) if successful.</p>
 
@@ -1270,15 +2120,15 @@ Note that not all event types are available for all devices.</p>
   </thead>
   <tbody>
     <tr>
-    <th>display​Name</th>
-    <td><code class="type">String</code></td>
-    <td><p>The display name of the new project.</p>
-</td>
-</tr>
-<tr>
     <th>organization​ID</th>
     <td><code class="type">String</code></td>
     <td><p>The identifier of the organization to create the project in.</p>
+</td>
+</tr>
+<tr>
+    <th>display​Name</th>
+    <td><code class="type">String</code></td>
+    <td><p>The display name of the new project.</p>
 </td>
 </tr>
 <tr>
@@ -1408,7 +2258,7 @@ Data Connectors in it. Otherwise, an error will be returned.</p>
     <tr>
     <th>completion</th>
     <td><code class="type">@escaping (_ result:​ Result&lt;[Role], Disruptive​Error&gt;) -&gt; ()</code></td>
-    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the array of <code>Role</code>s. If a failure occured, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
+    <td><p>The completion handler to be called when a response is received from the server. If successful, the <code>.success</code> case of the result will contain the array of <code>Role</code>s. If a failure occurred, the <code>.failure</code> case will contain a <code>DisruptiveError</code>.</p>
 </td>
 </tr>
 <tr>
@@ -1420,11 +2270,11 @@ Data Connectors in it. Otherwise, an error will be returned.</p>
   </tbody>
 </table>
 </div>
-<div role="article" class="function" id="disruptive.getrole(roleid:completion:)">
+<div role="article" class="function" id="disruptive.getrole(roletype:completion:)">
     <h3>
-        <code>get​Role(role​ID:​completion:​)</code>
+        <code>get​Role(role​Type:​completion:​)</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getRole</span>(<span class="variable">roleID</span>: <span class="type">String</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Role"><span class="type">Role</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
+    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">getRole</span>(<span class="variable">roleType</span>: <a href="https://vegather.github.io/Disruptive/Role"><span class="type">Role</span></a>.<span class="type">RoleType</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/Role"><span class="type">Role</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
     <p>Get the details for a specific role by its identifier.</p>
 
@@ -1442,7 +2292,7 @@ Data Connectors in it. Otherwise, an error will be returned.</p>
   <tbody>
     <tr>
     <th>role​ID</th>
-    <td><code class="type">String</code></td>
+    <td></td>
     <td><p>The identifier of the role to get.</p>
 </td>
 </tr>
@@ -1555,8 +2405,13 @@ Data Connectors in it. Otherwise, an error will be returned.</p>
     </h3>
     <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">createServiceAccount</span>(<span class="variable">projectID</span>: <span class="type">String</span>, <span class="variable">displayName</span>: <span class="type">String</span>, <span class="variable">basicAuthEnabled</span>: <span class="type">Bool</span> = <span class="keyword">false</span>, <span class="variable">completion</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/ServiceAccount"><span class="type">ServiceAccount</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ())</code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>Creates a new Service Account within a specific project. This Service Account will by default not
-have access to any resources, it will just have the specified project as its parent.</p>
+    <p>Creates a new Service Account within a specific project.</p>
+
+</div>
+<div class="discussion">
+    <p><strong>NOTE</strong>: This Service Account will by default not have access to any resources.
+In order to allow the Service Account to send API requests, add it as a <code>Member</code> to a project
+or an organization.</p>
 
 </div>
 <h4>Parameters</h4>
@@ -2063,7 +2918,7 @@ have access to any resources, it will just have the specified project as its par
 
     <footer>
         <p>
-    Generated on <time datetime="2020-12-27T15:21:29+0000">December 27, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-01-09T12:32:35+0000">January 9, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

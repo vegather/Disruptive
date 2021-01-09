@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#classes">Classes</a></li><li><a href="#structures">Structures</a></li><li><a href="#enumerations">Enumerations</a></li><li><a href="#protocols">Protocols</a></li></ol>
+            <ol><li><a href="#classes">Classes</a></li><li><a href="#structures">Structures</a></li><li><a href="#enumerations">Enumerations</a></li><li><a href="#protocols">Protocols</a></li><li><a href="#functions">Functions</a></li></ol>
         </div>
     </nav>
 
@@ -289,6 +289,16 @@ HTTP POST request.</p>
 
 </dd>
 <dt class="structure">
+    <a href="https://vegather.github.io/Disruptive/Member" title="structure - Member">
+        Member
+    </a>
+</dt>
+<dd>
+    <p>A <code>Member</code> assigns a specific role to an account within a project
+or an organization. The account can be either a user or a service account.</p>
+
+</dd>
+<dt class="structure">
     <a href="https://vegather.github.io/Disruptive/Organization" title="structure - Organization">
         Organization
     </a>
@@ -349,12 +359,47 @@ This is the response value for when a new key is created for a Service Account.<
         <h2>Enumerations</h2>
         <dl>
             <dt class="enumeration">
+    <a href="https://vegather.github.io/Disruptive/LogLevel" title="enumeration - LogLevel">
+        Log​Level
+    </a>
+</dt>
+<dd>
+    
+</dd>
+<dt class="enumeration">
     <a href="https://vegather.github.io/Disruptive/DisruptiveError" title="enumeration - DisruptiveError">
         Disruptive​Error
     </a>
 </dt>
 <dd>
     <p>An enumeration of all the possible errors that could occur by calling one of the endpoints.</p>
+
+</dd>
+<dt class="enumeration">
+    <a href="https://vegather.github.io/Disruptive/EventType" title="enumeration - EventType">
+        Event​Type
+    </a>
+</dt>
+<dd>
+    <p>An enumeration of all the possible types of events that a device can emit.</p>
+
+</dd>
+<dt class="enumeration">
+    <a href="https://vegather.github.io/Disruptive/ObjectPresentEvent_State" title="enumeration - ObjectPresentEvent.State">
+        Object​Present​Event.​State
+    </a>
+</dt>
+<dd>
+    <p>The proximity state of a sensor.</p>
+
+</dd>
+<dt class="enumeration">
+    <a href="https://vegather.github.io/Disruptive/WaterPresentEvent_State" title="enumeration - WaterPresentEvent.State">
+        Water​Present​Event.​State
+    </a>
+</dt>
+<dd>
+    <p>The water presence state of a sensor.</p>
 
 </dd>
 <dt class="enumeration">
@@ -387,15 +432,6 @@ See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/3
 
 </dd>
 <dt class="enumeration">
-    <a href="https://vegather.github.io/Disruptive/EventType" title="enumeration - EventType">
-        Event​Type
-    </a>
-</dt>
-<dd>
-    <p>An enumeration of all the possible types of events that a device can emit.</p>
-
-</dd>
-<dt class="enumeration">
     <a href="https://vegather.github.io/Disruptive/DataConnector_Status" title="enumeration - DataConnector.Status">
         Data​Connector.​Status
     </a>
@@ -424,6 +460,24 @@ not the Data Connector is currently sending out events.</p>
 
 </dd>
 <dt class="enumeration">
+    <a href="https://vegather.github.io/Disruptive/Member_Status" title="enumeration - Member.Status">
+        Member.​Status
+    </a>
+</dt>
+<dd>
+    <p>Indicates the current status of the membership.</p>
+
+</dd>
+<dt class="enumeration">
+    <a href="https://vegather.github.io/Disruptive/Member_AccountType" title="enumeration - Member.AccountType">
+        Member.​Account​Type
+    </a>
+</dt>
+<dd>
+    <p>The type of account the membership represents.</p>
+
+</dd>
+<dt class="enumeration">
     <a href="https://vegather.github.io/Disruptive/Permission" title="enumeration - Permission">
         Permission
     </a>
@@ -431,6 +485,15 @@ not the Data Connector is currently sending out events.</p>
 <dd>
     <p>A permission is a specific action that an authenticated account is allowed to do within
 a specific project or organization.</p>
+
+</dd>
+<dt class="enumeration">
+    <a href="https://vegather.github.io/Disruptive/Role_RoleType" title="enumeration - Role.RoleType">
+        Role.​Role​Type
+    </a>
+</dt>
+<dd>
+    <p>The level of access that is given to a role.</p>
 
 </dd>
         </dl>
@@ -447,6 +510,27 @@ a specific project or organization.</p>
     <p>Defines the interface required to authenticate the <code>Disruptive</code> struct.</p>
 
 </dd>
+<dt class="protocol">
+    <a href="https://vegather.github.io/Disruptive/PublishableEvent" title="protocol - PublishableEvent">
+        Publishable​Event
+    </a>
+</dt>
+<dd>
+    
+</dd>
+        </dl>
+    </section>
+    <section id="functions">
+        <h2>Functions</h2>
+        <dl>
+            <dt class="function">
+    <a href="https://vegather.github.io/Disruptive/DTLog(_:level:filePath:functionName:lineNumber:)" title="function - DTLog(_:level:filePath:functionName:lineNumber:)">
+        DTLog(_:​level:​file​Path:​function​Name:​line​Number:​)
+    </a>
+</dt>
+<dd>
+    
+</dd>
         </dl>
     </section>
         </article>
@@ -454,7 +538,7 @@ a specific project or organization.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2020-12-27T15:21:29+0000">December 27, 2020</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-01-09T12:32:35+0000">January 9, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
