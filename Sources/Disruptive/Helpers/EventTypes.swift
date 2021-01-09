@@ -79,7 +79,7 @@ public struct TemperatureEvent: Decodable, Equatable {
     
     /// Creates a new `TemperatureEvent`. Creating a new temperature can be useful for testing purposes.
     public init(value: Float, timestamp: Date) {
-        self.value = value
+        self.value     = value
         self.timestamp = timestamp
     }
     
@@ -160,9 +160,9 @@ public struct HumidityEvent: Decodable, Equatable {
     
     /// Creates a new `HumidityEvent`. Creating a new humidity event can be useful for testing purposes.
     public init(temperature: Float, relativeHumidity: Float, timestamp: Date) {
-        self.temperature = temperature
+        self.temperature      = temperature
         self.relativeHumidity = relativeHumidity
-        self.timestamp = timestamp
+        self.timestamp        = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -200,7 +200,7 @@ public struct ObjectPresentCountEvent: Decodable, Equatable {
     
     /// Creates a new `ObjectPresentCountEvent`. Creating a new object present count event can be useful for testing purposes.
     public init(total: Int, timestamp: Date) {
-        self.total = total
+        self.total     = total
         self.timestamp = timestamp
     }
     
@@ -236,7 +236,7 @@ public struct TouchCountEvent: Decodable, Equatable {
     
     /// Creates a new `TouchCountEvent`. Creating a new touch count event can be useful for testing purposes.
     public init(total: Int, timestamp: Date) {
-        self.total = total
+        self.total     = total
         self.timestamp = timestamp
     }
     
@@ -359,9 +359,9 @@ public struct NetworkStatusEvent: Decodable, Equatable {
         
         /// Creates a new `CloudConnector`. Creating a new cloud connector can be useful for testing purposes.
         public init(identifier: String, signalStrength: Int, rssi: Int) {
-            self.identifier = identifier
+            self.identifier     = identifier
             self.signalStrength = signalStrength
-            self.rssi = rssi
+            self.rssi           = rssi
         }
         
         private enum CodingKeys: String, CodingKey {
@@ -438,7 +438,7 @@ public struct BatteryStatusEvent: Decodable, Equatable {
     /// Creates a new `BatteryStatusEvent`. Creating a new battery status event can be useful for testing purposes.
     public init(percentage: Int, timestamp: Date) {
         self.percentage = percentage
-        self.timestamp = timestamp
+        self.timestamp  = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -511,9 +511,9 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
         /// Return a `String` representation of the `Connection` that is suited for presenting to a user on screen.
         public func displayName() -> String {
             switch self {
-                case .offline : return "Offline"
-                case .ethernet: return "Ethernet"
-                case .cellular: return "Cellular"
+                case .offline        : return "Offline"
+                case .ethernet       : return "Ethernet"
+                case .cellular       : return "Cellular"
             }
         }
     }
@@ -530,8 +530,8 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
         /// Return a `String` representation of the `Available` that is suited for presenting to a user on screen.
         public func displayName() -> String {
             switch self {
-                case .ethernet: return "Ethernet"
-                case .cellular: return "Cellular"
+                case .ethernet       : return "Ethernet"
+                case .cellular       : return "Cellular"
             }
         }
     }
@@ -539,8 +539,8 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
     /// Creates a new `ConnectionStatusEvent`. Creating a new connection status event can be useful for testing purposes.
     public init(connection: Connection, available: [Available], timestamp: Date) {
         self.connection = connection
-        self.available = available
-        self.timestamp = timestamp
+        self.available  = available
+        self.timestamp  = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -600,9 +600,9 @@ public struct EthernetStatusEvent: Decodable, Equatable {
     /// Creates a new `EthernetStatusEvent`. Creating a new ethernet status event can be useful for testing purposes.
     public init(macAddress: String, ipAddress: String, errors: [ErrorMessage], timestamp: Date) {
         self.macAddress = macAddress
-        self.ipAddress = ipAddress
-        self.errors = errors
-        self.timestamp = timestamp
+        self.ipAddress  = ipAddress
+        self.errors     = errors
+        self.timestamp  = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -656,8 +656,8 @@ public struct CellularStatusEvent: Decodable, Equatable {
     /// Creates a new `CellularStatusEvent`. Creating a new cellular status event can be useful for testing purposes.
     public init(signalStrength: Int, errors: [ErrorMessage], timestamp: Date) {
         self.signalStrength = signalStrength
-        self.errors = errors
-        self.timestamp = timestamp
+        self.errors         = errors
+        self.timestamp      = timestamp
     }
     
     public init(from decoder: Decoder) throws {
