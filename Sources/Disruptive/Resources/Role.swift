@@ -18,7 +18,7 @@ import Foundation
 public struct Role: Decodable, Equatable {
     
     /// The level of access that is given to the role.
-    public let accessLevel: RoleType
+    public let roleType: RoleType
     
     /// The display name of the `Role`. Example: `Project user`.
     public let displayName: String
@@ -58,11 +58,17 @@ extension Disruptive {
      - Parameter result: `Result<Role, DisruptiveError>`
      */
     public func getRole(
-        roleID: String,
+        roleType: Role.RoleType,
         completion: @escaping (_ result: Result<Role, DisruptiveError>) -> ())
     {
+        guard let resourceName = roleType.resourceName else {
+            Disruptive.log("Can't get role for roleType: \(roleType)", level: .error)
+            completion(.failure(.badRequest))
+            return
+        }
+        
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "roles/\(roleID)")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: resourceName)
         
         // Send the request
         sendRequest(request) { completion($0) }
@@ -114,20 +120,28 @@ extension Role {
         }
         
         public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-            
+            if let resourceName = resourceName {
+                var container = encoder.singleValueContainer()
+                try container.encode(resourceName)
+            } else {
+                Disruptive.log("Can't encode Role.RoleType with case .unknown", level: .error)
+                throw DisruptiveError.badRequest
+            }
+        }
+        
+        internal var resourceName: String? {
             switch self {
-                case .projectUser       : try container.encode("roles/project.user")
-                case .projectDeveloper  : try container.encode("roles/project.developer")
-                case .projectAdmin      : try container.encode("roles/project.admin")
-                case .organizationAdmin : try container.encode("roles/organization.admin")
-                case .unknown           : throw DisruptiveError.badRequest
+                case .projectUser       : return "roles/project.user"
+                case .projectDeveloper  : return "roles/project.developer"
+                case .projectAdmin      : return "roles/project.admin"
+                case .organizationAdmin : return "roles/organization.admin"
+                case .unknown           : return nil
             }
         }
     }
     
     private enum CodingKeys: String, CodingKey {
-        case accessLevel = "name"
+        case resourceName = "name"
         case displayName
         case description
         case permissions
@@ -136,9 +150,9 @@ extension Role {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self.accessLevel = try container.decode(RoleType.self, forKey: .accessLevel)
-        self.displayName = try container.decode(String.self,      forKey: .displayName)
-        self.description = try container.decode(String.self,      forKey: .description)
+        self.roleType    = try container.decode(RoleType.self, forKey: .resourceName)
+        self.displayName = try container.decode(String.self,   forKey: .displayName)
+        self.description = try container.decode(String.self,   forKey: .description)
         self.permissions = try container
             .decode([PermissionWrapper].self, forKey: .permissions)
             .compactMap { $0.permission }

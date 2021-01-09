@@ -87,9 +87,9 @@ class RoleTests: DisruptiveTests {
     }
     
     func testGetRole() {
-        let roleID = "dummy"
+        let role = Role.RoleType.organizationAdmin
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
-            .appendingPathComponent("roles/\(roleID)")
+            .appendingPathComponent(role.resourceName!)
         
         let respRole = createDummyRole()
         let respData = createRoleJSON(from: respRole)
@@ -110,12 +110,24 @@ class RoleTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getRole(roleID: roleID) { result in
+        disruptive.getRole(roleType: role) { result in
             switch result {
                 case .success(let role):
                     XCTAssertEqual(role, respRole)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetRoleUnknownRole() {
+        let exp = expectation(description: "")
+        disruptive.getRole(roleType: .unknown(value: "NOT_A_ROLE")) { result in
+            switch result {
+                case .success(_)       : XCTFail("Unexpected success")
+                case .failure(let err) : XCTAssertEqual(err, DisruptiveError.badRequest)
             }
             exp.fulfill()
         }
@@ -130,7 +142,7 @@ class RoleTests: DisruptiveTests {
 
 extension RoleTests {
     
-    // Only supports org admin access level
+    // Only supports org admin role type
     private func createRoleJSONString(from role: Role) -> String {
         return """
         {
@@ -159,7 +171,7 @@ extension RoleTests {
     
     fileprivate func createDummyRole() -> Role {
         return Role(
-            accessLevel : .organizationAdmin,
+            roleType    : .organizationAdmin,
             displayName : "Organization administrator",
             description : "Administrator in organization",
             permissions: [.organizationRead, .organizationUpdate]
