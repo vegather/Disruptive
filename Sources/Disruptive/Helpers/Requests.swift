@@ -152,6 +152,7 @@ extension Request {
             if let internalError = Request.checkResponseForErrors(
                 forRequestURL: urlString,
                 response: response,
+                data: data,
                 error: error)
             {
                 // If this error can be converted to a disruptive error
@@ -222,9 +223,17 @@ extension Request {
     // MARK: Error Checking
     // -------------------------------
     
+    /// A standardized error body from the Disruptive backend
+    private struct ErrorMessage: Decodable {
+        let error: String
+        let code: Int
+        let help: String
+    }
+    
     private static func checkResponseForErrors(
         forRequestURL url: String,
         response: URLResponse?,
+        data: Data?,
         error: Error?)
     -> InternalError?
     {
@@ -242,7 +251,18 @@ extension Request {
         
         // Check if the status code is outside the 2XX range
         guard httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 else {
-            Disruptive.log("Request: \(url) resulted in status code: \(httpResponse.statusCode)", level: .error)
+            // Decode the ErrorMessage body (if it's there)
+            var message: ErrorMessage?
+            if let data = data {
+                message = try? JSONDecoder().decode(ErrorMessage.self, from: data)
+            }
+            
+            // Log the error
+            if let msg = message {
+                Disruptive.log("Received status code \(httpResponse.statusCode) from the backend with message: \(msg)", level: .error)
+            } else {
+                Disruptive.log("Received status code \(httpResponse.statusCode) from the backend", level: .error)
+            }
             
             switch httpResponse.statusCode {
             case 400: return .badRequest

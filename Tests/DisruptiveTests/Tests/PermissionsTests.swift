@@ -18,7 +18,11 @@ class PermissionsTests: DisruptiveTests {
     
     func testDecodePermissionFail() {
         let notActualPermission = "\"project.crate\"".data(using: .utf8)!
-        let wrapper = try! JSONDecoder().decode(PermissionWrapper.self, from: notActualPermission)
+        var wrapper = try! JSONDecoder().decode(PermissionWrapper.self, from: notActualPermission)
+        XCTAssertNil(wrapper.permission)
+        
+        let notEvenAString = "42".data(using: .utf8)!
+        wrapper = try! JSONDecoder().decode(PermissionWrapper.self, from: notEvenAString)
         XCTAssertNil(wrapper.permission)
     }
     

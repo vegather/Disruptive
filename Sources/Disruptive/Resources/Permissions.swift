@@ -197,10 +197,17 @@ internal struct PermissionWrapper: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         
-        if let str = try? container.decode(String.self) {
-            self.permission = Permission(rawValue: str)
-        } else {
+        guard let str = try? container.decode(String.self) else {
+            Disruptive.log("Can't get String from expected Permission value", level: .warning)
             self.permission = nil
+            return
         }
+        guard let permission = Permission(rawValue: str) else {
+            Disruptive.log("Unknown permission type: \(str)", level: .warning)
+            self.permission = nil
+            return
+        }
+        
+        self.permission = permission
     }
 }

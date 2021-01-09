@@ -452,7 +452,9 @@ extension Member {
             switch self {
                 case .pending  : try container.encode("PENDING")
                 case .accepted : try container.encode("ACCEPTED")
-                case .unknown  : throw DisruptiveError.badRequest
+                case .unknown:
+                    Disruptive.log("Can't encode Member.Status with case .unknown", level: .error)
+                    throw DisruptiveError.badRequest
             }
         }
     }
