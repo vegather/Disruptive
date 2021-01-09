@@ -280,7 +280,12 @@ extension Device {
         // The name of the device comes in a label (if set)
         self.displayName = self.labels["name", default: ""]
         
-        self.reportedEvents = try values.decode(ReportedEvents.self, forKey: .reported)
+        // An emulated device will initially not have any reported events
+        if let reported = try container.decodeIfPresent(ReportedEvents.self, forKey: .reported) {
+            self.reportedEvents = reported
+        } else {
+            self.reportedEvents = ReportedEvents()
+        }
     }
 }
 

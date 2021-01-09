@@ -21,11 +21,17 @@ public struct Disruptive {
     /// The default base URL for the Disruptive Technologies REST API in the production environment.
     public static let defaultBaseURL = "https://api.disruptive-technologies.com/v2/"
     
+    /// The default base URL for the Disruptive Technologies emulator REST API in the production environment.
+    public static let defaultBaseEmulatorURL = "https://emulator.disruptive-technologies.com/v2/"
+    
     /// The default base URL for authenticating against the Disruptive Technologies REST API in the production environment.
     public static let defaultAuthURL = "https://identity.disruptive-technologies.com/oauth2/token"
     
     /// The base URL for the Disruptive Technologies REST API.
     public let baseURL: String
+    
+    /// The base URL for the Disruptive Technologies emulator REST API.
+    public let emulatorBaseURL: String
     
     /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`.
     public static var loggingEnabled = false
@@ -42,9 +48,10 @@ public struct Disruptive {
      - Parameter authProvider: Used to authenticate against the Disruptive Technologies REST API. It is recommended to pass an `OAuth2Authenticator` instance to this parameter.
      - Parameter baseURL: Optional parameter. The base URL for the REST API. The default value is `Disruptive.defaultBaseURL`.
      */
-    public init(authProvider: AuthProvider, baseURL: String = Disruptive.defaultBaseURL) {
+    public init(authProvider: AuthProvider, baseURL: String = Disruptive.defaultBaseURL, emulatorBaseURL: String = Disruptive.defaultBaseEmulatorURL) {
         self.authProvider = authProvider
         self.baseURL = baseURL
+        self.emulatorBaseURL = emulatorBaseURL
     }
 }
 

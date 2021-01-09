@@ -11,8 +11,8 @@ import XCTest
 class DeviceTests: DisruptiveTests {
     
     func testDecodeDevice() {
-        let deviceIn = createDummyDevice()
-        let deviceOut = try! JSONDecoder().decode(Device.self, from: createDeviceJSON(from: deviceIn))
+        let deviceIn = DeviceTests.createDummyDevice()
+        let deviceOut = try! JSONDecoder().decode(Device.self, from: DeviceTests.createDeviceJSON(from: deviceIn))
         
         XCTAssertEqual(deviceIn, deviceOut)
     }
@@ -43,8 +43,8 @@ class DeviceTests: DisruptiveTests {
     }
     
     func testDecodeEmulatedDevice() {
-        let deviceIn = createDummyDevice(isEmulated: true)
-        let deviceOut = try! JSONDecoder().decode(Device.self, from: createDeviceJSON(from: deviceIn))
+        let deviceIn = DeviceTests.createDummyDevice(isEmulated: true)
+        let deviceOut = try! JSONDecoder().decode(Device.self, from: DeviceTests.createDeviceJSON(from: deviceIn))
         
         XCTAssertEqual(deviceIn, deviceOut)
     }
@@ -86,8 +86,8 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)")
         
-        let respDevice = createDummyDevice()
-        let respData = createDeviceJSON(from: respDevice)
+        let respDevice = DeviceTests.createDummyDevice()
+        let respData = DeviceTests.createDeviceJSON(from: respDevice)
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -107,8 +107,8 @@ class DeviceTests: DisruptiveTests {
         let exp = expectation(description: "")
         disruptive.getDevice(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
-                case .success(_):
-                    break
+                case .success(let device):
+                    XCTAssertEqual(device, respDevice)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -122,8 +122,8 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/-/devices/\(reqDeviceID)")
         
-        let respDevice = createDummyDevice()
-        let respData = createDeviceJSON(from: respDevice)
+        let respDevice = DeviceTests.createDummyDevice()
+        let respData = DeviceTests.createDeviceJSON(from: respDevice)
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -143,8 +143,8 @@ class DeviceTests: DisruptiveTests {
         let exp = expectation(description: "")
         disruptive.getDevice(deviceID: reqDeviceID) { result in
             switch result {
-                case .success(_):
-                    break
+                case .success(let device):
+                    XCTAssertEqual(device, respDevice)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -158,8 +158,8 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         
-        let respDevices = [createDummyDevice(), createDummyDevice()]
-        let respData = createDevicesJSON(from: respDevices)
+        let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
+        let respData = DeviceTests.createDevicesJSON(from: respDevices)
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -426,29 +426,35 @@ class DeviceTests: DisruptiveTests {
 extension DeviceTests {
     
     // Only supports temp events for now
-    private func createDeviceJSONString(from device: Device) -> String {
+    private static func createDeviceJSONString(from device: Device) -> String {
+        var reported = ""
+        if device.reportedEvents.temperature != nil {
+            reported = """
+            ,"reported": {
+                "temperature": {
+                    "value": \(device.reportedEvents.temperature?.value ?? 0),
+                    "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")"
+                }
+            }
+            """
+        }
         return """
         {
           "name": "projects/\(device.projectID)/devices/\(device.identifier)",
           "type": "temperature",
           "labels": {
             "name": "\(device.displayName)"
-          },
-          "reported": {
-            "temperature": {
-              "value": \(device.reportedEvents.temperature?.value ?? 0),
-              "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")"
-            }
           }
+          \(reported)
         }
         """
     }
     
-    fileprivate func createDeviceJSON(from device: Device) -> Data {
+    static func createDeviceJSON(from device: Device) -> Data {
         return createDeviceJSONString(from: device).data(using: .utf8)!
     }
     
-    fileprivate func createDevicesJSON(from devices: [Device]) -> Data {
+    static func createDevicesJSON(from devices: [Device]) -> Data {
         return """
         {
             "devices": [
@@ -460,12 +466,14 @@ extension DeviceTests {
     }
     
     // Only supports temp events for now
-    fileprivate func createDummyDevice(isEmulated: Bool = false) -> Device {
+    static func createDummyDevice(isEmulated: Bool = false) -> Device {
         var reportedEvents = Device.ReportedEvents()
-        reportedEvents.temperature = TemperatureEvent(
-            value: 56,
-            timestamp: Date(timeIntervalSince1970: 1605999873)
-        )
+        if isEmulated == false {
+            reportedEvents.temperature = TemperatureEvent(
+                value: 56,
+                timestamp: Date(timeIntervalSince1970: 1605999873)
+            )
+        }
         
         return Device(
             identifier: (isEmulated ? "emu" : "") + "b5rj9ed7rihk942p48og",

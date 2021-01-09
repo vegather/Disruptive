@@ -26,7 +26,6 @@ Swift library for accessing data from [Disruptive Technologies](https://disrupti
     - [Requesting Historical Events](#requesting-historical-events)
     - [Subscribing to Device Events](#subscribing-to-device-events)
     - [Misc Tips](#misc-tips)
-- [Endpoints Implemented](#endpoints-implemented)
 - [Todo](#todo)
 - [License](#license)
 
@@ -209,70 +208,6 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 
 * Some basic debug logs can be enabled by setting `Disruptive.loggingEnabled = true` 
 
-
-
-## Endpoints Implemented
-
-The following is a list of all the available endpoints in the Disruptive Technologies REST API, with a checkmark next to the ones that have been implemented in this Swift library.
-
-Progress: ![Progress](https://progress-bar.dev/48/?scale=54&suffix=%20%2f%2054)
-
-- [x] ~~GET /projects/{project}/devices~~
-- [x] ~~POST /projects/{project}/devices:batchUpdate~~
-- [x] ~~POST /projects/{project}/devices:transfer~~
-- [x] ~~GET /projects/{project}/devices/{device}~~
-- [x] ~~POST /projects/{project}/devices/{device}/labels (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
-- [x] ~~PATCH /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
-- [x] ~~DELETE /projects/{project}/devices/{device}/labels/{label} (implicitly through `POST /projects/{project}/devices:batchUpdate`)~~
-- [x] ~~GET /projects/{project}/devices/{device}/events~~
-- [x] ~~GET /projects/{project}/devices:stream~~
-- [x] ~~GET /projects/{project}/devices/{device}:stream (implicitly through `GET /projects/{project}/devices:stream`)~~
-- [x] ~~GET /projects/{project}/dataconnectors~~
-- [x] ~~POST /projects/{project}/dataconnectors~~
-- [x] ~~GET /projects/{project}/dataconnectors/{dataconnector}~~
-- [x] ~~PATCH /projects/{project}/dataconnectors/{dataconnector}~~
-- [x] ~~DELETE /projects/{project}/dataconnectors/{dataconnector}~~
-- [x] ~~GET /projects/{project}/dataconnectors/{dataconnector}:metrics~~
-- [x] ~~POST /projects/{project}/dataconnectors/{dataconnector}:sync~~
-- [x] ~~GET /organizations/{organization}/members~~
-- [x] ~~POST /organizations/{organization}/members~~
-- [x] ~~GET /organizations/{organization}/members/{member}~~
-- [ ] PATCH /organizations/{organization}/members/{member}
-- [x] ~~DELETE /organizations/{organization}/members/{member}~~
-- [x] ~~GET /organizations/{organization}/members/{member}:getInviteUrl~~
-- [x] ~~GET /organizations/{organization}/permissions~~
-- [x] ~~GET /projects/{project}/members~~
-- [x] ~~POST /projects/{project}/members~~
-- [x] ~~GET /projects/{project}/members/{member}~~
-- [x] ~~PATCH /projects/{project}/members/{member}~~
-- [x] ~~DELETE /projects/{project}/members/{member}~~
-- [x] ~~GET /projects/{project}/members/{member}:getInviteUrl~~
-- [x] ~~GET /projects/{project}/permissions~~
-- [x] ~~GET /roles~~
-- [x] ~~GET /roles/{role}~~
-- [x] ~~GET /organizations~~
-- [x] ~~GET /organizations/{organization}~~
-- [x] ~~GET /projects~~
-- [x] ~~POST /projects~~
-- [x] ~~GET /projects/{project}~~
-- [x] ~~PATCH /projects/{project}~~
-- [x] ~~DELETE /projects/{project}~~
-- [x] ~~GET /projects/{project}/serviceaccounts~~
-- [x] ~~POST /projects/{project}/serviceaccounts~~
-- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}~~
-- [x] ~~PATCH /projects/{project}/serviceaccounts/{serviceaccount}~~
-- [x] ~~DELETE /projects/{project}/serviceaccounts/{serviceaccount}~~
-- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}/keys~~
-- [x] ~~POST /projects/{project}/serviceaccounts/{serviceaccount}/keys~~
-- [x] ~~GET /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}~~
-- [x] ~~DELETE /projects/{project}/serviceaccounts/{serviceaccount}/keys/{key}~~
-
-Emulator
-- [ ] GET /projects/{project}/devices
-- [ ] POST /projects/{project}/devices
-- [ ] GET /projects/{project}/devices/{device}
-- [ ] DELETE /projects/{project}/devices/{device}
-- [ ] POST /projects/{project}/devices/{device}:publish
 
 
 ## Todo

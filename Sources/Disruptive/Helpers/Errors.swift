@@ -182,4 +182,5 @@ internal enum ParseError: Error {
     case dateFormat(date: String)
     case stateValue(eventType: EventType, state: String)
     case durationFormat(format: String)
+    case encodingUnknownCase(value: String)
 }
