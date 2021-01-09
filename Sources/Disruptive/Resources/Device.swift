@@ -118,17 +118,17 @@ extension Disruptive {
     }
     
     /**
-     Removes the specified label for the device. Will return success if the label didn't exist.
+     Deletes the specified label for the device. Will return success if the label didn't exist.
      
      This is a convenience function for `batchUpdateDeviceLabels`.
      
      - Parameter projectID: The identifier of the project the device is in.
-     - Parameter deviceID: The identifier of the device to remove a label from.
-     - Parameter labelKey: The key of the label to remove.
+     - Parameter deviceID: The identifier of the device to delete a label from.
+     - Parameter labelKey: The key of the label to delete.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func removeDeviceLabel(
+    public func deleteDeviceLabel(
         projectID  : String,
         deviceID   : String,
         labelKey   : String,

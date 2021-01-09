@@ -261,7 +261,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.removeDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
+        disruptive.deleteDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
             switch result {
                 case .success():
                     break
