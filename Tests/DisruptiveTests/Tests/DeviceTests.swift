@@ -432,7 +432,7 @@ extension DeviceTests {
             reported = """
             ,"reported": {
                 "temperature": {
-                    "value": \(device.reportedEvents.temperature?.value ?? 0),
+                    "value": \(device.reportedEvents.temperature?.celsius ?? 0),
                     "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")"
                 }
             }
@@ -470,7 +470,7 @@ extension DeviceTests {
         var reportedEvents = Device.ReportedEvents()
         if isEmulated == false {
             reportedEvents.temperature = TemperatureEvent(
-                value: 56,
+                celsius: 56,
                 timestamp: Date(timeIntervalSince1970: 1605999873)
             )
         }

@@ -335,7 +335,7 @@ class EventsTests: DisruptiveTests {
     
     func testMergeNothing() {
         var events = Events()
-        events.temperature = [TemperatureEvent(value: 67, timestamp: Date())]
+        events.temperature = [TemperatureEvent(celsius: 67, timestamp: Date())]
         events.merge(with: Events())
         
         XCTAssertNil(events.touch)
@@ -355,7 +355,7 @@ class EventsTests: DisruptiveTests {
     func testMergeSingleEvent() {
         var events = Events()
         var mergee = Events()
-        mergee.temperature = [TemperatureEvent(value: 67, timestamp: Date())]
+        mergee.temperature = [TemperatureEvent(celsius: 67, timestamp: Date())]
         events.merge(with: mergee)
         
         XCTAssertNil(events.touch)
@@ -375,7 +375,7 @@ class EventsTests: DisruptiveTests {
     func testMergeAllEvents() {
         var mergee = Events()
         mergee.touch              = [TouchEvent(timestamp: Date())]
-        mergee.temperature        = [TemperatureEvent(value: 67, timestamp: Date())]
+        mergee.temperature        = [TemperatureEvent(celsius: 67, timestamp: Date())]
         mergee.objectPresent      = [ObjectPresentEvent(state: .objectPresent, timestamp: Date())]
         mergee.humidity           = [HumidityEvent(temperature: 67, relativeHumidity: 90, timestamp: Date())]
         mergee.objectPresentCount = [ObjectPresentCountEvent(total: 67, timestamp: Date())]

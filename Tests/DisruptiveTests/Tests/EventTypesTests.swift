@@ -25,12 +25,12 @@ class EventTypesTests: DisruptiveTests {
         let temp: Float = 25.75
         let event = try! JSONDecoder().decode(TemperatureEvent.self, from: tempEventData(temp: temp))
         XCTAssertEqual(event.timestamp, eventTimestamp)
-        XCTAssertEqual(event.value, temp)
+        XCTAssertEqual(event.celsius, temp)
     }
     
     func testEncodeTempEvent() {
         let temp: Float = 1
-        let event = TemperatureEvent(value: temp, timestamp: eventTimestamp)
+        let event = TemperatureEvent(celsius: temp, timestamp: eventTimestamp)
         let output = try! JSONEncoder().encode(event)
         assertJSONDatasAreEqual(a: output, b: tempEventData(temp: temp))
     }

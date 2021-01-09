@@ -41,7 +41,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
         stream?.onTemperature = { deviceID, temp in
             XCTAssertEqual(deviceID, respIdentifier)
-            XCTAssertEqual(temp.value, respTemp)
+            XCTAssertEqual(temp.celsius, respTemp)
             exp.fulfill()
         }
 
@@ -80,7 +80,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
         stream?.onTemperature = { deviceID, temp in
             XCTAssertEqual(deviceID, respIdentifier)
-            XCTAssertEqual(temp.value, respTemp)
+            XCTAssertEqual(temp.celsius, respTemp)
             exp.fulfill()
         }
         
@@ -292,7 +292,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
         stream?.onTemperature = { deviceID, temp in
             XCTAssertEqual(deviceID, respIdentifier)
-            XCTAssertEqual(temp.value, respTemp)
+            XCTAssertEqual(temp.celsius, respTemp)
             exp.fulfill()
         }
         

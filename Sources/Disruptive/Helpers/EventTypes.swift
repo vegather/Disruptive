@@ -77,15 +77,15 @@ public struct TouchEvent: Codable, Equatable {
 public struct TemperatureEvent: Codable, Equatable {
     
     /// The temperature value in celsius.
-    public let value: Float
+    public let celsius: Float
     
     /// The timestamp the temperature event was generated.
     public let timestamp: Date
     
     
     /// Creates a new `TemperatureEvent`.
-    public init(value: Float, timestamp: Date) {
-        self.value     = value
+    public init(celsius: Float, timestamp: Date) {
+        self.celsius   = celsius
         self.timestamp = timestamp
     }
     
@@ -97,13 +97,13 @@ public struct TemperatureEvent: Codable, Equatable {
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the value
-        self.value = try container.decode(Float.self, forKey: .value)
+        self.celsius = try container.decode(Float.self, forKey: .value)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        try container.encode(value,                     forKey: .value)
+        try container.encode(celsius,                   forKey: .value)
         try container.encode(timestamp.iso8601String(), forKey: .timestamp)
     }
     

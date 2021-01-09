@@ -269,7 +269,7 @@ class EmulatorTests: DisruptiveTests {
         )
         
         assertEvent(
-            event: TemperatureEvent(value: 15, timestamp: now),
+            event: TemperatureEvent(celsius: 15, timestamp: now),
             expectedPayload: """
             {
                 "temperature": {
