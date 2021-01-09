@@ -105,16 +105,48 @@ public struct TemperatureEvent: Decodable, Equatable {
 ///  See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#objectpresentevent) for more details.
 public struct ObjectPresentEvent: Decodable, Equatable {
     
-    public let objectPresent: Bool
     /// Whether or not an object is close to the proximity sensor.
+    public let state: State
     
     /// The timestamp of when the presence of an object switched state.
     public let timestamp: Date
     
+    /// The proximity state of a sensor.
+    public enum State: Codable, Equatable {
+        /// An object is close to the sensor.
+        case objectPresent
+        
+        /// No objects are close to the sensor.
+        case objectNotPresent
+        
+        /// Used for backward compatibility in case a new state
+        /// is added on the backend before being added to this
+        /// client library.
+        case unknown(value: String)
+        
+        public init(from decoder: Decoder) throws {
+            let str = try decoder.singleValueContainer().decode(String.self)
+            switch str {
+                case "PRESENT"     : self = .objectPresent
+                case "NOT_PRESENT" : self = .objectNotPresent
+                default            : self = .unknown(value: str)
+            }
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+                case .objectPresent    : try container.encode("PRESENT")
+                case .objectNotPresent : try container.encode("NOT_PRESENT")
+                case .unknown(let s):
+                    throw ParseError.encodingUnknownCase(value: "NetworkStatusEvent.TransmissionMode.unknown(\(s))")
+            }
+        }
+    }
     
     /// Creates a new `ObjectPresentEvent`. Creating a new object present event can be useful for testing purposes.
-    public init(objectPresent: Bool, timestamp: Date) {
-        self.objectPresent = objectPresent
+    public init(state: State, timestamp: Date) {
+        self.state     = state
         self.timestamp = timestamp
     }
     
@@ -126,18 +158,11 @@ public struct ObjectPresentEvent: Decodable, Equatable {
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the state
-        let stateString = try values.decode(String.self, forKey: .objectPresent)
-        switch stateString {
-            case "NOT_PRESENT": self.objectPresent = false
-            case "PRESENT"    : self.objectPresent = true
-            
-            // Likely "UNKNOWN"
-            default: throw ParseError.stateValue(eventType: .objectPresent, state: stateString)
-        }
+        self.state = try container.decode(State.self, forKey: .state)
     }
     
     private enum CodingKeys: String, CodingKey {
-        case objectPresent = "state"
+        case state
         case timestamp = "updateTime"
     }
 }
@@ -263,16 +288,51 @@ public struct TouchCountEvent: Decodable, Equatable {
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_fbe6f0b1-a42c-4072-aaa1-46d117c0be99) for more details.
 public struct WaterPresentEvent: Decodable, Equatable {
     
-    public let waterPresent: Bool
     /// Whether or not water was detected close to the sensor.
+    public let state: State
     
     /// The timestamp of when the state of water presence was changed.
     public let timestamp: Date
     
     
     /// Creates a new `WaterPresentEvent`. Creating a new water present event can be useful for testing purposes
-    public init(waterPresent: Bool, timestamp: Date) {
-        self.waterPresent = waterPresent
+    /// The water presence state of a sensor.
+    public enum State: Codable, Equatable {
+        
+        /// The sensor has detected the presence of water.
+        case waterPresent
+        
+        /// The sensor has not detected the presence of water.
+        case waterNotPresent
+        
+        /// Used for backward compatibility in case a new state
+        /// is added on the backend before being added to this
+        /// client library.
+        case unknown(value: String)
+        
+        public init(from decoder: Decoder) throws {
+            let str = try decoder.singleValueContainer().decode(String.self)
+            switch str {
+                case "PRESENT"     : self = .waterPresent
+                case "NOT_PRESENT" : self = .waterNotPresent
+                default            : self = .unknown(value: str)
+            }
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+                case .waterPresent    : try container.encode("PRESENT")
+                case .waterNotPresent : try container.encode("NOT_PRESENT")
+                case .unknown(let s):
+                    throw ParseError.encodingUnknownCase(value: "NetworkStatusEvent.TransmissionMode.unknown(\(s))")
+            }
+        }
+    }
+    
+    
+    public init(state: State, timestamp: Date) {
+        self.state     = state
         self.timestamp = timestamp
     }
     
@@ -284,18 +344,11 @@ public struct WaterPresentEvent: Decodable, Equatable {
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the state
-        let stateString = try values.decode(String.self, forKey: .waterPresent)
-        switch stateString {
-            case "NOT_PRESENT": self.waterPresent = false
-            case "PRESENT"    : self.waterPresent = true
-            
-            // Likely "UNKNOWN"
-            default: throw ParseError.stateValue(eventType: .waterPresent, state: stateString)
-        }
+        self.state = try container.decode(State.self, forKey: .state)
     }
     
     private enum CodingKeys: String, CodingKey {
-        case waterPresent = "state"
+        case state
         case timestamp = "updateTime"
     }
 }
@@ -376,10 +429,25 @@ public struct NetworkStatusEvent: Decodable, Equatable {
     /// See the [Help Center](https://support.disruptive-technologies.com/hc/en-us/articles/360003182914-What-is-Boost-high-power-usage-) for more details.
     public enum TransmissionMode: String, Decodable, Equatable {
         /// The normal transmission mode for a sensor. This consumes less energy, but has a lower range.
-        case standard = "LOW_POWER_STANDARD_MODE"
+        case standard
         
         /// Boost mode is used when a sensor has low connectivity to a Cloud Connector. It uses more energy, but has better range.
-        case boost    = "HIGH_POWER_BOOST_MODE"
+        case boost
+        
+        /// Used for backward compatibility in case a new transmission mode
+        /// is added on the backend before being added to this client library.
+        case unknown(value: String)
+        
+        public init(from decoder: Decoder) throws {
+            let str = try decoder.singleValueContainer().decode(String.self)
+            
+            switch str {
+                case "LOW_POWER_STANDARD_MODE": self = .standard
+                case "HIGH_POWER_BOOST_MODE"  : self = .boost
+                default                       : self = .unknown(value: str)
+            }
+        }
+        
     }
     
     /// Creates a new `NetworkStatusEvent`. Creating a new network status can be useful for testing purposes.
@@ -500,13 +568,17 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
     public enum Connection: String, Decodable, Equatable {
         
         /// Indicates that the Cloud Connector is currently offline.
-        case offline  = "OFFLINE"
+        case offline
         
         /// Indicates that the Cloud Connector will send its data over Ethernet.
-        case ethernet = "ETHERNET"
+        case ethernet
         
         /// Indicates that the Cloud Connector will send its data over Cellular.
-        case cellular = "CELLULAR"
+        case cellular
+        
+        /// Used for backward compatibility in case a new connection type
+        /// is added on the backend before being added to this client library.
+        case unknown(value: String)
         
         /// Return a `String` representation of the `Connection` that is suited for presenting to a user on screen.
         public func displayName() -> String {
@@ -514,6 +586,18 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
                 case .offline        : return "Offline"
                 case .ethernet       : return "Ethernet"
                 case .cellular       : return "Cellular"
+                case .unknown(let s) : return "Unknown (\(s))"
+            }
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let str = try decoder.singleValueContainer().decode(String.self)
+            
+            switch str {
+                case "OFFLINE"  : self = .offline
+                case "ETHERNET" : self = .ethernet
+                case "CELLULAR" : self = .cellular
+                default         : self = .unknown(value: str)
             }
         }
     }
@@ -522,16 +606,31 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
     public enum Available: String, Decodable, Equatable {
         
         /// Indicates that ethernet connectivity is available for a Cloud Connector.
-        case ethernet = "ETHERNET"
+        case ethernet
         
         /// Indicates that cellular connectivity is available for a Cloud Connector.
-        case cellular = "CELLULAR"
+        case cellular
+        
+        /// Used for backward compatibility in case a new available connectivity type
+        /// is added on the backend before being added to this client library.
+        case unknown(value: String)
         
         /// Return a `String` representation of the `Available` that is suited for presenting to a user on screen.
         public func displayName() -> String {
             switch self {
                 case .ethernet       : return "Ethernet"
                 case .cellular       : return "Cellular"
+                case .unknown(let s) : return "Unknown (\(s))"
+            }
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let str = try decoder.singleValueContainer().decode(String.self)
+            
+            switch str {
+                case "ETHERNET" : self = .ethernet
+                case "CELLULAR" : self = .cellular
+                default         : self = .unknown(value: str)
             }
         }
     }
@@ -552,13 +651,8 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
         
         // Extract the other values
         self.connection = try container.decode(Connection.self,  forKey: .connection)
+        self.available  = try container.decode([Available].self, forKey: .available)
         
-        // Extracting the list of `available` network interfaces as the REST API
-        // might occasionally return "OFFLINE" in the `available` array, even
-        // though this is not a valid value. This can happen when sending a
-        // `ConnectionStatusEvent` on an emulated Cloud Connector in Studio.
-        let availableStrings = try values.decode([String].self, forKey: .available)
-        self.available = availableStrings.compactMap { Available(rawValue: $0) }
     }
     
     private enum CodingKeys: String, CodingKey {

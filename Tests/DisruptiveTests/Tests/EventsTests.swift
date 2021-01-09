@@ -391,11 +391,11 @@ class EventsTests: DisruptiveTests {
         var mergee = Events()
         mergee.touch              = [TouchEvent(timestamp: Date())]
         mergee.temperature        = [TemperatureEvent(value: 67, timestamp: Date())]
-        mergee.objectPresent      = [ObjectPresentEvent(objectPresent: true, timestamp: Date())]
+        mergee.objectPresent      = [ObjectPresentEvent(state: .objectPresent, timestamp: Date())]
         mergee.humidity           = [HumidityEvent(temperature: 67, relativeHumidity: 90, timestamp: Date())]
         mergee.objectPresentCount = [ObjectPresentCountEvent(total: 67, timestamp: Date())]
         mergee.touchCount         = [TouchCountEvent(total: 88, timestamp: Date())]
-        mergee.waterPresent       = [WaterPresentEvent(waterPresent: true, timestamp: Date())]
+        mergee.waterPresent       = [WaterPresentEvent(state: .waterPresent, timestamp: Date())]
         mergee.networkStatus      = [NetworkStatusEvent(signalStrength: 22, rssi: 33, timestamp: Date(), cloudConnectors: [], transmissionMode: .standard)]
         mergee.batteryStatus      = [BatteryStatusEvent(percentage: 87, timestamp: Date())]
         mergee.connectionStatus   = [ConnectionStatusEvent(connection: .cellular, available: [.cellular], timestamp: Date())]
