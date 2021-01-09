@@ -94,8 +94,14 @@ public class DeviceEventStream: NSObject {
     
     internal static var sseConfig: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest  = .greatestFiniteMagnitude
-        config.timeoutIntervalForResource = .greatestFiniteMagnitude
+        
+        // Setting the timeout to `.greatestFiniteMagnitude` caused unexpected
+        // "The request timed out." errors. Seems like any value above 9223372037
+        // will cause that error. Setting the timeout to 3600 (1 hour) which means
+        // if we don't receive a single byte within an hour, the connection will
+        // be dropped and a new connection will be set up by the retry scheme mechanism.
+        config.timeoutIntervalForRequest  = 3600
+        config.timeoutIntervalForResource = 3600
         
         let headers = [
             "Accept"        : "text/event-stream",
