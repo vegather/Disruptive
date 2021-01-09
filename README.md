@@ -221,11 +221,10 @@ stream?.onTemperature = { deviceID, temperatureEvent in
 - Areas that still needs unit testing
     - [ ] `Authentication.swift` - `getActiveAccessToken` and error handling in `OAuth2Authenticator.refreshAccessToken`
     - [x] `DeviceEventStream.swift`
-    - [ ] `EventTypes.swift`
-    - [ ] `Requests.swift`
+    - [x] `EventTypes.swift`
+    - [ ] `Requests.swift` including pagination, errors
     - [ ] `RetryScheme.swift`
     - [x] `Stream.swift`
-    - [ ] Network Tests: pagination, errors
 - [ ] Add Combine support for server sent events.
 - [ ] Add global option not wait for re-attempts when rate-limiting, and just return the error instead.
 - [ ] Handle 5XX errors from the backend. These shows up as `InternalError`s, and should have a retry-policy with an exponential backoff.
