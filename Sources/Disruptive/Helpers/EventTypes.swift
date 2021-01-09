@@ -53,10 +53,10 @@ public struct TouchEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
     }
     
@@ -84,14 +84,14 @@ public struct TemperatureEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the value
-        self.value = try values.decode(Float.self, forKey: .value)
+        self.value = try container.decode(Float.self, forKey: .value)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -119,10 +119,10 @@ public struct ObjectPresentEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the state
@@ -166,15 +166,15 @@ public struct HumidityEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the values
-        self.temperature = try values.decode(Float.self, forKey: .temperature)
-        self.relativeHumidity = try values.decode(Float.self, forKey: .relativeHumidity)
+        self.temperature      = try container.decode(Float.self, forKey: .temperature)
+        self.relativeHumidity = try container.decode(Float.self, forKey: .relativeHumidity)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -205,14 +205,14 @@ public struct ObjectPresentCountEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the total
-        self.total = try values.decode(Int.self, forKey: .total)
+        self.total = try container.decode(Int.self, forKey: .total)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -241,14 +241,14 @@ public struct TouchCountEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the total
-        self.total = try values.decode(Int.self, forKey: .total)
+        self.total = try container.decode(Int.self, forKey: .total)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -277,10 +277,10 @@ public struct WaterPresentEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the state
@@ -398,17 +398,17 @@ public struct NetworkStatusEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the other values
-        self.signalStrength   = try values.decode(Int.self, forKey: .signalStrength)
-        self.rssi             = try values.decode(Int.self, forKey: .rssi)
-        self.cloudConnectors  = try values.decode([CloudConnector].self, forKey: .cloudConnectors)
-        self.transmissionMode = try values.decode(TransmissionMode.self, forKey: .transmissionMode)
+        self.signalStrength   = try container.decode(Int.self,              forKey: .signalStrength)
+        self.rssi             = try container.decode(Int.self,              forKey: .rssi)
+        self.cloudConnectors  = try container.decode([CloudConnector].self, forKey: .cloudConnectors)
+        self.transmissionMode = try container.decode(TransmissionMode.self, forKey: .transmissionMode)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -442,14 +442,14 @@ public struct BatteryStatusEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the percentage
-        self.percentage = try values.decode(Int.self, forKey: .percentage)
+        self.percentage = try container.decode(Int.self, forKey: .percentage)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -544,14 +544,14 @@ public struct ConnectionStatusEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the other values
-        self.connection = try values.decode(Connection.self, forKey: .connection)
+        self.connection = try container.decode(Connection.self,  forKey: .connection)
         
         // Extracting the list of `available` network interfaces as the REST API
         // might occasionally return "OFFLINE" in the `available` array, even
@@ -606,16 +606,16 @@ public struct EthernetStatusEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the other values
-        self.macAddress = try values.decode(String.self, forKey: .macAddress)
-        self.ipAddress  = try values.decode(String.self, forKey: .ipAddress)
-        self.errors     = try values.decode([ErrorMessage].self, forKey: .errors)
+        self.macAddress = try container.decode(String.self,         forKey: .macAddress)
+        self.ipAddress  = try container.decode(String.self,         forKey: .ipAddress)
+        self.errors     = try container.decode([ErrorMessage].self, forKey: .errors)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -661,15 +661,15 @@ public struct CellularStatusEvent: Decodable, Equatable {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Extract the timestamp
-        let timeString = try values.decode(String.self, forKey: .timestamp)
+        let timeString = try container.decode(String.self, forKey: .timestamp)
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the other values
-        self.signalStrength = try values.decode(Int.self, forKey: .signalStrength)
-        self.errors         = try values.decode([ErrorMessage].self, forKey: .errors)
+        self.signalStrength = try container.decode(Int.self,            forKey: .signalStrength)
+        self.errors         = try container.decode([ErrorMessage].self, forKey: .errors)
     }
     
     private enum CodingKeys: String, CodingKey {

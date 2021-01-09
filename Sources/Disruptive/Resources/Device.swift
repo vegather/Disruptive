@@ -259,11 +259,11 @@ extension Device {
     }
     
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Device resource names are formatted as "projects/b7s3umd0fee000ba5di0/devices/b5rj9ed7rihk942p48og"
         // Setting the identifier to the last component of the resource name
-        let projectResourceName = try values.decode(String.self, forKey: .resourceName)
+        let projectResourceName = try container.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = projectResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
             throw ParseError.identifier(path: projectResourceName)
@@ -274,8 +274,8 @@ extension Device {
         self.isEmulatedDevice = id.count == 23 && id.hasPrefix("emu")
         
         // Getting the other properties without any modifications
-        self.labels = try values.decode([String: String].self, forKey: .labels)
-        self.type   = try values.decode(DeviceType.self,       forKey: .type)
+        self.labels = try container.decode([String: String].self, forKey: .labels)
+        self.type   = try container.decode(DeviceType.self,       forKey: .type)
         
         // The name of the device comes in a label (if set)
         self.displayName = self.labels["name", default: ""]
