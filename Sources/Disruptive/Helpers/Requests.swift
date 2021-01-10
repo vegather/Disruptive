@@ -397,6 +397,38 @@ extension Disruptive {
     }
     
     /// Makes sure the `authProvider` is authenticated, and adds the `Authorization` header to
+    /// the request before sending it. This will return a one page of results if successful, and a
+    /// `DisruptiveError` on failure.
+    internal func sendRequest<T: Decodable>(
+        _ request  : Request,
+        pageSize   : Int,
+        pageToken  : String?,
+        pagingKey  : String,
+        completion : @escaping (Result<PagedResult<T>, DisruptiveError>) -> ())
+    {
+        // Set the pagination query parameters
+        var req = request
+        req.params["page_size"] = [String(pageSize)]
+        if let pageToken = pageToken {
+            req.params["page_token"] = [String(pageToken)]
+        }
+        
+        // Prepare a JSON decoder for decoding paged results
+        let decoder = pagingJSONDecoder(pagingKey: pagingKey)
+        
+        // Create a new request with a non-expired access token
+        // in the `Authorization` header.
+        authenticateRequest(req) { authResult in
+            switch authResult {
+                case .success(let req):
+                    req.send(decoder: decoder) { completion($0) }
+                case .failure(let err):
+                    completion(.failure(err))
+            }
+        }
+    }
+    
+    /// Makes sure the `authProvider` is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This expects a list of paginated items to be returned, and fetches
     /// all the available pages before returning.
     internal func sendRequest<T: Decodable>(
@@ -405,14 +437,7 @@ extension Disruptive {
         completion: @escaping (Result<[T], DisruptiveError>) -> ())
     {
         // Prepare a decoder for decoding paginated results
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .custom { keys in
-            if keys.last!.stringValue == pagingKey {
-                return PagedKey(stringValue: "results")!
-            } else {
-                return keys.last!
-            }
-        }
+        let decoder = pagingJSONDecoder(pagingKey: pagingKey)
         
         // Recursive function to fetch all the pages as long as `nextPageToken` is set.
         // The structure of this is a bit unfortunate due to having multiple nested
@@ -439,15 +464,10 @@ extension Disruptive {
                             let updatedResultsArray = cumulativeResults + pagedResult.results
                             
                             // Check if there are any more pages
-                            if pagedResult.nextPageToken.count == 0 {
-                                // This was the last page
-                                DispatchQueue.main.async {
-                                    completion(.success(updatedResultsArray))
-                                }
-                            } else {
+                            if let nextPageToken = pagedResult.nextPageToken {
                                 // This was not the last page, send request for the next page
                                 var nextRequest = req
-                                nextRequest.params["pageToken"] = [pagedResult.nextPageToken]
+                                nextRequest.params["page_token"] = [nextPageToken]
                                 
                                 Disruptive.log("Still more pages to load for \(String(describing: nextRequest.urlRequest()?.url))")
                                 
@@ -458,6 +478,11 @@ extension Disruptive {
                                     pageingKey        : pageingKey,
                                     completion        : completion
                                 )
+                            } else {
+                                // This was the last page
+                                DispatchQueue.main.async {
+                                    completion(.success(updatedResultsArray))
+                                }
                             }
                             
                         // The request failed
@@ -474,5 +499,38 @@ extension Disruptive {
         }
         
         fetchPages(request: request, cumulativeResults: [], pageingKey: pagingKey) { completion($0) }
+    }
+    
+    /// Returns a JSONDecoder that replaces the key with the given `pagingKey` with the key "results". Any other
+    /// keys are passed as is (eg. "nextPageToken"). This ensures a normalized JSON format that lets
+    /// us use `PagedResult` in the next step of decoding.
+    ///
+    /// Eg. replaces:
+    /// `{ "devices": [...], "nextPageToken": "abc" }`
+    /// with:
+    /// `{ "results": [...], "nextPageToken": "abc" }`
+    private func pagingJSONDecoder(pagingKey: String) -> JSONDecoder {
+        
+        /// A bare-minimum struct that conforms to `CodingKey`
+        struct PagedKey: CodingKey {
+            var stringValue: String
+            var intValue: Int?
+            
+            init?(stringValue: String) {
+                self.stringValue = stringValue
+            }
+            
+            init?(intValue: Int) { return nil }
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .custom { keys in
+            if keys.last!.stringValue == pagingKey {
+                return PagedKey(stringValue: "results")!
+            } else {
+                return keys.last!
+            }
+        }
+        return decoder
     }
 }

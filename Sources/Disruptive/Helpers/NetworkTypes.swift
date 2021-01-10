@@ -20,23 +20,29 @@ internal struct HTTPHeader {
     let value: String
 }
     
+/// Used as an intermediary structure to decode paginated results.
+/// If the received `nextPageToken` is an empty string, it will be replaced
+/// with `nil` as this makes more sense as a sentinel value.
 internal struct PagedResult<T: Decodable>: Decodable {
     let results: [T]
-    let nextPageToken: String
-}
-
-internal struct PagedKey: CodingKey {
-    var stringValue: String
-    var intValue: Int?
+    let nextPageToken: String?
     
-    init?(stringValue: String) {
-        self.stringValue = stringValue
-        self.intValue = nil
+    private enum CodingKeys: String, CodingKey {
+        case results
+        case nextPageToken
     }
     
-    init?(intValue: Int) {
-        self.stringValue = String(intValue)
-        self.intValue = intValue
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.results = try container.decode([T].self, forKey: .results)
+        
+        let nextString = try container.decode(String.self, forKey: .nextPageToken)
+        if nextString.count == 0 {
+            self.nextPageToken = nil
+        } else {
+            self.nextPageToken = nextString
+        }
     }
 }
 
