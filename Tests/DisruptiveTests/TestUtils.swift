@@ -56,20 +56,31 @@ extension DisruptiveTests {
         url: URL,
         body: Data?
     ) {
+        // Validate HTTP method
         XCTAssertEqual(request.httpMethod, method)
+        
+        // Validate query parameters
         XCTAssertEqual(request.extractQueryParameters(), queryParams)
         
+        // Validate URL
         var components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!
         components.queryItems = nil
         XCTAssertEqual(components.url, url)
         
+        // Validate "Authorization" header
         if authenticated {
             XCTAssertNotNil(request.allHTTPHeaderFields?["Authorization"])
+        } else {
+            XCTAssertNil(request.allHTTPHeaderFields?["Authorization"])
         }
+        
+        // Validate other headers
         for (key, value) in headers {
             XCTAssertEqual(request.allHTTPHeaderFields?[key], value)
         }
-        if let body = body { // Assumes body is JSON
+        
+        // Validate body
+        if let body = body {
             assertJSONDatasAreEqual(a: body, b: request.httpBodyStream!.readData())
         }
     }
@@ -77,7 +88,6 @@ extension DisruptiveTests {
     func assertJSONDatasAreEqual(a: Data, b: Data) {
         let jsonA = try! JSONSerialization.jsonObject(with: a) as! JSONValue
         let jsonB = try! JSONSerialization.jsonObject(with: b) as! JSONValue
-//        XCTAssertTrue(jsonA.isEqual(to: jsonB), "\(String(describing: String(data: a, encoding: .utf8))) does not equal \(String(describing: String(data: b, encoding: .utf8)))")
         XCTAssertTrue(jsonA.isEqual(to: jsonB), "\(jsonA) does not equal \(jsonB)")
     }
 }
