@@ -233,7 +233,7 @@ extension Request {
         let help: String
     }
     
-    private static func checkResponseForErrors(
+    internal static func checkResponseForErrors(
         forRequestURL url: String,
         response: URLResponse?,
         data: Data?,
@@ -296,7 +296,7 @@ extension Request {
     // MARK: Parsing Payload
     // -------------------------------
     
-    private static func parsePayload<T: Decodable>(_ payload: Data?, decoder: JSONDecoder) -> T? {
+    internal static func parsePayload<T: Decodable>(_ payload: Data?, decoder: JSONDecoder) -> T? {
         // Unwrap payload
         guard let payload = payload else {
             Disruptive.log("Didn't get a body in the response as expected", level: .error)

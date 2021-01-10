@@ -51,7 +51,7 @@ public enum DisruptiveError: Error {
     case loggedOut
 }
 
-internal enum InternalError: Error {
+internal enum InternalError: Error, Equatable {
     /// Could be client is not on network, or server is down
     case serverUnavailable
     
