@@ -177,6 +177,9 @@ extension Request {
                 }
                 
                 // Unhandled error
+                // All types of errors should have been handled above, so this
+                // should never happen. This is here as a fallback in case new
+                // types of errors are added in the future.
                 Disruptive.log("The internal error \(internalError) was not handled for \(urlString)", level: .error)
                 DispatchQueue.main.async {
                     completion(.failure(.unknownError))
