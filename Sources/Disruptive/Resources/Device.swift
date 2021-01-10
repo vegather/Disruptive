@@ -80,7 +80,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
-    public func getDevices(
+    public func getAllDevices(
         projectID  : String,
         completion : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
     {

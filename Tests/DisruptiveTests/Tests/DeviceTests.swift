@@ -153,7 +153,7 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetDevices() {
+    func testGetAllDevices() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -177,7 +177,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getDevices(projectID: reqProjectID) { result in
+        disruptive.getAllDevices(projectID: reqProjectID) { result in
             switch result {
                 case .success(let devices):
                     XCTAssertEqual(devices, respDevices)
