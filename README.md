@@ -18,23 +18,25 @@ Swift library for accessing data from [Disruptive Technologies](https://disrupti
 - [Guides](#guides)
     - [Overview](#overview)
     - [Authentication](#authentication)
-    - [Requesting Organizations, Projects, and Devices](#requesting-organizations-projects-and-devices)
-        - [Fetch Organizations](#fetch-organizations)
-        - [Fetch Projects](#fetch-projects)
-        - [Fetch Devices](#fetch-devices)
-        - [Single Device Lookup](#single-device-lookup)
-    - [Requesting Historical Events](#requesting-historical-events)
-    - [Subscribing to Device Events](#subscribing-to-device-events)
+    - [Permissions](#permissions)
+    - [Making Requests](#making-requests)
+        - [Lists & Pagination](#lists-%26-pagination)
+        - [Fetching Historical Events](#fetching-historical-events)
+        - [Subscribing to Device Events](#subscribing-to-device-events)
+        - [Other Common Requests](#other-common-requests)
     - [Misc Tips](#misc-tips)
-- [Todo](#todo)
 - [License](#license)
+
+
 
 
 ## API Documentation
 
-The full Swift API documentation for this library is available [here](https://vegather.github.io/Disruptive/)
+* [Full Swift API documentation](https://vegather.github.io/Disruptive/)
+* [REST API reference documentation](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260)
 
-Documentation for the Disruptive Technologies REST API is available [here](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260)
+
+
 
 
 ## Installation
@@ -58,22 +60,28 @@ dependencies: [
 ```
 
 
+
+
+
 ## Guides
 
 ### Overview
 
-To use this Swift library, you start by initializing an instance of the `Disruptive` struct. This will be your entry-point for all the requests to the Disruptive Technologies servers. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors.
+To use this Swift library, you start by initializing an instance of the `Disruptive` struct with the credentials for a Service Account (see the [Authentication](#authentication) section below). This will be your entry-point for all the requests to the Disruptive Technologies service. This `Disruptive` instance will automatically handle things such as authentication, pagination, re-sending of events after rate-limiting, and other recoverable errors.
 
-The endpoints implemented on the `Disruptive` struct are asynchronous, and will return its results in a  closure you provide with an argument of type `Result` (read more about the `Result` type [on Apple's developer site](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This `Result` will contain the value you requested on `.success` (`Void` if no values makes sense), or a `DisruptiveError` on `.failure`.
+The endpoints implemented on the `Disruptive` struct are asynchronous, and will return its results in a closure you provide with an argument of type `Result` (read more about the `Result` type [on Apple's developer site](https://developer.apple.com/documentation/swift/result/writing_failable_asynchronous_apis)). This `Result` will contain the value you requested on `.success` (`Void` if no values makes sense), or a `DisruptiveError` on `.failure`.
 
 **Note**: The callback with the `Result` will always be called on the `main` queue, even if networking/processing is done in a background queue.
 
 The following sections will provide a brief guide to the most common use-cases of the API. Check out the [full Swift API documentation](https://vegather.github.io/Disruptive/) for more.
 
 
+
 ### Authentication
 
-Authentication is done by initializing the `Disruptive` instance with a type that conforms to the `AuthProvider` protocol. The recommended type for this is `OAuth2Authenticator` which will authenticate a service account using the OAuth2 flow. A service account can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+Authentication is done by initializing the `Disruptive` instance with a type that conforms to the `Authenticator` protocol. The recommended type for this is `OAuth2Authenticator` which will authenticate a Service Account using the OAuth2 flow. Once authenticated, the `Disruptive` instance will make sure it always has a non-expired access token, and will add that to the `Authorization` header of the request before sending it. If the access token is expired when a request is made, a new access token will be fetched automatically before sending the request.
+
+A service account can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu. Create a new key for the Service Account and make sure to note down the key id, secret, and email for the Service Account. Note that by default, the Service Account will not have access to any resources. See the section below about [Permissions](#permissions) to learn how to grant the Service Account access to your resources.
 
 Here's an example of how to authenticate a service account with the OAuth2 flow:
 
@@ -82,58 +90,44 @@ import Disruptive
 
 let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
 let authenticator = OAuth2Authenticator(credentials: credentials)
-let disruptive = Disruptive(authProvider: authenticator)
+let disruptive = Disruptive(authenticator: authenticator)
 
 // All methods called on the disruptive instance will be authenticated
 ```
 
 [`OAuth2Authenticator` documentation](https://vegather.github.io/Disruptive/OAuth2Authenticator/)
 
-### Requesting Organizations, Projects, and Devices
-
-The endpoints that returns a list (such as `getOrganizations` or `getProjects`), are paginated automatically in the background. This could mean that multiple networking requests are made in the background, the result of each of those requests are grouped together, and the final array is returned within the `Result` in the callback. The end result is that you just call one method, and get back one array of items.
 
 
-#### Fetch Organizations
+### Permissions
 
-Here's an example of fetching all the organizations available to the authenticated account:
+Access levels for the Disruptive API can be described in terms of members, roles, and permissions. For an account (Service Account or user) to have access to a resource, it has to be a member in the project or organization that is a parent of that resource. A member will always have a role for the project/organization it's a member of (such as project user, project admin, etc). Each of those roles as a list of permissions that describes which CRUD (create, read, update, delete) operations it can perform on various resources. Examples of permissions would be `"project.read"`, `"membership.create"`, `"serviceaccount.key.delete"`, etc. To list the available roles and permissions, use the [`getRoles`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getroles(completion:)) and [`getPermissions`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getpermissions(forprojectid:completion:)) functions.
 
+In order for a Service Account to be able to access a given resource, it must have sufficient permissions for that resource. By default, a Service Account does not have access to any resources.  The easiest way to get started with a Service Account is by granting access for the relevant projects/organizations in [DT Studio](https://studio.disruptive-technologies.com). You can give it a role in the current project by selecting `Role in current Project` when viewing the Service Account under `API Integrations -> Service Accounts`. You can also give it access to other projects/organizations by going to the list of members (in `Project Settings` for project members), and then adding the Service Account as a member using the Service Account's email address, and selecting an appropriate role.
+
+Once you have the credentials for a Service Account and have created a `Disruptive` instance, you can use the API to create new Service Accounts and add them as a members to your projects. See the [`createServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createserviceaccount(projectid:displayname:basicauthenabled:completion:)) and [`inviteMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.invitemember(projectid:roles:email:completion:)) functions for more details.
+
+See the [Service Accounts](https://support.disruptive-technologies.com/hc/en-us/articles/360012295100-Service-Accounts) article on the developer website for more details about Service Accounts in general.
+
+
+
+
+### Making Requests
+
+Once an instance of the `Disruptive` struct has been created, it will be the main entry point to make requests against the Disruptive API. See the [API reference](https://vegather.github.io/Disruptive/Disruptive/) for an overview of all the functionality available on the `Disruptive` struct.
+
+
+#### Lists & Pagination
+
+There are two main approaches to fetching a list of resources (such as a list of `Device`s or `Project`s): You can either fetch them all at once, or one page at a time. Fetching all the items of a resource at once is more convenient, but if there are a lot of items this can take a long time as multiple network requests might be made in the background to get all the pages automatically. 
+
+Fetching one page of items at a time is slightly more cumbersome to implement, but provides full control of how many items are fetched at a time and when to fetch the next page of items. Fetching one page at a time is available for `Organization`, `Project`, `Device`, `DataConnector`, `Member`, `ServiceAccount`, and `ServiceAccount.Key`. It is not available for `Role` and `Permission` as those have a well-known, small number of items to list. It is also not available for fetching events as events can be paged by specifying start and end timestamps to fetch events between.
+
+Here are examples of both of these approaches for fetching a list of `Device`s.
+
+Fetching all `Device`s in a project at once:
 ```swift
-disruptive.getOrganizations { result in
-    switch result {
-        case .success(let organizations):
-            print(organizations)
-        case .failure(let error):
-            print("Failed to get organizations: \(error)")
-    }
-}
-```
-[`getOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))
-
-
-#### Fetch Projects
-
-Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
-
-```swift
-disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result in
-    switch result {
-        case .success(let projects):
-            print(projects)
-        case .failure(let error):
-            print("Failed to get projects: \(error)")
-    }
-}
-```
-[`getProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))
-
-
-#### Fetch Devices
-
-When fetching devices, you need to specify the identifier of the project to fetch the devices for (this identifier could be fetched from the `getProjects` endpoint for example). Here's an example of how to fetch all the devices within a specified project id:
-
-```swift
-disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
+disruptive.getAllDevices(projectID: "<PROJECT_ID>") { result in
     switch result {
         case .success(let devices):
             print(devices)
@@ -142,27 +136,45 @@ disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
     }
 }
 ```
-[`getDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:completion:))
+[`getAllDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getAlldevices(projectid:completion:))
 
 
-#### Single Device Lookup
-
-It is also possible to look up a single device just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example:
-
+Fetching `Device`s one page at a time:
 ```swift
-disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
-    switch result {
-        case .success(let device):
-            print(device)
-        case .failure(let error):
-            print("Failed to get device: \(error)")
+var fetchedDevices = [Device]()
+var nextPageToken: String?
+
+func fetchNextPage(pageToken: String?) {
+    disruptive.getDevicesPage(projectID: "<PROJECT_ID>", pageSize: 25, pageToken: pageToken) { result in
+        switch result {
+            case .success(let page):
+                // Keep track of the page token to use for the next page.
+                // Note that this will be `nil` when the last page is received.
+                nextPageToken = page.nextPageToken
+                
+                // Update the list of all the devices we have found so far
+                fetchedDevices.append(contentsOf: page.devices)
+                
+                print("Fetched \(page.devices.count) more devices. \(fetchedDevices.count) devices fetched in total")
+            case .failure(let error):
+                print("Failed to get devices: \(error)")
+        }
     }
 }
+
+// Fetch the first page
+fetchNextPage(pageToken: nil)
+
+// Fetch subsequent pages when it makes sense (for example when pre-fetching data
+// for a UITableView). Note that `nextPageToken` will be set to `nil` when the last
+// page is received.
+if let pageToken = nextPageToken {
+    fetchNextPage(pageToken: pageToken)
+}
 ```
-[`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
 
 
-### Requesting Historical Events
+#### Fetching Historical Events
 
 Fetching historical events for a device is similar to fetching other lists of data (like `getOrganizations` or `getProjects`). You need to specify the identifier of the project and the device, and optionally the start/end time and which events to fetch (certain event types are only available for certain device types, eg. `temperature` events are only available for `temperature` sensors). If the `Result` returned in the callback was `.success`, you will receive a value of type `Events` that contains an optional array of events for each event type. Only the event types that were actually returned will be non-nil, not necessarily the one specified in the `eventTypes` parameter.
 
@@ -183,9 +195,9 @@ disruptive.getEvents(projectID: "<PROJECT_ID>", deviceID: "<DEVICE_ID>", eventTy
 [`getEvents` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:))
 
 
-### Subscribing to Device Events
+#### Subscribing to Device Events
 
-When subscribing to device events you have two options: Either subscribe to a single device, or to a list of devices. If you want to subscribe to a list of devices, you can filter on which devices to subscribe to based on both device types and labels. Either way, you will get a value of type `ServerSentEvents` back that will let you set up a callbacks for each the various event types. Only the event types specified in the `eventTypes` parameter will actually receive callbacks.
+When subscribing to device events you have two options: Either subscribe to a single device, or to a list of devices. If you want to subscribe to a list of devices, you can filter on which devices to subscribe to based on both device types and labels. Either way, you will get a value of type `DeviceEventStream` back that will let you set up a callbacks for each the various event types. Only the event types specified in the `eventTypes` parameter will actually receive callbacks.
 
 Example of subscribing to temperature events for a single temperature sensor:
 ```swift
@@ -194,41 +206,65 @@ let stream = disruptive.subscribeToDevice(
     deviceID   : "<DEVICE_ID>", 
     eventTypes : [.temperature] // optional
 )
-stream?.onError = { error in
-    print("Got stream error: \(error)")
-}
 stream?.onTemperature = { deviceID, temperatureEvent in
     print("Got temperature \(temperatureEvent) for device with id \(deviceID)")
+}
+stream?.onError = { error in
+    print("Got stream error: \(error)")
 }
 ```
 [`subscribeToDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.subscribetodevices(projectid:deviceids:devicetypes:labelfilters:eventtypes:))
 
 
+
+#### Other Common Requests
+
+**Fetch Organizations**
+
+Here's an example of fetching all the organizations available to the authenticated account:
+
+```swift
+disruptive.getAllOrganizations { result in
+    ...
+}
+```
+[`getAllOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
+
+
+**Fetch Projects**
+
+Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
+
+```swift
+disruptive.getAllProjects(organizationID: "<ORG_ID>", query: "Building 1") { result in
+    ...
+}
+```
+[`getAllProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallprojects(organizationid:query:completion:))
+
+
+**Single Device Lookup**
+
+A single device can be looked up just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example:
+
+```swift
+disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
+    ...
+}
+```
+[`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
+
+
+
+
+
 ### Misc Tips
 
 * Some basic debug logs can be enabled by setting `Disruptive.loggingEnabled = true` 
-
-
-
-## Todo
-
-- [x] ~~Add unit tests. Would like to try to get a test harness set up based on `URLProtocol` as described in this blog post: https://medium.com/@dhawaldawar/how-to-mock-urlsession-using-urlprotocol-8b74f389a67a~~
-- [ ] Provide better control of pagination. At the moment, this library will automatically fetch all pages before returning the data. Ideally, the caller would be able to decide whether or not they want this automatic behavior, or do it by themselves instead. This would be useful when there are a lot of items in a list, and paging all the items would take too much time.
-- [x] Labels changed support. The `labelsChanged` event has a slightly different structure than the rest of the event types. It was added to this repo before this was realized, so the implementation is simply commented-out until proper parsing logic is implemented. 
-- [x] ~~Finish documenting all types, properties, and methods.~~
-- [x] Improve `DTLog` to include file and line numbers in a nicely formatted output. At this point it could also be a public function.
-- [x] Reach 90%+ code coverage for the unit tests.
-- Areas that still needs unit testing
-    - [ ] `Authentication.swift` - `getActiveAccessToken` and error handling in `OAuth2Authenticator.refreshAccessToken`
-    - [x] `DeviceEventStream.swift`
-    - [x] `EventTypes.swift`
-    - [ ] `Requests.swift` including pagination, errors
-    - [ ] `RetryScheme.swift`
-    - [x] `Stream.swift`
-- [ ] Add Combine support for server sent events.
-- [ ] Add global option not wait for re-attempts when rate-limiting, and just return the error instead.
-- [ ] Handle 5XX errors from the backend. These shows up as `InternalError`s, and should have a retry-policy with an exponential backoff.
     
+
+
+
 
 
 ## License
