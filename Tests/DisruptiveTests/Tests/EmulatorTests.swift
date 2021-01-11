@@ -10,7 +10,7 @@ import XCTest
 
 class EmulatorTests: DisruptiveTests {
     
-    func testGetEmulatedDevices() {
+    func testGetAllEmulatedDevices() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseEmulatorURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -34,10 +34,81 @@ class EmulatorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getEmulatedDevices(projectID: reqProjectID) { result in
+        disruptive.getAllEmulatedDevices(projectID: reqProjectID) { result in
             switch result {
                 case .success(let devices):
                     XCTAssertEqual(devices, respDevices)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func t() {
+        
+        var fetchedDevices = [Device]()
+        var nextPageToken: String?
+        
+        func fetchNextPage(pageToken: String?) {
+            disruptive.getDevicesPage(projectID: "<PROJECT_ID>", pageSize: 25, pageToken: pageToken) { result in
+                switch result {
+                    case .success(let page):
+                        // Keep track of the page token to use for the next page.
+                        // Note that this will be `nil` when the last page is received.
+                        nextPageToken = page.nextPageToken
+                        
+                        // Update the list of all the devices we have found so far
+                        fetchedDevices.append(contentsOf: page.devices)
+                        
+                        print("Fetched \(page.devices.count) more devices. \(fetchedDevices.count) devices fetched in total")
+                    case .failure(let error):
+                        print("Failed to get devices: \(error)")
+                }
+            }
+        }
+        
+        // Fetch the first page
+        fetchNextPage(pageToken: nil)
+        
+        // Fetch subsequent pages when it makes sense (for example when pre-fetching data
+        // for a UITableView). Note that `nextPageToken` will be set to `nil` when the last
+        // page is received.
+        if let pageToken = nextPageToken {
+            fetchNextPage(pageToken: pageToken)
+        }
+    }
+    
+    func testGetEmulatedDevicesPage() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseEmulatorURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices")
+        
+        let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
+        let respData = DeviceTests.createDevicesJSON(from: respDevices, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getEmulatedDevicesPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.devices, respDevices)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }

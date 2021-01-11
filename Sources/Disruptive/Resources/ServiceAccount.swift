@@ -42,13 +42,18 @@ public struct ServiceAccount: Decodable, Equatable {
 extension Disruptive {
     
     /**
-     Gets a list of Service Accounts that are available in a specific project.
+     Gets all the Service Accounts that are available in a specific project.
+     
+     This will handle pagination automatically and send multiple network requests in
+     the background if necessary. If a lot of Service Accounts are expected to be in the project,
+     it might be better to load pages of Service Accounts as they're needed using the
+     `getServiceAccountsPage` function instead.
      
      - Parameter projectID: The identifier of the project to get Service Accounts from.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount], DisruptiveError>`
      */
-    public func getServiceAccounts(
+    public func getAllServiceAccounts(
         projectID  : String,
         completion : @escaping (_ result: Result<[ServiceAccount], DisruptiveError>) -> ())
     {
@@ -58,6 +63,39 @@ extension Disruptive {
         
         // Send the request
         sendRequest(request, pagingKey: "serviceAccounts") { completion($0) }
+    }
+    
+    /**
+     Gets one page of Service Accounts.
+     
+     Useful if a lot of Service Accounts are expected in the specified project. This function
+     provides better control for when to get Service Accounts and how many to get at a time so
+     that Service Accounts are only fetch when they are needed. This can also improve performance,
+     at a cost of convenience compared to the `getAllServiceAccounts` function.
+     
+     - Parameter projectID: The identifier of the project to get Service Accounts from.
+     - Parameter pageSize: The maximum number of Service Accounts to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `ServiceAccount`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<(nextPageToken: String?, serviceAccounts: [ServiceAccount]), DisruptiveError>`
+     */
+    public func getServiceAccountsPage(
+        projectID  : String,
+        pageSize   : Int = 100,
+        pageToken  : String?,
+        completion : @escaping (_ result: Result<(nextPageToken: String?, serviceAccounts: [ServiceAccount]), DisruptiveError>) -> ())
+    {
+        // Create the request
+        let endpoint = "projects/\(projectID)/serviceaccounts"
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        
+        // Send the request
+        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "serviceAccounts") { (result: Result<PagedResult<ServiceAccount>, DisruptiveError>) in
+            switch result {
+                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, serviceAccounts: page.results)))
+                case .failure(let err)  : completion(.failure(err))
+            }
+        }
     }
     
     /**
@@ -216,14 +254,19 @@ extension Disruptive {
     }
     
     /**
-     Gets a list of keys for a specific Service Account.
+     Gets all the keys for a specific Service Account.
+     
+     This will handle pagination automatically and send multiple network requests in
+     the background if necessary. If a lot of keys are expected to be available for the Service Account,
+     it might be better to load pages of keys as they're needed using the
+     `getServiceAccountKeysPage` function instead.
      
      - Parameter projectID: The identifier of the project the Service Account is in.
      - Parameter serviceAccountID: The identifier of the Service Account to get keys for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount.Key`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount.Key], DisruptiveError>`
      */
-    public func getServiceAccountKeys(
+    public func getAllServiceAccountKeys(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<[ServiceAccount.Key], DisruptiveError>) -> ())
@@ -234,6 +277,41 @@ extension Disruptive {
         
         // Send the request
         sendRequest(request, pagingKey: "keys") { completion($0) }
+    }
+    
+    /**
+     Gets one page of keys for a specific Service Account.
+     
+     Useful if a lot of keys are expected to be available for this Service Account. This function
+     provides better control for when to get keys and how many to get at a time so
+     that keys are only fetch when they are needed. This can also improve performance,
+     at a cost of convenience compared to the `getAllServiceAccountKeys` function.
+     
+     - Parameter projectID: The identifier of the project the Service Account is in.
+     - Parameter serviceAccountID: The identifier of the Service Account to get keys for.
+     - Parameter pageSize: The maximum number of keys to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `ServiceAccount.Key`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<(nextPageToken: String?, keys: [ServiceAccount.Key]), DisruptiveError>`
+     */
+    public func getServiceAccountKeysPage(
+        projectID        : String,
+        serviceAccountID : String,
+        pageSize         : Int = 100,
+        pageToken        : String?,
+        completion       : @escaping (_ result: Result<(nextPageToken: String?, keys: [ServiceAccount.Key]), DisruptiveError>) -> ())
+    {
+        // Create the request
+        let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys"
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        
+        // Send the request
+        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "keys") { (result: Result<PagedResult<ServiceAccount.Key>, DisruptiveError>) in
+            switch result {
+                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, keys: page.results)))
+                case .failure(let err)  : completion(.failure(err))
+            }
+        }
     }
     
     /**

@@ -48,13 +48,18 @@ public struct DataConnector: Decodable, Equatable {
 extension Disruptive {
     
     /**
-     Gets a list of Data Connectors that are available in a specific project.
+     Gets all the Data Connectors that are available in a specific project.
+     
+     This will handle pagination automatically and send multiple network requests in
+     the background if necessary. If a lot of Data Connectors are expected to be in the project,
+     it might be better to load pages of Data Connectors as they're needed using the
+     `getDataConnectorsPage` function instead.
      
      - Parameter projectID: The identifier of the project to get Data Connectors from.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `DataConnector`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[DataConnector], DisruptiveError>`
      */
-    public func getDataConnectors(
+    public func getAllDataConnectors(
         projectID  : String,
         completion : @escaping (_ result: Result<[DataConnector], DisruptiveError>) -> ())
     {
@@ -64,6 +69,39 @@ extension Disruptive {
         
         // Send the request
         sendRequest(request, pagingKey: "dataConnectors") { completion($0) }
+    }
+    
+    /**
+     Gets one page of Data Connectors.
+     
+     Useful if a lot of Data Connectors are expected in the specified project. This function
+     provides better control for when to get Data Connectors and how many to get at a time so
+     that Data Connectors are only fetch when they are needed. This can also improve performance,
+     at a cost of convenience compared to the `getAllDataConnectors` function.
+     
+     - Parameter projectID: The identifier of the project to get Data Connectors from.
+     - Parameter pageSize: The maximum number of Data Connectors to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `DataConnector`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<(nextPageToken: String?, dataConnectors: [DataConnector]), DisruptiveError>`
+     */
+    public func getDataConnectorsPage(
+        projectID  : String,
+        pageSize   : Int = 100,
+        pageToken  : String?,
+        completion : @escaping (_ result: Result<(nextPageToken: String?, dataConnectors: [DataConnector]), DisruptiveError>) -> ())
+    {
+        // Create the request
+        let endpoint = "projects/\(projectID)/dataconnectors"
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        
+        // Send the request
+        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "dataConnectors") { (result: Result<PagedResult<DataConnector>, DisruptiveError>) in
+            switch result {
+                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, dataConnectors: page.results)))
+                case .failure(let err)  : completion(.failure(err))
+            }
+        }
     }
     
     /**

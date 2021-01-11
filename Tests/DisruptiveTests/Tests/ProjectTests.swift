@@ -19,7 +19,7 @@ class ProjectTests: DisruptiveTests {
     
     
     
-    func testGetProjects() {
+    func testGetAllProjects() {
         let reqOrgID = "abc"
         let reqQuery = "dummy"
         let reqParams = ["organization": [reqOrgID], "query": [reqQuery]]
@@ -44,10 +44,48 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getProjects(organizationID: reqOrgID, query: reqQuery) { result in
+        disruptive.getAllProjects(organizationID: reqOrgID, query: reqQuery) { result in
             switch result {
                 case .success(let projectsOut):
                     XCTAssertEqual(projectsOut, respProjects)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetProjectsPage() {
+        let reqOrgID = "abc"
+        let reqQuery = "dummy"
+        let reqParams = ["organization": [reqOrgID], "query": [reqQuery], "page_size": ["2"], "page_token": ["token"]]
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!.appendingPathComponent("projects")
+        
+        let respProjects = [createDummyProject(), createDummyProject()]
+        let respData = createProjectsJSON(from: respProjects, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : reqParams,
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getProjectsPage(organizationID: reqOrgID, query: reqQuery, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.projects, respProjects)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -232,13 +270,13 @@ extension ProjectTests {
         return createProjectJSONString(from: project).data(using: .utf8)!
     }
     
-    fileprivate func createProjectsJSON(from projects: [Project]) -> Data {
+    fileprivate func createProjectsJSON(from projects: [Project], nextPageToken: String = "") -> Data {
         return """
         {
             "projects": [
                 \(projects.map({ createProjectJSONString(from: $0) }).joined(separator: ","))
             ],
-            "nextPageToken": ""
+            "nextPageToken": "\(nextPageToken)"
         }
         """.data(using: .utf8)!
     }

@@ -74,7 +74,7 @@ class NetworkingTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getProjects() { result in
+        disruptive.getAllProjects() { result in
             switch result {
                 case .success(_): XCTFail("Expected failure")
                 case .failure(let err): XCTAssertEqual(err, .serverUnavailable)
