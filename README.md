@@ -20,7 +20,7 @@ Swift library for accessing data from [Disruptive Technologies](https://disrupti
     - [Authentication](#authentication)
     - [Permissions](#permissions)
     - [Making Requests](#making-requests)
-        - [Lists & Pagination](#lists-%26-pagination)
+        - [Lists & Pagination](#lists--pagination)
         - [Fetching Historical Events](#fetching-historical-events)
         - [Subscribing to Device Events](#subscribing-to-device-events)
         - [Other Common Requests](#other-common-requests)
@@ -55,7 +55,7 @@ If you want to add it manually to your Swift project, you can add the following 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vegather/Disruptive.git", from: "0.3.0")
+    .package(url: "https://github.com/vegather/Disruptive.git", from: "1.0.0")
 ]
 ```
 
@@ -101,7 +101,7 @@ let disruptive = Disruptive(authenticator: authenticator)
 
 ### Permissions
 
-Access levels for the Disruptive API can be described in terms of members, roles, and permissions. For an account (Service Account or user) to have access to a resource, it has to be a member in the project or organization that is a parent of that resource. A member will always have a role for the project/organization it's a member of (such as project user, project admin, etc). Each of those roles as a list of permissions that describes which CRUD (create, read, update, delete) operations it can perform on various resources. Examples of permissions would be `"project.read"`, `"membership.create"`, `"serviceaccount.key.delete"`, etc. To list the available roles and permissions, use the [`getRoles`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getroles(completion:)) and [`getPermissions`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getpermissions(forprojectid:completion:)) functions.
+Access levels for the Disruptive API can be described in terms of members, roles, and permissions. For an account (Service Account or user) to have access to a resource, it has to be a member in the project or organization that is a parent of that resource. A member will always have a role for the project/organization it's a member of (such as project user, project admin, etc). Each of those roles as a list of permissions that describes which CRUD (create, read, update, delete) operations it can perform on various resources. Examples of permissions would be `"project.read"`, `"membership.create"`, `"serviceaccount.key.delete"`, etc. To list the available roles and permissions, use the [`getRoles`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getroles(completion:)) and [`getPermissions`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getpermissions(projectid:completion:)) functions.
 
 In order for a Service Account to be able to access a given resource, it must have sufficient permissions for that resource. By default, a Service Account does not have access to any resources.  The easiest way to get started with a Service Account is by granting access for the relevant projects/organizations in [DT Studio](https://studio.disruptive-technologies.com). You can give it a role in the current project by selecting `Role in current Project` when viewing the Service Account under `API Integrations -> Service Accounts`. You can also give it access to other projects/organizations by going to the list of members (in `Project Settings` for project members), and then adding the Service Account as a member using the Service Account's email address, and selecting an appropriate role.
 
@@ -136,7 +136,7 @@ disruptive.getAllDevices(projectID: "<PROJECT_ID>") { result in
     }
 }
 ```
-[`getAllDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getAlldevices(projectid:completion:))
+[`getAllDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getalldevices(projectid:completion:))
 
 
 Fetching `Device`s one page at a time:
@@ -172,6 +172,7 @@ if let pageToken = nextPageToken {
     fetchNextPage(pageToken: pageToken)
 }
 ```
+[`getDevicesPage` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevicespage(projectid:pagesize:pagetoken:completion:))
 
 
 #### Fetching Historical Events
