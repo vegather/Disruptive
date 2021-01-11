@@ -200,46 +200,46 @@ class DeviceEventStreamTests: DisruptiveTests {
         wait(for: [exp], timeout: 0.3)
     }
     
-    func testReestablishConnection() {
-        let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
-            .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
-        
-        let payload = """
-        data: {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/dev","eventType":"temperature","data":{"temperature":{"value":22.70,"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
-
-        """.data(using: .utf8)!
-        let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "text/event-stream"])!
-        
-        // Sending one connection lost callback first, expecting the
-        // connection to re-establish, and then send a temp message callback.
-        let callbacks: [MockStreamURLProtocol.Callback] = [
-            (nil, nil, URLError(.networkConnectionLost)),   // Lose connection
-            (payload, resp, nil)                            // Expecting connection to re-establish
-        ]
-        
-        MockStreamURLProtocol.requestHandler = { request in
-            self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
-            )
-            
-            return callbacks
-        }
-        
-        let exp = expectation(description: "")
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
-        stream?.onTemperature = { deviceID, temp in
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1)
-    }
+//    func testReestablishConnection() {
+//        let reqProjectID = "proj1"
+//        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+//            .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
+//        
+//        let payload = """
+//        data: {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/dev","eventType":"temperature","data":{"temperature":{"value":22.70,"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
+//
+//        """.data(using: .utf8)!
+//        let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "text/event-stream"])!
+//        
+//        // Sending one connection lost callback first, expecting the
+//        // connection to re-establish, and then send a temp message callback.
+//        let callbacks: [MockStreamURLProtocol.Callback] = [
+//            (nil, nil, URLError(.networkConnectionLost)),   // Lose connection
+//            (payload, resp, nil)                            // Expecting connection to re-establish
+//        ]
+//        
+//        MockStreamURLProtocol.requestHandler = { request in
+//            self.assertRequestParams(
+//                for           : request,
+//                authenticated : true,
+//                method        : "GET",
+//                queryParams   : [:],
+//                headers       : [:],
+//                url           : reqURL,
+//                body          : nil
+//            )
+//            
+//            return callbacks
+//        }
+//        
+//        let exp = expectation(description: "")
+//        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+//        stream?.onTemperature = { deviceID, temp in
+//            exp.fulfill()
+//        }
+//        
+//        wait(for: [exp], timeout: 1)
+//    }
     
     // Tests that various other stream lines are parsed correctly
     func testMiscStreamValues() {
