@@ -41,7 +41,7 @@
     </a>
 </dt>
 <dd>
-    <p>An <code>AuthProvider</code> that logs in a service account using basic auth.</p>
+    <p>An <code>Authenticator</code> that logs in a service account using basic auth.</p>
 
 </dd>
 <dt class="class">
@@ -50,8 +50,8 @@
     </a>
 </dt>
 <dd>
-    <p>An <code>AuthProvider</code> that logs in a service account using OAuth2. This is a more
-secure flow than the basic auth counter-part, and is the recommended way to authenticate
+    <p>An <code>Authenticator</code> that logs in a service account using OAuth2 with a JWT Bearer Token as an authorization grant.
+This is a more secure flow than the basic auth counter-part, and is the recommended way to authenticate
 a service account in a production environment.</p>
 
 </dd>
@@ -193,6 +193,15 @@ that connection is. A network status event is sent on every heartbeat, as well a
 </dt>
 <dd>
     <p>A battery status event is sent quite rarely since the battery life of the sensors lasts up to 15 years. It indicates how much battery life is left in the sensor.</p>
+
+</dd>
+<dt class="structure">
+    <a href="https://vegather.github.io/Disruptive/LabelsChangedEvent" title="structure - LabelsChangedEvent">
+        Labels​Changed​Event
+    </a>
+</dt>
+<dd>
+    <p>Labels changed events are sent when the labels for a device are changed (added, deleted, or modified).</p>
 
 </dd>
 <dt class="structure">
@@ -364,7 +373,10 @@ This is the response value for when a new key is created for a Service Account.<
     </a>
 </dt>
 <dd>
-    
+    <p>The severity of the log. Might be used to prefix
+the log message with a symbol to make it easily
+distinguishable.</p>
+
 </dd>
 <dt class="enumeration">
     <a href="https://vegather.github.io/Disruptive/DisruptiveError" title="enumeration - DisruptiveError">
@@ -502,8 +514,8 @@ a specific project or organization.</p>
         <h2>Protocols</h2>
         <dl>
             <dt class="protocol">
-    <a href="https://vegather.github.io/Disruptive/AuthProvider" title="protocol - AuthProvider">
-        Auth​Provider
+    <a href="https://vegather.github.io/Disruptive/Authenticator" title="protocol - Authenticator">
+        Authenticator
     </a>
 </dt>
 <dd>
@@ -529,7 +541,9 @@ a specific project or organization.</p>
     </a>
 </dt>
 <dd>
-    
+    <p>Provides a nicely formatted log output with the file, function, and line number the
+log statement came from. Also includes a timestamp with millisecond accuracy.</p>
+
 </dd>
         </dl>
     </section>
@@ -538,7 +552,7 @@ a specific project or organization.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2021-01-09T12:32:35+0000">January 9, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-01-11T01:33:42+0000">January 11, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>

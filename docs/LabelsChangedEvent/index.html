@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disruptive - ServiceAccount.KeySecret</title>
+    <title>Disruptive - LabelsChangedEvent</title>
     <link rel="stylesheet" type="text/css" href="https://vegather.github.io/Disruptive/all.css" media="all" />
 </head>
 <body>
@@ -26,7 +26,7 @@
     <nav>
         <div class="wrapper">
             <h2>On This Page</h2>
-            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Member Of</a></li><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#serviceaccount.keysecret.key">key</a></li><li class="variable"><a href="#serviceaccount.keysecret.secret">secret</a></li></ul></li></ol>
+            <ol><li><a href="#relationships">Relationships</a><ul><li><a href="#relationships">Conforms To</a></li></ul></li><li><a href="#properties">Properties</a><ul><li class="variable"><a href="#labelschangedevent.added">added</a></li><li class="variable"><a href="#labelschangedevent.modified">modified</a></li><li class="variable"><a href="#labelschangedevent.removed">removed</a></li></ul></li></ol>
         </div>
     </nav>
 
@@ -34,13 +34,23 @@
         <article>
             <h1>
     <small>Structure</small>
-    <code class="name">Service​Account.​Key​Secret</code>
+    <code class="name">Labels​Changed​Event</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">KeySecret</span>: <span class="type">Decodable</span>, <span class="type">Equatable</span></code></pre></body></html>
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">struct</span> <span class="type">LabelsChangedEvent</span>: <span class="type">Decodable</span>, <span class="type">Equatable</span></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>A secret along with the corresponding key used to authenticate a Service Account.
-This is the response value for when a new key is created for a Service Account.</p>
+    <p>Labels changed events are sent when the labels for a device are changed (added, deleted, or modified).</p>
+
+</div>
+<div class="discussion">
+    <p>Since the display name of a device is a label with the key &quot;name&quot; behind the scene, this event will also
+be sent when the display name changes.</p>
+
+<p>Note that this event will only be sent to a device stream (see <code>subscribeToDevices</code>), or a Data Connector.
+It will not be available as historical events for a device (the current labels for a device can be found on
+the <code>Device</code> itself).</p>
+
+<p>Seed the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#labelschangedevent">Developer Website</a> for more details.</p>
 
 </div>
 <section id="relationships">
@@ -57,12 +67,12 @@ This is the response value for when a new key is created for a Service Account.<
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
 <title>%3</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-112 868,-112 868,4 -4,4"/>
-<!-- ServiceAccount.KeySecret -->
+<!-- LabelsChangedEvent -->
 <g id="node1" class="node structure current">
-<title>ServiceAccount.KeySecret</title>
-<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/ServiceAccount_KeySecret" xlink:title="ServiceAccount.KeySecret">
+<title>LabelsChangedEvent</title>
+<g id="a_node1"><a xlink:href="https://vegather.github.io/Disruptive/LabelsChangedEvent" xlink:title="LabelsChangedEvent">
 <path fill="none" stroke="#000000" stroke-width="3" d="M528,-108C528,-108 336,-108 336,-108 330,-108 324,-102 324,-96 324,-96 324,-84 324,-84 324,-78 330,-72 336,-72 336,-72 528,-72 528,-72 534,-72 540,-78 540,-84 540,-84 540,-96 540,-96 540,-102 534,-108 528,-108"/>
-<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">ServiceAccount.KeySecret</text>
+<text text-anchor="middle" x="432" y="-86.3" font-family="Menlo" font-size="14.00" fill="#000000">LabelsChangedEvent</text>
 </a>
 </g>
 </g>
@@ -72,9 +82,9 @@ This is the response value for when a new key is created for a Service Account.<
 <path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
 <text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Decodable</text>
 </g>
-<!-- ServiceAccount.KeySecret&#45;&gt;Decodable -->
+<!-- LabelsChangedEvent&#45;&gt;Decodable -->
 <g id="edge2" class="edge conformsTo">
-<title>ServiceAccount.KeySecret&#45;&gt;Decodable</title>
+<title>LabelsChangedEvent&#45;&gt;Decodable</title>
 <path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
 </g>
@@ -84,9 +94,9 @@ This is the response value for when a new key is created for a Service Account.<
 <path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
 <text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
 </g>
-<!-- ServiceAccount.KeySecret&#45;&gt;Equatable -->
+<!-- LabelsChangedEvent&#45;&gt;Equatable -->
 <g id="edge1" class="edge conformsTo">
-<title>ServiceAccount.KeySecret&#45;&gt;Equatable</title>
+<title>LabelsChangedEvent&#45;&gt;Equatable</title>
 <path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
 </g>
@@ -94,15 +104,9 @@ This is the response value for when a new key is created for a Service Account.<
 </svg>
 
 
-    <figcaption hidden>Inheritance graph for ServiceAccount.KeySecret.</figcaption>
+    <figcaption hidden>Inheritance graph for LabelsChangedEvent.</figcaption>
 </figure>
-        <h3>Member Of</h3>
-<dl>
-    <dt class="structure"><code><a href="https://vegather.github.io/Disruptive/ServiceAccount">ServiceAccount</a></code></dt>
-<dd><p>All programmatic interaction with the Disruptive Technologies API is done via a logged-in Service Account.</p>
-</dd>
-</dl>
-<h3>Conforms To</h3>
+        <h3>Conforms To</h3>
 <dl>
     <dt class="unknown"><code>Decodable</code></dt>
 <dt class="unknown"><code>Equatable</code></dt>
@@ -111,25 +115,23 @@ This is the response value for when a new key is created for a Service Account.<
     <section id="properties">
         <h2>Properties</h2>
 
-        <div role="article" class="variable" id="serviceaccount.keysecret.key">
+        <div role="article" class="variable" id="labelschangedevent.added">
     <h3>
-        <code>key</code>
+        <code>added</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">key</span>: <span class="type">Key</span></code></pre></body></html>
-<div class="summary" role="doc-abstract">
-    <p>The key the <code>secret</code> corresponds to.</p>
-
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">added</span>: [<span class="type">String</span>: <span class="type">String</span>]</code></pre></body></html>
 </div>
-</div>
-<div role="article" class="variable" id="serviceaccount.keysecret.secret">
+<div role="article" class="variable" id="labelschangedevent.modified">
     <h3>
-        <code>secret</code>
+        <code>modified</code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">secret</span>: <span class="type">String</span></code></pre></body></html>
-<div class="summary" role="doc-abstract">
-    <p>The secret used to authenticate a Service Account.</p>
-
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">modified</span>: [<span class="type">String</span>: <span class="type">String</span>]</code></pre></body></html>
 </div>
+<div role="article" class="variable" id="labelschangedevent.removed">
+    <h3>
+        <code>removed</code>
+    </h3>
+    <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">removed</span>: [<span class="type">String</span>]</code></pre></body></html>
 </div>
     </section>
 

@@ -37,9 +37,9 @@
     <code class="name">Basic​Auth​Authenticator</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="type">BasicAuthAuthenticator</span>: <a href="https://vegather.github.io/Disruptive/AuthProvider"><span class="type">AuthProvider</span></a></code></pre></body></html>
+<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="type">BasicAuthAuthenticator</span>: <a href="https://vegather.github.io/Disruptive/Authenticator"><span class="type">Authenticator</span></a></code></pre></body></html>
 <div class="summary" role="doc-abstract">
-    <p>An <code>AuthProvider</code> that logs in a service account using basic auth.</p>
+    <p>An <code>Authenticator</code> that logs in a service account using basic auth.</p>
 
 </div>
 <div class="discussion">
@@ -47,7 +47,7 @@
 However if you'd like the authenticator to no longer be authenticated, you can call <code>logout()</code>,
 and then <code>login()</code> if you want it to be authenticated again.</p>
 
-<p>See <a href="../AuthProvider">AuthProvider</a> for more details about the properties
+<p>See <a href="../Authenticator">Authenticator</a> for more details about the properties
 and methods.</p>
 
 <p><strong>Note</strong>: This should only be used for development/testing. For production use-cases the <a href="../OAuth2Authenticator"><code>OAuth2Authenticator</code></a> should be used.</p>
@@ -56,7 +56,7 @@ and methods.</p>
 
 <html><body><pre class="highlight"><code><span class="keyword">let</span> <span class="variable">credentials</span> = <span class="variable">ServiceAccountCredentials</span>(<span class="variable">email</span>: <span class="string literal">"</span><span class="string literal">&lt;EMAIL&gt;</span><span class="string literal">"</span>, <span class="variable">key</span>: <span class="string literal">"</span><span class="string literal">&lt;KEY_ID&gt;</span><span class="string literal">"</span>, <span class="variable">secret</span>: <span class="string literal">"</span><span class="string literal">&lt;SECRET&gt;</span><span class="string literal">"</span>)
 <span class="keyword">let</span> <span class="variable">authenticator</span> = <span class="variable">BasicAuthAuthenticator</span>(<span class="variable">credentials</span>: <span class="type">credentials</span>)
-<span class="keyword">let</span> <span class="variable">disruptive</span> = <span class="variable">Disruptive</span>(<span class="variable">authProvider</span>: <span class="type">authenticator</span>)
+<span class="keyword">let</span> <span class="variable">disruptive</span> = <span class="variable">Disruptive</span>(<span class="variable">authenticator</span>: <span class="type">authenticator</span>)
 </code></pre></body></html>
 </div>
 <section id="relationships">
@@ -82,18 +82,18 @@ and methods.</p>
 </a>
 </g>
 </g>
-<!-- AuthProvider -->
+<!-- Authenticator -->
 <g id="node2" class="node protocol">
-<title>AuthProvider</title>
-<g id="a_node2"><a xlink:href="https://vegather.github.io/Disruptive/AuthProvider" xlink:title="AuthProvider">
+<title>Authenticator</title>
+<g id="a_node2"><a xlink:href="https://vegather.github.io/Disruptive/Authenticator" xlink:title="Authenticator">
 <path fill="none" stroke="#000000" d="M528,-36C528,-36 336,-36 336,-36 330,-36 324,-30 324,-24 324,-24 324,-12 324,-12 324,-6 330,0 336,0 336,0 528,0 528,0 534,0 540,-6 540,-12 540,-12 540,-24 540,-24 540,-30 534,-36 528,-36"/>
-<text text-anchor="middle" x="432" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">AuthProvider</text>
+<text text-anchor="middle" x="432" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Authenticator</text>
 </a>
 </g>
 </g>
-<!-- BasicAuthAuthenticator&#45;&gt;AuthProvider -->
+<!-- BasicAuthAuthenticator&#45;&gt;Authenticator -->
 <g id="edge1" class="edge conformsTo">
-<title>BasicAuthAuthenticator&#45;&gt;AuthProvider</title>
+<title>BasicAuthAuthenticator&#45;&gt;Authenticator</title>
 <path fill="none" stroke="#000000" d="M432,-71.8314C432,-64.131 432,-54.9743 432,-46.4166"/>
 <polygon fill="#000000" stroke="#000000" points="435.5001,-46.4132 432,-36.4133 428.5001,-46.4133 435.5001,-46.4132"/>
 </g>
@@ -105,7 +105,7 @@ and methods.</p>
 </figure>
         <h3>Conforms To</h3>
 <dl>
-    <dt class="protocol"><code><a href="https://vegather.github.io/Disruptive/AuthProvider">AuthProvider</a></code></dt>
+    <dt class="protocol"><code><a href="https://vegather.github.io/Disruptive/Authenticator">Authenticator</a></code></dt>
 <dd><p>Defines the interface required to authenticate the <code>Disruptive</code> struct.</p>
 </dd>
 </dl>
@@ -219,7 +219,7 @@ This access token is stored in the <code>auth</code> property along with an expi
 
     <footer>
         <p>
-    Generated on <time datetime="2021-01-09T12:32:35+0000">January 9, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-01-11T01:33:42+0000">January 11, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
