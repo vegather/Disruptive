@@ -46,12 +46,12 @@ public enum DisruptiveError: Error {
     /// Check the logs for more information
     case unknownError
     
-    /// Returned when the `authProvider` is currently logged out. Call
-    /// `login()` on the `authProvider` to log it back in.
+    /// Returned when the `authenticator` is currently logged out. Call
+    /// `login()` on the `authenticator` to log it back in.
     case loggedOut
 }
 
-internal enum InternalError: Error {
+internal enum InternalError: Error, Equatable {
     /// Could be client is not on network, or server is down
     case serverUnavailable
     

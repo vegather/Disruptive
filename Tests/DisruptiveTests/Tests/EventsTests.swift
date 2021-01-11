@@ -192,20 +192,6 @@ class EventsTests: DisruptiveTests {
         }
         """.data(using: .utf8)!
         
-        //{
-        //    "eventId": "bjehr0ig1me000dm66s0",
-        //    "targetName": "projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg",
-        //    "eventType": "labelsChanged",
-        //    "data": {
-        //        "added": {},
-        //        "modified": {
-        //            "name": "Sensor name"
-        //        },
-        //        "removed": []
-        //    },
-        //    "timestamp": "2019-05-16T08:21:21.076013Z"
-        //},
-        
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
                 for           : request,
@@ -234,7 +220,6 @@ class EventsTests: DisruptiveTests {
                     XCTAssertNotNil(events.waterPresent)
                     XCTAssertNotNil(events.networkStatus)
                     XCTAssertNotNil(events.batteryStatus)
-//                    XCTAssertNotNil(events.labelsChanged)
                     XCTAssertNotNil(events.connectionStatus)
                     XCTAssertNotNil(events.ethernetStatus)
                     XCTAssertNotNil(events.cellularStatus)
@@ -350,7 +335,7 @@ class EventsTests: DisruptiveTests {
     
     func testMergeNothing() {
         var events = Events()
-        events.temperature = [TemperatureEvent(value: 67, timestamp: Date())]
+        events.temperature = [TemperatureEvent(celsius: 67, timestamp: Date())]
         events.merge(with: Events())
         
         XCTAssertNil(events.touch)
@@ -370,7 +355,7 @@ class EventsTests: DisruptiveTests {
     func testMergeSingleEvent() {
         var events = Events()
         var mergee = Events()
-        mergee.temperature = [TemperatureEvent(value: 67, timestamp: Date())]
+        mergee.temperature = [TemperatureEvent(celsius: 67, timestamp: Date())]
         events.merge(with: mergee)
         
         XCTAssertNil(events.touch)
@@ -390,7 +375,7 @@ class EventsTests: DisruptiveTests {
     func testMergeAllEvents() {
         var mergee = Events()
         mergee.touch              = [TouchEvent(timestamp: Date())]
-        mergee.temperature        = [TemperatureEvent(value: 67, timestamp: Date())]
+        mergee.temperature        = [TemperatureEvent(celsius: 67, timestamp: Date())]
         mergee.objectPresent      = [ObjectPresentEvent(state: .objectPresent, timestamp: Date())]
         mergee.humidity           = [HumidityEvent(temperature: 67, relativeHumidity: 90, timestamp: Date())]
         mergee.objectPresentCount = [ObjectPresentCountEvent(total: 67, timestamp: Date())]

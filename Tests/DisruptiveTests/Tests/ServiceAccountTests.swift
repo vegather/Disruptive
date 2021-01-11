@@ -31,7 +31,7 @@ class ServiceAccountTests: DisruptiveTests {
         XCTAssertEqual(keySecretIn, keySecretOut)
     }
     
-    func testGetServiceAccounts() {
+    func testGetAllServiceAccounts() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
@@ -55,10 +55,47 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccounts(projectID: reqProjectID) { result in
+        disruptive.getAllServiceAccounts(projectID: reqProjectID) { result in
             switch result {
                 case .success(let accounts):
                     XCTAssertEqual(accounts, respServiceAccounts)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetServiceAccountsPage() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
+        
+        let respServiceAccounts = [createDummyServiceAccount(), createDummyServiceAccount()]
+        let respData = createServiceAccountsJSON(from: respServiceAccounts, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getServiceAccountsPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.serviceAccounts, respServiceAccounts)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -277,7 +314,7 @@ class ServiceAccountTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetServiceAccountKeys() {
+    func testGetAllServiceAccountKeys() {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
@@ -302,10 +339,48 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccountKeys(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
+        disruptive.getAllServiceAccountKeys(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
             switch result {
                 case .success(let keys):
                     XCTAssertEqual(keys, respSaKeys)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetServiceAccountKeysPage() {
+        let reqProjectID = "proj1"
+        let reqSaID = "sa1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)/keys")
+        
+        let respSaKeys = [createDummyServiceAccountKey(), createDummyServiceAccountKey()]
+        let respData = createServiceAccountKeysJSON(from: respSaKeys, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getServiceAccountKeysPage(projectID: reqProjectID, serviceAccountID: reqSaID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.keys, respSaKeys)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -450,13 +525,13 @@ extension ServiceAccountTests {
         return createServiceAccountJSONString(from: sa).data(using: .utf8)!
     }
     
-    fileprivate func createServiceAccountsJSON(from sas: [ServiceAccount]) -> Data {
+    fileprivate func createServiceAccountsJSON(from sas: [ServiceAccount], nextPageToken: String = "") -> Data {
         return """
         {
             "serviceAccounts": [
                 \(sas.map({ createServiceAccountJSONString(from: $0) }).joined(separator: ","))
             ],
-            "nextPageToken": ""
+            "nextPageToken": "\(nextPageToken)"
         }
         """.data(using: .utf8)!
     }
@@ -496,13 +571,13 @@ extension ServiceAccountTests {
         return createServiceAccountKeyJSONString(from: key).data(using: .utf8)!
     }
     
-    fileprivate func createServiceAccountKeysJSON(from keys: [ServiceAccount.Key]) -> Data {
+    fileprivate func createServiceAccountKeysJSON(from keys: [ServiceAccount.Key], nextPageToken: String = "") -> Data {
         return """
         {
             "keys": [
                 \(keys.map({ createServiceAccountKeyJSONString(from: $0) }).joined(separator: ","))
             ],
-            "nextPageToken": ""
+            "nextPageToken": "\(nextPageToken)"
         }
         """.data(using: .utf8)!
     }

@@ -55,7 +55,7 @@ extension Disruptive {
         let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices:stream", params: params)
         
         // Create the stream, and connect to it
-        return DeviceEventStream(request: request, authProvider: authProvider)
+        return DeviceEventStream(request: request, authenticator: authenticator)
     }
     
     /**

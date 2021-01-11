@@ -153,7 +153,7 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetDevices() {
+    func testGetAllDevices() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -177,10 +177,47 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getDevices(projectID: reqProjectID) { result in
+        disruptive.getAllDevices(projectID: reqProjectID) { result in
             switch result {
                 case .success(let devices):
                     XCTAssertEqual(devices, respDevices)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetDevicesPage() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices")
+        
+        let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
+        let respData = DeviceTests.createDevicesJSON(from: respDevices, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getDevicesPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.devices, respDevices)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -432,7 +469,7 @@ extension DeviceTests {
             reported = """
             ,"reported": {
                 "temperature": {
-                    "value": \(device.reportedEvents.temperature?.value ?? 0),
+                    "value": \(device.reportedEvents.temperature?.celsius ?? 0),
                     "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")"
                 }
             }
@@ -454,13 +491,13 @@ extension DeviceTests {
         return createDeviceJSONString(from: device).data(using: .utf8)!
     }
     
-    static func createDevicesJSON(from devices: [Device]) -> Data {
+    static func createDevicesJSON(from devices: [Device], nextPageToken: String = "") -> Data {
         return """
         {
             "devices": [
                 \(devices.map({ createDeviceJSONString(from: $0) }).joined(separator: ","))
             ],
-            "nextPageToken": ""
+            "nextPageToken": "\(nextPageToken)"
         }
         """.data(using: .utf8)!
     }
@@ -470,7 +507,7 @@ extension DeviceTests {
         var reportedEvents = Device.ReportedEvents()
         if isEmulated == false {
             reportedEvents.temperature = TemperatureEvent(
-                value: 56,
+                celsius: 56,
                 timestamp: Date(timeIntervalSince1970: 1605999873)
             )
         }

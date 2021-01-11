@@ -33,11 +33,16 @@ extension Disruptive {
     /**
      Gets all the emulated devices in a specific project (without any physical devices).
      
+     This will handle pagination automatically and send multiple network requests in
+     the background if necessary. If a lot of emulated devices are expected to be in the project,
+     it might be better to load pages of emulated devices as they're needed using the
+     `getEmulatedDevicesPage` function instead.
+     
      - Parameter projectID: The identifier of the project to get emulated devices from.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
-    public func getEmulatedDevices(
+    public func getAllEmulatedDevices(
         projectID  : String,
         completion : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
     {
@@ -46,6 +51,38 @@ extension Disruptive {
         
         // Send the request
         sendRequest(request, pagingKey: "devices") { completion($0) }
+    }
+    
+    /**
+     Gets one page of emulated devices.
+     
+     Useful if a lot of emulated devices are expected in the specified project. This function
+     provides better control for when to get emulated devices and how many to get at a time so
+     that emulated devices are only fetch when they are needed. This can also improve performance,
+     at a cost of convenience compared to the `getAllEmulatedDevices` function.
+     
+     - Parameter projectID: The identifier of the project to get emulated devices from.
+     - Parameter pageSize: The maximum number of emulated devices to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Device`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>`
+     */
+    public func getEmulatedDevicesPage(
+        projectID  : String,
+        pageSize   : Int = 100,
+        pageToken  : String?,
+        completion : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
+    {
+        // Create the request
+        let request = Request(method: .get, baseURL: emulatorBaseURL, endpoint: "projects/\(projectID)/devices")
+        
+        // Send the request
+        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "devices") { (result: Result<PagedResult<Device>, DisruptiveError>) in
+            switch result {
+                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, devices: page.results)))
+                case .failure(let err)  : completion(.failure(err))
+            }
+        }
     }
     
     /**
@@ -207,6 +244,10 @@ private struct PublishBody: Encodable {
             case .connectionStatus   : connectionStatus   = event as? ConnectionStatusEvent
             case .ethernetStatus     : ethernetStatus     = event as? EthernetStatusEvent
             case .cellularStatus     : cellularStatus     = event as? CellularStatusEvent
+            case .labelsChanged:
+                // LabelsChangedEvent is not a `PublishableEvent` so this shouldn't happen.
+                DTLog("LabelsChangedEvent cannot be published", level: .error)
+                throw DisruptiveError.badRequest
         }
     }
 }

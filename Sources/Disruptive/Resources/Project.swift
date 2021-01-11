@@ -52,14 +52,23 @@ public struct Project: Decodable, Equatable {
 
 extension Disruptive {
     /**
-     Gets a list of projects. If an `organizationID` is specified, only projects within this organization is fetched. Otherwise, all the projects the authenticated account has access to is returned.
+     Gets a list of all projects that matches the `query`/`organizationID`.
+     
+     If an `organizationID` is specified, only projects within this organization are fetched.
+     Otherwise, all the projects the authenticated account has access to is returned. A `query`
+     string can also be used for simple keyword based search.
+     
+     This will handle pagination automatically and send multiple network requests in
+     the background if necessary. If a lot of projects are expected to be available,
+     it might be better to load pages of projects as they're needed using the
+     `getProjectsPage` function instead.
      
      - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch all the project the authenticated account has access to.
      - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), all projects will be returned.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Project], DisruptiveError>`
      */
-    public func getProjects(
+    public func getAllProjects(
         organizationID : String? = nil,
         query          : String? = nil,
         completion     : @escaping (_ result: Result<[Project], DisruptiveError>) -> ())
@@ -78,6 +87,53 @@ extension Disruptive {
         
         // Send the request
         sendRequest(request, pagingKey: "projects") { completion($0) }
+    }
+    
+    /**
+     Gets one page of projects that matches the `query`/`organizationID`
+     
+     If an `organizationID` is specified, only projects within this organization are fetched.
+     Otherwise, one page of the projects the authenticated account has access to is returned.
+     A `query` string can also be used for simple keyword based search.
+     
+     Useful if a lot of projects are expected to be available. This function
+     provides better control for when to get projects and how many to get at a time so
+     that projects are only fetch when they are needed. This can also improve performance,
+     at a cost of convenience compared to the `getAllProjects` function.
+     
+     - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch projects the authenticated account has access to from all organizations.
+     - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), any projects will be returned.
+     - Parameter pageSize: The maximum number of projects to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Project`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<(nextPageToken: String?, projects: [Project]), DisruptiveError>`
+     */
+    public func getProjectsPage(
+        organizationID : String? = nil,
+        query          : String? = nil,
+        pageSize       : Int = 100,
+        pageToken      : String?,
+        completion     : @escaping (_ result: Result<(nextPageToken: String?, projects: [Project]), DisruptiveError>) -> ())
+    {
+        // Set up the query parameters
+        var params: [String: [String]] = [:]
+        if let orgID = organizationID {
+            params["organization"] = [orgID]
+        }
+        if let query = query {
+            params["query"] = [query]
+        }
+        
+        // Create the request
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects", params: params)
+        
+        // Send the request
+        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "projects") { (result: Result<PagedResult<Project>, DisruptiveError>) in
+            switch result {
+                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, projects: page.results)))
+                case .failure(let err)  : completion(.failure(err))
+            }
+        }
     }
     
     /**

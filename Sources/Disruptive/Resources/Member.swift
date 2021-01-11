@@ -49,34 +49,44 @@ public struct Member: Decodable, Equatable {
 extension Disruptive {
     
     /**
-     Gets a list of Members for a specific organization.
+     Gets all the Members for a specific organization.
+     
+     This will handle pagination automatically and send multiple network requests in
+     the background if necessary. If a lot of Members are expected to be in the organization,
+     it might be better to load pages of Members as they're needed using the
+     `getMembersPage` function instead.
      
      - Parameter organizationID: The identifier of the organization to get Members for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public func getMembers(
+    public func getAllMembers(
         organizationID : String,
         completion     : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
-        getMembers(endpoint: "organizations/\(organizationID)/members") { completion($0) }
+        getAllMembers(endpoint: "organizations/\(organizationID)/members") { completion($0) }
     }
     
     /**
-     Gets a list of Members for a specific project.
+     Gets all the Members for a specific project.
+     
+     This will handle pagination automatically and send multiple network requests in
+     the background if necessary. If a lot of Members are expected to be in the project,
+     it might be better to load pages of Members as they're needed using the
+     `getMembersPage` function instead.
      
      - Parameter projectID: The identifier of the project to get Members for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public func getMembers(
+    public func getAllMembers(
         projectID  : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
-        getMembers(endpoint: "projects/\(projectID)/members") { completion($0) }
+        getAllMembers(endpoint: "projects/\(projectID)/members") { completion($0) }
     }
     
-    private func getMembers(
+    private func getAllMembers(
         endpoint   : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
@@ -85,6 +95,72 @@ extension Disruptive {
         
         // Send the request
         sendRequest(request, pagingKey: "members") { completion($0) }
+    }
+    
+    
+    
+    /**
+     Gets one page of Members for a specific organization.
+     
+     Useful if a lot of Members are expected in the specified organization. This function
+     provides better control for when to get Members and how many to get at a time so
+     that Members are only fetch when they are needed. This can also improve performance,
+     at a cost of convenience compared to the `getAllMembers` function.
+     
+     - Parameter organizationID: The identifier of the organization to get Members from.
+     - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
+     */
+    public func getMembersPage(
+        organizationID : String,
+        pageSize   : Int = 100,
+        pageToken  : String?,
+        completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
+    {
+        getMembersPage(endpoint: "organizations/\(organizationID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
+    }
+    
+    /**
+     Gets one page of Members for a specific project.
+     
+     Useful if a lot of Members are expected in the specified project. This function
+     provides better control for when to get Members and how many to get at a time so
+     that Members are only fetch when they are needed. This can also improve performance,
+     at a cost of convenience compared to the `getAllMembers` function.
+     
+     - Parameter projectID: The identifier of the project to get Members from.
+     - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
+     */
+    public func getMembersPage(
+        projectID  : String,
+        pageSize   : Int = 100,
+        pageToken  : String?,
+        completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
+    {
+        getMembersPage(endpoint: "projects/\(projectID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
+    }
+    
+    private func getMembersPage(
+        endpoint   : String,
+        pageSize   : Int = 100,
+        pageToken  : String?,
+        completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
+    {
+        // Create the request
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        
+        // Send the request
+        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "members") { (result: Result<PagedResult<Member>, DisruptiveError>) in
+            switch result {
+                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, members: page.results)))
+                case .failure(let err)  : completion(.failure(err))
+            }
+        }
     }
     
     

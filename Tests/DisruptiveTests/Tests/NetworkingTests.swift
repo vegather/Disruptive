@@ -10,14 +10,52 @@ import XCTest
 
 class NetworkingTests: DisruptiveTests {
     
-    func testPagedKey() {
-        let fromString = PagedKey(stringValue: "5")
-        XCTAssertEqual(fromString?.intValue, nil)
-        XCTAssertEqual(fromString?.stringValue, "5")
+    func testDecodePagedResult() {
+        struct Dummy: Decodable {
+            let foo: String
+            let bar: Int
+        }
         
-        let fromInt = PagedKey(intValue: 5)
-        XCTAssertEqual(fromInt?.intValue, 5)
-        XCTAssertEqual(fromInt?.stringValue, "5")
+        let validPayload = """
+        {
+            "results": [
+                {
+                    "foo": "some value",
+                    "bar": 42
+                }
+            ],
+            "nextPageToken": "token"
+        }
+        """.data(using: .utf8)!
+        let validOutput = try! JSONDecoder().decode(PagedResult<Dummy>.self, from: validPayload)
+        XCTAssertEqual(validOutput.results.count, 1)
+        XCTAssertEqual(validOutput.results[0].foo, "some value")
+        XCTAssertEqual(validOutput.results[0].bar, 42)
+        XCTAssertEqual(validOutput.nextPageToken, "token")
+        
+        
+        let emptyNextPageTokenPayload = """
+        {
+            "results": [],
+            "nextPageToken": ""
+        }
+        """.data(using: .utf8)!
+        let nextPageTokenOutput = try! JSONDecoder().decode(PagedResult<Dummy>.self, from: emptyNextPageTokenPayload)
+        XCTAssertNil(nextPageTokenOutput.nextPageToken)
+        
+        
+        let invalidPayload = """
+        {
+            "results": [
+                {
+                    "invalid": "some value",
+                    "bar": 42
+                }
+            ],
+            "nextPageToken": "token"
+        }
+        """.data(using: .utf8)!
+        XCTAssertThrowsError(try JSONDecoder().decode(PagedResult<Dummy>.self, from: invalidPayload))
     }
     
     func testFormURLEncodedBody() {
@@ -36,7 +74,7 @@ class NetworkingTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getProjects() { result in
+        disruptive.getAllProjects() { result in
             switch result {
                 case .success(_): XCTFail("Expected failure")
                 case .failure(let err): XCTAssertEqual(err, .serverUnavailable)

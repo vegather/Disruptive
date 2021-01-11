@@ -13,7 +13,7 @@ import Foundation
  
  The most straight-forward usage is to create one single shared instance of this, and use it across
  the entire app (although you can create multiple instances if you need to). When initialized with an
- `AuthProvider`, a `Disruptive` instance will keep an access token up-to-date automatically,
+ `Authenticator`, a `Disruptive` instance will keep an access token up-to-date automatically,
  so all requests are authenticated.
  */
 public struct Disruptive {
@@ -37,19 +37,19 @@ public struct Disruptive {
     public static var loggingEnabled = false
     
     /// The authentication mechanism used by `Disruptive`. This will be
-    /// checked to see if it has a non-expired `authToken` before every request
-    /// is sent to the Disruptive backend. If no non-expired `authToken` were found
-    /// the `authenticate` method will be called before attempting to send the request.
-    public let authProvider: AuthProvider
+    /// checked to see if it has a non-expired access token before every request
+    /// is sent to the Disruptive backend. If no non-expired access token were found
+    /// the `refreshAccessToken` method will be called before attempting to send the request.
+    public let authenticator: Authenticator
 
     /**
      Initializes a `Disruptive` instance.
      
-     - Parameter authProvider: Used to authenticate against the Disruptive Technologies REST API. It is recommended to pass an `OAuth2Authenticator` instance to this parameter.
+     - Parameter authenticator: Used to authenticate against the Disruptive Technologies REST API. It is recommended to pass an `OAuth2Authenticator` instance to this parameter.
      - Parameter baseURL: Optional parameter. The base URL for the REST API. The default value is `Disruptive.defaultBaseURL`.
      */
-    public init(authProvider: AuthProvider, baseURL: String = Disruptive.defaultBaseURL, emulatorBaseURL: String = Disruptive.defaultBaseEmulatorURL) {
-        self.authProvider = authProvider
+    public init(authenticator: Authenticator, baseURL: String = Disruptive.defaultBaseURL, emulatorBaseURL: String = Disruptive.defaultBaseEmulatorURL) {
+        self.authenticator = authenticator
         self.baseURL = baseURL
         self.emulatorBaseURL = emulatorBaseURL
     }

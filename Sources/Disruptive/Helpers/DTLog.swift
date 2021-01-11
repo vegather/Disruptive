@@ -8,6 +8,9 @@
 
 import Foundation
 
+/// The severity of the log. Might be used to prefix
+/// the log message with a symbol to make it easily
+/// distinguishable.
 public enum LogLevel {
     case debug
     case info
@@ -15,6 +18,25 @@ public enum LogLevel {
     case error
 }
 
+/**
+ Provides a nicely formatted log output with the file, function, and line number the
+ log statement came from. Also includes a timestamp with millisecond accuracy.
+ 
+ Here are some examples of the output format:
+ ```txt
+ 2021-01-11 02:01:28.084    l:122   Authentication.swift   getActiveAccessToken(comple...   Authentication successful
+ 2021-01-11 02:04:32.512    l:94    main.swift             main()                           Fetched 28 devices
+ 2021-01-11 02:04:31.506    l:108   main.swift             main()                           🐛 This is a debug log
+ 2021-01-11 02:04:31.507    l:109   main.swift             main()                           ⚠️ This is a warning
+ 2021-01-11 02:04:31.507    l:110   main.swift             main()                           ❌ This is an error
+ ```
+ 
+ - Parameter message: The thing that should be log. This will be converted to a `String` like this: `String(describing: message)`
+ - Parameter level: The severity of the log. Will be used as a prefix before `message`. The default is `.info` (no prefix).
+ - Parameter filePath: Should be left as-is to get the correct file path.
+ - Parameter functionName: Should be left as-is to get the correct function name.
+ - Parameter lineNumber: Should be left as-is to get the correct line number.
+ */
 public func DTLog(
     _ message   : Any      = "",
     level       : LogLevel = .info,

@@ -88,7 +88,7 @@ class MemberTests: DisruptiveTests {
         assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
     }
     
-    func testGetProjectMembers() {
+    func testGetAllProjectMembers() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members")
@@ -112,7 +112,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getMembers(projectID: reqProjectID) { result in
+        disruptive.getAllMembers(projectID: reqProjectID) { result in
             switch result {
                 case .success(let members):
                     XCTAssertEqual(members, respMembers)
@@ -124,7 +124,7 @@ class MemberTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetOrgMembers() {
+    func testGetAllOrgMembers() {
         let reqOrgID = "org1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members")
@@ -148,10 +148,84 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getMembers(organizationID: reqOrgID) { result in
+        disruptive.getAllMembers(organizationID: reqOrgID) { result in
             switch result {
                 case .success(let members):
                     XCTAssertEqual(members, respMembers)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetProjectMembersPage() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/members")
+        
+        let respMembers = [createDummyMember(), createDummyMember()]
+        let respData = createMembersJSON(from: respMembers, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getMembersPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.members, respMembers)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetOrgMembersPage() {
+        let reqOrgID = "org1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("organizations/\(reqOrgID)/members")
+        
+        let respMembers = [createDummyMember(), createDummyMember()]
+        let respData = createMembersJSON(from: respMembers, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getMembersPage(organizationID: reqOrgID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.members, respMembers)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -550,13 +624,13 @@ extension MemberTests {
         return createMemberJSONString(from: member).data(using: .utf8)!
     }
     
-    fileprivate func createMembersJSON(from members: [Member]) -> Data {
+    fileprivate func createMembersJSON(from members: [Member], nextPageToken: String = "") -> Data {
         return """
         {
             "members": [
                 \(members.map({ createMemberJSONString(from: $0) }).joined(separator: ","))
             ],
-            "nextPageToken": ""
+            "nextPageToken": "\(nextPageToken)"
         }
         """.data(using: .utf8)!
     }

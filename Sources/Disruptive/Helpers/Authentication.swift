@@ -28,7 +28,7 @@ public struct ServiceAccountCredentials: Codable {
 /**
  Encapsulates authentication details like access token and expiration date.
  
- This type is only useful when implementing a type that conforms to `AuthProvider`,
+ This type is only useful when implementing a type that conforms to `Authenticator`,
  and does not need to be accessed or created in any other circumstances.
  */
 public struct Auth {
@@ -52,7 +52,7 @@ public struct Auth {
  Any conforming types needs a mechanism to acquire an access token that
  can be used to authenticate against the Disruptive Technologies' REST API.
  */
-public protocol AuthProvider {
+public protocol Authenticator {
     
     /// The authentication data (token, and expiration date). This should be set by
     /// a conforming type after a call to `refreshAccessToken()`.
@@ -86,7 +86,7 @@ public protocol AuthProvider {
     func refreshAccessToken(completion: @escaping AuthHandler)
 }
 
-internal extension AuthProvider {
+internal extension Authenticator {
     
     /// Returns the auth token if the auth token is non-nil, AND
     /// there's an expiration date that is further away than a minute.
@@ -106,7 +106,7 @@ internal extension AuthProvider {
     func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
         if shouldAutoRefreshAccessToken == false {
             // We should no longer be logged in. Just return the `.loggedOut` error code
-            Disruptive.log("The `AuthProvider` is not logged in. Call `login()` on the `AuthProvider` to log back in.", level: .error)
+            Disruptive.log("The `Authenticator` is not logged in. Call `login()` on the `Authenticator` to log back in.", level: .error)
             completion(.failure(.loggedOut))
         } else if let authToken = getLocalAuthToken() {
             // There already exists a non-expired auth token
@@ -135,13 +135,13 @@ internal extension AuthProvider {
 }
 
 /**
- An `AuthProvider` that logs in a service account using basic auth.
+ An `Authenticator` that logs in a service account using basic auth.
  
  A `BasicAuthAuthenticator` is authenticated by default, so there is no need to call `login()`.
  However if you'd like the authenticator to no longer be authenticated, you can call `logout()`,
  and then `login()` if you want it to be authenticated again.
  
- See [AuthProvider](../AuthProvider) for more details about the properties
+ See [Authenticator](../Authenticator) for more details about the properties
  and methods.
  
  __Note__: This should only be used for development/testing. For production use-cases the [`OAuth2Authenticator`](../OAuth2Authenticator) should be used.
@@ -150,10 +150,10 @@ internal extension AuthProvider {
  ```
  let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
  let authenticator = BasicAuthAuthenticator(credentials: credentials)
- let disruptive = Disruptive(authProvider: authenticator)
+ let disruptive = Disruptive(authenticator: authenticator)
  ```
  */
-public class BasicAuthAuthenticator: AuthProvider {
+public class BasicAuthAuthenticator: Authenticator {
     public let credentials : ServiceAccountCredentials
     
     /// The authentication details.
@@ -203,15 +203,15 @@ public class BasicAuthAuthenticator: AuthProvider {
 }
 
 /**
- An `AuthProvider` that logs in a service account using OAuth2. This is a more
- secure flow than the basic auth counter-part, and is the recommended way to authenticate
+ An `Authenticator` that logs in a service account using OAuth2 with a JWT Bearer Token as an authorization grant.
+ This is a more secure flow than the basic auth counter-part, and is the recommended way to authenticate
  a service account in a production environment.
  
  An `OAuth2Authenticator` is authenticated by default, so there is no need to call `login()`.
  However if you'd like the authenticator to no longer be authenticated, you can call `logout()`,
  and then `login()` if you want it to be authenticated again.
  
- See [AuthProvider](../AuthProvider) for more details about the properties
+ See [Authenticator](../Authenticator) for more details about the properties
  and methods.
  
  See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication) for details about OAuth2 authentication using a Service Account.
@@ -220,10 +220,10 @@ public class BasicAuthAuthenticator: AuthProvider {
  ```
  let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
  let authenticator = OAuth2Authenticator(credentials: credentials)
- let disruptive = Disruptive(authProvider: authenticator)
+ let disruptive = Disruptive(authenticator: authenticator)
  ```
  */
-public class OAuth2Authenticator: AuthProvider {
+public class OAuth2Authenticator: Authenticator {
 
     /// The service account used to authenticate against the Disruptive Technologies' REST API.
     public let credentials : ServiceAccountCredentials

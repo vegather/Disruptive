@@ -65,7 +65,8 @@ public class DeviceEventStream: NSObject {
     /// Called with the device identifier and the event when a new `BatteryStatusEvent` is received
     public var onBatteryStatus      : ((DeviceID, BatteryStatusEvent) -> ())?
     
-//    public var onLabelsChanged      : ((DeviceID, LabelsChanged) -> ())?
+    /// Called with the device identifier and the event when a new `LabelsChangedEvent` is received
+    public var onLabelsChanged      : ((DeviceID, LabelsChangedEvent) -> ())?
     
     
     
@@ -94,8 +95,14 @@ public class DeviceEventStream: NSObject {
     
     internal static var sseConfig: URLSessionConfiguration = {
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest  = .greatestFiniteMagnitude
-        config.timeoutIntervalForResource = .greatestFiniteMagnitude
+        
+        // Setting the timeout to `.greatestFiniteMagnitude` caused unexpected
+        // "The request timed out." errors. Seems like any value above 9223372037
+        // will cause that error. Setting the timeout to 3600 (1 hour) which means
+        // if we don't receive a single byte within an hour, the connection will
+        // be dropped and a new connection will be set up by the retry scheme mechanism.
+        config.timeoutIntervalForRequest  = 3600
+        config.timeoutIntervalForResource = 3600
         
         let headers = [
             "Accept"        : "text/event-stream",
@@ -109,7 +116,7 @@ public class DeviceEventStream: NSObject {
     private var session: URLSession!
     private var task: URLSessionTask?
     private let request: Request
-    private let authProvider: AuthProvider
+    private let authenticator: Authenticator
     
     private var retryScheme = RetryScheme()
     
@@ -120,9 +127,9 @@ public class DeviceEventStream: NSObject {
     // Preventing init without parameters
     private override init() { fatalError() }
     
-    internal init(request: Request, authProvider: AuthProvider) {
+    internal init(request: Request, authenticator: Authenticator) {
         self.request = request
-        self.authProvider = authProvider
+        self.authenticator = authenticator
         
         super.init()
         
@@ -162,7 +169,7 @@ public class DeviceEventStream: NSObject {
     private func restartStream() {
         guard hasBeenClosed == false else { return }
         
-        authProvider.getActiveAccessToken { [weak self] result in
+        authenticator.getActiveAccessToken { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -280,7 +287,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
                 // Sensor status
                 case .networkStatus      (let d, let e): onNetworkStatus?(d, e)
                 case .batteryStatus      (let d, let e): onBatteryStatus?(d, e)
-                //                    case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
+                case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
                 
                 // Cloud connector
                 case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)

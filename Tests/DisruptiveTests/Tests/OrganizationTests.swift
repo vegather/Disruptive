@@ -17,7 +17,7 @@ class OrganizationTests: DisruptiveTests {
         XCTAssertEqual(orgIn, orgOut)
     }
     
-    func testGetOrganizations() {
+    func testGetAllOrganizations() {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("organizations")
         
@@ -40,10 +40,46 @@ class OrganizationTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getOrganizations { result in
+        disruptive.getAllOrganizations { result in
             switch result {
                 case .success(let orgs):
                     XCTAssertEqual(orgs, respOrgs)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetOrganizationsPage() {
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("organizations")
+        
+        let respOrgs = [createDummyOrganization(), createDummyOrganization()]
+        let respData = createOrganizationsJSON(from: respOrgs, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getOrganizationsPage(pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.organizations, respOrgs)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -111,13 +147,13 @@ extension OrganizationTests {
         return createOrganizationJSONString(from: org).data(using: .utf8)!
     }
     
-    fileprivate func createOrganizationsJSON(from orgs: [Organization]) -> Data {
+    fileprivate func createOrganizationsJSON(from orgs: [Organization], nextPageToken: String = "") -> Data {
         return """
         {
             "organizations": [
                 \(orgs.map({ createOrganizationJSONString(from: $0) }).joined(separator: ","))
             ],
-            "nextPageToken": ""
+            "nextPageToken": "\(nextPageToken)"
         }
         """.data(using: .utf8)!
     }

@@ -100,7 +100,7 @@ class DataConnectorTests: DisruptiveTests {
         assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
     }
     
-    func testGetDataConnectors() {
+    func testGetAllDataConnectors() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
@@ -124,10 +124,47 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getDataConnectors(projectID: reqProjectID) { result in
+        disruptive.getAllDataConnectors(projectID: reqProjectID) { result in
             switch result {
                 case .success(let dcs):
                     XCTAssertEqual(dcs, respDCs)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetDataConnectorsPage() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
+        
+        let respDCs = [createDummyDataConnector(), createDummyDataConnector()]
+        let respData = createDataConnectorsJSON(from: respDCs, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getDataConnectorsPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.dataConnectors, respDCs)
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
             }
@@ -531,13 +568,13 @@ extension DataConnectorTests {
         return createDataConnectorJSONString(from: dc).data(using: .utf8)!
     }
     
-    private func createDataConnectorsJSON(from dcs: [DataConnector]) -> Data {
+    private func createDataConnectorsJSON(from dcs: [DataConnector], nextPageToken: String = "") -> Data {
         return """
         {
             "dataConnectors": [
                 \(dcs.map({ createDataConnectorJSONString(from: $0) }).joined(separator: ","))
             ],
-            "nextPageToken": ""
+            "nextPageToken": "\(nextPageToken)"
         }
         """.data(using: .utf8)!
     }
