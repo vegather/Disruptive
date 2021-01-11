@@ -15,12 +15,12 @@ import Foundation
  */
 public struct ServiceAccountCredentials: Codable {
     public let email  : String
-    public let key    : String
+    public let keyID  : String
     public let secret : String
     
-    public init(email: String, key: String, secret: String) {
-        self.email = email
-        self.key = key
+    public init(email: String, keyID: String, secret: String) {
+        self.email  = email
+        self.keyID  = keyID
         self.secret = secret
     }
 }
@@ -148,7 +148,7 @@ internal extension Authenticator {
  
  Example:
  ```
- let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+ let credentials = ServiceAccountCredentials(email: "<EMAIL>", keyID: "<KEY_ID>", secret: "<SECRET>")
  let authenticator = BasicAuthAuthenticator(credentials: credentials)
  let disruptive = Disruptive(authenticator: authenticator)
  ```
@@ -195,7 +195,7 @@ public class BasicAuthAuthenticator: Authenticator {
     /// This access token is stored in the `auth` property along with an expiration date in the `.distantFuture`.
     public func refreshAccessToken(completion: @escaping AuthHandler) {
         auth = Auth(
-            token: "Basic " + "\(credentials.key):\(credentials.secret)".data(using: .utf8)!.base64EncodedString(),
+            token: "Basic " + "\(credentials.keyID):\(credentials.secret)".data(using: .utf8)!.base64EncodedString(),
             expirationDate: .distantFuture
         )
         completion(.success(()))
@@ -218,7 +218,7 @@ public class BasicAuthAuthenticator: Authenticator {
  
  Example:
  ```
- let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+ let credentials = ServiceAccountCredentials(email: "<EMAIL>", keyID: "<KEY_ID>", secret: "<SECRET>")
  let authenticator = OAuth2Authenticator(credentials: credentials)
  let disruptive = Disruptive(authenticator: authenticator)
  ```
