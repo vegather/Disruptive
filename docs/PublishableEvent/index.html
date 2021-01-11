@@ -38,6 +38,11 @@
 </h1>
 
 <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">protocol</span> <span class="type">PublishableEvent</span>: <span class="type">Encodable</span></code></pre></body></html>
+<div class="summary" role="doc-abstract">
+    <p>Used by event types (such as <code>TouchEvent</code>) to indicate that
+they can be published to the device emulator.</p>
+
+</div>
 <section id="relationships">
     <h2 hidden>Relationships</h2>
         <figure>
@@ -62,89 +67,74 @@
 </g>
 </g>
 <!-- Encodable -->
-<g id="node11" class="node unknown">
+<g id="node3" class="node unknown">
 <title>Encodable</title>
-<path fill="none" stroke="#000000" d="M892.4808,-38.3488C892.4808,-38.3488 700.4808,-38.3488 700.4808,-38.3488 694.4808,-38.3488 688.4808,-32.3488 688.4808,-26.3488 688.4808,-26.3488 688.4808,-14.3488 688.4808,-14.3488 688.4808,-8.3488 694.4808,-2.3488 700.4808,-2.3488 700.4808,-2.3488 892.4808,-2.3488 892.4808,-2.3488 898.4808,-2.3488 904.4808,-8.3488 904.4808,-14.3488 904.4808,-14.3488 904.4808,-26.3488 904.4808,-26.3488 904.4808,-32.3488 898.4808,-38.3488 892.4808,-38.3488"/>
-<text text-anchor="middle" x="796.4808" y="-16.6488" font-family="Menlo" font-size="14.00" fill="#000000">Encodable</text>
+<path fill="none" stroke="#000000" d="M593.7726,-36C593.7726,-36 401.7726,-36 401.7726,-36 395.7726,-36 389.7726,-30 389.7726,-24 389.7726,-24 389.7726,-12 389.7726,-12 389.7726,-6 395.7726,0 401.7726,0 401.7726,0 593.7726,0 593.7726,0 599.7726,0 605.7726,-6 605.7726,-12 605.7726,-12 605.7726,-24 605.7726,-24 605.7726,-30 599.7726,-36 593.7726,-36"/>
+<text text-anchor="middle" x="497.7726" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Encodable</text>
 </g>
 <!-- PublishableEvent&#45;&gt;Encodable -->
-<g id="edge10" class="edge conformsTo">
+<g id="edge12" class="edge conformsTo">
 <title>PublishableEvent&#45;&gt;Encodable</title>
-<path fill="none" stroke="#000000" d="M729.1255,-125.5976C742.3721,-104.8985 764.1174,-70.9195 779.3056,-47.1866"/>
-<polygon fill="#000000" stroke="#000000" points="782.3318,-48.951 784.7741,-38.6415 776.4358,-45.1777 782.3318,-48.951"/>
+<path fill="none" stroke="#000000" d="M685.9899,-125.7892C647.1102,-103.5234 580.8991,-65.6053 538.2682,-41.1912"/>
+<polygon fill="#000000" stroke="#000000" points="539.9646,-38.1294 529.5475,-36.197 536.4859,-44.2039 539.9646,-38.1294"/>
 </g>
-<!-- HumidityEvent -->
+<!-- TouchEvent -->
 <g id="node2" class="node structure">
-<title>HumidityEvent</title>
-<g id="a_node2"><a xlink:href="https://vegather.github.io/Disruptive/HumidityEvent" xlink:title="HumidityEvent">
+<title>TouchEvent</title>
+<g id="a_node2"><a xlink:href="https://vegather.github.io/Disruptive/TouchEvent" xlink:title="TouchEvent">
 <path fill="none" stroke="#000000" d="M1294.7346,-214.3893C1294.7346,-214.3893 1102.7346,-214.3893 1102.7346,-214.3893 1096.7346,-214.3893 1090.7346,-208.3893 1090.7346,-202.3893 1090.7346,-202.3893 1090.7346,-190.3893 1090.7346,-190.3893 1090.7346,-184.3893 1096.7346,-178.3893 1102.7346,-178.3893 1102.7346,-178.3893 1294.7346,-178.3893 1294.7346,-178.3893 1300.7346,-178.3893 1306.7346,-184.3893 1306.7346,-190.3893 1306.7346,-190.3893 1306.7346,-202.3893 1306.7346,-202.3893 1306.7346,-208.3893 1300.7346,-214.3893 1294.7346,-214.3893"/>
-<text text-anchor="middle" x="1198.7346" y="-192.6893" font-family="Menlo" font-size="14.00" fill="#000000">HumidityEvent</text>
+<text text-anchor="middle" x="1198.7346" y="-192.6893" font-family="Menlo" font-size="14.00" fill="#000000">TouchEvent</text>
 </a>
 </g>
 </g>
-<!-- HumidityEvent&#45;&gt;PublishableEvent -->
-<g id="edge2" class="edge conformsTo">
-<title>HumidityEvent&#45;&gt;PublishableEvent</title>
+<!-- TouchEvent&#45;&gt;PublishableEvent -->
+<g id="edge11" class="edge conformsTo">
+<title>TouchEvent&#45;&gt;PublishableEvent</title>
 <path fill="none" stroke="#000000" d="M1090.7287,-184.5908C1015.0061,-176.3188 913.802,-165.2633 835.8783,-156.7508"/>
 <polygon fill="#000000" stroke="#000000" points="835.8486,-153.2269 825.5276,-155.6201 835.0884,-160.1855 835.8486,-153.2269"/>
 </g>
-<!-- BatteryStatusEvent -->
-<g id="node3" class="node structure">
-<title>BatteryStatusEvent</title>
-<g id="a_node3"><a xlink:href="https://vegather.github.io/Disruptive/BatteryStatusEvent" xlink:title="BatteryStatusEvent">
-<path fill="none" stroke="#000000" d="M593.7726,-36C593.7726,-36 401.7726,-36 401.7726,-36 395.7726,-36 389.7726,-30 389.7726,-24 389.7726,-24 389.7726,-12 389.7726,-12 389.7726,-6 395.7726,0 401.7726,0 401.7726,0 593.7726,0 593.7726,0 599.7726,0 605.7726,-6 605.7726,-12 605.7726,-12 605.7726,-24 605.7726,-24 605.7726,-30 599.7726,-36 593.7726,-36"/>
-<text text-anchor="middle" x="497.7726" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">BatteryStatusEvent</text>
-</a>
-</g>
-</g>
-<!-- BatteryStatusEvent&#45;&gt;PublishableEvent -->
-<g id="edge5" class="edge conformsTo">
-<title>BatteryStatusEvent&#45;&gt;PublishableEvent</title>
-<path fill="none" stroke="#000000" d="M529.2494,-36.0263C568.1291,-58.2921 634.3402,-96.2102 676.9711,-120.6243"/>
-<polygon fill="#000000" stroke="#000000" points="675.2747,-123.6861 685.6918,-125.6185 678.7534,-117.6117 675.2747,-123.6861"/>
-</g>
-<!-- TemperatureEvent -->
+<!-- ObjectPresentEvent -->
 <g id="node4" class="node structure">
-<title>TemperatureEvent</title>
-<g id="a_node4"><a xlink:href="https://vegather.github.io/Disruptive/TemperatureEvent" xlink:title="TemperatureEvent">
+<title>ObjectPresentEvent</title>
+<g id="a_node4"><a xlink:href="https://vegather.github.io/Disruptive/ObjectPresentEvent" xlink:title="ObjectPresentEvent">
 <path fill="none" stroke="#000000" d="M593.8912,-285.9233C593.8912,-285.9233 401.8912,-285.9233 401.8912,-285.9233 395.8912,-285.9233 389.8912,-279.9233 389.8912,-273.9233 389.8912,-273.9233 389.8912,-261.9233 389.8912,-261.9233 389.8912,-255.9233 395.8912,-249.9233 401.8912,-249.9233 401.8912,-249.9233 593.8912,-249.9233 593.8912,-249.9233 599.8912,-249.9233 605.8912,-255.9233 605.8912,-261.9233 605.8912,-261.9233 605.8912,-273.9233 605.8912,-273.9233 605.8912,-279.9233 599.8912,-285.9233 593.8912,-285.9233"/>
-<text text-anchor="middle" x="497.8912" y="-264.2233" font-family="Menlo" font-size="14.00" fill="#000000">TemperatureEvent</text>
+<text text-anchor="middle" x="497.8912" y="-264.2233" font-family="Menlo" font-size="14.00" fill="#000000">ObjectPresentEvent</text>
 </a>
 </g>
 </g>
-<!-- TemperatureEvent&#45;&gt;PublishableEvent -->
-<g id="edge1" class="edge conformsTo">
-<title>TemperatureEvent&#45;&gt;PublishableEvent</title>
+<!-- ObjectPresentEvent&#45;&gt;PublishableEvent -->
+<g id="edge5" class="edge conformsTo">
+<title>ObjectPresentEvent&#45;&gt;PublishableEvent</title>
 <path fill="none" stroke="#000000" d="M529.8193,-249.877C568.6035,-227.9555 634.0961,-190.938 676.5472,-166.9439"/>
 <polygon fill="#000000" stroke="#000000" points="678.5165,-169.8513 685.5,-161.8837 675.0721,-163.7573 678.5165,-169.8513"/>
 </g>
-<!-- ConnectionStatusEvent -->
+<!-- NetworkStatusEvent -->
 <g id="node5" class="node structure">
-<title>ConnectionStatusEvent</title>
-<g id="a_node5"><a xlink:href="https://vegather.github.io/Disruptive/ConnectionStatusEvent" xlink:title="ConnectionStatusEvent">
+<title>NetworkStatusEvent</title>
+<g id="a_node5"><a xlink:href="https://vegather.github.io/Disruptive/NetworkStatusEvent" xlink:title="NetworkStatusEvent">
 <path fill="none" stroke="#000000" d="M894.8094,-288.8247C894.8094,-288.8247 702.8094,-288.8247 702.8094,-288.8247 696.8094,-288.8247 690.8094,-282.8247 690.8094,-276.8247 690.8094,-276.8247 690.8094,-264.8247 690.8094,-264.8247 690.8094,-258.8247 696.8094,-252.8247 702.8094,-252.8247 702.8094,-252.8247 894.8094,-252.8247 894.8094,-252.8247 900.8094,-252.8247 906.8094,-258.8247 906.8094,-264.8247 906.8094,-264.8247 906.8094,-276.8247 906.8094,-276.8247 906.8094,-282.8247 900.8094,-288.8247 894.8094,-288.8247"/>
-<text text-anchor="middle" x="798.8094" y="-267.1247" font-family="Menlo" font-size="14.00" fill="#000000">ConnectionStatusEvent</text>
+<text text-anchor="middle" x="798.8094" y="-267.1247" font-family="Menlo" font-size="14.00" fill="#000000">NetworkStatusEvent</text>
 </a>
 </g>
 </g>
-<!-- ConnectionStatusEvent&#45;&gt;PublishableEvent -->
-<g id="edge11" class="edge conformsTo">
-<title>ConnectionStatusEvent&#45;&gt;PublishableEvent</title>
+<!-- NetworkStatusEvent&#45;&gt;PublishableEvent -->
+<g id="edge9" class="edge conformsTo">
+<title>NetworkStatusEvent&#45;&gt;PublishableEvent</title>
 <path fill="none" stroke="#000000" d="M787.1549,-252.6274C773.383,-231.1237 750.349,-195.1582 734.5586,-170.5031"/>
 <polygon fill="#000000" stroke="#000000" points="737.4401,-168.5125 729.0995,-161.9791 731.5454,-172.2878 737.4401,-168.5125"/>
 </g>
-<!-- CellularStatusEvent -->
+<!-- EthernetStatusEvent -->
 <g id="node6" class="node structure">
-<title>CellularStatusEvent</title>
-<g id="a_node6"><a xlink:href="https://vegather.github.io/Disruptive/CellularStatusEvent" xlink:title="CellularStatusEvent">
+<title>EthernetStatusEvent</title>
+<g id="a_node6"><a xlink:href="https://vegather.github.io/Disruptive/EthernetStatusEvent" xlink:title="EthernetStatusEvent">
 <path fill="none" stroke="#000000" d="M352.9539,-247.837C352.9539,-247.837 160.9539,-247.837 160.9539,-247.837 154.9539,-247.837 148.9539,-241.837 148.9539,-235.837 148.9539,-235.837 148.9539,-223.837 148.9539,-223.837 148.9539,-217.837 154.9539,-211.837 160.9539,-211.837 160.9539,-211.837 352.9539,-211.837 352.9539,-211.837 358.9539,-211.837 364.9539,-217.837 364.9539,-223.837 364.9539,-223.837 364.9539,-235.837 364.9539,-235.837 364.9539,-241.837 358.9539,-247.837 352.9539,-247.837"/>
-<text text-anchor="middle" x="256.9539" y="-226.137" font-family="Menlo" font-size="14.00" fill="#000000">CellularStatusEvent</text>
+<text text-anchor="middle" x="256.9539" y="-226.137" font-family="Menlo" font-size="14.00" fill="#000000">EthernetStatusEvent</text>
 </a>
 </g>
 </g>
-<!-- CellularStatusEvent&#45;&gt;PublishableEvent -->
-<g id="edge3" class="edge conformsTo">
-<title>CellularStatusEvent&#45;&gt;PublishableEvent</title>
+<!-- EthernetStatusEvent&#45;&gt;PublishableEvent -->
+<g id="edge13" class="edge conformsTo">
+<title>EthernetStatusEvent&#45;&gt;PublishableEvent</title>
 <path fill="none" stroke="#000000" d="M353.4924,-211.8041C428.7111,-197.7536 533.0644,-178.2609 610.7568,-163.7484"/>
 <polygon fill="#000000" stroke="#000000" points="611.8679,-167.1015 621.0552,-161.8247 610.5825,-160.2205 611.8679,-167.1015"/>
 </g>
@@ -158,98 +148,113 @@
 </g>
 </g>
 <!-- TouchCountEvent&#45;&gt;PublishableEvent -->
-<g id="edge9" class="edge conformsTo">
+<g id="edge4" class="edge conformsTo">
 <title>TouchCountEvent&#45;&gt;PublishableEvent</title>
 <path fill="none" stroke="#000000" d="M216.2581,-117.7368C323.8144,-123.3332 488.2967,-131.8915 599.2199,-137.663"/>
 <polygon fill="#000000" stroke="#000000" points="599.2801,-141.1707 609.4485,-138.1952 599.6439,-134.1802 599.2801,-141.1707"/>
 </g>
-<!-- ObjectPresentEvent -->
+<!-- HumidityEvent -->
 <g id="node8" class="node structure">
-<title>ObjectPresentEvent</title>
-<g id="a_node8"><a xlink:href="https://vegather.github.io/Disruptive/ObjectPresentEvent" xlink:title="ObjectPresentEvent">
+<title>HumidityEvent</title>
+<g id="a_node8"><a xlink:href="https://vegather.github.io/Disruptive/HumidityEvent" xlink:title="HumidityEvent">
 <path fill="none" stroke="#000000" d="M1364.8224,-103.6606C1364.8224,-103.6606 1172.8224,-103.6606 1172.8224,-103.6606 1166.8224,-103.6606 1160.8224,-97.6606 1160.8224,-91.6606 1160.8224,-91.6606 1160.8224,-79.6606 1160.8224,-79.6606 1160.8224,-73.6606 1166.8224,-67.6606 1172.8224,-67.6606 1172.8224,-67.6606 1364.8224,-67.6606 1364.8224,-67.6606 1370.8224,-67.6606 1376.8224,-73.6606 1376.8224,-79.6606 1376.8224,-79.6606 1376.8224,-91.6606 1376.8224,-91.6606 1376.8224,-97.6606 1370.8224,-103.6606 1364.8224,-103.6606"/>
-<text text-anchor="middle" x="1268.8224" y="-81.9606" font-family="Menlo" font-size="14.00" fill="#000000">ObjectPresentEvent</text>
+<text text-anchor="middle" x="1268.8224" y="-81.9606" font-family="Menlo" font-size="14.00" fill="#000000">HumidityEvent</text>
 </a>
 </g>
 </g>
-<!-- ObjectPresentEvent&#45;&gt;PublishableEvent -->
+<!-- HumidityEvent&#45;&gt;PublishableEvent -->
 <g id="edge8" class="edge conformsTo">
-<title>ObjectPresentEvent&#45;&gt;PublishableEvent</title>
+<title>HumidityEvent&#45;&gt;PublishableEvent</title>
 <path fill="none" stroke="#000000" d="M1160.5501,-97.0807C1066.9561,-106.9527 931.9306,-121.1947 835.5726,-131.3582"/>
 <polygon fill="#000000" stroke="#000000" points="835.069,-127.8918 825.4913,-132.4215 835.8033,-134.8532 835.069,-127.8918"/>
 </g>
-<!-- WaterPresentEvent -->
+<!-- BatteryStatusEvent -->
 <g id="node9" class="node structure">
-<title>WaterPresentEvent</title>
-<g id="a_node9"><a xlink:href="https://vegather.github.io/Disruptive/WaterPresentEvent" xlink:title="WaterPresentEvent">
+<title>BatteryStatusEvent</title>
+<g id="a_node9"><a xlink:href="https://vegather.github.io/Disruptive/BatteryStatusEvent" xlink:title="BatteryStatusEvent">
 <path fill="none" stroke="#000000" d="M358.7107,-76.7264C358.7107,-76.7264 166.7107,-76.7264 166.7107,-76.7264 160.7107,-76.7264 154.7107,-70.7264 154.7107,-64.7264 154.7107,-64.7264 154.7107,-52.7264 154.7107,-52.7264 154.7107,-46.7264 160.7107,-40.7264 166.7107,-40.7264 166.7107,-40.7264 358.7107,-40.7264 358.7107,-40.7264 364.7107,-40.7264 370.7107,-46.7264 370.7107,-52.7264 370.7107,-52.7264 370.7107,-64.7264 370.7107,-64.7264 370.7107,-70.7264 364.7107,-76.7264 358.7107,-76.7264"/>
-<text text-anchor="middle" x="262.7107" y="-55.0264" font-family="Menlo" font-size="14.00" fill="#000000">WaterPresentEvent</text>
+<text text-anchor="middle" x="262.7107" y="-55.0264" font-family="Menlo" font-size="14.00" fill="#000000">BatteryStatusEvent</text>
+</a>
+</g>
+</g>
+<!-- BatteryStatusEvent&#45;&gt;PublishableEvent -->
+<g id="edge3" class="edge conformsTo">
+<title>BatteryStatusEvent&#45;&gt;PublishableEvent</title>
+<path fill="none" stroke="#000000" d="M359.1527,-76.7716C433.0103,-90.5911 534.8276,-109.6421 611.0558,-123.9051"/>
+<polygon fill="#000000" stroke="#000000" points="610.6905,-127.3974 621.1636,-125.7963 611.9779,-120.5168 610.6905,-127.3974"/>
+</g>
+<!-- ConnectionStatusEvent -->
+<g id="node10" class="node structure">
+<title>ConnectionStatusEvent</title>
+<g id="a_node10"><a xlink:href="https://vegather.github.io/Disruptive/ConnectionStatusEvent" xlink:title="ConnectionStatusEvent">
+<path fill="none" stroke="#000000" d="M1182.8707,-52.235C1182.8707,-52.235 990.8707,-52.235 990.8707,-52.235 984.8707,-52.235 978.8707,-46.235 978.8707,-40.235 978.8707,-40.235 978.8707,-28.235 978.8707,-28.235 978.8707,-22.235 984.8707,-16.235 990.8707,-16.235 990.8707,-16.235 1182.8707,-16.235 1182.8707,-16.235 1188.8707,-16.235 1194.8707,-22.235 1194.8707,-28.235 1194.8707,-28.235 1194.8707,-40.235 1194.8707,-40.235 1194.8707,-46.235 1188.8707,-52.235 1182.8707,-52.235"/>
+<text text-anchor="middle" x="1086.8707" y="-30.535" font-family="Menlo" font-size="14.00" fill="#000000">ConnectionStatusEvent</text>
+</a>
+</g>
+</g>
+<!-- ConnectionStatusEvent&#45;&gt;PublishableEvent -->
+<g id="edge10" class="edge conformsTo">
+<title>ConnectionStatusEvent&#45;&gt;PublishableEvent</title>
+<path fill="none" stroke="#000000" d="M1025.8712,-52.33C960.5372,-71.7107 856.9857,-102.4284 788.1458,-122.8492"/>
+<polygon fill="#000000" stroke="#000000" points="786.8413,-119.5853 778.2496,-125.7848 788.8321,-126.2963 786.8413,-119.5853"/>
+</g>
+<!-- TemperatureEvent -->
+<g id="node11" class="node structure">
+<title>TemperatureEvent</title>
+<g id="a_node11"><a xlink:href="https://vegather.github.io/Disruptive/TemperatureEvent" xlink:title="TemperatureEvent">
+<path fill="none" stroke="#000000" d="M892.4808,-38.3488C892.4808,-38.3488 700.4808,-38.3488 700.4808,-38.3488 694.4808,-38.3488 688.4808,-32.3488 688.4808,-26.3488 688.4808,-26.3488 688.4808,-14.3488 688.4808,-14.3488 688.4808,-8.3488 694.4808,-2.3488 700.4808,-2.3488 700.4808,-2.3488 892.4808,-2.3488 892.4808,-2.3488 898.4808,-2.3488 904.4808,-8.3488 904.4808,-14.3488 904.4808,-14.3488 904.4808,-26.3488 904.4808,-26.3488 904.4808,-32.3488 898.4808,-38.3488 892.4808,-38.3488"/>
+<text text-anchor="middle" x="796.4808" y="-16.6488" font-family="Menlo" font-size="14.00" fill="#000000">TemperatureEvent</text>
+</a>
+</g>
+</g>
+<!-- TemperatureEvent&#45;&gt;PublishableEvent -->
+<g id="edge7" class="edge conformsTo">
+<title>TemperatureEvent&#45;&gt;PublishableEvent</title>
+<path fill="none" stroke="#000000" d="M784.822,-38.5667C771.5753,-59.2658 749.83,-93.2448 734.6419,-116.9777"/>
+<polygon fill="#000000" stroke="#000000" points="731.6156,-115.2134 729.1733,-125.5229 737.5117,-118.9866 731.6156,-115.2134"/>
+</g>
+<!-- CellularStatusEvent -->
+<g id="node12" class="node structure">
+<title>CellularStatusEvent</title>
+<g id="a_node12"><a xlink:href="https://vegather.github.io/Disruptive/CellularStatusEvent" xlink:title="CellularStatusEvent">
+<path fill="none" stroke="#000000" d="M208.1843,-193.331C208.1843,-193.331 16.1843,-193.331 16.1843,-193.331 10.1843,-193.331 4.1843,-187.331 4.1843,-181.331 4.1843,-181.331 4.1843,-169.331 4.1843,-169.331 4.1843,-163.331 10.1843,-157.331 16.1843,-157.331 16.1843,-157.331 208.1843,-157.331 208.1843,-157.331 214.1843,-157.331 220.1843,-163.331 220.1843,-169.331 220.1843,-169.331 220.1843,-181.331 220.1843,-181.331 220.1843,-187.331 214.1843,-193.331 208.1843,-193.331"/>
+<text text-anchor="middle" x="112.1843" y="-171.631" font-family="Menlo" font-size="14.00" fill="#000000">CellularStatusEvent</text>
+</a>
+</g>
+</g>
+<!-- CellularStatusEvent&#45;&gt;PublishableEvent -->
+<g id="edge6" class="edge conformsTo">
+<title>CellularStatusEvent&#45;&gt;PublishableEvent</title>
+<path fill="none" stroke="#000000" d="M220.3967,-169.6967C326.9871,-164.1468 489.3782,-155.6915 599.2903,-149.9687"/>
+<polygon fill="#000000" stroke="#000000" points="599.623,-153.4562 609.4275,-149.4409 599.259,-146.4657 599.623,-153.4562"/>
+</g>
+<!-- WaterPresentEvent -->
+<g id="node13" class="node structure">
+<title>WaterPresentEvent</title>
+<g id="a_node13"><a xlink:href="https://vegather.github.io/Disruptive/WaterPresentEvent" xlink:title="WaterPresentEvent">
+<path fill="none" stroke="#000000" d="M1477.8757,-167.026C1477.8757,-167.026 1285.8757,-167.026 1285.8757,-167.026 1279.8757,-167.026 1273.8757,-161.026 1273.8757,-155.026 1273.8757,-155.026 1273.8757,-143.026 1273.8757,-143.026 1273.8757,-137.026 1279.8757,-131.026 1285.8757,-131.026 1285.8757,-131.026 1477.8757,-131.026 1477.8757,-131.026 1483.8757,-131.026 1489.8757,-137.026 1489.8757,-143.026 1489.8757,-143.026 1489.8757,-155.026 1489.8757,-155.026 1489.8757,-161.026 1483.8757,-167.026 1477.8757,-167.026"/>
+<text text-anchor="middle" x="1381.8757" y="-145.326" font-family="Menlo" font-size="14.00" fill="#000000">WaterPresentEvent</text>
 </a>
 </g>
 </g>
 <!-- WaterPresentEvent&#45;&gt;PublishableEvent -->
-<g id="edge12" class="edge conformsTo">
+<g id="edge1" class="edge conformsTo">
 <title>WaterPresentEvent&#45;&gt;PublishableEvent</title>
-<path fill="none" stroke="#000000" d="M359.1527,-76.7716C433.0103,-90.5911 534.8276,-109.6421 611.0558,-123.9051"/>
-<polygon fill="#000000" stroke="#000000" points="610.6905,-127.3974 621.1636,-125.7963 611.9779,-120.5168 610.6905,-127.3974"/>
-</g>
-<!-- NetworkStatusEvent -->
-<g id="node10" class="node structure">
-<title>NetworkStatusEvent</title>
-<g id="a_node10"><a xlink:href="https://vegather.github.io/Disruptive/NetworkStatusEvent" xlink:title="NetworkStatusEvent">
-<path fill="none" stroke="#000000" d="M1182.8707,-52.235C1182.8707,-52.235 990.8707,-52.235 990.8707,-52.235 984.8707,-52.235 978.8707,-46.235 978.8707,-40.235 978.8707,-40.235 978.8707,-28.235 978.8707,-28.235 978.8707,-22.235 984.8707,-16.235 990.8707,-16.235 990.8707,-16.235 1182.8707,-16.235 1182.8707,-16.235 1188.8707,-16.235 1194.8707,-22.235 1194.8707,-28.235 1194.8707,-28.235 1194.8707,-40.235 1194.8707,-40.235 1194.8707,-46.235 1188.8707,-52.235 1182.8707,-52.235"/>
-<text text-anchor="middle" x="1086.8707" y="-30.535" font-family="Menlo" font-size="14.00" fill="#000000">NetworkStatusEvent</text>
-</a>
-</g>
-</g>
-<!-- NetworkStatusEvent&#45;&gt;PublishableEvent -->
-<g id="edge7" class="edge conformsTo">
-<title>NetworkStatusEvent&#45;&gt;PublishableEvent</title>
-<path fill="none" stroke="#000000" d="M1025.8712,-52.33C960.5372,-71.7107 856.9857,-102.4284 788.1458,-122.8492"/>
-<polygon fill="#000000" stroke="#000000" points="786.8413,-119.5853 778.2496,-125.7848 788.8321,-126.2963 786.8413,-119.5853"/>
-</g>
-<!-- EthernetStatusEvent -->
-<g id="node12" class="node structure">
-<title>EthernetStatusEvent</title>
-<g id="a_node12"><a xlink:href="https://vegather.github.io/Disruptive/EthernetStatusEvent" xlink:title="EthernetStatusEvent">
-<path fill="none" stroke="#000000" d="M208.1843,-193.331C208.1843,-193.331 16.1843,-193.331 16.1843,-193.331 10.1843,-193.331 4.1843,-187.331 4.1843,-181.331 4.1843,-181.331 4.1843,-169.331 4.1843,-169.331 4.1843,-163.331 10.1843,-157.331 16.1843,-157.331 16.1843,-157.331 208.1843,-157.331 208.1843,-157.331 214.1843,-157.331 220.1843,-163.331 220.1843,-169.331 220.1843,-169.331 220.1843,-181.331 220.1843,-181.331 220.1843,-187.331 214.1843,-193.331 208.1843,-193.331"/>
-<text text-anchor="middle" x="112.1843" y="-171.631" font-family="Menlo" font-size="14.00" fill="#000000">EthernetStatusEvent</text>
-</a>
-</g>
-</g>
-<!-- EthernetStatusEvent&#45;&gt;PublishableEvent -->
-<g id="edge4" class="edge conformsTo">
-<title>EthernetStatusEvent&#45;&gt;PublishableEvent</title>
-<path fill="none" stroke="#000000" d="M220.3967,-169.6967C326.9871,-164.1468 489.3782,-155.6915 599.2903,-149.9687"/>
-<polygon fill="#000000" stroke="#000000" points="599.623,-153.4562 609.4275,-149.4409 599.259,-146.4657 599.623,-153.4562"/>
+<path fill="none" stroke="#000000" d="M1273.6482,-148.1773C1153.4756,-147.2349 960.1094,-145.7184 835.9517,-144.7447"/>
+<polygon fill="#000000" stroke="#000000" points="835.675,-141.2426 825.6479,-144.6639 835.6201,-148.2423 835.675,-141.2426"/>
 </g>
 <!-- ObjectPresentCountEvent -->
-<g id="node13" class="node structure">
+<g id="node14" class="node structure">
 <title>ObjectPresentCountEvent</title>
-<g id="a_node13"><a xlink:href="https://vegather.github.io/Disruptive/ObjectPresentCountEvent" xlink:title="ObjectPresentCountEvent">
-<path fill="none" stroke="#000000" d="M1477.8757,-167.026C1477.8757,-167.026 1285.8757,-167.026 1285.8757,-167.026 1279.8757,-167.026 1273.8757,-161.026 1273.8757,-155.026 1273.8757,-155.026 1273.8757,-143.026 1273.8757,-143.026 1273.8757,-137.026 1279.8757,-131.026 1285.8757,-131.026 1285.8757,-131.026 1477.8757,-131.026 1477.8757,-131.026 1483.8757,-131.026 1489.8757,-137.026 1489.8757,-143.026 1489.8757,-143.026 1489.8757,-155.026 1489.8757,-155.026 1489.8757,-161.026 1483.8757,-167.026 1477.8757,-167.026"/>
-<text text-anchor="middle" x="1381.8757" y="-145.326" font-family="Menlo" font-size="14.00" fill="#000000">ObjectPresentCountEvent</text>
+<g id="a_node14"><a xlink:href="https://vegather.github.io/Disruptive/ObjectPresentCountEvent" xlink:title="ObjectPresentCountEvent">
+<path fill="none" stroke="#000000" d="M1206.9668,-273.2472C1206.9668,-273.2472 1014.9668,-273.2472 1014.9668,-273.2472 1008.9668,-273.2472 1002.9668,-267.2472 1002.9668,-261.2472 1002.9668,-261.2472 1002.9668,-249.2472 1002.9668,-249.2472 1002.9668,-243.2472 1008.9668,-237.2472 1014.9668,-237.2472 1014.9668,-237.2472 1206.9668,-237.2472 1206.9668,-237.2472 1212.9668,-237.2472 1218.9668,-243.2472 1218.9668,-249.2472 1218.9668,-249.2472 1218.9668,-261.2472 1218.9668,-261.2472 1218.9668,-267.2472 1212.9668,-273.2472 1206.9668,-273.2472"/>
+<text text-anchor="middle" x="1110.9668" y="-251.5472" font-family="Menlo" font-size="14.00" fill="#000000">ObjectPresentCountEvent</text>
 </a>
 </g>
 </g>
 <!-- ObjectPresentCountEvent&#45;&gt;PublishableEvent -->
-<g id="edge13" class="edge conformsTo">
+<g id="edge2" class="edge conformsTo">
 <title>ObjectPresentCountEvent&#45;&gt;PublishableEvent</title>
-<path fill="none" stroke="#000000" d="M1273.6482,-148.1773C1153.4756,-147.2349 960.1094,-145.7184 835.9517,-144.7447"/>
-<polygon fill="#000000" stroke="#000000" points="835.675,-141.2426 825.6479,-144.6639 835.6201,-148.2423 835.675,-141.2426"/>
-</g>
-<!-- TouchEvent -->
-<g id="node14" class="node structure">
-<title>TouchEvent</title>
-<g id="a_node14"><a xlink:href="https://vegather.github.io/Disruptive/TouchEvent" xlink:title="TouchEvent">
-<path fill="none" stroke="#000000" d="M1206.9668,-273.2472C1206.9668,-273.2472 1014.9668,-273.2472 1014.9668,-273.2472 1008.9668,-273.2472 1002.9668,-267.2472 1002.9668,-261.2472 1002.9668,-261.2472 1002.9668,-249.2472 1002.9668,-249.2472 1002.9668,-243.2472 1008.9668,-237.2472 1014.9668,-237.2472 1014.9668,-237.2472 1206.9668,-237.2472 1206.9668,-237.2472 1212.9668,-237.2472 1218.9668,-243.2472 1218.9668,-249.2472 1218.9668,-249.2472 1218.9668,-261.2472 1218.9668,-261.2472 1218.9668,-267.2472 1212.9668,-273.2472 1206.9668,-273.2472"/>
-<text text-anchor="middle" x="1110.9668" y="-251.5472" font-family="Menlo" font-size="14.00" fill="#000000">TouchEvent</text>
-</a>
-</g>
-</g>
-<!-- TouchEvent&#45;&gt;PublishableEvent -->
-<g id="edge6" class="edge conformsTo">
-<title>TouchEvent&#45;&gt;PublishableEvent</title>
 <path fill="none" stroke="#000000" d="M1047.3069,-237.22C977.1532,-217.3538 864.5013,-185.4529 790.7293,-164.5621"/>
 <polygon fill="#000000" stroke="#000000" points="791.6104,-161.1741 781.0351,-161.8169 789.7031,-167.9092 791.6104,-161.1741"/>
 </g>
@@ -329,7 +334,7 @@ change in the connectivity of a Cloud Connector.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2021-01-11T01:33:42+0000">January 11, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-01-11T22:57:18+0000">January 11, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
 </p>
     </footer>
 </body>
