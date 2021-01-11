@@ -341,7 +341,7 @@ extension Disruptive {
         _ request: Request,
         completion: @escaping (Result<Request, DisruptiveError>) -> ())
     {
-        authProvider.getActiveAccessToken { result in
+        authenticator.getActiveAccessToken { result in
             switch result {
             case .success(let token):
                 var req = request
@@ -353,7 +353,7 @@ extension Disruptive {
         }
     }
     
-    /// Makes sure the `authProvider` is authenticated, and adds the `Authorization` header to
+    /// Makes sure the `authenticator` is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This will not return anything if successful, but it will return a
     /// `DisruptiveError` on failure.
     internal func sendRequest(
@@ -379,7 +379,7 @@ extension Disruptive {
         }
     }
     
-    /// Makes sure the `authProvider` is authenticated, and adds the `Authorization` header to
+    /// Makes sure the `authenticator` is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This will return a single value if successful, and a
     /// `DisruptiveError` on failure.
     internal func sendRequest<T: Decodable>(
@@ -399,7 +399,7 @@ extension Disruptive {
         }
     }
     
-    /// Makes sure the `authProvider` is authenticated, and adds the `Authorization` header to
+    /// Makes sure the `authenticator` is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This will return a one page of results if successful, and a
     /// `DisruptiveError` on failure.
     internal func sendRequest<T: Decodable>(
@@ -431,7 +431,7 @@ extension Disruptive {
         }
     }
     
-    /// Makes sure the `authProvider` is authenticated, and adds the `Authorization` header to
+    /// Makes sure the `authenticator` is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This expects a list of paginated items to be returned, and fetches
     /// all the available pages before returning.
     internal func sendRequest<T: Decodable>(

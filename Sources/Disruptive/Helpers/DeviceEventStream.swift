@@ -116,7 +116,7 @@ public class DeviceEventStream: NSObject {
     private var session: URLSession!
     private var task: URLSessionTask?
     private let request: Request
-    private let authProvider: AuthProvider
+    private let authenticator: Authenticator
     
     private var retryScheme = RetryScheme()
     
@@ -127,9 +127,9 @@ public class DeviceEventStream: NSObject {
     // Preventing init without parameters
     private override init() { fatalError() }
     
-    internal init(request: Request, authProvider: AuthProvider) {
+    internal init(request: Request, authenticator: Authenticator) {
         self.request = request
-        self.authProvider = authProvider
+        self.authenticator = authenticator
         
         super.init()
         
@@ -169,7 +169,7 @@ public class DeviceEventStream: NSObject {
     private func restartStream() {
         guard hasBeenClosed == false else { return }
         
-        authProvider.getActiveAccessToken { [weak self] result in
+        authenticator.getActiveAccessToken { [weak self] result in
             guard let self = self else { return }
             
             switch result {

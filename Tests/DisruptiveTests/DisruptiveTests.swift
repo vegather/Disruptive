@@ -26,7 +26,7 @@ class DisruptiveTests: XCTestCase {
     private func setupAuth() {
         let creds = ServiceAccountCredentials(email: "", key: "", secret: "")
         let auth = BasicAuthAuthenticator(credentials: creds)
-        disruptive = Disruptive(authProvider: auth)
+        disruptive = Disruptive(authenticator: auth)
         Disruptive.loggingEnabled = true
     }
 }
