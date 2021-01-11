@@ -9,8 +9,9 @@
 import Foundation
 
 internal struct RetryScheme {
+    
     private var index: Int?
-    private let timeIntervals = [TimeInterval(0), 1, 3, 5, 7, 11, 15]
+    private let timeIntervals = [TimeInterval(0.1), 1, 3, 5, 7, 11, 15]
     
     var backoffInterval: TimeInterval {
         return timeIntervals[index ?? 0]
