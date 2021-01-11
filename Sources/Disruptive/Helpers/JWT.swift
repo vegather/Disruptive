@@ -15,7 +15,7 @@ internal struct JWT {
     internal static func serviceAccount(authURL: String, credentials: ServiceAccountCredentials) -> String? {
         let headers = [
             "alg": "HS256",
-            "kid": credentials.key
+            "kid": credentials.keyID
         ]
         
         let now = Int(Date().timeIntervalSince1970)

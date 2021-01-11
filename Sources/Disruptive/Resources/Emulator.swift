@@ -199,6 +199,8 @@ extension Disruptive {
     }
 }
 
+/// Used by event types (such as `TouchEvent`) to indicate that
+/// they can be published to the device emulator.
 public protocol PublishableEvent: Encodable {
     var eventType: EventType { get }
 }

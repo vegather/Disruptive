@@ -20,7 +20,7 @@ Swift library for accessing data from [Disruptive Technologies](https://disrupti
     - [Authentication](#authentication)
     - [Permissions](#permissions)
     - [Making Requests](#making-requests)
-        - [Lists & Pagination](#lists-%26-pagination)
+        - [Lists & Pagination](#lists--pagination)
         - [Fetching Historical Events](#fetching-historical-events)
         - [Subscribing to Device Events](#subscribing-to-device-events)
         - [Other Common Requests](#other-common-requests)
@@ -55,7 +55,7 @@ If you want to add it manually to your Swift project, you can add the following 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vegather/Disruptive.git", from: "0.3.0")
+    .package(url: "https://github.com/vegather/Disruptive.git", from: "1.0.0")
 ]
 ```
 
@@ -88,7 +88,7 @@ Here's an example of how to authenticate a service account with the OAuth2 flow:
 ```swift
 import Disruptive
 
-let credentials = ServiceAccountCredentials(email: "<EMAIL>", key: "<KEY_ID>", secret: "<SECRET>")
+let credentials = ServiceAccountCredentials(email: "<EMAIL>", keyID: "<KEY_ID>", secret: "<SECRET>")
 let authenticator = OAuth2Authenticator(credentials: credentials)
 let disruptive = Disruptive(authenticator: authenticator)
 
@@ -101,7 +101,7 @@ let disruptive = Disruptive(authenticator: authenticator)
 
 ### Permissions
 
-Access levels for the Disruptive API can be described in terms of members, roles, and permissions. For an account (Service Account or user) to have access to a resource, it has to be a member in the project or organization that is a parent of that resource. A member will always have a role for the project/organization it's a member of (such as project user, project admin, etc). Each of those roles as a list of permissions that describes which CRUD (create, read, update, delete) operations it can perform on various resources. Examples of permissions would be `"project.read"`, `"membership.create"`, `"serviceaccount.key.delete"`, etc. To list the available roles and permissions, use the [`getRoles`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getroles(completion:)) and [`getPermissions`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getpermissions(forprojectid:completion:)) functions.
+Access levels for the Disruptive API can be described in terms of members, roles, and permissions. For an account (Service Account or user) to have access to a resource, it has to be a member in the project or organization that is a parent of that resource. A member will always have a role for the project/organization it's a member of (such as project user, project admin, etc). Each of those roles as a list of permissions that describes which CRUD (create, read, update, delete) operations it can perform on various resources. Examples of permissions would be `"project.read"`, `"membership.create"`, `"serviceaccount.key.delete"`, etc. To list the available roles and permissions, use the [`getRoles`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getroles(completion:)) and [`getPermissions`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getpermissions(projectid:completion:)) functions.
 
 In order for a Service Account to be able to access a given resource, it must have sufficient permissions for that resource. By default, a Service Account does not have access to any resources.  The easiest way to get started with a Service Account is by granting access for the relevant projects/organizations in [DT Studio](https://studio.disruptive-technologies.com). You can give it a role in the current project by selecting `Role in current Project` when viewing the Service Account under `API Integrations -> Service Accounts`. You can also give it access to other projects/organizations by going to the list of members (in `Project Settings` for project members), and then adding the Service Account as a member using the Service Account's email address, and selecting an appropriate role.
 
@@ -136,7 +136,7 @@ disruptive.getAllDevices(projectID: "<PROJECT_ID>") { result in
     }
 }
 ```
-[`getAllDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getAlldevices(projectid:completion:))
+[`getAllDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getalldevices(projectid:completion:))
 
 
 Fetching `Device`s one page at a time:
@@ -172,6 +172,7 @@ if let pageToken = nextPageToken {
     fetchNextPage(pageToken: pageToken)
 }
 ```
+[`getDevicesPage` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevicespage(projectid:pagesize:pagetoken:completion:))
 
 
 #### Fetching Historical Events
@@ -219,7 +220,40 @@ stream?.onError = { error in
 
 #### Other Common Requests
 
-**Fetch Organizations**
+##### Search / Filter Devices
+
+The requests to fetch devices has various parameters to search and/or filter devices. All of these parameters are optional (except for `projectID`), and can be mixed and matched as desired.
+
+When specifying the order to retrieve the devices in, a field as well as an ascending/descending flag is included in a tuple. The value of this field is based on the JSON structure of the devices. Examples of `field`s to use include `id` (identifier), `type` (device type), `labels.name` (displayName). All events will have the format `reported.<event_type>.<field>`, eg. `reported.networkStatus.signalStrength`. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available.
+
+Here is an example of how to use all the parameters:
+```swift
+disruptive.getAllDevices(
+    projectID    : "<PROJECT_ID>",
+    query        : "Air Vent",
+    deviceIDs    : ["<DEVICE_ID>", "<DEVICE_ID>"],
+    deviceTypes  : [.temperature],
+    labelFilters : ["kit": "perform-compare-establish"],
+    orderBy      : (field: "reported.networkStatus.updateTime", ascending: false))
+{ result in
+    ...
+}
+```
+
+##### Single Device Lookup
+
+A single device can be looked up just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example:
+
+```swift
+disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
+...
+}
+```
+[`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
+
+
+
+##### Fetch Organizations
 
 Here's an example of fetching all the organizations available to the authenticated account:
 
@@ -231,7 +265,7 @@ disruptive.getAllOrganizations { result in
 [`getAllOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
 
 
-**Fetch Projects**
+##### Fetch Projects
 
 Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
 
@@ -241,18 +275,6 @@ disruptive.getAllProjects(organizationID: "<ORG_ID>", query: "Building 1") { res
 }
 ```
 [`getAllProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallprojects(organizationid:query:completion:))
-
-
-**Single Device Lookup**
-
-A single device can be looked up just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example:
-
-```swift
-disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
-    ...
-}
-```
-[`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
 
 
 

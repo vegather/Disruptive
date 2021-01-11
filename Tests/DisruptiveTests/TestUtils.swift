@@ -59,8 +59,11 @@ extension DisruptiveTests {
         // Validate HTTP method
         XCTAssertEqual(request.httpMethod, method)
         
-        // Validate query parameters
-        XCTAssertEqual(request.extractQueryParameters(), queryParams)
+        // Validate query parameters (with sorted values)
+        XCTAssertEqual(
+            request.extractQueryParameters().mapValues { $0.sorted() },
+            queryParams                     .mapValues { $0.sorted() }
+        )
         
         // Validate URL
         var components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!

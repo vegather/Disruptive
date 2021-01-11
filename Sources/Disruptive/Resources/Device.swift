@@ -81,16 +81,47 @@ extension Disruptive {
      it might be better to load pages of devices as they're needed using the
      `getDevicesPage` function instead.
      
+     Examples:
+     ```swift
+     // Get all the devices in the project
+     disruptive.getAllDevices(projectID: "<PROJECT_ID>") { result in
+         ...
+     }
+     
+     // Get all the temperature devices in the project ordered by
+     // the temperature (highest temperatures first)
+     disruptive.getAllDevices(
+         projectID   : "<PROJECT_ID>",
+         deviceTypes : [.temperature],
+         orderBy     : (field: "reported.temperature.value", ascending: false))
+     { result in
+        ...
+     }
+     ```
+     
      - Parameter projectID: The identifier of the project to get devices from.
+     - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter deviceIDs: Filters on a list of device identifiers. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
     public func getAllDevices(
-        projectID  : String,
-        completion : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
+        projectID    : String,
+        query        : String?                           = nil,
+        deviceIDs    : [String]?                         = nil,
+        deviceTypes  : [Device.DeviceType]?              = nil,
+        labelFilters : [String: String]?                 = nil,
+        orderBy      : (field: String, ascending: Bool)? = nil,
+        completion   : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
     {
+        // Set up the query parameters
+        let params = createDevicesParams(query: query, deviceIDs: deviceIDs, deviceTypes: deviceTypes, labelFilters: labelFilters, orderBy: orderBy)
+        
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
         sendRequest(request, pagingKey: "devices") { completion($0) }
@@ -105,19 +136,32 @@ extension Disruptive {
      at a cost of convenience compared to the `getAllDevices` function.
      
      - Parameter projectID: The identifier of the project to get devices from.
+     - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter deviceIDs: Filters on a list of device identifiers. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter pageSize: The maximum number of devices to get for this page. The maximum page size is 100, which is also the default
      - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Device`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>`
      */
     public func getDevicesPage(
-        projectID  : String,
-        pageSize   : Int = 100,
-        pageToken  : String?,
-        completion : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
+        projectID    : String,
+        query        : String?                           = nil,
+        deviceIDs    : [String]?                         = nil,
+        deviceTypes  : [Device.DeviceType]?              = nil,
+        labelFilters : [String: String]?                 = nil,
+        orderBy      : (field: String, ascending: Bool)? = nil,
+        pageSize     : Int = 100,
+        pageToken    : String?,
+        completion   : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
     {
+        // Set up the query parameters
+        let params = createDevicesParams(query: query, deviceIDs: deviceIDs, deviceTypes: deviceTypes, labelFilters: labelFilters, orderBy: orderBy)
+        
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices")
+        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
         sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "devices") { (result: Result<PagedResult<Device>, DisruptiveError>) in
@@ -126,6 +170,35 @@ extension Disruptive {
                 case .failure(let err)  : completion(.failure(err))
             }
         }
+    }
+    
+    private func createDevicesParams(
+        query        : String?                           = nil,
+        deviceIDs    : [String]?                         = nil,
+        deviceTypes  : [Device.DeviceType]?              = nil,
+        labelFilters : [String: String]?                 = nil,
+        orderBy      : (field: String, ascending: Bool)? = nil
+        ) -> [String: [String]]
+    {
+        var params = [String: [String]]()
+        
+        if let query = query {
+            params["query"] = [query]
+        }
+        if let deviceIDs = deviceIDs {
+            params["device_ids"] = deviceIDs
+        }
+        if let deviceTypes = deviceTypes {
+            params["device_types"] = deviceTypes.compactMap { $0.rawValue }
+        }
+        if let labelFilters = labelFilters {
+            params["label_filters"] = labelFilters.keys.map { "\($0)=\(labelFilters[$0]!)"}
+        }
+        if let orderBy = orderBy {
+            params["order_by"] = [(orderBy.ascending ? "" : "-") + orderBy.field]
+        }
+        
+        return params
     }
     
     /**
