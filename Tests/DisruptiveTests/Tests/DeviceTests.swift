@@ -153,7 +153,7 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetAllDevices() {
+    func testGetAllDevicesNoParameters() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -189,7 +189,58 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetDevicesPage() {
+    func testGetAllDevicesAllParameters() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices")
+        let reqParams: [String: [String]] = [
+            "query"         : ["search query"],
+            "device_ids"    : ["dev1", "dev2"],
+            "device_types"  : ["humidity", "touch"],
+            "label_filters" : ["key1=value1", "key2=value2"],
+            "order_by"      : ["-reported.temperature.value"]
+        ]
+        
+        let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
+        let respData = DeviceTests.createDevicesJSON(from: respDevices)
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : reqParams,
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getAllDevices(
+            projectID   : reqProjectID,
+            query       : "search query",
+            deviceIDs   : ["dev1", "dev2"],
+            deviceTypes : [.humidity, .touch],
+            labelFilters: ["key1": "value1", "key2": "value2"],
+            orderBy     : (field: "reported.temperature.value", ascending: false)
+        )
+        { result in
+            switch result {
+                case .success(let devices):
+                    XCTAssertEqual(devices, respDevices)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetDevicesPageNoParameters() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -214,6 +265,62 @@ class DeviceTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         disruptive.getDevicesPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+            switch result {
+                case .success(let page):
+                    XCTAssertEqual(page.nextPageToken, "nextToken")
+                    XCTAssertEqual(page.devices, respDevices)
+                case .failure(let err):
+                    XCTFail("Unexpected error: \(err)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
+    func testGetDevicesPageAllParameters() {
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices")
+        let reqParams: [String: [String]] = [
+            "query"         : ["search query"],
+            "device_ids"    : ["dev1", "dev2"],
+            "device_types"  : ["humidity", "touch"],
+            "label_filters" : ["key1=value1", "key2=value2"],
+            "order_by"      : ["-reported.temperature.value"],
+            "page_size"     : ["2"],
+            "page_token"    : ["token"]
+        ]
+        
+        let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
+        let respData = DeviceTests.createDevicesJSON(from: respDevices, nextPageToken: "nextToken")
+        
+        MockURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : reqParams,
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (respData, resp, nil)
+        }
+        
+        let exp = expectation(description: "")
+        disruptive.getDevicesPage(
+            projectID   : reqProjectID,
+            query       : "search query",
+            deviceIDs   : ["dev1", "dev2"],
+            deviceTypes : [.humidity, .touch],
+            labelFilters: ["key1": "value1", "key2": "value2"],
+            orderBy     : (field: "reported.temperature.value", ascending: false),
+            pageSize    : 2,
+            pageToken   : "token"
+        )
+        { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")

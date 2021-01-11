@@ -220,7 +220,40 @@ stream?.onError = { error in
 
 #### Other Common Requests
 
-**Fetch Organizations**
+##### Search / Filter Devices
+
+The requests to fetch devices has various parameters to search and/or filter devices. All of these parameters are optional (except for `projectID`), and can be mixed and matched as desired.
+
+When specifying the order to retrieve the devices in, a field as well as an ascending/descending flag is included in a tuple. The value of this field is based on the JSON structure of the devices. Examples of `field`s to use include `id` (identifier), `type` (device type), `labels.name` (displayName). All events will have the format `reported.<event_type>.<field>`, eg. `reported.networkStatus.signalStrength`. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available.
+
+Here is an example of how to use all the parameters:
+```swift
+disruptive.getAllDevices(
+    projectID    : "<PROJECT_ID>",
+    query        : "Air Vent",
+    deviceIDs    : ["<DEVICE_ID>", "<DEVICE_ID>"],
+    deviceTypes  : [.temperature],
+    labelFilters : ["kit": "perform-compare-establish"],
+    orderBy      : (field: "reported.networkStatus.updateTime", ascending: false))
+{ result in
+    ...
+}
+```
+
+##### Single Device Lookup
+
+A single device can be looked up just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example:
+
+```swift
+disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
+...
+}
+```
+[`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
+
+
+
+##### Fetch Organizations
 
 Here's an example of fetching all the organizations available to the authenticated account:
 
@@ -232,7 +265,7 @@ disruptive.getAllOrganizations { result in
 [`getAllOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
 
 
-**Fetch Projects**
+##### Fetch Projects
 
 Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
 
@@ -242,18 +275,6 @@ disruptive.getAllProjects(organizationID: "<ORG_ID>", query: "Building 1") { res
 }
 ```
 [`getAllProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallprojects(organizationid:query:completion:))
-
-
-**Single Device Lookup**
-
-A single device can be looked up just by the identifier of the device. This is useful if you got a device identifier by scanning a QR code for example. Here's an example:
-
-```swift
-disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
-    ...
-}
-```
-[`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
 
 
 
