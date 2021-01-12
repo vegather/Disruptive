@@ -12,6 +12,9 @@ import Foundation
  A permission is a specific action that an authenticated account is allowed to do within
  a specific project or organization.
  
+ Functions relevant for `Member`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
+ * [`getPermissions`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getpermissions(projectid:completion:))
+ 
  Permissions for the four different roles:
  
  Project.User:

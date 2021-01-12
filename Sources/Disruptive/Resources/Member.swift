@@ -10,6 +10,15 @@ import Foundation
 /**
  A `Member` assigns a specific role to an account within a project
  or an organization. The account can be either a user or a service account.
+ 
+ Functions relevant for `Member`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
+ * [`getAllMembers`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallmembers(projectid:completion:))
+ * [`getMembersPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmemberspage(projectid:pagesize:pagetoken:completion:))
+ * [`getMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmember(projectid:memberid:completion:))
+ * [`inviteMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.invitemember(projectid:roles:email:completion:))
+ * [`updateMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updatemember(projectid:memberid:roles:completion:))
+ * [`deleteMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deletemember(projectid:memberid:completion:))
+ * [`getMemberInviteURL`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmemberinviteurl(projectid:memberid:completion:))
  */
 public struct Member: Decodable, Equatable {
     
