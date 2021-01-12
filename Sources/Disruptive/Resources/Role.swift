@@ -13,7 +13,9 @@ import Foundation
  A `Role` is typically used when inviting a new member to a project or an organization, or when
  listing out the members of a project or an organization.
  
- Relevant methods for `Role` can be found on the [Disruptive](../Disruptive) struct.
+ Functions relevant for `Role`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
+ * [`getRoles`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getroles(completion:))
+ * [`getRole`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getrole(roletype:completion:))
  */
 public struct Role: Decodable, Equatable {
     
@@ -51,9 +53,9 @@ extension Disruptive {
     }
     
     /**
-     Get the details for a specific role by its identifier.
+     Get the details for a specific role.
      
-     - Parameter roleID: The identifier of the role to get.
+     - Parameter roleType: The type of role to get.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Role`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Role, DisruptiveError>`
      */

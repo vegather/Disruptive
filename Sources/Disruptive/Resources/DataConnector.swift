@@ -12,9 +12,19 @@ import Foundation
  to an external service. It can be set up to send specific types of events to a configurable endpoint through an
  HTTP POST request.
  
- To learn more about Data Connectors, see the following two articles on the developer website:
+ Functions relevant for `DataConnector`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
+ 
+ * [`getAllDataConnectors`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getalldataconnectors(projectid:completion:))
+ * [`getDataConnectorsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnectorspage(projectid:pagesize:pagetoken:completion:))
+ * [`getDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnector(projectid:dataconnectorid:completion:))
+ * [`createDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createdataconnector(projectid:displayname:pushtype:eventtypes:labels:isactive:completion:))
+ * [`updateDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updatedataconnector(projectid:dataconnectorid:displayname:httppush:isactive:eventtypes:labels:completion:))
+ * [`deleteDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deletedataconnector(projectid:dataconnectorid:completion:))
+ * [`getDataConnectorMetrics`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnectormetrics(projectid:dataconnectorid:completion:))
+ * [`syncDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.syncdataconnector(projectid:dataconnectorid:completion:))
+ 
+ To learn more about Data Connectors, see the following article on the developer website:
  * [Data Connectors](https://support.disruptive-technologies.com/hc/en-us/articles/360012692180-Data-Connectors)
- * [Forwarding data with Data Connectors](https://support.disruptive-technologies.com/hc/en-us/articles/360011500359-Forwarding-data-with-Data-Connectors)
  */
 public struct DataConnector: Decodable, Equatable {
     

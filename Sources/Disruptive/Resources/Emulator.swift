@@ -175,7 +175,7 @@ extension Disruptive {
      - Parameter projectID: The identifier of the project the emulated device is in.
      - Parameter deviceID: The identifier of the emulated device to publish the event to.
      - Parameter event: The event to publish to the emulated device. This can be any event type such as `TemperatureEvent`,
-     `TouchEvent`, `NetworkStatusEvent`, `ObjectPresentEvent`, etc.
+     `TouchEvent`, `NetworkStatusEvent`, `ObjectPresentEvent`, etc, as long as it conforms to the `PublishableEvent` protocol.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */

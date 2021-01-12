@@ -11,7 +11,10 @@ import Foundation
 /**
  Represents an organization registered with Disruptive Technologies.
  
- Relevant methods for `Organization` can be found on the [Disruptive](../Disruptive) struct.
+ Functions relevant for `Organization`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
+ * [`getAllOrganizations`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
+ * [`getOrganizationsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizationspage(pagesize:pagetoken:completion:))
+ * [`getOrganization`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganization(organizationid:completion:))
  */
 public struct Organization: Decodable, Equatable {
     

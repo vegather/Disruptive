@@ -11,7 +11,16 @@ import Foundation
 /**
  Represents a Sensor or Cloud Connector from Disruptive Technologies.
  
- Relevant methods for `Device` can be found on the [Disruptive](../Disruptive) struct.
+ Functions relevant for `Device`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
+ * [`getAllDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getalldevices(projectid:query:deviceids:devicetypes:labelfilters:orderby:completion:))
+ * [`getDevicesPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevicespage(projectid:query:deviceids:devicetypes:labelfilters:orderby:pagesize:pagetoken:completion:))
+ * [`getDevice`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
+ * [`updateDeviceDisplayName`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updatedevicedisplayname(projectid:deviceid:newdisplayname:completion:))
+ * [`deleteDeviceLabel`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deletedevicelabel(projectid:deviceid:labelkey:completion:))
+ * [`setDeviceLabel`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.setdevicelabel(projectid:deviceid:labelkey:labelvalue:completion:))
+ * [`batchUpdateDeviceLabels`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.batchupdatedevicelabels(projectid:deviceids:labelstoset:labelstoremove:completion:))
+ * [`moveDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.movedevices(deviceids:fromprojectid:toprojectid:completion:))
+ 
  */
 public struct Device: Decodable, Equatable {
     
@@ -52,26 +61,6 @@ public struct Device: Decodable, Equatable {
 
 
 extension Disruptive {
-    /**
-     Gets details for a specific device. This device could be found within a specific project, or if the `projectID` argument is not specified (or nil), throughout all the project available to the authenticated account.
-     
-     - Parameter projectID: The identifier of the project to find the device in. If default value (nil) is used, a wildcard character will be used for the projectID that searches through all the project the authenticated account has access to.
-     - Parameter deviceID: The identifier of the device to get details for.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
-     - Parameter result: `Result<Device, DisruptiveError>`
-     */
-    public func getDevice(
-        projectID  : String? = nil,
-        deviceID   : String,
-        completion : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
-    {
-        // Create the request
-        let endpoint = "projects/\(projectID ?? "-")/devices/\(deviceID)"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
-        
-        // Send the request
-        sendRequest(request) { completion($0) }
-    }
     
     /**
      Gets all the devices in a specific project (including emulated devices).
@@ -199,6 +188,27 @@ extension Disruptive {
         }
         
         return params
+    }
+    
+    /**
+     Gets details for a specific device. This device could be found within a specific project, or if the `projectID` argument is not specified (or nil), throughout all the project available to the authenticated account.
+     
+     - Parameter projectID: The identifier of the project to find the device in. If default value (nil) is used, a wildcard character will be used for the projectID that searches through all the project the authenticated account has access to.
+     - Parameter deviceID: The identifier of the device to get details for.
+     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
+     - Parameter result: `Result<Device, DisruptiveError>`
+     */
+    public func getDevice(
+        projectID  : String? = nil,
+        deviceID   : String,
+        completion : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
+    {
+        // Create the request
+        let endpoint = "projects/\(projectID ?? "-")/devices/\(deviceID)"
+        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        
+        // Send the request
+        sendRequest(request) { completion($0) }
     }
     
     /**

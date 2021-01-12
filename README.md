@@ -214,7 +214,7 @@ stream?.onError = { error in
     print("Got stream error: \(error)")
 }
 ```
-[`subscribeToDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.subscribetodevices(projectid:deviceids:devicetypes:labelfilters:eventtypes:))
+[`subscribeToDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.subscribetodevice(projectid:deviceid:eventtypes:))
 
 
 
@@ -246,26 +246,46 @@ A single device can be looked up just by the identifier of the device. This is u
 
 ```swift
 disruptive.getDevice(deviceID: "<DEVICE_ID>") { result in
-...
+    ...
 }
 ```
 [`getDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
 
 
 
-##### Fetch Organizations
+##### Emulated Devices
 
-Here's an example of fetching all the organizations available to the authenticated account:
+Emulated devices can be created and used to publish events using the API. This enables testing out other parts of the API (such as listing devices) and developing a solution around the API without having access to physical devices.
+
+Here's an example for how to create a new emulated temperature sensor:
 
 ```swift
-disruptive.getAllOrganizations { result in
+disruptive.createEmulatedDevice(
+    projectID   : "<PROJECT_ID>",
+    deviceType  : .temperature,
+    displayName : "Emulated Temperature Sensor")
+{ result in
     ...
 }
 ```
-[`getAllOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
+[`createEmulatedDevice` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createemulateddevice(projectid:devicetype:displayname:labels:completion:))
+
+Here's an example for how to publish a `TemperatureEvent` for an emulated sensor:
+
+```swift
+disruptive.publishEmulatedEvent(
+    projectID : "<PROJECT_ID>",
+    deviceID  : "<DEVICE_ID>",
+    event     : TemperatureEvent(celsius: 42, timestamp: Date()))
+{ result in
+    ...
+}
+```
+[`publishEmulatedEvent` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.publishemulatedevent(projectid:deviceid:event:completion:))
 
 
-##### Fetch Projects
+
+##### Fetch Projects & Organizations
 
 Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
 
@@ -275,6 +295,16 @@ disruptive.getAllProjects(organizationID: "<ORG_ID>", query: "Building 1") { res
 }
 ```
 [`getAllProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallprojects(organizationid:query:completion:))
+
+
+Here's an example of fetching all the organizations available to the authenticated account:
+
+```swift
+disruptive.getAllOrganizations { result in
+    ...
+}
+```
+[`getAllOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
 
 
 

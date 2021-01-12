@@ -11,7 +11,13 @@ import Foundation
 /**
  Represents a project within an `Organization`.
  
- Relevant methods for `Project` can be found on the [Disruptive](../Disruptive) struct.
+ Functions relevant for `Project`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
+ * [`getAllProjects`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallprojects(organizationid:query:completion:))
+ * [`getProjectsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojectspage(organizationid:query:pagesize:pagetoken:completion:))
+ * [`getProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getproject(projectid:completion:))
+ * [`createProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createproject(organizationid:displayname:completion:))
+ * [`deleteProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deleteproject(projectid:completion:))
+ * [`updateProjectDisplayName`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updateprojectdisplayname(projectid:newdisplayname:completion:))
  */
 public struct Project: Decodable, Equatable {
     
