@@ -29,10 +29,16 @@ class EventTypesTests: DisruptiveTests {
     }
     
     func testEncodeTempEvent() {
-        let temp: Float = 1
-        let event = TemperatureEvent(celsius: temp, timestamp: eventTimestamp)
-        let output = try! JSONEncoder().encode(event)
-        assertJSONDatasAreEqual(a: output, b: tempEventData(temp: temp))
+        let celsius: Float = 1
+        var event = TemperatureEvent(celsius: celsius, timestamp: eventTimestamp)
+        var output = try! JSONEncoder().encode(event)
+        assertJSONDatasAreEqual(a: output, b: tempEventData(temp: celsius))
+        XCTAssertEqual(celsiusToFahrenheit(celsius: celsius), event.fahrenheit, accuracy: 0.0001)
+        
+        let fahrenheit: Float = 1
+        event = TemperatureEvent(fahrenheit: fahrenheit, timestamp: eventTimestamp)
+        output = try! JSONEncoder().encode(event)
+        XCTAssertEqual(fahrenheitToCelsius(fahrenheit: fahrenheit), event.celsius, accuracy: 0.0001)
     }
     
     func testDecodeObjectPresentEvent() {

@@ -79,14 +79,25 @@ public struct TemperatureEvent: Codable, Equatable {
     /// The temperature value in celsius.
     public let celsius: Float
     
+    /// The temperature value in fahrenheit.
+    public let fahrenheit: Float
+    
     /// The timestamp the temperature event was generated.
     public let timestamp: Date
     
     
-    /// Creates a new `TemperatureEvent`.
+    /// Creates a new `TemperatureEvent` .
     public init(celsius: Float, timestamp: Date) {
-        self.celsius   = celsius
-        self.timestamp = timestamp
+        self.celsius    = celsius
+        self.fahrenheit = celsiusToFahrenheit(celsius: celsius)
+        self.timestamp  = timestamp
+    }
+    
+    /// Creates a new `TemperatureEvent` using fahrenheit.
+    public init(fahrenheit: Float, timestamp: Date) {
+        self.celsius    = fahrenheitToCelsius(fahrenheit: fahrenheit)
+        self.fahrenheit = fahrenheit
+        self.timestamp  = timestamp
     }
     
     public init(from decoder: Decoder) throws {
@@ -98,6 +109,7 @@ public struct TemperatureEvent: Codable, Equatable {
         
         // Extract the value
         self.celsius = try container.decode(Float.self, forKey: .value)
+        self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
     }
     
     public func encode(to encoder: Encoder) throws {

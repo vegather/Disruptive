@@ -155,7 +155,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         stream?.onEthernetStatus     = { _, _ in expectations[.cellularStatus]!    .fulfill() }
         stream?.onCellularStatus     = { _, _ in expectations[.connectionStatus]!  .fulfill() }
         
-        wait(for: Array(expectations.values), timeout: 1)
+        wait(for: Array(expectations.values), timeout: 2)
     }
     
     
