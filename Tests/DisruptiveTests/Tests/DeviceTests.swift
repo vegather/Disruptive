@@ -34,7 +34,9 @@ class DeviceTests: DisruptiveTests {
               "value": 25,
               "updateTime": "\(Date().iso8601String())"
             }
-          }
+          },
+          "productNumber": "102150",
+          "unknownKey": "unknownValue"
         }
         """.data(using: .utf8)!
         
@@ -194,11 +196,12 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         let reqParams: [String: [String]] = [
-            "query"         : ["search query"],
-            "device_ids"    : ["dev1", "dev2"],
-            "device_types"  : ["humidity", "touch"],
-            "label_filters" : ["key1=value1", "key2=value2"],
-            "order_by"      : ["-reported.temperature.value"]
+            "query"           : ["search query"],
+            "device_ids"      : ["dev1", "dev2"],
+            "device_types"    : ["humidity", "touch"],
+            "product_numbers" : ["pn1", "pn2"],
+            "label_filters"   : ["key1=value1", "key2=value2"],
+            "order_by"        : ["-reported.temperature.value"]
         ]
         
         let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
@@ -225,6 +228,7 @@ class DeviceTests: DisruptiveTests {
             query       : "search query",
             deviceIDs   : ["dev1", "dev2"],
             deviceTypes : [.humidity, .touch],
+            productNumbers: ["pn1", "pn2"],
             labelFilters: ["key1": "value1", "key2": "value2"],
             orderBy     : (field: "reported.temperature.value", ascending: false)
         )
@@ -282,13 +286,14 @@ class DeviceTests: DisruptiveTests {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         let reqParams: [String: [String]] = [
-            "query"         : ["search query"],
-            "device_ids"    : ["dev1", "dev2"],
-            "device_types"  : ["humidity", "touch"],
-            "label_filters" : ["key1=value1", "key2=value2"],
-            "order_by"      : ["-reported.temperature.value"],
-            "page_size"     : ["2"],
-            "page_token"    : ["token"]
+            "query"           : ["search query"],
+            "device_ids"      : ["dev1", "dev2"],
+            "device_types"    : ["humidity", "touch"],
+            "product_numbers" : ["pn1", "pn2"],
+            "label_filters"   : ["key1=value1", "key2=value2"],
+            "order_by"        : ["-reported.temperature.value"],
+            "page_size"       : ["2"],
+            "page_token"      : ["token"]
         ]
         
         let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
@@ -311,14 +316,15 @@ class DeviceTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         disruptive.getDevicesPage(
-            projectID   : reqProjectID,
-            query       : "search query",
-            deviceIDs   : ["dev1", "dev2"],
-            deviceTypes : [.humidity, .touch],
-            labelFilters: ["key1": "value1", "key2": "value2"],
-            orderBy     : (field: "reported.temperature.value", ascending: false),
-            pageSize    : 2,
-            pageToken   : "token"
+            projectID      : reqProjectID,
+            query          : "search query",
+            deviceIDs      : ["dev1", "dev2"],
+            deviceTypes    : [.humidity, .touch],
+            productNumbers : ["pn1", "pn2"],
+            labelFilters   : ["key1": "value1", "key2": "value2"],
+            orderBy        : (field: "reported.temperature.value", ascending: false),
+            pageSize       : 2,
+            pageToken      : "token"
         )
         { result in
             switch result {
@@ -589,7 +595,8 @@ extension DeviceTests {
           "labels": {
             "name": "\(device.displayName)"
           }
-          \(reported)
+          \(reported),
+          "productNumber": "\(device.productNumber ?? "")"
         }
         """
     }
@@ -612,12 +619,15 @@ extension DeviceTests {
     // Only supports temp events for now
     static func createDummyDevice(isEmulated: Bool = false) -> Device {
         var reportedEvents = Device.ReportedEvents()
+        var productNumber: String?
         if isEmulated == false {
             reportedEvents.temperature = TemperatureEvent(
                 celsius: 56,
                 timestamp: Date(timeIntervalSince1970: 1605999873)
             )
+            productNumber = "102150"
         }
+        
         
         return Device(
             identifier: (isEmulated ? "emu" : "") + "b5rj9ed7rihk942p48og",
@@ -625,6 +635,7 @@ extension DeviceTests {
             projectID: "b7s3umd0fee000ba5di0",
             labels: ["name": "Dummy project"],
             type: .temperature,
+            productNumber: productNumber,
             reportedEvents: reportedEvents,
             isEmulatedDevice: isEmulated
         )

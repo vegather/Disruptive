@@ -42,6 +42,7 @@ class StreamTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqDeviceIDs = ["dev1", "dev2"]
         let reqDeviceTypes = [Device.DeviceType.temperature, .touch]
+        let productNumbers = ["pn1", "pn2"]
         let reqLabelFilters = ["foo", "bar"]
         let reqEventTypes = [EventType.touch, .batteryStatus, .networkStatus]
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
@@ -53,10 +54,11 @@ class StreamTests: DisruptiveTests {
                 authenticated : true,
                 method        : "GET",
                 queryParams   : [
-                    "device_ids"    : reqDeviceIDs,
-                    "label_filters" : reqLabelFilters,
-                    "device_types"  : reqDeviceTypes.map { $0.rawValue! },
-                    "event_types"   : reqEventTypes .map { $0.rawValue }
+                    "device_ids"      : reqDeviceIDs,
+                    "label_filters"   : reqLabelFilters,
+                    "device_types"    : reqDeviceTypes.map { $0.rawValue! },
+                    "product_numbers" : productNumbers,
+                    "event_types"     : reqEventTypes .map { $0.rawValue }
                 ],
                 headers       : [:],
                 url           : reqURL,
@@ -67,11 +69,12 @@ class StreamTests: DisruptiveTests {
         }
         
         let stream = disruptive.subscribeToDevices(
-            projectID    : reqProjectID,
-            deviceIDs    : reqDeviceIDs,
-            deviceTypes  : reqDeviceTypes,
-            labelFilters : reqLabelFilters,
-            eventTypes   : reqEventTypes
+            projectID      : reqProjectID,
+            deviceIDs      : reqDeviceIDs,
+            deviceTypes    : reqDeviceTypes,
+            productNumbers : productNumbers,
+            labelFilters   : reqLabelFilters,
+            eventTypes     : reqEventTypes
         )
         
         // Wait a bit to let the request go through (and be asserted)
