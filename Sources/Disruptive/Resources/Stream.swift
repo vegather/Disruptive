@@ -24,17 +24,19 @@ extension Disruptive {
      - Parameter projectID: The identifier of the project that contains the device(s).
      - Parameter deviceIDs: An array of device identifiers to subscribe to. If not specified (or `nil`), all the devices in the project will be subscribed to.
      - Parameter deviceTypes: An array of device types to subscribe to. This is useful if `nil` is specified for the `deviceIDs` argument.
+     - Parameter productNumbers: An array of product numbers to subscribe to. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
      - Parameter labelFilters: An array of label filter expressions that filters the set of devices for the results. Each expression takes the form labelKey=labelValue.
      - Parameter eventTypes: An array of event types to subscribe to.
           
      - Returns: A `DeviceEventStream` device stream object with callbacks for each type of event. For example, set a closure on the `onNetworkStatus` property to receive an event each time a device sends out a heart beat.
      */
     public func subscribeToDevices(
-        projectID    : String,
-        deviceIDs    : [String]?            = nil,
-        deviceTypes  : [Device.DeviceType]? = nil,
-        labelFilters : [String]?            = nil,
-        eventTypes   : [EventType]?         = nil)
+        projectID      : String,
+        deviceIDs      : [String]?            = nil,
+        deviceTypes    : [Device.DeviceType]? = nil,
+        productNumbers : [String]?            = nil,
+        labelFilters   : [String]?            = nil,
+        eventTypes     : [EventType]?         = nil)
         -> DeviceEventStream?
     {
         // Construct parameters
@@ -47,6 +49,9 @@ extension Disruptive {
         }
         if let deviceTypes = deviceTypes {
             params["device_types"] = deviceTypes.compactMap { $0.rawValue }
+        }
+        if let productNumbers = productNumbers {
+            params["product_numbers"] = productNumbers
         }
         if let eventTypes = eventTypes {
             params["event_types"] = eventTypes.map { $0.rawValue }
@@ -67,11 +72,12 @@ extension Disruptive {
      */
     public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> DeviceEventStream? {
         return subscribeToDevices(
-            projectID    : projectID,
-            deviceIDs    : [deviceID],
-            deviceTypes  : nil,
-            labelFilters : nil,
-            eventTypes   : eventTypes
+            projectID      : projectID,
+            deviceIDs      : [deviceID],
+            deviceTypes    : nil,
+            productNumbers : nil,
+            labelFilters   : nil,
+            eventTypes     : eventTypes
         )
     }
 }

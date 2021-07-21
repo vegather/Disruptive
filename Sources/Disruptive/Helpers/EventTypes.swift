@@ -43,7 +43,7 @@ public enum EventType: String, Decodable, CodingKey, CaseIterable {
 ///
 /// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_e9491be1-b53d-447b-9c21-de436175a0e1) for more details.
 public struct TouchEvent: Codable, Equatable {
-    /// The timestamp of when the device was touched.
+    /// The timestamp of when the touch event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -79,14 +79,84 @@ public struct TemperatureEvent: Codable, Equatable {
     /// The temperature value in celsius.
     public let celsius: Float
     
-    /// The timestamp the temperature event was generated.
+    /// The temperature value in fahrenheit.
+    public let fahrenheit: Float
+    
+    /// The timestamp of when the temperature event was received by a Cloud Connector.
     public let timestamp: Date
     
+    /// An array of temperature values sampled within a single heartbeat.
+    /// The order is the same as the order of events, meaning newest is last.
+    public let samples: [TemperatureSample]
     
-    /// Creates a new `TemperatureEvent`.
-    public init(celsius: Float, timestamp: Date) {
-        self.celsius   = celsius
-        self.timestamp = timestamp
+    
+    /// Represents a temperature value sampled within a single heartbeat.
+    public struct TemperatureSample: Codable, Equatable {
+        /// The temperature value in celsius.
+        public let celsius: Float
+        
+        /// The temperature value in fahrenheit.
+        public let fahrenheit: Float
+        
+        /// The timestamp the temperature value was sample.
+        /// This timestamp is estimated by DT Cloud, and may not
+        /// be as accurate as the timestamp of the event itself.
+        public let timestamp: Date
+        
+        /// Creates a new `TemperatureSample` using celsius.
+        public init(celsius: Float, timestamp: Date) {
+            self.celsius    = celsius
+            self.fahrenheit = celsiusToFahrenheit(celsius: celsius)
+            self.timestamp  = timestamp
+        }
+        
+        /// Creates a new `TemperatureSample` using fahrenheit.
+        public init(fahrenheit: Float, timestamp: Date) {
+            self.celsius    = fahrenheitToCelsius(fahrenheit: fahrenheit)
+            self.fahrenheit = fahrenheit
+            self.timestamp  = timestamp
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+                // Extract the timestamp
+            let timeString = try container.decode(String.self, forKey: .timestamp)
+            self.timestamp = try Date(iso8601String: timeString)
+            
+                // Extract the value
+            self.celsius = try container.decode(Float.self, forKey: .value)
+            self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            
+            try container.encode(celsius,                   forKey: .value)
+            try container.encode(timestamp.iso8601String(), forKey: .timestamp)
+        }
+        
+        private enum CodingKeys: String, CodingKey {
+            case value
+            case timestamp = "sampleTime"
+        }
+    }
+    
+    
+    /// Creates a new `TemperatureEvent` using celsius.
+    public init(celsius: Float, timestamp: Date, samples: [TemperatureSample]? = nil) {
+        self.celsius    = celsius
+        self.fahrenheit = celsiusToFahrenheit(celsius: celsius)
+        self.timestamp  = timestamp
+        self.samples    = samples ?? [TemperatureSample(celsius: celsius, timestamp: timestamp)]
+    }
+    
+    /// Creates a new `TemperatureEvent` using fahrenheit.
+    public init(fahrenheit: Float, timestamp: Date, samples: [TemperatureSample]? = nil) {
+        self.celsius    = fahrenheitToCelsius(fahrenheit: fahrenheit)
+        self.fahrenheit = fahrenheit
+        self.timestamp  = timestamp
+        self.samples    = samples ?? [TemperatureSample(fahrenheit: fahrenheit, timestamp: timestamp)]
     }
     
     public init(from decoder: Decoder) throws {
@@ -98,6 +168,13 @@ public struct TemperatureEvent: Codable, Equatable {
         
         // Extract the value
         self.celsius = try container.decode(Float.self, forKey: .value)
+        self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
+        
+        // Extract samples
+        var samples = try container.decode([TemperatureSample].self, forKey: .samples)
+        samples.reverse()
+        samples.sort(by: { $0.timestamp < $1.timestamp })
+        self.samples = samples
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -105,11 +182,13 @@ public struct TemperatureEvent: Codable, Equatable {
         
         try container.encode(celsius,                   forKey: .value)
         try container.encode(timestamp.iso8601String(), forKey: .timestamp)
+        try container.encode(samples.reversed(),        forKey: .samples)
     }
     
     private enum CodingKeys: String, CodingKey {
         case value
         case timestamp = "updateTime"
+        case samples
     }
 }
 
@@ -121,7 +200,7 @@ public struct ObjectPresentEvent: Codable, Equatable {
     /// Whether or not an object is close to the proximity sensor.
     public let state: State
     
-    /// The timestamp of when the presence of an object switched state.
+    /// The timestamp of when the object present event was received by a Cloud Connector.
     public let timestamp: Date
     
     /// The proximity state of a sensor.
@@ -199,7 +278,7 @@ public struct HumidityEvent: Codable, Equatable {
     /// The relative humidity as a percentage.
     public let relativeHumidity: Float
     
-    /// The timestamp the humidity event was generated.
+    /// The timestamp of when the humidity event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -247,7 +326,7 @@ public struct ObjectPresentCountEvent: Codable, Equatable {
     /// The total accumulated state switches for this sensor.
     public let total: Int
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the object present count event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -290,7 +369,7 @@ public struct TouchCountEvent: Codable, Equatable {
     /// The total accumulated number of touches for this sensor.
     public let total: Int
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the touch count event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -333,7 +412,7 @@ public struct WaterPresentEvent: Codable, Equatable {
     /// Whether or not water was detected close to the sensor.
     public let state: State
     
-    /// The timestamp of when the state of water presence was changed.
+    /// The timestamp of when the water present event event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -427,7 +506,7 @@ public struct NetworkStatusEvent: Codable, Equatable {
     /// See [Wikipedia](https://en.wikipedia.org/wiki/Received_signal_strength_indication) for more details.
     public let rssi: Int
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the network status event was received by a Cloud Connector.
     public let timestamp: Date
     
     /// The Cloud Connector(s) that picked up this event.
@@ -567,7 +646,7 @@ public struct BatteryStatusEvent: Codable, Equatable {
     /// The amount of battery life left in the sensor as a percentage.
     public let percentage: Int
     
-    /// The timestamp the battery status event was generated.
+    /// The timestamp of when the battery status event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -648,7 +727,7 @@ public struct ConnectionStatusEvent: Codable, Equatable {
     /// An array of the available `Connection`s for the Cloud Connector.
     public let available: [Available]
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the connection status event was received by a Cloud Connector.
     public let timestamp: Date
     
     /// Indicates the current connectivity of a Cloud Connector.
@@ -795,7 +874,7 @@ public struct EthernetStatusEvent: Codable, Equatable {
     /// Any errors related to connecting to the local network.
     public let errors: [ErrorMessage]
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the ethernet status event was generated by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -859,7 +938,7 @@ public struct CellularStatusEvent: Codable, Equatable {
     /// Any errors related to connecting to the cellular network.
     public let errors: [ErrorMessage]
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the cellular status event was generated by a Cloud Connector.
     public let timestamp: Date
     
     

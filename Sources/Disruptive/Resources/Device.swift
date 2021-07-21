@@ -40,6 +40,11 @@ public struct Device: Decodable, Equatable {
     /// The type of the device. What type the device is determines which types of events it will receive.
     public let type: DeviceType
     
+    /// The product number of the device. This is the same product number that can be found on the support pages for both
+    /// [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and
+    /// [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
+    public let productNumber: String?
+    
     /// The last known reported event for each available event type for the device. Which of these are available is dependent on the device `type`.
     public var reportedEvents: ReportedEvents
     
@@ -47,13 +52,14 @@ public struct Device: Decodable, Equatable {
     public let isEmulatedDevice: Bool
     
     /// Creates a new `Device`. Creating a new device can be useful for testing purposes.
-    public init(identifier: String, displayName: String, projectID: String, labels: [String: String], type: DeviceType, reportedEvents: ReportedEvents, isEmulatedDevice: Bool)
+    public init(identifier: String, displayName: String, projectID: String, labels: [String: String], type: DeviceType, productNumber: String?, reportedEvents: ReportedEvents, isEmulatedDevice: Bool)
     {
         self.identifier = identifier
         self.displayName = displayName
         self.projectID = projectID
         self.labels = labels
         self.type = type
+        self.productNumber = productNumber
         self.reportedEvents = reportedEvents
         self.isEmulatedDevice = isEmulatedDevice
     }
@@ -92,22 +98,31 @@ extension Disruptive {
      - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceIDs: Filters on a list of device identifiers. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
      - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
      - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
     public func getAllDevices(
-        projectID    : String,
-        query        : String?                           = nil,
-        deviceIDs    : [String]?                         = nil,
-        deviceTypes  : [Device.DeviceType]?              = nil,
-        labelFilters : [String: String]?                 = nil,
-        orderBy      : (field: String, ascending: Bool)? = nil,
-        completion   : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
+        projectID      : String,
+        query          : String?                           = nil,
+        deviceIDs      : [String]?                         = nil,
+        deviceTypes    : [Device.DeviceType]?              = nil,
+        productNumbers : [String]?                         = nil,
+        labelFilters   : [String: String]?                 = nil,
+        orderBy        : (field: String, ascending: Bool)? = nil,
+        completion     : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
     {
         // Set up the query parameters
-        let params = createDevicesParams(query: query, deviceIDs: deviceIDs, deviceTypes: deviceTypes, labelFilters: labelFilters, orderBy: orderBy)
+        let params = createDevicesParams(
+            query:          query,
+            deviceIDs:      deviceIDs,
+            deviceTypes:    deviceTypes,
+            productNumbers: productNumbers,
+            labelFilters:   labelFilters,
+            orderBy:        orderBy
+        )
         
         // Create the request
         let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices", params: params)
@@ -128,6 +143,7 @@ extension Disruptive {
      - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceIDs: Filters on a list of device identifiers. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
+     - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
      - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
      - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter pageSize: The maximum number of devices to get for this page. The maximum page size is 100, which is also the default
@@ -136,18 +152,26 @@ extension Disruptive {
      - Parameter result: `Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>`
      */
     public func getDevicesPage(
-        projectID    : String,
-        query        : String?                           = nil,
-        deviceIDs    : [String]?                         = nil,
-        deviceTypes  : [Device.DeviceType]?              = nil,
-        labelFilters : [String: String]?                 = nil,
-        orderBy      : (field: String, ascending: Bool)? = nil,
-        pageSize     : Int = 100,
-        pageToken    : String?,
-        completion   : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
+        projectID      : String,
+        query          : String?                           = nil,
+        deviceIDs      : [String]?                         = nil,
+        deviceTypes    : [Device.DeviceType]?              = nil,
+        productNumbers : [String]?                         = nil,
+        labelFilters   : [String: String]?                 = nil,
+        orderBy        : (field: String, ascending: Bool)? = nil,
+        pageSize       : Int = 100,
+        pageToken      : String?,
+        completion     : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
     {
         // Set up the query parameters
-        let params = createDevicesParams(query: query, deviceIDs: deviceIDs, deviceTypes: deviceTypes, labelFilters: labelFilters, orderBy: orderBy)
+        let params = createDevicesParams(
+            query:          query,
+            deviceIDs:      deviceIDs,
+            deviceTypes:    deviceTypes,
+            productNumbers: productNumbers,
+            labelFilters:   labelFilters,
+            orderBy:        orderBy
+        )
         
         // Create the request
         let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices", params: params)
@@ -162,11 +186,12 @@ extension Disruptive {
     }
     
     private func createDevicesParams(
-        query        : String?                           = nil,
-        deviceIDs    : [String]?                         = nil,
-        deviceTypes  : [Device.DeviceType]?              = nil,
-        labelFilters : [String: String]?                 = nil,
-        orderBy      : (field: String, ascending: Bool)? = nil
+        query          : String?                           = nil,
+        deviceIDs      : [String]?                         = nil,
+        deviceTypes    : [Device.DeviceType]?              = nil,
+        productNumbers : [String]?                         = nil,
+        labelFilters   : [String: String]?                 = nil,
+        orderBy        : (field: String, ascending: Bool)? = nil
         ) -> [String: [String]]
     {
         var params = [String: [String]]()
@@ -179,6 +204,9 @@ extension Disruptive {
         }
         if let deviceTypes = deviceTypes {
             params["device_types"] = deviceTypes.compactMap { $0.rawValue }
+        }
+        if let productNumbers = productNumbers {
+            params["product_numbers"] = productNumbers
         }
         if let labelFilters = labelFilters {
             params["label_filters"] = labelFilters.keys.map { "\($0)=\(labelFilters[$0]!)"}
@@ -376,6 +404,7 @@ extension Device {
         case labels
         case type
         case reported
+        case productNumber
     }
     
     public init(from decoder: Decoder) throws {
@@ -393,9 +422,17 @@ extension Device {
         self.identifier = id
         self.isEmulatedDevice = id.count == 23 && id.hasPrefix("emu")
         
+        // Decode product number. Will not be present for emulators,
+        // and should be nil if empty string.
+        var productNumber = try container.decodeIfPresent(String.self,  forKey: .productNumber)
+        if productNumber == "" {
+            productNumber = nil
+        }
+        self.productNumber = productNumber
+        
         // Getting the other properties without any modifications
-        self.labels = try container.decode([String: String].self, forKey: .labels)
-        self.type   = try container.decode(DeviceType.self,       forKey: .type)
+        self.labels        = try container.decode([String: String].self, forKey: .labels)
+        self.type          = try container.decode(DeviceType.self,       forKey: .type)
         
         // The name of the device comes in a label (if set)
         self.displayName = self.labels["name", default: ""]
