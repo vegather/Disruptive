@@ -32,7 +32,21 @@ class DeviceTests: DisruptiveTests {
             },
             "temperature": {
               "value": 25,
-              "updateTime": "\(Date().iso8601String())"
+              "updateTime": "\(Date().iso8601String())",
+              "samples": [
+                {
+                  "value": 24.9,
+                  "sampleTime": "2019-05-16T08:15:18.318751Z"
+                },
+                {
+                  "value": 24.2,
+                  "sampleTime": "2019-05-16T08:15:13.318751Z"
+                },
+                {
+                  "value": 24.5,
+                  "sampleTime": "2019-05-16T08:15:08.318751Z"
+                }
+              ]
             }
           },
           "productNumber": "102150",
@@ -583,7 +597,21 @@ extension DeviceTests {
             ,"reported": {
                 "temperature": {
                     "value": \(device.reportedEvents.temperature?.celsius ?? 0),
-                    "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")"
+                    "updateTime": "\(device.reportedEvents.temperature?.timestamp.iso8601String() ?? "-")",
+                    "samples": [
+                        {
+                            "value": \(device.reportedEvents.temperature!.samples[2].celsius),
+                            "sampleTime": "\(device.reportedEvents.temperature!.samples[2].timestamp.iso8601String())"
+                        },
+                        {
+                            "value": \(device.reportedEvents.temperature!.samples[1].celsius),
+                            "sampleTime": "\(device.reportedEvents.temperature!.samples[1].timestamp.iso8601String())"
+                        },
+                        {
+                            "value": \(device.reportedEvents.temperature!.samples[0].celsius),
+                            "sampleTime": "\(device.reportedEvents.temperature!.samples[0].timestamp.iso8601String())"
+                        }
+                    ]
                 }
             }
             """
@@ -623,7 +651,12 @@ extension DeviceTests {
         if isEmulated == false {
             reportedEvents.temperature = TemperatureEvent(
                 celsius: 56,
-                timestamp: Date(timeIntervalSince1970: 1605999873)
+                timestamp: Date(timeIntervalSince1970: 1605999873),
+                samples: [
+                    TemperatureEvent.TemperatureSample(celsius: 24.5, timestamp: Date(timeIntervalSince1970: 1605999273)),
+                    TemperatureEvent.TemperatureSample(celsius: 24.2, timestamp: Date(timeIntervalSince1970: 1605999573)),
+                    TemperatureEvent.TemperatureSample(celsius: 24.9, timestamp: Date(timeIntervalSince1970: 1605999873))
+                ]
             )
             productNumber = "102150"
         }

@@ -340,12 +340,43 @@ class EmulatorTests: DisruptiveTests {
         )
         
         assertEvent(
-            event: TemperatureEvent(celsius: 15, timestamp: now),
+            event: TemperatureEvent(
+                celsius: 15,
+                timestamp: now,
+                samples: [
+                    TemperatureEvent.TemperatureSample(
+                        celsius: 24.5,
+                        timestamp: try! Date(iso8601String: "2019-05-16T08:15:08.318Z")
+                    ),
+                    TemperatureEvent.TemperatureSample(
+                        celsius: 23.75,
+                        timestamp: try! Date(iso8601String: "2019-05-16T08:15:13.318Z")
+                    ),
+                    TemperatureEvent.TemperatureSample(
+                        celsius: 25.25,
+                        timestamp: try! Date(iso8601String: "2019-05-16T08:15:18.318Z")
+                    )
+                ]
+            ),
             expectedPayload: """
             {
                 "temperature": {
                     "value": 15,
-                    "updateTime": "\(now.iso8601String())"
+                    "updateTime": "\(now.iso8601String())",
+                    "samples": [
+                        {
+                            "value": 25.25,
+                            "sampleTime": "2019-05-16T08:15:18.318Z"
+                        },
+                        {
+                            "value": 23.75,
+                            "sampleTime": "2019-05-16T08:15:13.318Z"
+                        },
+                        {
+                            "value": 24.5,
+                            "sampleTime": "2019-05-16T08:15:08.318Z"
+                        }
+                    ]
                 }
             }
             """.data(using: .utf8)!

@@ -22,18 +22,40 @@ class EventTypesTests: DisruptiveTests {
     }
     
     func testDecodeTempEvent() {
-        let temp: Float = 25.75
-        let event = try! JSONDecoder().decode(TemperatureEvent.self, from: tempEventData(temp: temp))
+        let temp1: Float = 25.75
+        let temp2: Float = 27.8
+        let temp3: Float = 24.7
+        let timeDelta = TimeInterval(300)
+        let event = try! JSONDecoder().decode(
+            TemperatureEvent.self,
+            from: tempEventData(temp1: temp1, temp2: temp2, temp3: temp3, timeDelta: timeDelta)
+        )
         XCTAssertEqual(event.timestamp, eventTimestamp)
-        XCTAssertEqual(event.celsius, temp)
+        XCTAssertEqual(event.celsius, temp1)
+        XCTAssertEqual(event.samples, [
+            TemperatureEvent.TemperatureSample(celsius: temp3, timestamp: eventTimestamp.addingTimeInterval(-timeDelta*2)),
+            TemperatureEvent.TemperatureSample(celsius: temp2, timestamp: eventTimestamp.addingTimeInterval(-timeDelta)),
+            TemperatureEvent.TemperatureSample(celsius: temp1, timestamp: eventTimestamp)
+        ])
     }
     
     func testEncodeTempEvent() {
-        let celsius: Float = 1
-        var event = TemperatureEvent(celsius: celsius, timestamp: eventTimestamp)
+        let temp1: Float = 25.75
+        let temp2: Float = 27.5
+        let temp3: Float = 24.25
+        let timeDelta = TimeInterval(300)
+        var event = TemperatureEvent(
+            celsius: temp1,
+            timestamp: eventTimestamp,
+            samples: [
+                TemperatureEvent.TemperatureSample(celsius: temp3, timestamp: eventTimestamp.addingTimeInterval(-timeDelta*2)),
+                TemperatureEvent.TemperatureSample(celsius: temp2, timestamp: eventTimestamp.addingTimeInterval(-timeDelta)),
+                TemperatureEvent.TemperatureSample(celsius: temp1, timestamp: eventTimestamp)
+            ]
+        )
         var output = try! JSONEncoder().encode(event)
-        assertJSONDatasAreEqual(a: output, b: tempEventData(temp: celsius))
-        XCTAssertEqual(celsiusToFahrenheit(celsius: celsius), event.fahrenheit, accuracy: 0.0001)
+        assertJSONDatasAreEqual(a: output, b: tempEventData(temp1: temp1, temp2: temp2, temp3: temp3, timeDelta: timeDelta))
+        XCTAssertEqual(celsiusToFahrenheit(celsius: temp1), event.fahrenheit, accuracy: 0.0001)
         
         let fahrenheit: Float = 1
         event = TemperatureEvent(fahrenheit: fahrenheit, timestamp: eventTimestamp)
@@ -301,11 +323,25 @@ extension EventTypesTests {
         """.data(using: .utf8)!
     }
     
-    func tempEventData(temp: Float) -> Data {
+    func tempEventData(temp1: Float, temp2: Float, temp3: Float, timeDelta: TimeInterval) -> Data {
         return """
         {
-            "value": \(temp),
-            "updateTime": "\(eventTimestampString)"
+            "value": \(temp1),
+            "updateTime": "\(eventTimestampString)",
+            "samples": [
+                {
+                    "value": \(temp1),
+                    "sampleTime": "\(eventTimestamp.iso8601String())"
+                },
+                {
+                    "value": \(temp2),
+                    "sampleTime": "\(eventTimestamp.addingTimeInterval(-timeDelta).iso8601String())"
+                },
+                {
+                    "value": \(temp3),
+                    "sampleTime": "\(eventTimestamp.addingTimeInterval(-timeDelta*2).iso8601String())"
+                }
+            ]
         }
         """.data(using: .utf8)!
     }

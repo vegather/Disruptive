@@ -85,19 +85,78 @@ public struct TemperatureEvent: Codable, Equatable {
     /// The timestamp of when the temperature event was received by a Cloud Connector.
     public let timestamp: Date
     
+    /// An array of temperature values sampled within a single heartbeat.
+    /// The order is the same as the order of events, meaning newest is last.
+    public let samples: [TemperatureSample]
     
-    /// Creates a new `TemperatureEvent` .
-    public init(celsius: Float, timestamp: Date) {
+    
+    /// Represents a temperature value sampled within a single heartbeat.
+    public struct TemperatureSample: Codable, Equatable {
+        /// The temperature value in celsius.
+        public let celsius: Float
+        
+        /// The temperature value in fahrenheit.
+        public let fahrenheit: Float
+        
+        /// The timestamp the temperature value was sample.
+        /// This timestamp is estimated by DT Cloud, and may not
+        /// be as accurate as the timestamp of the event itself.
+        public let timestamp: Date
+        
+        /// Creates a new `TemperatureSample` using celsius.
+        public init(celsius: Float, timestamp: Date) {
+            self.celsius    = celsius
+            self.fahrenheit = celsiusToFahrenheit(celsius: celsius)
+            self.timestamp  = timestamp
+        }
+        
+        /// Creates a new `TemperatureSample` using fahrenheit.
+        public init(fahrenheit: Float, timestamp: Date) {
+            self.celsius    = fahrenheitToCelsius(fahrenheit: fahrenheit)
+            self.fahrenheit = fahrenheit
+            self.timestamp  = timestamp
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+                // Extract the timestamp
+            let timeString = try container.decode(String.self, forKey: .timestamp)
+            self.timestamp = try Date(iso8601String: timeString)
+            
+                // Extract the value
+            self.celsius = try container.decode(Float.self, forKey: .value)
+            self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            
+            try container.encode(celsius,                   forKey: .value)
+            try container.encode(timestamp.iso8601String(), forKey: .timestamp)
+        }
+        
+        private enum CodingKeys: String, CodingKey {
+            case value
+            case timestamp = "sampleTime"
+        }
+    }
+    
+    
+    /// Creates a new `TemperatureEvent` using celsius.
+    public init(celsius: Float, timestamp: Date, samples: [TemperatureSample]? = nil) {
         self.celsius    = celsius
         self.fahrenheit = celsiusToFahrenheit(celsius: celsius)
         self.timestamp  = timestamp
+        self.samples    = samples ?? [TemperatureSample(celsius: celsius, timestamp: timestamp)]
     }
     
     /// Creates a new `TemperatureEvent` using fahrenheit.
-    public init(fahrenheit: Float, timestamp: Date) {
+    public init(fahrenheit: Float, timestamp: Date, samples: [TemperatureSample]? = nil) {
         self.celsius    = fahrenheitToCelsius(fahrenheit: fahrenheit)
         self.fahrenheit = fahrenheit
         self.timestamp  = timestamp
+        self.samples    = samples ?? [TemperatureSample(fahrenheit: fahrenheit, timestamp: timestamp)]
     }
     
     public init(from decoder: Decoder) throws {
@@ -110,6 +169,12 @@ public struct TemperatureEvent: Codable, Equatable {
         // Extract the value
         self.celsius = try container.decode(Float.self, forKey: .value)
         self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
+        
+        // Extract samples
+        var samples = try container.decode([TemperatureSample].self, forKey: .samples)
+        samples.reverse()
+        samples.sort(by: { $0.timestamp < $1.timestamp })
+        self.samples = samples
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -117,11 +182,13 @@ public struct TemperatureEvent: Codable, Equatable {
         
         try container.encode(celsius,                   forKey: .value)
         try container.encode(timestamp.iso8601String(), forKey: .timestamp)
+        try container.encode(samples.reversed(),        forKey: .samples)
     }
     
     private enum CodingKeys: String, CodingKey {
         case value
         case timestamp = "updateTime"
+        case samples
     }
 }
 

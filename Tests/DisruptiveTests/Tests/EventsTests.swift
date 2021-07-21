@@ -45,7 +45,21 @@ class EventsTests: DisruptiveTests {
                     "data": {
                       "temperature": {
                         "value": 24.9,
-                        "updateTime": "2019-05-16T08:15:18.318751Z"
+                        "updateTime": "2019-05-16T08:15:18.318751Z",
+                        "samples": [
+                          {
+                            "value": 24.9,
+                            "sampleTime": "2019-05-16T08:15:18.318751Z"
+                          },
+                          {
+                            "value": 24.2,
+                            "sampleTime": "2019-05-16T08:15:13.318751Z"
+                          },
+                          {
+                            "value": 24.5,
+                            "sampleTime": "2019-05-16T08:15:08.318751Z"
+                          }
+                        ]
                       }
                     },
                     "timestamp": "2019-05-16T08:15:18.318751Z"

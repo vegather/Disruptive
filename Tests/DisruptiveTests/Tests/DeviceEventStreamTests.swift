@@ -18,7 +18,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         let respTemp: Float = 22.65
         let respIdentifier = "dev1"
         let payload = """
-        data: {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/\(respIdentifier)","eventType":"temperature","data":{"temperature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
+        data: {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/\(respIdentifier)","eventType":"temperature","data":{"temperature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z","samples":[{"value":24.9,"sampleTime": "2019-05-16T08:15:18.318751Z"},{"value":24.2,"sampleTime":"2019-05-16T08:15:13.318751Z"},{"value": 24.5,"sampleTime":"2019-05-16T08:15:08.318751Z"}]}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
 
         """.data(using: .utf8)!
         
@@ -57,7 +57,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         let respIdentifier = "dev1"
         let payload = """
         data: {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/\(respIdentifier)","eventType":"temperature","data":{"temper
-        data: ature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
+        data: ature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z","samples":[{"value":24.9,"sampleTime": "2019-05-16T08:15:18.318751Z"},{"value":24.2,"sampleTime":"2019-05-16T08:15:13.318751Z"},{"value": 24.5,"sampleTime":"2019-05-16T08:15:08.318751Z"}]}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
 
         """.data(using: .utf8)!
         
@@ -95,7 +95,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         let payload = """
         data: {"result": {"event": {"eventId":"bjehn6sdm92f9pd7f4s0","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"touch","data":{"touch":{"updateTime":"2019-05-16T08:13:15.361624Z"}},"timestamp":"2019-05-16T08:13:15.361624Z"}}}
 
-        data: {"result": {"event": {"eventId":"bjeho5nlafj3bdrehgsg","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"temperature","data":{"temperature":{"value":24.9,"updateTime":"2019-05-16T08:15:18.318751Z"}},"timestamp":"2019-05-16T08:15:18.318751Z"}}}
+        data: {"result": {"event": {"eventId":"bjeho5nlafj3bdrehgsg","targetName":"projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg","eventType":"temperature","data":{"temperature":{"value":24.9,"updateTime":"2019-05-16T08:15:18.318751Z","samples":[{"value":24.9,"sampleTime": "2019-05-16T08:15:18.318751Z"},{"value":24.2,"sampleTime":"2019-05-16T08:15:13.318751Z"},{"value": 24.5,"sampleTime":"2019-05-16T08:15:08.318751Z"}]}},"timestamp":"2019-05-16T08:15:18.318751Z"}}}
 
         data: {"result": {"event": {"eventId":"bjei2dia9k365r1ntb20","targetName":"projects/bhmh0143iktucae701vg/devices/bchonol7rihjtvdmd7bg","eventType":"objectPresent","data":{"objectPresent":{"state":"NOT_PRESENT","updateTime":"2019-05-16T08:37:10.711412Z"}},"timestamp":"2019-05-16T08:37:10.711412Z"}}}
 
@@ -257,7 +257,7 @@ class DeviceEventStreamTests: DisruptiveTests {
 
         :this is also a comment
 
-        data:{"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/\(respIdentifier)","eventType":"temperature","data":{"temperature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
+        data:{"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/\(respIdentifier)","eventType":"temperature","data":{"temperature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z","samples":[{"value":24.9,"sampleTime": "2019-05-16T08:15:18.318751Z"},{"value":24.2,"sampleTime":"2019-05-16T08:15:13.318751Z"},{"value": 24.5,"sampleTime":"2019-05-16T08:15:08.318751Z"}]}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
 
         this is a field name
 
@@ -265,7 +265,7 @@ class DeviceEventStreamTests: DisruptiveTests {
 
 
         data: {"result":{"eve
-        data:nt":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/\(respIdentifier)","eventType":"temperature","data":{"temperature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
+        data:nt":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/\(respIdentifier)","eventType":"temperature","data":{"temperature":{"value":\(respTemp),"updateTime":"2020-12-25T17:57:02.560000Z","samples":[{"value":24.9,"sampleTime": "2019-05-16T08:15:18.318751Z"},{"value":24.2,"sampleTime":"2019-05-16T08:15:13.318751Z"},{"value": 24.5,"sampleTime":"2019-05-16T08:15:08.318751Z"}]}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
 
 
         :
