@@ -14,7 +14,6 @@
             </strong>
             <span>Documentation</span>
         </a>
-        <sup>Beta</sup>
     </header>
 
     <!--
@@ -37,7 +36,9 @@
     <code class="name">Member.​Status</code>
 </h1>
 
-<html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">enum</span> <span class="type">Status</span></code></pre></body></html>
+<div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">enum</span> <span class="type">Status</span>: <span class="type">Codable</span>, <span class="type">Equatable</span>  </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Indicates the current status of the membership.</p>
 
@@ -65,27 +66,27 @@
 </a>
 </g>
 </g>
-<!-- Equatable -->
-<g id="node2" class="node unknown">
-<title>Equatable</title>
-<path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
-<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
-</g>
-<!-- Member.Status&#45;&gt;Equatable -->
-<g id="edge2" class="edge conformsTo">
-<title>Member.Status&#45;&gt;Equatable</title>
-<path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
-<polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
-</g>
 <!-- Codable -->
-<g id="node3" class="node unknown">
+<g id="node2" class="node unknown">
 <title>Codable</title>
-<path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
-<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Codable</text>
+<path fill="none" stroke="#000000" d="M303,-36C303,-36 111,-36 111,-36 105,-36 99,-30 99,-24 99,-24 99,-12 99,-12 99,-6 105,0 111,0 111,0 303,0 303,0 309,0 315,-6 315,-12 315,-12 315,-24 315,-24 315,-30 309,-36 303,-36"/>
+<text text-anchor="middle" x="207" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Codable</text>
 </g>
 <!-- Member.Status&#45;&gt;Codable -->
 <g id="edge1" class="edge conformsTo">
 <title>Member.Status&#45;&gt;Codable</title>
+<path fill="none" stroke="#000000" d="M375.5134,-71.9243C344.4871,-61.9959 305.8297,-49.6255 273.3694,-39.2382"/>
+<polygon fill="#000000" stroke="#000000" points="274.1008,-35.7975 263.5098,-36.0831 271.9673,-42.4645 274.1008,-35.7975"/>
+</g>
+<!-- Equatable -->
+<g id="node3" class="node unknown">
+<title>Equatable</title>
+<path fill="none" stroke="#000000" d="M753,-36C753,-36 561,-36 561,-36 555,-36 549,-30 549,-24 549,-24 549,-12 549,-12 549,-6 555,0 561,0 561,0 753,0 753,0 759,0 765,-6 765,-12 765,-12 765,-24 765,-24 765,-30 759,-36 753,-36"/>
+<text text-anchor="middle" x="657" y="-14.3" font-family="Menlo" font-size="14.00" fill="#000000">Equatable</text>
+</g>
+<!-- Member.Status&#45;&gt;Equatable -->
+<g id="edge2" class="edge conformsTo">
+<title>Member.Status&#45;&gt;Equatable</title>
 <path fill="none" stroke="#000000" d="M488.4866,-71.9243C519.5129,-61.9959 558.1703,-49.6255 590.6306,-39.2382"/>
 <polygon fill="#000000" stroke="#000000" points="592.0327,-42.4645 600.4902,-36.0831 589.8992,-35.7975 592.0327,-42.4645"/>
 </g>
@@ -113,9 +114,11 @@ or an organization. The account can be either a user or a service account.</p>
 
         <div role="article" class="initializer" id="member.status.init(from:)">
     <h3>
-        <code>init(from:​)</code>
+        <code><a href="#member.status.init(from:)">init(from:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">from</span> <span class="variable">decoder</span>: <span class="type">Decoder</span>) <span class="keyword">throws</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">init</span>(<span class="variable">from</span> <span class="variable">decoder</span>: <span class="type">Decoder</span>) <span class="keyword">throws</span>  </body></html></code></pre>
+</div>
 </div>
     </section>
     <section id="enumeration cases">
@@ -123,9 +126,11 @@ or an organization. The account can be either a user or a service account.</p>
 
         <div role="article" class="case" id="member.status.pending">
     <h3>
-        <code>pending</code>
+        <code><a href="#member.status.pending">pending</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">pending</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">pending</span></body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>Pending on the User to acknowledge the membership.
 The UI can use this to indicate that the member is
@@ -135,9 +140,11 @@ not yet active.</p>
 </div>
 <div role="article" class="case" id="member.status.accepted">
     <h3>
-        <code>accepted</code>
+        <code><a href="#member.status.accepted">accepted</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">accepted</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">accepted</span></body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>User has accepted the membership.</p>
 
@@ -145,9 +152,11 @@ not yet active.</p>
 </div>
 <div role="article" class="case" id="member.status.unknown">
     <h3>
-        <code>unknown</code>
+        <code><a href="#member.status.unknown">unknown</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">case</span> <span class="variable">unknown</span>(<span class="variable">value</span>: <span class="type">String</span>)</code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">case</span> <span class="variable">unknown</span>(<span class="variable">value</span>: <span class="type">String</span>) </body></html></code></pre>
+</div>
 <div class="summary" role="doc-abstract">
     <p>The status received for the member was unknown.
 Used for backwards compatibility in case a new status
@@ -162,9 +171,11 @@ client library.</p>
 
         <div role="article" class="function" id="member.status.encode(to:)">
     <h3>
-        <code>encode(to:​)</code>
+        <code><a href="#member.status.encode(to:)">encode(to:​)</a></code>
     </h3>
-    <html><body><pre class="highlight"><code><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">encode</span>(<span class="variable">to</span> <span class="variable">encoder</span>: <span class="type">Encoder</span>) <span class="keyword">throws</span></code></pre></body></html>
+    <div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">encode</span>(<span class="variable">to</span> <span class="variable">encoder</span>: <span class="type">Encoder</span>) <span class="keyword">throws</span>  </body></html></code></pre>
+</div>
 </div>
     </section>
 
@@ -175,7 +186,7 @@ client library.</p>
 
     <footer>
         <p>
-    Generated on <time datetime="2021-01-12T00:38:21+0000">January 12, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-beta.5</span>.
+    Generated on <time datetime="2021-07-21T21:28:25+0000">July 21, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
 </p>
     </footer>
 </body>
