@@ -10,7 +10,7 @@ import Foundation
 /**
  All programmatic interaction with the Disruptive Technologies API is done via a logged-in Service Account.
  
- To learn more about Service Accounts, see the [Service Account page on the developer website](https://support.disruptive-technologies.com/hc/en-us/articles/360012295100-Service-Accounts).
+ To learn more about Service Accounts, see the [Service Account page on the developer website](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts).
  
  Functions relevant for `ServiceAccount`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
  * [`getAllServiceAccounts`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallserviceaccounts(projectid:completion:))

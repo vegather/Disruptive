@@ -24,7 +24,7 @@ import Foundation
  * [`syncDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.syncdataconnector(projectid:dataconnectorid:completion:))
  
  To learn more about Data Connectors, see the following article on the developer website:
- * [Data Connectors](https://support.disruptive-technologies.com/hc/en-us/articles/360012692180-Data-Connectors)
+ * [Data Connectors](https://developer.disruptive-technologies.com/docs/data-connectors/introduction-to-data-connector)
  */
 public struct DataConnector: Decodable, Equatable {
     
@@ -136,7 +136,7 @@ extension Disruptive {
     }
     
     /**
-     Creates a new Data Connector. See the [Data Connectors](https://support.disruptive-technologies.com/hc/en-us/articles/360012692180-Data-Connectors)
+     Creates a new Data Connector. See the [Data Connectors](https://developer.disruptive-technologies.com/docs/data-connectors/introduction-to-data-connector)
      guide on the developer website to learn more about how Data Connectors work, and how to
      set up an external service to receive the events that are sent out by a Data Connector.
      
@@ -484,7 +484,7 @@ extension DataConnector {
          
          An HTTP push Data Connector allows you to specify a signature secret that will be used to sign
          each every event sent from the Data Connector. The signature will be included as a JWT in a header.
-         Read more about it in the [Signing events section](https://support.disruptive-technologies.com/hc/en-us/articles/360012692180-Data-Connectors#signing-events)
+         Read more about it in the [Signing events section](https://developer.disruptive-technologies.com/docs/data-connectors/advanced-configurations#signing-events)
          of the Data Connectors article on the developer website.
          
          Parameters:
