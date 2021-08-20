@@ -11,7 +11,7 @@ import Foundation
 
 internal struct JWT {
     /// Produces a JWT token that is suitable for a Disruptive service account.
-    /// Docs: https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication
+    /// Docs: https://developer.disruptive-technologies.com/docs/authentication/oauth2
     internal static func serviceAccount(authURL: String, credentials: ServiceAccountCredentials) -> String? {
         let headers = [
             "alg": "HS256",

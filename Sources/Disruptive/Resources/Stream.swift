@@ -24,7 +24,7 @@ extension Disruptive {
      - Parameter projectID: The identifier of the project that contains the device(s).
      - Parameter deviceIDs: An array of device identifiers to subscribe to. If not specified (or `nil`), all the devices in the project will be subscribed to.
      - Parameter deviceTypes: An array of device types to subscribe to. This is useful if `nil` is specified for the `deviceIDs` argument.
-     - Parameter productNumbers: An array of product numbers to subscribe to. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
+     - Parameter productNumbers: An array of product numbers to subscribe to. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products).
      - Parameter labelFilters: An array of label filter expressions that filters the set of devices for the results. Each expression takes the form labelKey=labelValue.
      - Parameter eventTypes: An array of event types to subscribe to.
           

@@ -41,8 +41,8 @@ public struct Device: Decodable, Equatable {
     public let type: DeviceType
     
     /// The product number of the device. This is the same product number that can be found on the support pages for both
-    /// [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and
-    /// [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
+    /// [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products) and
+    /// [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products).
     public let productNumber: String?
     
     /// The last known reported event for each available event type for the device. Which of these are available is dependent on the device `type`.
@@ -98,9 +98,9 @@ extension Disruptive {
      - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceIDs: Filters on a list of device identifiers. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
-     - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
+     - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products).
      - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
-     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
+     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
@@ -143,9 +143,9 @@ extension Disruptive {
      - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceIDs: Filters on a list of device identifiers. Will be ignored if not set (or `nil`), which is the default.
      - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
-     - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors).
+     - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products).
      - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
-     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices) documentation for the `GET Devices` request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
+     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices) documentation for the `GET Devices` request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter pageSize: The maximum number of devices to get for this page. The maximum page size is 100, which is also the default
      - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Device`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.

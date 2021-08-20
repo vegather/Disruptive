@@ -158,7 +158,7 @@ extension Disruptive {
      Any of the event types in `Sources/Disruptive/Helpers/EventTypes.swift` can be published,
      although not all event types can be published for every device type. For example, an emulated temperature sensor
      cannot publish an `EthernetStatusEvent`.
-     For more details about the different event types, see the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events).
+     For more details about the different event types, see the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events).
      
      Example:
      ```
