@@ -40,7 +40,7 @@ public struct Events: Equatable {
 extension Disruptive {
     /**
      Fetches historical data for a specific device from the server. The events are
-     returned with the oldest event at the beginning of the array, and the newest
+     returned with the newest event at the beginning of the array, and the oldest
      event at the end.
      
      If one or more `eventTypes` are specified, only those events will be fetched.
@@ -89,12 +89,7 @@ extension Disruptive {
         sendRequest(request, pagingKey: "events") { (response: Result<[EventContainer], DisruptiveError>) in
             switch response {
                 case .success(let eventContainers):
-                    // The events are returned from the server with the newest event at the beginning.
-                    // We want to flip this around to make the data easier to work with (draw as
-                    // graphs, etc). The `reversed()` call should be doing most of the heavy lifting
-                    // here, and we're sorting at the end to guarantee the order. This is way faster
-                    // than just sorting without reversing first.
-                    var events = Events(events: eventContainers.reversed())
+                    var events = Events(events: eventContainers)
                     events.sort()
                     
                     completion(.success(events))
@@ -140,18 +135,18 @@ extension Events {
     }
     
     fileprivate mutating func sort() {
-        touch?             .sort { $0.timestamp < $1.timestamp }
-        temperature?       .sort { $0.timestamp < $1.timestamp }
-        objectPresent?     .sort { $0.timestamp < $1.timestamp }
-        humidity?          .sort { $0.timestamp < $1.timestamp }
-        objectPresentCount?.sort { $0.timestamp < $1.timestamp }
-        touchCount?        .sort { $0.timestamp < $1.timestamp }
-        waterPresent?      .sort { $0.timestamp < $1.timestamp }
-        networkStatus?     .sort { $0.timestamp < $1.timestamp }
-        batteryStatus?     .sort { $0.timestamp < $1.timestamp }
-        connectionStatus?  .sort { $0.timestamp < $1.timestamp }
-        ethernetStatus?    .sort { $0.timestamp < $1.timestamp }
-        cellularStatus?    .sort { $0.timestamp < $1.timestamp }
+        touch?             .sort { $0.timestamp > $1.timestamp }
+        temperature?       .sort { $0.timestamp > $1.timestamp }
+        objectPresent?     .sort { $0.timestamp > $1.timestamp }
+        humidity?          .sort { $0.timestamp > $1.timestamp }
+        objectPresentCount?.sort { $0.timestamp > $1.timestamp }
+        touchCount?        .sort { $0.timestamp > $1.timestamp }
+        waterPresent?      .sort { $0.timestamp > $1.timestamp }
+        networkStatus?     .sort { $0.timestamp > $1.timestamp }
+        batteryStatus?     .sort { $0.timestamp > $1.timestamp }
+        connectionStatus?  .sort { $0.timestamp > $1.timestamp }
+        ethernetStatus?    .sort { $0.timestamp > $1.timestamp }
+        cellularStatus?    .sort { $0.timestamp > $1.timestamp }
     }
     
     public mutating func merge(with other: Events) {

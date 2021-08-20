@@ -653,9 +653,9 @@ extension DeviceTests {
                 celsius: 56,
                 timestamp: Date(timeIntervalSince1970: 1605999873),
                 samples: [
-                    TemperatureEvent.TemperatureSample(celsius: 24.5, timestamp: Date(timeIntervalSince1970: 1605999273)),
+                    TemperatureEvent.TemperatureSample(celsius: 24.9, timestamp: Date(timeIntervalSince1970: 1605999873)),
                     TemperatureEvent.TemperatureSample(celsius: 24.2, timestamp: Date(timeIntervalSince1970: 1605999573)),
-                    TemperatureEvent.TemperatureSample(celsius: 24.9, timestamp: Date(timeIntervalSince1970: 1605999873))
+                    TemperatureEvent.TemperatureSample(celsius: 24.5, timestamp: Date(timeIntervalSince1970: 1605999273))
                 ]
             )
             productNumber = "102150"

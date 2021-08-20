@@ -33,9 +33,9 @@ class EventTypesTests: DisruptiveTests {
         XCTAssertEqual(event.timestamp, eventTimestamp)
         XCTAssertEqual(event.celsius, temp1)
         XCTAssertEqual(event.samples, [
-            TemperatureEvent.TemperatureSample(celsius: temp3, timestamp: eventTimestamp.addingTimeInterval(-timeDelta*2)),
+            TemperatureEvent.TemperatureSample(celsius: temp1, timestamp: eventTimestamp),
             TemperatureEvent.TemperatureSample(celsius: temp2, timestamp: eventTimestamp.addingTimeInterval(-timeDelta)),
-            TemperatureEvent.TemperatureSample(celsius: temp1, timestamp: eventTimestamp)
+            TemperatureEvent.TemperatureSample(celsius: temp3, timestamp: eventTimestamp.addingTimeInterval(-timeDelta*2))
         ])
     }
     
@@ -48,9 +48,9 @@ class EventTypesTests: DisruptiveTests {
             celsius: temp1,
             timestamp: eventTimestamp,
             samples: [
-                TemperatureEvent.TemperatureSample(celsius: temp3, timestamp: eventTimestamp.addingTimeInterval(-timeDelta*2)),
+                TemperatureEvent.TemperatureSample(celsius: temp1, timestamp: eventTimestamp),
                 TemperatureEvent.TemperatureSample(celsius: temp2, timestamp: eventTimestamp.addingTimeInterval(-timeDelta)),
-                TemperatureEvent.TemperatureSample(celsius: temp1, timestamp: eventTimestamp)
+                TemperatureEvent.TemperatureSample(celsius: temp3, timestamp: eventTimestamp.addingTimeInterval(-timeDelta*2))
             ]
         )
         var output = try! JSONEncoder().encode(event)

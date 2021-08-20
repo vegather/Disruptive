@@ -345,16 +345,16 @@ class EmulatorTests: DisruptiveTests {
                 timestamp: now,
                 samples: [
                     TemperatureEvent.TemperatureSample(
-                        celsius: 24.5,
-                        timestamp: try! Date(iso8601String: "2019-05-16T08:15:08.318Z")
+                        celsius: 25.25,
+                        timestamp: try! Date(iso8601String: "2019-05-16T08:15:18.318Z")
                     ),
                     TemperatureEvent.TemperatureSample(
                         celsius: 23.75,
                         timestamp: try! Date(iso8601String: "2019-05-16T08:15:13.318Z")
                     ),
                     TemperatureEvent.TemperatureSample(
-                        celsius: 25.25,
-                        timestamp: try! Date(iso8601String: "2019-05-16T08:15:18.318Z")
+                        celsius: 24.5,
+                        timestamp: try! Date(iso8601String: "2019-05-16T08:15:08.318Z")
                     )
                 ]
             ),

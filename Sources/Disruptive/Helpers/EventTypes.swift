@@ -86,7 +86,7 @@ public struct TemperatureEvent: Codable, Equatable {
     public let timestamp: Date
     
     /// An array of temperature values sampled within a single heartbeat.
-    /// The order is the same as the order of events, meaning newest is last.
+    /// The order is the same as the order of events, meaning newest is first.
     public let samples: [TemperatureSample]
     
     
@@ -172,8 +172,7 @@ public struct TemperatureEvent: Codable, Equatable {
         
         // Extract samples
         var samples = try container.decode([TemperatureSample].self, forKey: .samples)
-        samples.reverse()
-        samples.sort(by: { $0.timestamp < $1.timestamp })
+        samples.sort(by: { $0.timestamp > $1.timestamp })
         self.samples = samples
     }
     
@@ -182,7 +181,7 @@ public struct TemperatureEvent: Codable, Equatable {
         
         try container.encode(celsius,                   forKey: .value)
         try container.encode(timestamp.iso8601String(), forKey: .timestamp)
-        try container.encode(samples.reversed(),        forKey: .samples)
+        try container.encode(samples,                   forKey: .samples)
     }
     
     private enum CodingKeys: String, CodingKey {
