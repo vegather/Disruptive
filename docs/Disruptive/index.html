@@ -371,7 +371,7 @@ at a cost of convenience compared to the <code>getAllDataConnectors</code> funct
         <span class="variable">completion</span>    : <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="keyword">_</span> <span class="variable">result</span>: <span class="type">Result</span>&lt;<a href="https://vegather.github.io/Disruptive/DataConnector"><span class="type">DataConnector</span></a>, <a href="https://vegather.github.io/Disruptive/DisruptiveError"><span class="type">DisruptiveError</span></a>&gt;) -&gt; ()) </body></html></code></pre>
 </div>
 <div class="summary" role="doc-abstract">
-    <p>Creates a new Data Connector. See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012692180-Data-Connectors">Data Connectors</a>
+    <p>Creates a new Data Connector. See the <a href="https://developer.disruptive-technologies.com/docs/data-connectors/introduction-to-data-connector">Data Connectors</a>
 guide on the developer website to learn more about how Data Connectors work, and how to
 set up an external service to receive the events that are sent out by a Data Connector.</p>
 
@@ -784,7 +784,7 @@ it might be better to load pages of devices as they're needed using the
 <tr>
     <th>product​Numbers</th>
     <td><code class="type">[String]?</code></td>
-    <td><p>Filters on a list of product numbers. This is the same product number that can be found on the support pages for both <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors">Sensors</a> and <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors">Cloud Connectors</a>.</p>
+    <td><p>Filters on a list of product numbers. This is the same product number that can be found on the support pages for both <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products">Sensors</a> and <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products">Cloud Connectors</a>.</p>
 </td>
 </tr>
 <tr>
@@ -796,7 +796,7 @@ it might be better to load pages of devices as they're needed using the
 <tr>
     <th>order​By</th>
     <td><code class="type">(field:​ String, ascending:​ Bool)?</code></td>
-    <td><p>Defines a field to order the retrieved devices by. Uses a dot notation format (eg. <code>reported.temperature.value</code> or <code>labels.name</code>). The fields are defined by the JSON structure of a Device. See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices">REST API</a> documentation for the <code>GET Devices</code> endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or <code>nil</code>), which is the default.</p>
+    <td><p>Defines a field to order the retrieved devices by. Uses a dot notation format (eg. <code>reported.temperature.value</code> or <code>labels.name</code>). The fields are defined by the JSON structure of a Device. See the <a href="https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices">REST API</a> documentation for the <code>GET Devices</code> endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or <code>nil</code>), which is the default.</p>
 </td>
 </tr>
 <tr>
@@ -880,7 +880,7 @@ at a cost of convenience compared to the <code>getAllDevices</code> function.</p
 <tr>
     <th>product​Numbers</th>
     <td><code class="type">[String]?</code></td>
-    <td><p>Filters on a list of product numbers. This is the same product number that can be found on the support pages for both <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors">Sensors</a> and <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors">Cloud Connectors</a>.</p>
+    <td><p>Filters on a list of product numbers. This is the same product number that can be found on the support pages for both <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products">Sensors</a> and <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products">Cloud Connectors</a>.</p>
 </td>
 </tr>
 <tr>
@@ -892,7 +892,7 @@ at a cost of convenience compared to the <code>getAllDevices</code> function.</p
 <tr>
     <th>order​By</th>
     <td><code class="type">(field:​ String, ascending:​ Bool)?</code></td>
-    <td><p>Defines a field to order the retrieved devices by. Uses a dot notation format (eg. <code>reported.temperature.value</code> or <code>labels.name</code>). The fields are defined by the JSON structure of a Device. See the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012807260#/Devices/get_projects__project__devices">REST API</a> documentation for the <code>GET Devices</code> request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or <code>nil</code>), which is the default.</p>
+    <td><p>Defines a field to order the retrieved devices by. Uses a dot notation format (eg. <code>reported.temperature.value</code> or <code>labels.name</code>). The fields are defined by the JSON structure of a Device. See the <a href="https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices">REST API</a> documentation for the <code>GET Devices</code> request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or <code>nil</code>), which is the default.</p>
 </td>
 </tr>
 <tr>
@@ -1603,7 +1603,7 @@ at a cost of convenience compared to the <code>getAllEmulatedDevices</code> func
     <p>Any of the event types in <code>Sources/Disruptive/Helpers/EventTypes.swift</code> can be published,
 although not all event types can be published for every device type. For example, an emulated temperature sensor
 cannot publish an <code>EthernetStatusEvent</code>.
-For more details about the different event types, see the <a href="https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events">Developer Website</a>.</p>
+For more details about the different event types, see the <a href="https://developer.disruptive-technologies.com/docs/concepts/events">Developer Website</a>.</p>
 
 <p>Example:</p>
 
@@ -3921,7 +3921,7 @@ at a cost of convenience compared to the <code>getAllServiceAccountKeys</code> f
 <tr>
     <th>product​Numbers</th>
     <td><code class="type">[String]?</code></td>
-    <td><p>An array of product numbers to subscribe to. This is the same product number that can be found on the support pages for both <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Sensors">Sensors</a> and <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Cloud-Connectors">Cloud Connectors</a>.</p>
+    <td><p>An array of product numbers to subscribe to. This is the same product number that can be found on the support pages for both <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products">Sensors</a> and <a href="https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products">Cloud Connectors</a>.</p>
 </td>
 </tr>
 <tr>
@@ -3994,7 +3994,7 @@ at a cost of convenience compared to the <code>getAllServiceAccountKeys</code> f
 
     <footer>
         <p>
-    Generated on <time datetime="2021-07-21T21:28:25+0000">July 21, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
+    Generated on <time datetime="2021-08-20T12:27:59+0000">August 20, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
 </p>
     </footer>
 </body>
