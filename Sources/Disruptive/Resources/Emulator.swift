@@ -10,83 +10,10 @@ import Foundation
 extension Disruptive {
     
     /**
-     Gets details for a specific emulated device within a project.
-     
-     - Parameter projectID: The identifier of the project to find the device in.
-     - Parameter deviceID: The identifier of the emulated device to get details for.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
-     - Parameter result: `Result<Device, DisruptiveError>`
-     */
-    public func getEmulatedDevice(
-        projectID  : String,
-        deviceID   : String,
-        completion : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
-    {
-        // Create the request
-        let endpoint = "projects/\(projectID)/devices/\(deviceID)"
-        let request = Request(method: .get, baseURL: emulatorBaseURL, endpoint: endpoint)
-        
-        // Send the request
-        sendRequest(request) { completion($0) }
-    }
-    
-    /**
-     Gets all the emulated devices in a specific project (without any physical devices).
-     
-     This will handle pagination automatically and send multiple network requests in
-     the background if necessary. If a lot of emulated devices are expected to be in the project,
-     it might be better to load pages of emulated devices as they're needed using the
-     `getEmulatedDevicesPage` function instead.
-     
-     - Parameter projectID: The identifier of the project to get emulated devices from.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
-     - Parameter result: `Result<[Device], DisruptiveError>`
-     */
-    public func getAllEmulatedDevices(
-        projectID  : String,
-        completion : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
-    {
-        // Create the request
-        let request = Request(method: .get, baseURL: emulatorBaseURL, endpoint: "projects/\(projectID)/devices")
-        
-        // Send the request
-        sendRequest(request, pagingKey: "devices") { completion($0) }
-    }
-    
-    /**
-     Gets one page of emulated devices.
-     
-     Useful if a lot of emulated devices are expected in the specified project. This function
-     provides better control for when to get emulated devices and how many to get at a time so
-     that emulated devices are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllEmulatedDevices` function.
-     
-     - Parameter projectID: The identifier of the project to get emulated devices from.
-     - Parameter pageSize: The maximum number of emulated devices to get for this page. The maximum page size is 100, which is also the default
-     - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
-     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Device`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
-     - Parameter result: `Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>`
-     */
-    public func getEmulatedDevicesPage(
-        projectID  : String,
-        pageSize   : Int = 100,
-        pageToken  : String?,
-        completion : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
-    {
-        // Create the request
-        let request = Request(method: .get, baseURL: emulatorBaseURL, endpoint: "projects/\(projectID)/devices")
-        
-        // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "devices") { (result: Result<PagedResult<Device>, DisruptiveError>) in
-            switch result {
-                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, devices: page.results)))
-                case .failure(let err)  : completion(.failure(err))
-            }
-        }
-    }
-    
-    /**
      Creates a new emulated device in a specific project.
+     
+     Emulated devices will be listed in the standard `getAllDevices` method along with the
+     physical devices. The `isEmulatedDevice` property will differentiate them.
      
      - Parameter projectID: The identifier of the project to create the emulated device in.
      - Parameter deviceType: The type of device the emulated device should emulate.
