@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- Contains an array of events for each type of event for a specific `Device`.  Detailed documentation for each event type can be found on Disruptive Technologies' [developer website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events).
+ Contains an array of events for each type of event for a specific `Device`.  Detailed documentation for each event type can be found on Disruptive Technologies' [developer website](https://developer.disruptive-technologies.com/docs/concepts/events).
  
  Functions relevant for `Events` are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
  * [`getEvents`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getevents(projectid:deviceid:startdate:enddate:eventtypes:completion:))

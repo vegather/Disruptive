@@ -30,3 +30,11 @@ internal extension Date {
         }
     }
 }
+
+internal func celsiusToFahrenheit(celsius: Float) -> Float {
+    return (celsius * 9/5) + 32
+}
+
+internal func fahrenheitToCelsius(fahrenheit: Float) -> Float {
+    return (fahrenheit - 32) * 5/9
+}

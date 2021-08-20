@@ -214,7 +214,7 @@ public class BasicAuthAuthenticator: Authenticator {
  See [Authenticator](../Authenticator) for more details about the properties
  and methods.
  
- See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication) for details about OAuth2 authentication using a Service Account.
+ See the [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2) for details about OAuth2 authentication using a Service Account.
  
  Example:
  ```
@@ -272,7 +272,7 @@ public class OAuth2Authenticator: Authenticator {
     /// with an access token from the authentication endpoint. This access token is stored in the `auth` property
     /// along with the received expiration date.
     ///
-    /// This flow is described in more detail on the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360011534099-Authentication).
+    /// This flow is described in more detail on the [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2).
     public func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         guard let authJWT = JWT.serviceAccount(authURL: authURL, credentials: credentials) else {
             Disruptive.log("Failed to create a JWT from service account credentials: \(credentials)", level: .error)

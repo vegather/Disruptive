@@ -41,9 +41,9 @@ public enum EventType: String, Decodable, CodingKey, CaseIterable {
 /// An event that is sent whenever a device is touched. This event is sent for almost all the
 /// available device types (except a few like the counting sensors).
 ///
-/// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_e9491be1-b53d-447b-9c21-de436175a0e1) for more details.
+/// See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#touch-event) for more details.
 public struct TouchEvent: Codable, Equatable {
-    /// The timestamp of when the device was touched.
+    /// The timestamp of when the touch event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -73,20 +73,90 @@ public struct TouchEvent: Codable, Equatable {
 
 /// A temperature event that is sent for temperature sensors every heartbeat, and whenever the sensor is touched.
 ///
-/// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#temperatureevent) for more details.
+/// See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#temperature-event) for more details.
 public struct TemperatureEvent: Codable, Equatable {
     
     /// The temperature value in celsius.
     public let celsius: Float
     
-    /// The timestamp the temperature event was generated.
+    /// The temperature value in fahrenheit.
+    public let fahrenheit: Float
+    
+    /// The timestamp of when the temperature event was received by a Cloud Connector.
     public let timestamp: Date
     
+    /// An array of temperature values sampled within a single heartbeat.
+    /// The order is the same as the order of events, meaning newest is last.
+    public let samples: [TemperatureSample]
     
-    /// Creates a new `TemperatureEvent`.
-    public init(celsius: Float, timestamp: Date) {
-        self.celsius   = celsius
-        self.timestamp = timestamp
+    
+    /// Represents a temperature value sampled within a single heartbeat.
+    public struct TemperatureSample: Codable, Equatable {
+        /// The temperature value in celsius.
+        public let celsius: Float
+        
+        /// The temperature value in fahrenheit.
+        public let fahrenheit: Float
+        
+        /// The timestamp the temperature value was sample.
+        /// This timestamp is estimated by DT Cloud, and may not
+        /// be as accurate as the timestamp of the event itself.
+        public let timestamp: Date
+        
+        /// Creates a new `TemperatureSample` using celsius.
+        public init(celsius: Float, timestamp: Date) {
+            self.celsius    = celsius
+            self.fahrenheit = celsiusToFahrenheit(celsius: celsius)
+            self.timestamp  = timestamp
+        }
+        
+        /// Creates a new `TemperatureSample` using fahrenheit.
+        public init(fahrenheit: Float, timestamp: Date) {
+            self.celsius    = fahrenheitToCelsius(fahrenheit: fahrenheit)
+            self.fahrenheit = fahrenheit
+            self.timestamp  = timestamp
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+                // Extract the timestamp
+            let timeString = try container.decode(String.self, forKey: .timestamp)
+            self.timestamp = try Date(iso8601String: timeString)
+            
+                // Extract the value
+            self.celsius = try container.decode(Float.self, forKey: .value)
+            self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            
+            try container.encode(celsius,                   forKey: .value)
+            try container.encode(timestamp.iso8601String(), forKey: .timestamp)
+        }
+        
+        private enum CodingKeys: String, CodingKey {
+            case value
+            case timestamp = "sampleTime"
+        }
+    }
+    
+    
+    /// Creates a new `TemperatureEvent` using celsius.
+    public init(celsius: Float, timestamp: Date, samples: [TemperatureSample]? = nil) {
+        self.celsius    = celsius
+        self.fahrenheit = celsiusToFahrenheit(celsius: celsius)
+        self.timestamp  = timestamp
+        self.samples    = samples ?? [TemperatureSample(celsius: celsius, timestamp: timestamp)]
+    }
+    
+    /// Creates a new `TemperatureEvent` using fahrenheit.
+    public init(fahrenheit: Float, timestamp: Date, samples: [TemperatureSample]? = nil) {
+        self.celsius    = fahrenheitToCelsius(fahrenheit: fahrenheit)
+        self.fahrenheit = fahrenheit
+        self.timestamp  = timestamp
+        self.samples    = samples ?? [TemperatureSample(fahrenheit: fahrenheit, timestamp: timestamp)]
     }
     
     public init(from decoder: Decoder) throws {
@@ -98,6 +168,13 @@ public struct TemperatureEvent: Codable, Equatable {
         
         // Extract the value
         self.celsius = try container.decode(Float.self, forKey: .value)
+        self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
+        
+        // Extract samples
+        var samples = try container.decode([TemperatureSample].self, forKey: .samples)
+        samples.reverse()
+        samples.sort(by: { $0.timestamp < $1.timestamp })
+        self.samples = samples
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -105,23 +182,25 @@ public struct TemperatureEvent: Codable, Equatable {
         
         try container.encode(celsius,                   forKey: .value)
         try container.encode(timestamp.iso8601String(), forKey: .timestamp)
+        try container.encode(samples.reversed(),        forKey: .samples)
     }
     
     private enum CodingKeys: String, CodingKey {
         case value
         case timestamp = "updateTime"
+        case samples
     }
 }
 
 /// An event that is sent whenever an object is close to a proximity sensor or not.
 ///
-///  See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#objectpresentevent) for more details.
+///  See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#object-present-event) for more details.
 public struct ObjectPresentEvent: Codable, Equatable {
     
     /// Whether or not an object is close to the proximity sensor.
     public let state: State
     
-    /// The timestamp of when the presence of an object switched state.
+    /// The timestamp of when the object present event was received by a Cloud Connector.
     public let timestamp: Date
     
     /// The proximity state of a sensor.
@@ -190,7 +269,7 @@ public struct ObjectPresentEvent: Codable, Equatable {
 /// A humidity event that is sent for humidity sensors every heartbeat, and whenever the
 /// sensor is touched. This event contains both the measured temperature as well as the relative humidity.
 ///
-/// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#humidityevent) for more details.
+/// See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#humidity-event) for more details.
 public struct HumidityEvent: Codable, Equatable {
     
     /// The temperature value in celsius.
@@ -199,7 +278,7 @@ public struct HumidityEvent: Codable, Equatable {
     /// The relative humidity as a percentage.
     public let relativeHumidity: Float
     
-    /// The timestamp the humidity event was generated.
+    /// The timestamp of when the humidity event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -241,13 +320,13 @@ public struct HumidityEvent: Codable, Equatable {
 /// Counting Proximity sensor. These events are sent every heartbeat, and *not* when
 /// the sensor is touched or when the state is switched (to save battery life).
 ///
-/// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_cc5229d5-adb4-46fb-9293-2f4178494e6d) for more details.
+/// See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#object-present-count-event) for more details.
 public struct ObjectPresentCountEvent: Codable, Equatable {
     
     /// The total accumulated state switches for this sensor.
     public let total: Int
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the object present count event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -284,13 +363,13 @@ public struct ObjectPresentCountEvent: Codable, Equatable {
 /// An event that includes the accumulated count of touches for a Counting Touch sensor.
 /// These events are sent every heartbeat, and *not* when the sensor is touched (to save battery life).
 ///
-/// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_942dab91-0826-458a-a0bb-2c28ab92d21b) for more details.
+/// See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#touch-count-event) for more details.
 public struct TouchCountEvent: Codable, Equatable {
     
     /// The total accumulated number of touches for this sensor.
     public let total: Int
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the touch count event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -327,13 +406,13 @@ public struct TouchCountEvent: Codable, Equatable {
 /// An event that indicates whether or not water is present to a Water Detector sensor.
 /// This event is sent every heartbeat, and when the sensor is touched.
 ///
-/// See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_fbe6f0b1-a42c-4072-aaa1-46d117c0be99) for more details.
+/// See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#water-present-event) for more details.
 public struct WaterPresentEvent: Codable, Equatable {
     
     /// Whether or not water was detected close to the sensor.
     public let state: State
     
-    /// The timestamp of when the state of water presence was changed.
+    /// The timestamp of when the water present event event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -412,7 +491,7 @@ public struct WaterPresentEvent: Codable, Equatable {
  A network status event describes which Cloud Connectors a sensor is connected to, and how strong
  that connection is. A network status event is sent on every heartbeat, as well as when a sensor is touched.
  
- See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_231c54ad-8586-4d45-a3f6-b169edbe3fae) for more details.
+ See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#network-status-event) for more details.
  */
 public struct NetworkStatusEvent: Codable, Equatable {
     
@@ -427,7 +506,7 @@ public struct NetworkStatusEvent: Codable, Equatable {
     /// See [Wikipedia](https://en.wikipedia.org/wiki/Received_signal_strength_indication) for more details.
     public let rssi: Int
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the network status event was received by a Cloud Connector.
     public let timestamp: Date
     
     /// The Cloud Connector(s) that picked up this event.
@@ -475,7 +554,7 @@ public struct NetworkStatusEvent: Codable, Equatable {
     
     /// The transmission mode the sensor is currently in. The sensor will automatically switch
     /// transmission modes when the sensor has low connectivity to a Cloud Connector.
-    /// See the [Help Center](https://support.disruptive-technologies.com/hc/en-us/articles/360003182914-What-is-Boost-high-power-usage-) for more details.
+    /// See the [Help Center](https://support.disruptive-technologies.com/hc/en-us/articles/360003182914-What-is-Boost-high-power-boost-mode-) for more details.
     public enum TransmissionMode: Codable, Equatable {
         /// The normal transmission mode for a sensor. This consumes less energy, but has a lower range.
         case standard
@@ -560,14 +639,14 @@ public struct NetworkStatusEvent: Codable, Equatable {
 /**
  A battery status event is sent quite rarely since the battery life of the sensors lasts up to 15 years. It indicates how much battery life is left in the sensor.
  
- See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_ecc3b3d4-36d0-46b7-82c0-564cd42013bc) for more details.
+ See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#battery-status-event) for more details.
  */
 public struct BatteryStatusEvent: Codable, Equatable {
     
     /// The amount of battery life left in the sensor as a percentage.
     public let percentage: Int
     
-    /// The timestamp the battery status event was generated.
+    /// The timestamp of when the battery status event was received by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -612,7 +691,7 @@ public struct BatteryStatusEvent: Codable, Equatable {
  It will not be available as historical events for a device (the current labels for a device can be found on
  the `Device` itself).
  
- Seed the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#labelschangedevent) for more details.
+ Seed the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#labels-changed-event) for more details.
  */
 public struct LabelsChangedEvent: Decodable, Equatable {
     public let added    : [String: String]
@@ -637,7 +716,7 @@ public struct LabelsChangedEvent: Decodable, Equatable {
  Indicates the current connectivity of a Cloud Connector. This is sent when there is a
  change in the connectivity of a Cloud Connector.
  
- See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#h_54fc31ee-d707-4227-b968-fc596a86b434) for more details.
+ See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#connection-status-event) for more details.
  */
 public struct ConnectionStatusEvent: Codable, Equatable {
     
@@ -648,7 +727,7 @@ public struct ConnectionStatusEvent: Codable, Equatable {
     /// An array of the available `Connection`s for the Cloud Connector.
     public let available: [Available]
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the connection status event was received by a Cloud Connector.
     public let timestamp: Date
     
     /// Indicates the current connectivity of a Cloud Connector.
@@ -782,7 +861,7 @@ public struct ConnectionStatusEvent: Codable, Equatable {
 /**
  Details about the current ethernet connection status of a Cloud Connector.
  
- See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#ethernetstatusevent) for more details.
+ See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#ethernet-status-event) for more details.
  */
 public struct EthernetStatusEvent: Codable, Equatable {
     
@@ -795,7 +874,7 @@ public struct EthernetStatusEvent: Codable, Equatable {
     /// Any errors related to connecting to the local network.
     public let errors: [ErrorMessage]
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the ethernet status event was generated by a Cloud Connector.
     public let timestamp: Date
     
     
@@ -849,7 +928,7 @@ public struct EthernetStatusEvent: Codable, Equatable {
 /**
  Details about the current cellular connection status of a Cloud Connector.
  
- See the [Developer Website](https://support.disruptive-technologies.com/hc/en-us/articles/360012510839-Events#cellularstatusevent) for more details.
+ See the [Developer Website](https://developer.disruptive-technologies.com/docs/concepts/events#cellular-status-event) for more details.
  */
 public struct CellularStatusEvent: Codable, Equatable {
     
@@ -859,7 +938,7 @@ public struct CellularStatusEvent: Codable, Equatable {
     /// Any errors related to connecting to the cellular network.
     public let errors: [ErrorMessage]
     
-    /// The timestamp the event was generated.
+    /// The timestamp of when the cellular status event was generated by a Cloud Connector.
     public let timestamp: Date
     
     
