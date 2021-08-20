@@ -13,13 +13,13 @@ import Foundation
  To learn more about Service Accounts, see the [Service Account page on the developer website](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts).
  
  Functions relevant for `ServiceAccount`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getAllServiceAccounts`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallserviceaccounts(projectid:completion:))
+ * [`getServiceAccounts`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccounts(projectid:completion:))
  * [`getServiceAccountsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountspage(projectid:pagesize:pagetoken:completion:))
  * [`getServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccount(projectid:serviceaccountid:completion:))
  * [`createServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createserviceaccount(projectid:displayname:basicauthenabled:completion:))
  * [`updateServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updateserviceaccount(projectid:serviceaccountid:displayname:basicauthenabled:completion:))
  * [`deleteServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deleteserviceaccount(projectid:serviceaccountid:completion:))
- * [`getAllServiceAccountKeys`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallserviceaccountkeys(projectid:serviceaccountid:completion:))
+ * [`getServiceAccountKeys`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountkeys(projectid:serviceaccountid:completion:))
  * [`getServiceAccountKeysPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountkeyspage(projectid:serviceaccountid:pagesize:pagetoken:completion:))
  * [`getServiceAccountKey`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountkey(projectid:serviceaccountid:keyid:completion:))
  * [`createServiceAccountKey`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createserviceaccountkey(projectid:serviceaccountid:completion:))
@@ -66,7 +66,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount], DisruptiveError>`
      */
-    public func getAllServiceAccounts(
+    public func getServiceAccounts(
         projectID  : String,
         completion : @escaping (_ result: Result<[ServiceAccount], DisruptiveError>) -> ())
     {
@@ -84,7 +84,7 @@ extension Disruptive {
      Useful if a lot of Service Accounts are expected in the specified project. This function
      provides better control for when to get Service Accounts and how many to get at a time so
      that Service Accounts are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllServiceAccounts` function.
+     at a cost of convenience compared to the `getServiceAccounts` function.
      
      - Parameter projectID: The identifier of the project to get Service Accounts from.
      - Parameter pageSize: The maximum number of Service Accounts to get for this page. The maximum page size is 100, which is also the default
@@ -279,7 +279,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount.Key`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount.Key], DisruptiveError>`
      */
-    public func getAllServiceAccountKeys(
+    public func getServiceAccountKeys(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<[ServiceAccount.Key], DisruptiveError>) -> ())
@@ -298,7 +298,7 @@ extension Disruptive {
      Useful if a lot of keys are expected to be available for this Service Account. This function
      provides better control for when to get keys and how many to get at a time so
      that keys are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllServiceAccountKeys` function.
+     at a cost of convenience compared to the `getServiceAccountKeys` function.
      
      - Parameter projectID: The identifier of the project the Service Account is in.
      - Parameter serviceAccountID: The identifier of the Service Account to get keys for.

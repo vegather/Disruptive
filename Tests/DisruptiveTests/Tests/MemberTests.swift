@@ -88,7 +88,7 @@ class MemberTests: DisruptiveTests {
         assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
     }
     
-    func testGetAllProjectMembers() {
+    func testGetProjectMembers() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members")
@@ -112,7 +112,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllMembers(projectID: reqProjectID) { result in
+        disruptive.getMembers(projectID: reqProjectID) { result in
             switch result {
                 case .success(let members):
                     XCTAssertEqual(members, respMembers)
@@ -124,7 +124,7 @@ class MemberTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetAllOrgMembers() {
+    func testGetOrgMembers() {
         let reqOrgID = "org1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members")
@@ -148,7 +148,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllMembers(organizationID: reqOrgID) { result in
+        disruptive.getMembers(organizationID: reqOrgID) { result in
             switch result {
                 case .success(let members):
                     XCTAssertEqual(members, respMembers)

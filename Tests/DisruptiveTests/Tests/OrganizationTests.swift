@@ -17,7 +17,7 @@ class OrganizationTests: DisruptiveTests {
         XCTAssertEqual(orgIn, orgOut)
     }
     
-    func testGetAllOrganizations() {
+    func testGetOrganizations() {
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("organizations")
         
@@ -40,7 +40,7 @@ class OrganizationTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllOrganizations { result in
+        disruptive.getOrganizations { result in
             switch result {
                 case .success(let orgs):
                     XCTAssertEqual(orgs, respOrgs)

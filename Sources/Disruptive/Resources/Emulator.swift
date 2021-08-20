@@ -12,7 +12,7 @@ extension Disruptive {
     /**
      Creates a new emulated device in a specific project.
      
-     Emulated devices will be listed in the standard `getAllDevices` method along with the
+     Emulated devices will be listed in the standard `getDevices` method along with the
      physical devices. The `isEmulatedDevice` property will differentiate them.
      
      - Parameter projectID: The identifier of the project to create the emulated device in.

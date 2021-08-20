@@ -169,7 +169,7 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetAllDevicesNoParameters() {
+    func testGetDevicesNoParameters() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -193,7 +193,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllDevices(projectID: reqProjectID) { result in
+        disruptive.getDevices(projectID: reqProjectID) { result in
             switch result {
                 case .success(let devices):
                     XCTAssertEqual(devices, respDevices)
@@ -205,7 +205,7 @@ class DeviceTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetAllDevicesAllParameters() {
+    func testGetDevicesAllParameters() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -237,7 +237,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllDevices(
+        disruptive.getDevices(
             projectID   : reqProjectID,
             query       : "search query",
             deviceIDs   : ["dev1", "dev2"],

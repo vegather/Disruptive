@@ -31,7 +31,7 @@ class ServiceAccountTests: DisruptiveTests {
         XCTAssertEqual(keySecretIn, keySecretOut)
     }
     
-    func testGetAllServiceAccounts() {
+    func testGetServiceAccounts() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
@@ -55,7 +55,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllServiceAccounts(projectID: reqProjectID) { result in
+        disruptive.getServiceAccounts(projectID: reqProjectID) { result in
             switch result {
                 case .success(let accounts):
                     XCTAssertEqual(accounts, respServiceAccounts)
@@ -314,7 +314,7 @@ class ServiceAccountTests: DisruptiveTests {
         wait(for: [exp], timeout: 1)
     }
     
-    func testGetAllServiceAccountKeys() {
+    func testGetServiceAccountKeys() {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
@@ -339,7 +339,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllServiceAccountKeys(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
+        disruptive.getServiceAccountKeys(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
             switch result {
                 case .success(let keys):
                     XCTAssertEqual(keys, respSaKeys)

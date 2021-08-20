@@ -19,7 +19,7 @@ class ProjectTests: DisruptiveTests {
     
     
     
-    func testGetAllProjects() {
+    func testGetProjects() {
         let reqOrgID = "abc"
         let reqQuery = "dummy"
         let reqParams = ["organization": [reqOrgID], "query": [reqQuery]]
@@ -44,7 +44,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllProjects(organizationID: reqOrgID, query: reqQuery) { result in
+        disruptive.getProjects(organizationID: reqOrgID, query: reqQuery) { result in
             switch result {
                 case .success(let projectsOut):
                     XCTAssertEqual(projectsOut, respProjects)

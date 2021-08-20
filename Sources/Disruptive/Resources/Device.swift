@@ -12,7 +12,7 @@ import Foundation
  Represents a Sensor or Cloud Connector from Disruptive Technologies.
  
  Functions relevant for `Device`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getAllDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getalldevices(projectid:query:deviceids:devicetypes:labelfilters:orderby:completion:))
+ * [`getDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:query:deviceids:devicetypes:labelfilters:orderby:completion:))
  * [`getDevicesPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevicespage(projectid:query:deviceids:devicetypes:labelfilters:orderby:pagesize:pagetoken:completion:))
  * [`getDevice`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
  * [`updateDeviceDisplayName`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updatedevicedisplayname(projectid:deviceid:newdisplayname:completion:))
@@ -79,13 +79,13 @@ extension Disruptive {
      Examples:
      ```swift
      // Get all the devices in the project
-     disruptive.getAllDevices(projectID: "<PROJECT_ID>") { result in
+     disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
          ...
      }
      
      // Get all the temperature devices in the project ordered by
      // the temperature (highest temperatures first)
-     disruptive.getAllDevices(
+     disruptive.getDevices(
          projectID   : "<PROJECT_ID>",
          deviceTypes : [.temperature],
          orderBy     : (field: "reported.temperature.value", ascending: false))
@@ -104,7 +104,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
-    public func getAllDevices(
+    public func getDevices(
         projectID      : String,
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
@@ -137,7 +137,7 @@ extension Disruptive {
      Useful if a lot of devices are expected in the specified project. This function
      provides better control for when to get devices and how many to get at a time so
      that devices are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllDevices` function.
+     at a cost of convenience compared to the `getDevices` function.
      
      - Parameter projectID: The identifier of the project to get devices from.
      - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.

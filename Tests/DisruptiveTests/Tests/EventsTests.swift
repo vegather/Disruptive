@@ -10,7 +10,7 @@ import XCTest
 
 class EventsTests: DisruptiveTests {
     
-    func testGetAllEvents() {
+    func testGetEvents() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!

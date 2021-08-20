@@ -127,7 +127,7 @@ Here are examples of both of these approaches for fetching a list of `Device`s.
 
 Fetching all `Device`s in a project at once:
 ```swift
-disruptive.getAllDevices(projectID: "<PROJECT_ID>") { result in
+disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
     switch result {
         case .success(let devices):
             print(devices)
@@ -136,7 +136,7 @@ disruptive.getAllDevices(projectID: "<PROJECT_ID>") { result in
     }
 }
 ```
-[`getAllDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getalldevices(projectid:completion:))
+[`getDevices` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:completion:))
 
 
 Fetching `Device`s one page at a time:
@@ -228,7 +228,7 @@ When specifying the order to retrieve the devices in, a field as well as an asce
 
 Here is an example of how to use all the parameters:
 ```swift
-disruptive.getAllDevices(
+disruptive.getDevices(
     projectID    : "<PROJECT_ID>",
     query        : "Air Vent",
     deviceIDs    : ["<DEVICE_ID>", "<DEVICE_ID>"],
@@ -290,21 +290,21 @@ disruptive.publishEmulatedEvent(
 Fetching projects lets you optionally filter on both the organization (by identifier) as well as a keyword based query. You can also leave both of those parameters out to fetch all projects available to the authenticated account. The following example will search for projects with a specified organization id (fetched from the `getOrganizations` endpoint for example) that has `Building 1` in its name:
 
 ```swift
-disruptive.getAllProjects(organizationID: "<ORG_ID>", query: "Building 1") { result in
+disruptive.getProjects(organizationID: "<ORG_ID>", query: "Building 1") { result in
     ...
 }
 ```
-[`getAllProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallprojects(organizationid:query:completion:))
+[`getProjects` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))
 
 
 Here's an example of fetching all the organizations available to the authenticated account:
 
 ```swift
-disruptive.getAllOrganizations { result in
+disruptive.getOrganizations { result in
     ...
 }
 ```
-[`getAllOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
+[`getOrganizations` documentation](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))
 
 
 

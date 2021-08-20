@@ -12,7 +12,7 @@ import Foundation
  or an organization. The account can be either a user or a service account.
  
  Functions relevant for `Member`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getAllMembers`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallmembers(projectid:completion:))
+ * [`getMembers`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmembers(projectid:completion:))
  * [`getMembersPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmemberspage(projectid:pagesize:pagetoken:completion:))
  * [`getMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmember(projectid:memberid:completion:))
  * [`inviteMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.invitemember(projectid:roles:email:completion:))
@@ -69,11 +69,11 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public func getAllMembers(
+    public func getMembers(
         organizationID : String,
         completion     : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
-        getAllMembers(endpoint: "organizations/\(organizationID)/members") { completion($0) }
+        getMembers(endpoint: "organizations/\(organizationID)/members") { completion($0) }
     }
     
     /**
@@ -88,14 +88,14 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public func getAllMembers(
+    public func getMembers(
         projectID  : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
-        getAllMembers(endpoint: "projects/\(projectID)/members") { completion($0) }
+        getMembers(endpoint: "projects/\(projectID)/members") { completion($0) }
     }
     
-    private func getAllMembers(
+    private func getMembers(
         endpoint   : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
@@ -114,7 +114,7 @@ extension Disruptive {
      Useful if a lot of Members are expected in the specified organization. This function
      provides better control for when to get Members and how many to get at a time so
      that Members are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllMembers` function.
+     at a cost of convenience compared to the `getMembers` function.
      
      - Parameter organizationID: The identifier of the organization to get Members from.
      - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default
@@ -137,7 +137,7 @@ extension Disruptive {
      Useful if a lot of Members are expected in the specified project. This function
      provides better control for when to get Members and how many to get at a time so
      that Members are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllMembers` function.
+     at a cost of convenience compared to the `getMembers` function.
      
      - Parameter projectID: The identifier of the project to get Members from.
      - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default

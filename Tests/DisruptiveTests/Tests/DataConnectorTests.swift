@@ -100,7 +100,7 @@ class DataConnectorTests: DisruptiveTests {
         assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
     }
     
-    func testGetAllDataConnectors() {
+    func testGetDataConnectors() {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.defaultBaseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
@@ -124,7 +124,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getAllDataConnectors(projectID: reqProjectID) { result in
+        disruptive.getDataConnectors(projectID: reqProjectID) { result in
             switch result {
                 case .success(let dcs):
                     XCTAssertEqual(dcs, respDCs)

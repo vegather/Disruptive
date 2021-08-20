@@ -12,7 +12,7 @@ import Foundation
  Represents an organization registered with Disruptive Technologies.
  
  Functions relevant for `Organization`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getAllOrganizations`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallorganizations(completion:))
+ * [`getOrganizations`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))
  * [`getOrganizationsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizationspage(pagesize:pagetoken:completion:))
  * [`getOrganization`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganization(organizationid:completion:))
  */
@@ -39,7 +39,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Organization`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Organization], DisruptiveError>`
      */
-    public func getAllOrganizations(
+    public func getOrganizations(
         completion: @escaping (_ result: Result<[Organization], DisruptiveError>) -> ())
     {
         // Create the request
@@ -55,7 +55,7 @@ extension Disruptive {
      Useful if a lot of organizations are expected to be available. This function
      provides better control for when to get organizations and how many to get at a time so
      that organizations are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllOrganizations` function.
+     at a cost of convenience compared to the `getOrganizations` function.
      
      - Parameter pageSize: The maximum number of organizations to get for this page. The maximum page size is 100, which is also the default
      - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.

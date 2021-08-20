@@ -14,7 +14,7 @@ import Foundation
  
  Functions relevant for `DataConnector`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
  
- * [`getAllDataConnectors`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getalldataconnectors(projectid:completion:))
+ * [`getDataConnectors`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnectors(projectid:completion:))
  * [`getDataConnectorsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnectorspage(projectid:pagesize:pagetoken:completion:))
  * [`getDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnector(projectid:dataconnectorid:completion:))
  * [`createDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createdataconnector(projectid:displayname:pushtype:eventtypes:labels:isactive:completion:))
@@ -69,7 +69,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `DataConnector`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[DataConnector], DisruptiveError>`
      */
-    public func getAllDataConnectors(
+    public func getDataConnectors(
         projectID  : String,
         completion : @escaping (_ result: Result<[DataConnector], DisruptiveError>) -> ())
     {
@@ -87,7 +87,7 @@ extension Disruptive {
      Useful if a lot of Data Connectors are expected in the specified project. This function
      provides better control for when to get Data Connectors and how many to get at a time so
      that Data Connectors are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllDataConnectors` function.
+     at a cost of convenience compared to the `getDataConnectors` function.
      
      - Parameter projectID: The identifier of the project to get Data Connectors from.
      - Parameter pageSize: The maximum number of Data Connectors to get for this page. The maximum page size is 100, which is also the default

@@ -12,7 +12,7 @@ import Foundation
  Represents a project within an `Organization`.
  
  Functions relevant for `Project`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getAllProjects`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getallprojects(organizationid:query:completion:))
+ * [`getProjects`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))
  * [`getProjectsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojectspage(organizationid:query:pagesize:pagetoken:completion:))
  * [`getProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getproject(projectid:completion:))
  * [`createProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createproject(organizationid:displayname:completion:))
@@ -74,7 +74,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Project], DisruptiveError>`
      */
-    public func getAllProjects(
+    public func getProjects(
         organizationID : String? = nil,
         query          : String? = nil,
         completion     : @escaping (_ result: Result<[Project], DisruptiveError>) -> ())
@@ -105,7 +105,7 @@ extension Disruptive {
      Useful if a lot of projects are expected to be available. This function
      provides better control for when to get projects and how many to get at a time so
      that projects are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getAllProjects` function.
+     at a cost of convenience compared to the `getProjects` function.
      
      - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch projects the authenticated account has access to from all organizations.
      - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), any projects will be returned.
