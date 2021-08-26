@@ -10,7 +10,7 @@ import Foundation
 
 
 /**
- Represent an event stream for a device, and is implemented using [Server-Sent Events](https://html.spec.whatwg.org/multipage/server-sent-events.html).
+ Represent an event stream for a device
  
  Has callbacks that can be set for each type of event. Note that which event type is available for a device depends on the device type.
  
@@ -87,7 +87,8 @@ public class DeviceEventStream: NSObject {
     // Error
     // -------------------------
     
-    /// Called with an error if the device stream couldn't open
+    /// Called when an error was received on the stream. The connection to the stream will automatically
+    /// be re-established.
     public var onError: ((DisruptiveError)-> ())?
 
     
@@ -105,7 +106,7 @@ public class DeviceEventStream: NSObject {
         config.timeoutIntervalForResource = 3600
         
         let headers = [
-            "Accept"        : "text/event-stream",
+            "Accept"        : "application/json",
             "Cache-Control" : "no-cache"
         ]
         config.httpAdditionalHeaders = headers
@@ -199,12 +200,76 @@ public class DeviceEventStream: NSObject {
 
 extension DeviceEventStream: URLSessionDataDelegate {
     // Packet format for payloads from the ServerSentEvent
-    private struct StreamPacket: Decodable {
-        let result: StreamEvent
+    private struct StreamResult: Decodable {
+        let result: Event
         
-        struct StreamEvent: Decodable {
+        struct Event: Decodable {
             let event: EventContainer
         }
+    }
+    
+    private struct StreamError: Decodable {
+        let error: Error
+        
+        struct Error: Decodable {
+            let code: Int
+            let message: String
+            let details: [[String: String]]
+            
+            func toError() -> DisruptiveError? {
+                // Checking both HTTP codes and gRPC codes
+                switch code {
+                    case 3, 9, 11, 400:  return .badRequest
+                    case 16, 401:        return .unauthorized
+                    case 7, 403:         return .insufficientPermissions
+                    case 5, 404:         return .notFound
+                    case 2, 13, 15, 500: return .serverError
+                    case 14, 503:        return .serverError
+                    case 1,4, 504:       return nil // The stream session timed out, and will be restarted. Not considered an error
+                    default :            return .unknownError
+                }
+            }
+        }
+    }
+    
+    // Reads out the device ID and the event of each stream packet,
+    // and calling the appropriate callback closure
+    private func handleResult(with payload: StreamResult) {
+        
+        switch payload.result.event {
+            // Events
+            case .touch              (let d, let e): onTouch?(d, e)
+            case .temperature        (let d, let e): onTemperature?(d, e)
+            case .objectPresent      (let d, let e): onObjectPresent?(d, e)
+            case .humidity           (let d, let e): onHumidity?(d, e)
+            case .objectPresentCount (let d, let e): onObjectPresentCount?(d, e)
+            case .touchCount         (let d, let e): onTouchCount?(d, e)
+            case .waterPresent       (let d, let e): onWaterPresent?(d, e)
+                
+            // Sensor status
+            case .networkStatus      (let d, let e): onNetworkStatus?(d, e)
+            case .batteryStatus      (let d, let e): onBatteryStatus?(d, e)
+            case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
+                
+            // Cloud connector
+            case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)
+            case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
+            case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
+                
+            case .unknown(let eventType): Disruptive.log("Unknown event type: \(eventType)", level: .warning)
+        }
+    }
+    
+    private func handleError(with payload: StreamError) {
+        guard let dtErr = payload.error.toError() else { return }
+        
+        var helpStr = ""
+        if let help = payload.error.details.first?["help"] {
+            helpStr = ". Help URL: \(help)"
+        }
+        
+        Disruptive.log("Got an error from the stream. Message: \"\(payload.error.message)\". Error: \(dtErr)\(helpStr)", level: .warning)
+        onError?(dtErr)
     }
     
     public func urlSession(
@@ -212,92 +277,19 @@ extension DeviceEventStream: URLSessionDataDelegate {
         dataTask: URLSessionDataTask,
         didReceive data: Data)
     {
-        guard let response = dataTask.response as? HTTPURLResponse,
-              let contentType = response.allHeaderFields["Content-Type"] as? String,
-              contentType == "text/event-stream",
-              response.statusCode == 200
-        else {
-            Disruptive.log("Unexpected response: \(String(describing: dataTask.response))", level: .error)
-            return
-        }
-        
-        // We got data, so reset the retry scheme
-        retryScheme.reset()
+        // We might receive multiple messages per payload, so the data needs to be split
+        // on linebreak (0x0A)
+        data.split(separator: 0x0A).forEach { message in
+            if let result = try? JSONDecoder().decode(StreamResult.self, from: message) {
+                // We got a result, so reset the retry scheme
+                retryScheme.reset()
                 
-        guard let payloadStr = String(data: data, encoding: .utf8) else {
-            return
-        }
-                
-        // Decoding using scheme from:
-        // https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation
-        // Assumes all fields will be "data", and ignores event IDs. Only supports
-        // one event per block (data buffer), An event can be spread across
-        // multiple data fields, as long as it's all within the same block.
-        var dataBuffer = ""
-        for line in payloadStr.components(separatedBy: "\n") {
-            if line.count == 0 {
-                if dataBuffer.count > 0 {
-                    // Dispatching the data buffer
-                    handleNewDataBuffer(dataBuffer)
-                    dataBuffer = ""
-                }
-                continue
+                handleResult(with: result)
+            } else if let error = try? JSONDecoder().decode(StreamError.self, from: message) {
+                handleError(with: error)
+            } else {
+                Disruptive.log("Failed to decode stream data: \(String(data: message, encoding: .utf8) as Any)", level: .error)
             }
-            if line.hasPrefix(":") {
-                continue // Comment
-            }
-            if line.contains(":") == false {
-                // Ignoring lines that doesn't contain ":", even though it's
-                // allowed by the spec.
-                continue
-            }
-            let field = line.components(separatedBy: ":")[0]
-            let value = line.dropFirst((field+":").count).trimmingCharacters(in: .whitespaces)
-            
-            // Only handling "data" fields
-            guard field == "data" else {
-                Disruptive.log("Not handling unexpected field: \(field)", level: .warning)
-                continue
-            }
-            
-            dataBuffer += value
-        }
-    }
-    
-    private func handleNewDataBuffer(_ dataBuffer: String) {
-        guard dataBuffer.count > 0, let data = dataBuffer.data(using: .utf8) else {
-            Disruptive.log("Couldn't convert: \"\(dataBuffer)\" to Data", level: .warning)
-            return
-        }
-        do {
-            let streamPacket = try JSONDecoder().decode(StreamPacket.self, from: data)
-            
-            // Reading out the device ID and the event of each stream packet,
-            // and calling the appropriate callback closure
-            switch streamPacket.result.event {
-                // Events
-                case .touch              (let d, let e): onTouch?(d, e)
-                case .temperature        (let d, let e): onTemperature?(d, e)
-                case .objectPresent      (let d, let e): onObjectPresent?(d, e)
-                case .humidity           (let d, let e): onHumidity?(d, e)
-                case .objectPresentCount (let d, let e): onObjectPresentCount?(d, e)
-                case .touchCount         (let d, let e): onTouchCount?(d, e)
-                case .waterPresent       (let d, let e): onWaterPresent?(d, e)
-                    
-                // Sensor status
-                case .networkStatus      (let d, let e): onNetworkStatus?(d, e)
-                case .batteryStatus      (let d, let e): onBatteryStatus?(d, e)
-                case .labelsChanged      (let d, let e): onLabelsChanged?(d, e)
-                
-                // Cloud connector
-                case .connectionStatus   (let d, let e): onConnectionStatus?(d, e)
-                case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
-                case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
-                    
-                case .unknown(let eventType): Disruptive.log("Unknown event type: \(eventType)", level: .warning)
-            }
-        } catch {
-            Disruptive.log("Failed to decode: \(dataBuffer). Error: \(error)", level: .error)
         }
     }
     
@@ -306,18 +298,24 @@ extension DeviceEventStream: URLSessionDataDelegate {
         task: URLSessionTask,
         didCompleteWithError error: Error?)
     {
-        let statusCode = (task.response as? HTTPURLResponse)?.statusCode
-        let errorMessage = error?.localizedDescription ?? ""
-        
         if hasBeenClosed {
             Disruptive.log("Stream closed")
             return
         }
         
-        Disruptive.log("The event stream closed with message: \"\(errorMessage)\". Status code: \(String(describing: statusCode))", level: .warning)
+        // Log the error, if present
+        if let error = error {
+            var statusCodeStr = ""
+            if let statusCode = (task.response as? HTTPURLResponse)?.statusCode {
+                statusCodeStr = ". Status code: \(String(describing: statusCode))"
+            }
+            Disruptive.log("The event stream closed with message: \"\(error.localizedDescription)\"\(statusCodeStr)", level: .error)
+            onError?(.serverUnavailable)
+        }
         
         let backoff = retryScheme.nextBackoff()
-        Disruptive.log("Reconnecting to the event stream in \(backoff)s...")
+        Disruptive.log("Disconnected from event stream. Reconnecting in \(backoff)s...")
+        
         DispatchQueue.global().asyncAfter(deadline: .now() + backoff) { [weak self] in
             self?.restartStream()
         }

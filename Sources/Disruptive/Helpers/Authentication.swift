@@ -284,7 +284,7 @@ public class OAuth2Authenticator: Authenticator {
             field: "Content-Type",
             value: "application/x-www-form-urlencoded"
         )
-        let body =  formURLEncodedBody(keysAndValues: [
+        let body = formURLEncodedBody(keysAndValues: [
             "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
             "assertion" : authJWT
         ])!
