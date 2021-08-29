@@ -200,7 +200,17 @@ class EventsTests: DisruptiveTests {
                       }
                     },
                     "timestamp": "2019-05-16T08:21:21.076013Z"
-                }
+                },
+                {
+                    "eventId": "bjehr0ig1me000dm66s0",
+                    "targetName": "projects/bhmh0143iktucae701vg/devices/bchonod7rihjtvdmd2vg",
+                    "eventType": "labelsChanged",
+                    "data":{
+                        "added": {"add":"added"},
+                        "modified": {"name":"Sensorname"},
+                        "removed": ["removed"]
+                    },
+                    "timestamp": "2019-05-16T08:21:21.076013Z"}
             ],
             "nextPageToken": ""
         }
@@ -238,6 +248,7 @@ class EventsTests: DisruptiveTests {
                     XCTAssertNotNil(events.ethernetStatus)
                     XCTAssertNotNil(events.cellularStatus)
                     XCTAssertNotNil(events.connectionStatus)
+                    XCTAssertNotNil(events.labelsChanged)
                     
                 case .failure(let err):
                     XCTFail("Unexpected error: \(err)")
@@ -364,6 +375,7 @@ class EventsTests: DisruptiveTests {
         XCTAssertNil(events.connectionStatus)
         XCTAssertNil(events.ethernetStatus)
         XCTAssertNil(events.cellularStatus)
+        XCTAssertNil(events.labelsChanged)
     }
     
     func testMergeSingleEvent() {
@@ -384,6 +396,7 @@ class EventsTests: DisruptiveTests {
         XCTAssertNil(events.connectionStatus)
         XCTAssertNil(events.ethernetStatus)
         XCTAssertNil(events.cellularStatus)
+        XCTAssertNil(events.labelsChanged)
     }
     
     func testMergeAllEvents() {
@@ -400,6 +413,7 @@ class EventsTests: DisruptiveTests {
         mergee.connectionStatus   = [ConnectionStatusEvent(connection: .cellular, available: [.cellular], timestamp: Date())]
         mergee.ethernetStatus     = [EthernetStatusEvent(macAddress: "", ipAddress: "", errors: [], timestamp: Date())]
         mergee.cellularStatus     = [CellularStatusEvent(signalStrength: 78, errors: [], timestamp: Date())]
+        mergee.labelsChanged      = [LabelsChangedEvent(added: ["foo": "bar"], modified: ["hello": "world"], removed: ["foobar"], timestamp: Date())]
         
         var events = Events()
         events.merge(with: mergee)
@@ -416,5 +430,6 @@ class EventsTests: DisruptiveTests {
         XCTAssertNotNil(events.connectionStatus)
         XCTAssertNotNil(events.ethernetStatus)
         XCTAssertNotNil(events.cellularStatus)
+        XCTAssertNotNil(events.labelsChanged)
     }
 }

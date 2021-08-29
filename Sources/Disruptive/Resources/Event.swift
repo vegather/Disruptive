@@ -27,6 +27,7 @@ public struct Events: Equatable {
     // Sensor Status
     public var networkStatus      : [NetworkStatusEvent]?
     public var batteryStatus      : [BatteryStatusEvent]?
+    public var labelsChanged      : [LabelsChangedEvent]?
     
     // Cloud Connector
     public var connectionStatus   : [ConnectionStatusEvent]?
@@ -118,7 +119,7 @@ extension Events {
                 case .connectionStatus  (_, let event): Events.addToList(list: &connectionStatus,   newItem: event)
                 case .ethernetStatus    (_, let event): Events.addToList(list: &ethernetStatus,     newItem: event)
                 case .cellularStatus    (_, let event): Events.addToList(list: &cellularStatus,     newItem: event)
-                case .labelsChanged: break // LabelsChangedEvent will not be returned when fetching historical events
+                case .labelsChanged     (_, let event): Events.addToList(list: &labelsChanged,      newItem: event)
                 case .unknown(let eventType): Disruptive.log("Unknown event type: \(eventType)", level: .warning)
             }
         }
@@ -147,6 +148,7 @@ extension Events {
         connectionStatus?  .sort { $0.timestamp > $1.timestamp }
         ethernetStatus?    .sort { $0.timestamp > $1.timestamp }
         cellularStatus?    .sort { $0.timestamp > $1.timestamp }
+        labelsChanged?     .sort { $0.timestamp > $1.timestamp }
     }
     
     public mutating func merge(with other: Events) {
@@ -162,5 +164,6 @@ extension Events {
         if let e = other.connectionStatus   { self.connectionStatus   = e }
         if let e = other.ethernetStatus     { self.ethernetStatus     = e }
         if let e = other.cellularStatus     { self.cellularStatus     = e }
+        if let e = other.labelsChanged      { self.labelsChanged      = e }
     }
 }
