@@ -19,7 +19,7 @@ import Foundation
  * [`deleteDeviceLabel`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deletedevicelabel(projectid:deviceid:labelkey:completion:))
  * [`setDeviceLabel`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.setdevicelabel(projectid:deviceid:labelkey:labelvalue:completion:))
  * [`batchUpdateDeviceLabels`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.batchupdatedevicelabels(projectid:deviceids:labelstoset:labelstoremove:completion:))
- * [`moveDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.movedevices(deviceids:fromprojectid:toprojectid:completion:))
+ * [`transferDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.movedevices(deviceids:fromprojectid:toprojectid:completion:))
  
  */
 public struct Device: Decodable, Equatable {
@@ -362,16 +362,16 @@ extension Disruptive {
     }
     
     /**
-     Moves a list of devices from one project to another. The authenticated account must be an admin
+     Transfers a list of devices from one project to another. The authenticated account must be an admin
      in the `toProjectID`, or an organization admin in which the `toProjectID` resides.
      
-     - Parameter deviceIDs: A list of the device identifiers to move from one project to another.
-     - Parameter fromProjectID: The identifier of the project to move the devices from.
-     - Parameter toProjectID: The identifier of the project to move the devices to.
+     - Parameter deviceIDs: A list of the device identifiers to transfer from one project to another.
+     - Parameter fromProjectID: The identifier of the project to transfer the devices from.
+     - Parameter toProjectID: The identifier of the project to transfer the devices to.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func moveDevices(
+    public func transferDevices(
         deviceIDs     : [String],
         fromProjectID : String,
         toProjectID   : String,
@@ -391,7 +391,7 @@ extension Disruptive {
             // Send the request
             sendRequest(request) { completion($0) }
         } catch (let error) {
-            Disruptive.log("Failed to initialize move devices request with payload: \(body). Error: \(error)", level: .error)
+            Disruptive.log("Failed to initialize transfer devices request with payload: \(body). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
         }
     }
