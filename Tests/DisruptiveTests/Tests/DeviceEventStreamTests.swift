@@ -320,7 +320,6 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         let payload = """
         {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/dev1","eventType":"temperature","data":{"temperature":{"value":22.65,"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
-
         """.data(using: .utf8)!
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -357,7 +356,6 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         let payload = """
         {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/dev1","eventType":"temperature","data":{"temperature":{"value":22.65,"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
-
         """.data(using: .utf8)!
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -393,7 +391,6 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         let payload = """
         {"result":{"event":{"eventId":"bvj2frmmj123c0m4keng","targetName":"projects/proj/devices/dev1","eventType":"unknownEvent","data":{"unknownEvent":{"value":0,"updateTime":"2020-12-25T17:57:02.560000Z"}},"timestamp":"2020-12-25T17:57:02.560000Z"}}}
-
         """.data(using: .utf8)!
         
         MockStreamURLProtocol.requestHandler = { request in
