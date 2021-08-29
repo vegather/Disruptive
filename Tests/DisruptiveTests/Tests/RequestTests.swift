@@ -292,8 +292,8 @@ class RequestTests: DisruptiveTests {
         assertError(is: .notFound,                       forStatusCode: 404)
         assertError(is: .conflict,                       forStatusCode: 409)
         assertError(is: .internalServerError,            forStatusCode: 500)
-        assertError(is: .serviceUnavailable,             forStatusCode: 501)
-        assertError(is: .gatewayTimeout,                 forStatusCode: 503)
+        assertError(is: .serviceUnavailable,             forStatusCode: 503)
+        assertError(is: .gatewayTimeout,                 forStatusCode: 504)
         assertError(is: .tooManyRequests(retryAfter: 5), forStatusCode: 429)
     }
     

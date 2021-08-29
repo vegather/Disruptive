@@ -253,7 +253,7 @@ extension Request {
         }
         
         // Check if the status code is outside the 2XX range
-        guard httpResponse.statusCode >= 200 && httpResponse.statusCode < 300 else {
+        guard (200..<300).contains(httpResponse.statusCode) else {
             // Decode the ErrorMessage body (if it's there)
             var message: ErrorMessage?
             if let data = data {
@@ -274,8 +274,8 @@ extension Request {
             case 404: return .notFound
             case 409: return .conflict
             case 500: return .internalServerError
-            case 501: return .serviceUnavailable
-            case 503: return .gatewayTimeout
+            case 503: return .serviceUnavailable
+            case 504: return .gatewayTimeout
             case 429:
                 // Read "Retry-After" header for how long we need to wait
                 // Default to 5 seconds if not present

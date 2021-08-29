@@ -145,14 +145,14 @@ internal enum InternalError: Error, Equatable {
     case internalServerError
     
     /**
-     # Error Code: 501 - Service Unavailable
+     # Error Code: 503 - Service Unavailable
      
         See 500 - Internal Server Error.
      */
     case serviceUnavailable
     
     /**
-     # Error Code: 503 - Gateway Timeout
+     # Error Code: 504 - Gateway Timeout
      
         See 500 - Internal Server Error, but retry with minimum 10s delay.
      */
