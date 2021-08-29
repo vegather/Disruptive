@@ -130,14 +130,14 @@ class EventTypesTests: DisruptiveTests {
         let hum: Float = 88
         let event = try! JSONDecoder().decode(HumidityEvent.self, from: humidityEventData(temp: temp, hum: hum))
         XCTAssertEqual(event.timestamp, eventTimestamp)
-        XCTAssertEqual(event.temperature, temp)
+        XCTAssertEqual(event.celsius, temp)
         XCTAssertEqual(event.relativeHumidity, hum)
     }
     
     func testEncodeHumidityEvent() {
         let temp: Float = 26.75
         let hum: Float = 88
-        let event = HumidityEvent(temperature: temp, relativeHumidity: hum, timestamp: eventTimestamp)
+        let event = HumidityEvent(celsius: temp, relativeHumidity: hum, timestamp: eventTimestamp)
         let output = try! JSONEncoder().encode(event)
         assertJSONDatasAreEqual(a: output, b: humidityEventData(temp: temp, hum: hum))
     }

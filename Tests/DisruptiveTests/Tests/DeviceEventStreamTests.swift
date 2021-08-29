@@ -68,7 +68,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         runEventTest(payload: payload) { stream, exp in
             stream.onHumidity = { deviceID, hum in
                 XCTAssertEqual(deviceID, "b6roh6d7rihmn9oji86g")
-                XCTAssertEqual(hum.temperature, 22.45)
+                XCTAssertEqual(hum.celsius, 22.45)
                 XCTAssertEqual(hum.relativeHumidity, 17)
                 XCTAssertEqual(hum.timestamp, try! Date(iso8601String: "2019-05-16T06:13:46.369000Z"))
                 exp.fulfill()

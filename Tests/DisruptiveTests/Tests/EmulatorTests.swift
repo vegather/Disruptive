@@ -251,7 +251,7 @@ class EmulatorTests: DisruptiveTests {
         )
 
         assertEvent(
-            event: HumidityEvent(temperature: 12, relativeHumidity: 13, timestamp: now),
+            event: HumidityEvent(celsius: 12, relativeHumidity: 13, timestamp: now),
             expectedPayload: """
             {
                 "humidity": {

@@ -120,11 +120,11 @@ public struct TemperatureEvent: Codable, Equatable {
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             
-                // Extract the timestamp
+            // Extract the timestamp
             let timeString = try container.decode(String.self, forKey: .timestamp)
             self.timestamp = try Date(iso8601String: timeString)
             
-                // Extract the value
+            // Extract the value
             self.celsius = try container.decode(Float.self, forKey: .value)
             self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
         }
@@ -272,7 +272,10 @@ public struct ObjectPresentEvent: Codable, Equatable {
 public struct HumidityEvent: Codable, Equatable {
     
     /// The temperature value in celsius.
-    public let temperature: Float
+    public let celsius: Float
+    
+    /// The temperature value in fahrenheit.
+    public let fahrenheit: Float
     
     /// The relative humidity as a percentage.
     public let relativeHumidity: Float
@@ -281,9 +284,18 @@ public struct HumidityEvent: Codable, Equatable {
     public let timestamp: Date
     
     
-    /// Creates a new `HumidityEvent`.
-    public init(temperature: Float, relativeHumidity: Float, timestamp: Date) {
-        self.temperature      = temperature
+    /// Creates a new `HumidityEvent` using celsius.
+    public init(celsius: Float, relativeHumidity: Float, timestamp: Date) {
+        self.celsius          = celsius
+        self.fahrenheit       = celsiusToFahrenheit(celsius: celsius)
+        self.relativeHumidity = relativeHumidity
+        self.timestamp        = timestamp
+    }
+    
+    /// Creates a new `HumidityEvent` using fahrenheit.
+    public init(fahrenheit: Float, relativeHumidity: Float, timestamp: Date) {
+        self.celsius          = fahrenheitToCelsius(fahrenheit: fahrenheit)
+        self.fahrenheit       = fahrenheit
         self.relativeHumidity = relativeHumidity
         self.timestamp        = timestamp
     }
@@ -296,14 +308,15 @@ public struct HumidityEvent: Codable, Equatable {
         self.timestamp = try Date(iso8601String: timeString)
         
         // Extract the values
-        self.temperature      = try container.decode(Float.self, forKey: .temperature)
         self.relativeHumidity = try container.decode(Float.self, forKey: .relativeHumidity)
+        self.celsius          = try container.decode(Float.self, forKey: .temperature)
+        self.fahrenheit = celsiusToFahrenheit(celsius: self.celsius)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        try container.encode(temperature,               forKey: .temperature)
+        try container.encode(celsius,                   forKey: .temperature)
         try container.encode(relativeHumidity,          forKey: .relativeHumidity)
         try container.encode(timestamp.iso8601String(), forKey: .timestamp)
     }

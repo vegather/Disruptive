@@ -391,7 +391,7 @@ class EventsTests: DisruptiveTests {
         mergee.touch              = [TouchEvent(timestamp: Date())]
         mergee.temperature        = [TemperatureEvent(celsius: 67, timestamp: Date())]
         mergee.objectPresent      = [ObjectPresentEvent(state: .objectPresent, timestamp: Date())]
-        mergee.humidity           = [HumidityEvent(temperature: 67, relativeHumidity: 90, timestamp: Date())]
+        mergee.humidity           = [HumidityEvent(celsius: 67, relativeHumidity: 90, timestamp: Date())]
         mergee.objectPresentCount = [ObjectPresentCountEvent(total: 67, timestamp: Date())]
         mergee.touchCount         = [TouchCountEvent(total: 88, timestamp: Date())]
         mergee.waterPresent       = [WaterPresentEvent(state: .waterPresent, timestamp: Date())]
