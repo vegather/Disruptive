@@ -167,6 +167,7 @@ class DeviceEventStreamTests: DisruptiveTests {
                 XCTAssertEqual(labelsChanged.added, ["add": "added"])
                 XCTAssertEqual(labelsChanged.modified, ["name": "Sensorname"])
                 XCTAssertEqual(labelsChanged.removed, ["removed"])
+                XCTAssertEqual(labelsChanged.timestamp, try! Date(iso8601String: "2019-05-16T08:21:21.076013Z"))
                 exp.fulfill()
             }
         }

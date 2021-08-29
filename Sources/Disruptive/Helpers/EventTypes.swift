@@ -709,12 +709,33 @@ public struct LabelsChangedEvent: Decodable, Equatable {
     public let added    : [String: String]
     public let modified : [String: String]
     public let removed  : [String]
+    public internal(set) var timestamp: Date
 
     // Used for testing
-    internal init(added: [String: String], modified: [String: String], removed: [String]) {
+    internal init(added: [String: String], modified: [String: String], removed: [String], timestamp: Date) {
         self.added = added
         self.modified = modified
         self.removed = removed
+        self.timestamp = timestamp
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+                
+        // Extract the values
+        self.added    = try container.decode([String: String].self, forKey: .added)
+        self.modified = try container.decode([String: String].self, forKey: .modified)
+        self.removed  = try container.decode([String].self,         forKey: .removed)
+        
+        // Since labels changed events does not have a timestamp like the
+        // other events, it has to be set after being decoded.
+        self.timestamp = Date()
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case added
+        case modified
+        case removed
     }
 }
 
@@ -1036,6 +1057,7 @@ extension EventContainer {
         case eventType
         case targetName
         case data
+        case timestamp
     }
     
     init(from decoder: Decoder) throws {
@@ -1087,7 +1109,13 @@ extension EventContainer {
             case .labelsChanged:
                 // Labels changed events are nested one layer shallower than the other events,
                 // so getting it straight out of the root container keyed by "data".
-                let event = try container.decode(LabelsChangedEvent.self, forKey: .data)
+                var event = try container.decode(LabelsChangedEvent.self, forKey: .data)
+                
+                // Labels changed event also does not include a timestamp (updateTime) in the
+                // data object, so setting it based on the outer timestamp instead.
+                let timeString = try container.decode(String.self, forKey: .timestamp)
+                event.timestamp = try Date(iso8601String: timeString)
+                
                 self = .labelsChanged(deviceID: deviceID, event: event)
                 
             // Cloud Connector
