@@ -10,63 +10,6 @@ import XCTest
 
 class AuthenticationTests: DisruptiveTests {
     
-    func testBasicAuth() {
-        let creds = ServiceAccountCredentials(email: "email", keyID: "key", secret: "secret")
-        let authenticator = BasicAuthAuthenticator(credentials: creds)
-        
-        
-        
-        // Should not be authenticated to begin with
-        XCTAssertNil(authenticator.auth)
-        XCTAssertTrue(authenticator.shouldAutoRefreshAccessToken)
-        
-        
-        
-        // Should successfully authenticate
-        var exp = expectation(description: "")
-        authenticator.refreshAccessToken { result in
-            guard case .success = result else { XCTFail(); return }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
-        XCTAssertTrue(authenticator.shouldAutoRefreshAccessToken)
-        XCTAssertNotNil(authenticator.auth)
-        XCTAssertGreaterThan(
-            authenticator.auth!.expirationDate.timeIntervalSince1970,
-            Date().timeIntervalSince1970
-        )
-        XCTAssertEqual(authenticator.auth!.token, "Basic a2V5OnNlY3JldA==")
-
-        
-        
-        // Log out
-        exp = expectation(description: "")
-        authenticator.logout { result in
-            guard case .success = result else { XCTFail(); return }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
-        XCTAssertFalse(authenticator.shouldAutoRefreshAccessToken)
-        XCTAssertNil(authenticator.auth)
-        
-        
-        
-        // Log back in
-        exp = expectation(description: "")
-        authenticator.login { result in
-            guard case .success = result else { XCTFail(); return }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
-        XCTAssertTrue(authenticator.shouldAutoRefreshAccessToken)
-        XCTAssertNotNil(authenticator.auth)
-        XCTAssertGreaterThan(
-            authenticator.auth!.expirationDate.timeIntervalSince1970,
-            Date().timeIntervalSince1970
-        )
-        XCTAssertEqual(authenticator.auth!.token, "Basic a2V5OnNlY3JldA==")
-    }
-    
     func testOAuth2() {
         let reqKey = "key"
         let reqEmail = "email"

@@ -1,6 +1,30 @@
 import XCTest
 @testable import Disruptive
 
+struct TestAuthenticator: Authenticator {
+    var auth: AuthToken? {
+        return AuthToken(token: "foobar", expirationDate: .distantFuture)
+    }
+    
+    var shouldAutoRefreshAccessToken: Bool {
+        return true
+    }
+    
+    func login(completion: @escaping AuthHandler) {
+        completion(.success(()))
+    }
+    
+    func logout(completion: @escaping AuthHandler) {
+        completion(.success(()))
+    }
+    
+    func refreshAccessToken(completion: @escaping AuthHandler) {
+        completion(.success(()))
+    }
+    
+    
+}
+
 class DisruptiveTests: XCTestCase {
     var disruptive: Disruptive!
     var expectation: XCTestExpectation!
@@ -24,8 +48,7 @@ class DisruptiveTests: XCTestCase {
     }
     
     private func setupAuth() {
-        let creds = ServiceAccountCredentials(email: "", keyID: "", secret: "")
-        let auth = BasicAuthAuthenticator(credentials: creds)
+        let auth = TestAuthenticator()
         disruptive = Disruptive(authenticator: auth)
         Disruptive.loggingEnabled = true
     }

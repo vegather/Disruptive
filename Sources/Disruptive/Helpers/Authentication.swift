@@ -33,7 +33,7 @@ public struct ServiceAccountCredentials: Codable {
  */
 public struct Auth {
     /// The current token to use for authentication. This `String` needs to
-    /// be prefixed with the authentication scheme. Eg: "Basic ..." or "Bearer ..."
+    /// be prefixed with the authentication scheme. Eg: "Bearer ..."
     public let token: String
     
     /// The expiration date of the `token`.
@@ -135,77 +135,7 @@ internal extension Authenticator {
 }
 
 /**
- An `Authenticator` that logs in a service account using basic auth.
- 
- A `BasicAuthAuthenticator` is authenticated by default, so there is no need to call `login()`.
- However if you'd like the authenticator to no longer be authenticated, you can call `logout()`,
- and then `login()` if you want it to be authenticated again.
- 
- See [Authenticator](../Authenticator) for more details about the properties
- and methods.
- 
- __Note__: This should only be used for development/testing. For production use-cases the [`OAuth2Authenticator`](../OAuth2Authenticator) should be used.
- 
- Example:
- ```
- let credentials = ServiceAccountCredentials(email: "<EMAIL>", keyID: "<KEY_ID>", secret: "<SECRET>")
- let authenticator = BasicAuthAuthenticator(credentials: credentials)
- let disruptive = Disruptive(authenticator: authenticator)
- ```
- */
-public class BasicAuthAuthenticator: Authenticator {
-    public let credentials : ServiceAccountCredentials
-    
-    /// The authentication details.
-    private(set) public var auth: Auth?
-    
-    /// A `BasicAuthAuthenticator` will default to automatically get a fresh access token.
-    /// This will be switched on and off when `logout()` and `login()` is called.
-    private(set) public var shouldAutoRefreshAccessToken = true
-    
-    /**
-     Initializes a `BasicAuthAuthenticator` using a set of `ServiceAccountCredentials`.
-     
-     - Parameter credentials: The `ServiceAccountCredentials` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
-     */
-    public init(credentials: ServiceAccountCredentials) {
-        self.credentials = credentials
-    }
-    
-    /// Refreshes the access token, stores it in the `auth` property, and sets
-    /// `shouldAutoRefreshAccessToken` to `true`.
-    public func login(completion: @escaping AuthHandler) {
-        refreshAccessToken { [weak self] result in
-            if case .success = result {
-                self?.shouldAutoRefreshAccessToken = true
-            }
-            completion(result)
-        }
-    }
-    
-    /// Logs out the auth provider by setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
-    /// to `false`. Call `login()` to log the auth provider back in again.
-    public func logout(completion: @escaping AuthHandler) {
-        auth = nil
-        shouldAutoRefreshAccessToken = false
-        completion(.success(()))
-    }
-    
-    /// Used internally to create a new access token from the service account credentials passed in to the initializer.
-    /// This access token is stored in the `auth` property along with an expiration date in the `.distantFuture`.
-    public func refreshAccessToken(completion: @escaping AuthHandler) {
-        auth = Auth(
-            token: "Basic " + "\(credentials.keyID):\(credentials.secret)".data(using: .utf8)!.base64EncodedString(),
-            expirationDate: .distantFuture
-        )
-        completion(.success(()))
-    }
-}
-
-/**
  An `Authenticator` that logs in a service account using OAuth2 with a JWT Bearer Token as an authorization grant.
- This is a more secure flow than the basic auth counter-part, and is the recommended way to authenticate
- a service account in a production environment.
  
  An `OAuth2Authenticator` is authenticated by default, so there is no need to call `login()`.
  However if you'd like the authenticator to no longer be authenticated, you can call `logout()`,
