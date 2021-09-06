@@ -89,10 +89,10 @@ extension Disruptive {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects", params: params)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects", params: params)
         
         // Send the request
-        sendRequest(request, pagingKey: "projects") { completion($0) }
+        request.send(pagingKey: "projects") { completion($0) }
     }
     
     /**
@@ -131,10 +131,10 @@ extension Disruptive {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects", params: params)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects", params: params)
         
         // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "projects") { (result: Result<PagedResult<Project>, DisruptiveError>) in
+        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "projects") { (result: Result<PagedResult<Project>, DisruptiveError>) in
             switch result {
                 case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, projects: page.results)))
                 case .failure(let err)  : completion(.failure(err))
@@ -154,10 +154,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)")
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)")
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -181,10 +181,10 @@ extension Disruptive {
         
         do {
             // Create the request
-            let request = try Request(method: .post, baseURL: baseURL, endpoint: "projects", body: payload)
+            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: "projects", body: payload)
             
             // Create the new project
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init createProject request with payload: \(payload). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -205,10 +205,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)"
-        let request = Request(method: .delete, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -230,10 +230,10 @@ extension Disruptive {
         
         do {
             // Create the request
-            let request = try Request(method: .patch, baseURL: baseURL, endpoint: "projects/\(projectID)", body: payload)
+            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)", body: payload)
             
             // Update the project display name
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init the update project request with payload: \(payload). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))

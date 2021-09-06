@@ -137,7 +137,7 @@ class RequestTests: DisruptiveTests {
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
                 for           : request,
-                authenticated : false,
+                authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
                 headers       : [:],
@@ -179,7 +179,7 @@ class RequestTests: DisruptiveTests {
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
                 for           : request,
-                authenticated : false,
+                authenticated : true,
                 method        : "GET",
                 queryParams   : [:],
                 headers       : [:],
@@ -385,7 +385,7 @@ class RequestTests: DisruptiveTests {
         }
         
         let firstExp = expectation(description: "")
-        disruptive.sendRequest(req, pageSize: 20, pageToken: nil, pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
+        req.send(pageSize: 20, pageToken: nil, pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "token")
@@ -398,7 +398,7 @@ class RequestTests: DisruptiveTests {
         wait(for: [firstExp], timeout: 1)
         
         let secondExp = expectation(description: "")
-        disruptive.sendRequest(req, pageSize: 30, pageToken: "token", pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
+        req.send(pageSize: 30, pageToken: "token", pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
             switch result {
                 case .success(let page):
                     XCTAssertNil(page.nextPageToken)
@@ -465,7 +465,7 @@ class RequestTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         
-        disruptive.sendRequest(req, pagingKey: "events") { (result: Result<[TouchEvent], DisruptiveError>) in
+        req.send(pagingKey: "events") { (result: Result<[TouchEvent], DisruptiveError>) in
             switch result {
                 case .success(let events) : XCTAssertEqual(events.count, 2)
                 case .failure(let err)    : XCTFail("Unexpected error: \(err)")

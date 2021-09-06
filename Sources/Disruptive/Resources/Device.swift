@@ -125,10 +125,10 @@ extension Disruptive {
         )
         
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices", params: params)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
-        sendRequest(request, pagingKey: "devices") { completion($0) }
+        request.send(pagingKey: "devices") { completion($0) }
     }
     
     /**
@@ -174,10 +174,10 @@ extension Disruptive {
         )
         
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices", params: params)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "devices") { (result: Result<PagedResult<Device>, DisruptiveError>) in
+        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "devices") { (result: Result<PagedResult<Device>, DisruptiveError>) in
             switch result {
                 case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, devices: page.results)))
                 case .failure(let err)  : completion(.failure(err))
@@ -233,10 +233,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID ?? "-")/devices/\(deviceID)"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -351,10 +351,10 @@ extension Disruptive {
         do {
             // Create the request
             let endpoint = "projects/\(projectID)/devices:batchUpdate"
-            let request = try Request(method: .post, baseURL: baseURL, endpoint: endpoint, body: body)
+            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
             
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init setLabel request with payload: \(body). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -386,10 +386,10 @@ extension Disruptive {
         do {
             // Create the request
             let endpoint = "projects/\(toProjectID)/devices:transfer"
-            let request = try Request(method: .post, baseURL: baseURL, endpoint: endpoint, body: body)
+            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
             
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to initialize transfer devices request with payload: \(body). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))

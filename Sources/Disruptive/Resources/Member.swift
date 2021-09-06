@@ -100,10 +100,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pagingKey: "members") { completion($0) }
+        request.send(pagingKey: "members") { completion($0) }
     }
     
     
@@ -161,10 +161,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "members") { (result: Result<PagedResult<Member>, DisruptiveError>) in
+        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "members") { (result: Result<PagedResult<Member>, DisruptiveError>) in
             switch result {
                 case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, members: page.results)))
                 case .failure(let err)  : completion(.failure(err))
@@ -211,10 +211,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     
@@ -288,10 +288,10 @@ extension Disruptive {
         
         do {
             // Create the request
-            let request = try Request(method: .post, baseURL: baseURL, endpoint: endpoint, body: payload)
+            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
             
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init create member request with payload \(payload). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -375,10 +375,10 @@ extension Disruptive {
         do {
             // Create the request
             let params = ["update_mask": [updateMask.joined(separator: ",")]]
-            let request = try Request(method: .patch, baseURL: baseURL, endpoint: endpoint, params: params, body: patch)
+            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params, body: patch)
 
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init updateMember request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -423,10 +423,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .delete, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     
@@ -484,10 +484,10 @@ extension Disruptive {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { (result: Result<InviteURLResponse, DisruptiveError>) in
+        request.send() { (result: Result<InviteURLResponse, DisruptiveError>) in
             switch result {
                 case .success(let response):
                     if let url = URL(string: response.inviteUrl) {

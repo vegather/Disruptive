@@ -9,11 +9,10 @@ import XCTest
 @testable import Disruptive
 
 class AuthenticationTests: DisruptiveTests {
-    
     func testOAuth2() {
         let reqKey = "key"
         let reqEmail = "email"
-        let reqURL = Disruptive.defaultAuthURL
+        let reqURL = Disruptive.DefaultURLs.oauthTokenEndpoint
         
         let respAccessToken = "dummy_token"
         let respPayload = """
@@ -24,8 +23,9 @@ class AuthenticationTests: DisruptiveTests {
         }
         """.data(using: .utf8)!
         
-        let creds = ServiceAccountCredentials(email: reqEmail, keyID: reqKey, secret: "secret")
-        let auth = OAuth2Authenticator(credentials: creds)
+        let creds = OAuth2Authenticator.Credentials(keyID: reqKey, issuer: reqEmail, secret: "secret")
+        let auth = OAuth2Authenticator(credentials: creds, authURL: reqURL)
+        Disruptive.auth = auth
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -96,7 +96,7 @@ class AuthenticationTests: DisruptiveTests {
         }
         
         // Should not be authenticated to begin with
-        XCTAssertNil(auth.auth)
+        XCTAssertNil(auth.authToken)
         XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
         
         
@@ -108,12 +108,12 @@ class AuthenticationTests: DisruptiveTests {
         }
         wait(for: [exp], timeout: 1)
         XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
-        XCTAssertNotNil(auth.auth)
+        XCTAssertNotNil(auth.authToken)
         XCTAssertGreaterThan(
-            auth.auth!.expirationDate.timeIntervalSince1970,
+            auth.authToken!.expirationDate.timeIntervalSince1970,
             Date().timeIntervalSince1970
         )
-        XCTAssertEqual(auth.auth?.token, "Bearer \(respAccessToken)")
+        XCTAssertEqual(auth.authToken?.token, "Bearer \(respAccessToken)")
         
         
         // Log out
@@ -124,7 +124,7 @@ class AuthenticationTests: DisruptiveTests {
         }
         wait(for: [exp], timeout: 1)
         XCTAssertFalse(auth.shouldAutoRefreshAccessToken)
-        XCTAssertNil(auth.auth)
+        XCTAssertNil(auth.authToken)
         
         // getActiveAccessToken should return .loggedOut
         exp = expectation(description: "")
@@ -143,12 +143,12 @@ class AuthenticationTests: DisruptiveTests {
         }
         wait(for: [exp], timeout: 1)
         XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
-        XCTAssertNotNil(auth.auth)
+        XCTAssertNotNil(auth.authToken)
         XCTAssertGreaterThan(
-            auth.auth!.expirationDate.timeIntervalSince1970,
+            auth.authToken!.expirationDate.timeIntervalSince1970,
             Date().timeIntervalSince1970
         )
-        XCTAssertEqual(auth.auth?.token, "Bearer \(respAccessToken)")
+        XCTAssertEqual(auth.authToken?.token, "Bearer \(respAccessToken)")
     }
 }
 

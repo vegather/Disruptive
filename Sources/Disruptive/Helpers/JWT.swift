@@ -12,10 +12,16 @@ import Foundation
 internal struct JWT {
     /// Produces a JWT token that is suitable for a Disruptive service account.
     /// Docs: https://developer.disruptive-technologies.com/docs/authentication/oauth2
-    internal static func serviceAccount(authURL: String, credentials: ServiceAccountCredentials) -> String? {
+    internal static func serviceAccount(
+        authURL : String,
+        keyID   : String,
+        issuer  : String,
+        secret  : String
+    ) -> String? {
+        
         let headers = [
             "alg": "HS256",
-            "kid": credentials.keyID
+            "kid": keyID
         ]
         
         let now = Int(Date().timeIntervalSince1970)
@@ -23,10 +29,10 @@ internal struct JWT {
             "iat": now,
             "exp": now + 3600,
             "aud": authURL,
-            "iss": credentials.email
+            "iss": issuer
         ]
         
-        return jwt(headers: headers, claims: claims, secret: credentials.secret)
+        return jwt(headers: headers, claims: claims, secret: secret)
     }
     
     /// Produces a JWT token for a given set of `headers`, `claims`, and a `secret`. No default

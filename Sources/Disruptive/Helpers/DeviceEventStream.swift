@@ -117,7 +117,7 @@ public class DeviceEventStream: NSObject {
     private var session: URLSession!
     private var task: URLSessionTask?
     private let request: Request
-    private let authenticator: Authenticator
+    private let authenticator: Authenticator?
     
     private var retryScheme = RetryScheme()
     
@@ -128,14 +128,19 @@ public class DeviceEventStream: NSObject {
     // Preventing init without parameters
     private override init() { fatalError() }
     
-    internal init(request: Request, authenticator: Authenticator) {
+    internal init(request: Request, authenticator: Authenticator?) {
         self.request = request
         self.authenticator = authenticator
         
         super.init()
         
         setupSession()
-        restartStream()
+        
+        // Starting the stream in the next runloop cycle in case no authenticator
+        // has been, and we want to call `onError?()` immediately.
+        DispatchQueue.main.async { [weak self] in
+            self?.restartStream()
+        }
     }
     
     /**
@@ -169,8 +174,13 @@ public class DeviceEventStream: NSObject {
     
     private func restartStream() {
         guard hasBeenClosed == false else { return }
+        guard let auth = authenticator else {
+            Disruptive.log("No authentication has been set. Set it with `Disruptive.auth = ...`", level: .error)
+            onError?(.loggedOut)
+            return
+        }
         
-        authenticator.getActiveAccessToken { [weak self] result in
+        auth.getActiveAccessToken { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -182,7 +192,7 @@ public class DeviceEventStream: NSObject {
                 
                 // Convert to URLRequest
                 guard let urlRequest = req.urlRequest() else {
-                    Disruptive.log("Failed to create URLRequest to restart the ServerSentEvents stream", level: .error)
+                    Disruptive.log("Failed to create URLRequest to restart the DeviceEventStream stream", level: .error)
                     self.onError?(.unknownError)
                     return
                 }
@@ -191,7 +201,7 @@ public class DeviceEventStream: NSObject {
                 self.task = self.session.dataTask(with: urlRequest)
                 self.task?.resume()
             case .failure(let e):
-                Disruptive.log("Failed to authenticate the ServerSentEvents stream. Error: \(e)", level: .error)
+                Disruptive.log("Failed to authenticate the DeviceEventStream stream. Error: \(e)", level: .error)
                 self.onError?(e)
             }
         }

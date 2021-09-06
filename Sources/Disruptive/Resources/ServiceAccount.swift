@@ -72,10 +72,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pagingKey: "serviceAccounts") { completion($0) }
+        request.send(pagingKey: "serviceAccounts") { completion($0) }
     }
     
     /**
@@ -100,10 +100,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "serviceAccounts") { (result: Result<PagedResult<ServiceAccount>, DisruptiveError>) in
+        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "serviceAccounts") { (result: Result<PagedResult<ServiceAccount>, DisruptiveError>) in
             switch result {
                 case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, serviceAccounts: page.results)))
                 case .failure(let err)  : completion(.failure(err))
@@ -126,10 +126,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -164,10 +164,10 @@ extension Disruptive {
         do {
             // Create the request
             let endpoint = "projects/\(projectID)/serviceaccounts"
-            let request = try Request(method: .post, baseURL: baseURL, endpoint: endpoint, body: payload)
+            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
             
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init create service account request with payload \(payload). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -235,10 +235,10 @@ extension Disruptive {
             // Create the request
             let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
             let params = ["update_mask": [updateMask.joined(separator: ",")]]
-            let request = try Request(method: .patch, baseURL: baseURL, endpoint: endpoint, params: params, body: patch)
+            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params, body: patch)
             
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init updateServiceAccount request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -260,10 +260,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
-        let request = Request(method: .delete, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -286,10 +286,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pagingKey: "keys") { completion($0) }
+        request.send(pagingKey: "keys") { completion($0) }
     }
     
     /**
@@ -316,10 +316,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "keys") { (result: Result<PagedResult<ServiceAccount.Key>, DisruptiveError>) in
+        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "keys") { (result: Result<PagedResult<ServiceAccount.Key>, DisruptiveError>) in
             switch result {
                 case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, keys: page.results)))
                 case .failure(let err)  : completion(.failure(err))
@@ -344,10 +344,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys/\(keyID)"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -369,10 +369,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys"
-        let request = Request(method: .post, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -395,10 +395,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys/\(keyID)"
-        let request = Request(method: .delete, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
 }
 

@@ -92,6 +92,12 @@ let credentials = ServiceAccountCredentials(email: "<EMAIL>", keyID: "<KEY_ID>",
 let authenticator = OAuth2Authenticator(credentials: credentials)
 let disruptive = Disruptive(authenticator: authenticator)
 
+Disruptive.defaultAuth = Disruptive.Auth.serviceAccount(
+    email  : "<EMAIL>", 
+    keyID  : "<KEY_ID>", 
+    secret : "<SECRET>"
+)
+
 // All methods called on the disruptive instance will be authenticated
 ```
 

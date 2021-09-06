@@ -43,10 +43,10 @@ extension Disruptive {
         completion: @escaping (_ result: Result<[Organization], DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations")
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "organizations")
         
         // Send the request
-        sendRequest(request, pagingKey: "organizations") { completion($0) }
+        request.send(pagingKey: "organizations") { completion($0) }
     }
     
     /**
@@ -68,10 +68,10 @@ extension Disruptive {
         completion : @escaping (_ result: Result<(nextPageToken: String?, organizations: [Organization]), DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "organizations")
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "organizations")
         
         // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "organizations") { (result: Result<PagedResult<Organization>, DisruptiveError>) in
+        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "organizations") { (result: Result<PagedResult<Organization>, DisruptiveError>) in
             switch result {
                 case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, organizations: page.results)))
                 case .failure(let err)  : completion(.failure(err))
@@ -92,10 +92,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "organizations/\(organizationID)"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
 }
 

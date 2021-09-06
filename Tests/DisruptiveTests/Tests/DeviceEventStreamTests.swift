@@ -254,7 +254,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func runEventTest(payload: Data, handler: (DeviceEventStream, XCTestExpectation) -> ()) {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -273,7 +273,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)!
+        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
         handler(stream, exp)
         
         wait(for: [exp], timeout: 1)
@@ -281,7 +281,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func testErrorMessage() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """
@@ -305,7 +305,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
-        stream?.onError = { err in
+        stream.onError = { err in
             XCTAssertEqual(err, .badRequest)
             exp.fulfill()
         }
@@ -315,7 +315,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func testNoMessageIfNoResponse() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """
@@ -339,10 +339,10 @@ class DeviceEventStreamTests: DisruptiveTests {
         let exp = expectation(description: "")
         exp.isInverted = true
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
-        stream?.onTemperature = { deviceID, temp in
+        stream.onTemperature = { deviceID, temp in
             exp.fulfill()
         }
-        stream?.onError = { err in
+        stream.onError = { err in
             exp.fulfill()
         }
         
@@ -351,7 +351,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func testCloseStream() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """
@@ -376,17 +376,17 @@ class DeviceEventStreamTests: DisruptiveTests {
         let exp = expectation(description: "")
         exp.isInverted = true
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
-        stream?.onTemperature = { deviceID, temp in
+        stream.onTemperature = { deviceID, temp in
             exp.fulfill()
         }
-        stream?.close()
+        stream.close()
         
         wait(for: [exp], timeout: 0.1)
     }
     
     func testUnknownEvent() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """
@@ -411,8 +411,8 @@ class DeviceEventStreamTests: DisruptiveTests {
         let exp = expectation(description: "")
         exp.isInverted = true
         let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
-        stream?.onTemperature = { _, _ in exp.fulfill() }
-        stream?.onError = { _ in exp.fulfill()}
+        stream.onTemperature = { _, _ in exp.fulfill() }
+        stream.onError = { _ in exp.fulfill()}
         
         wait(for: [exp], timeout: 1)
     }

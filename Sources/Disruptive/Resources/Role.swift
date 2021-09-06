@@ -46,10 +46,10 @@ extension Disruptive {
         completion: @escaping (_ result: Result<[Role], DisruptiveError>) -> ())
     {
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "roles")
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "roles")
         
         // Send the request
-        sendRequest(request, pagingKey: "roles") { completion($0) }
+        request.send(pagingKey: "roles") { completion($0) }
     }
     
     /**
@@ -70,10 +70,10 @@ extension Disruptive {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: baseURL, endpoint: resourceName)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: resourceName)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
 }
 

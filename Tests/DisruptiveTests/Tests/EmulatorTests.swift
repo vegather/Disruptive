@@ -15,7 +15,7 @@ class EmulatorTests: DisruptiveTests {
         let reqDeviceType = Device.DeviceType.temperature
         let reqDisplayName = "dummy"
         let reqLabels = ["foo": "bar"]
-        let reqURL = URL(string: Disruptive.defaultBaseEmulatorURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseEmulatorURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         let reqBody = """
         {
@@ -59,7 +59,7 @@ class EmulatorTests: DisruptiveTests {
         let reqProjectID = "abc"
         let reqDeviceType = Device.DeviceType.temperature
         let reqDisplayName = "dummy"
-        let reqURL = URL(string: Disruptive.defaultBaseEmulatorURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseEmulatorURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         let reqBody = """
         {
@@ -114,7 +114,7 @@ class EmulatorTests: DisruptiveTests {
     func testDeleteEmulatedDevice() {
         let reqProjectID = "proj1"
         let reqDeviceID = "emudev1"
-        let reqURL = URL(string: Disruptive.defaultBaseEmulatorURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseEmulatorURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)")
         
         MockURLProtocol.requestHandler = { request in
@@ -149,7 +149,7 @@ class EmulatorTests: DisruptiveTests {
         func assertEvent<T: PublishableEvent>(event: T, expectedPayload: Data) {
             let reqProjectID = "proj1"
             let reqDeviceID = "dev1"
-            let reqURL = URL(string: Disruptive.defaultBaseEmulatorURL)!
+            let reqURL = URL(string: Disruptive.DefaultURLs.baseEmulatorURL)!
                 .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID):publish")
             
             

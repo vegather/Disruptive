@@ -48,10 +48,10 @@ extension Disruptive {
         do {
             // Create the request
             let endpoint = "projects/\(projectID)/devices"
-            let request = try Request(method: .post, baseURL: emulatorBaseURL, endpoint: endpoint, body: payload)
+            let request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: payload)
             
             // Create the new project
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init request with payload: \(payload). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -73,10 +73,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/devices/\(deviceID)"
-        let request = Request(method: .delete, baseURL: emulatorBaseURL, endpoint: endpoint)
+        let request = Request(method: .delete, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -116,10 +116,10 @@ extension Disruptive {
             // Create request
             let endpoint = "projects/\(projectID)/devices/\(deviceID):publish"
             let body = try PublishBody(event: event)
-            let request = try Request(method: .post, baseURL: emulatorBaseURL, endpoint: endpoint, body: body)
+            let request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: body)
 
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let err) {
             completion(.failure((err as? DisruptiveError) ?? .unknownError))
         }

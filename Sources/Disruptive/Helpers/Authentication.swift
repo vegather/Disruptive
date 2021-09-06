@@ -8,20 +8,31 @@
 
 import Foundation
 
-/**
- A set of `ServiceAccountCredentials` is used to authenticate against the Disruptive Technologies API.
- It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking
- the `Service Account` tab under `API Integrations` in the side menu, and creating a new key.
- */
-public struct ServiceAccountCredentials: Codable {
-    public let email  : String
-    public let keyID  : String
-    public let secret : String
+public extension Disruptive {
     
-    public init(email: String, keyID: String, secret: String) {
-        self.email  = email
-        self.keyID  = keyID
-        self.secret = secret
+    /**
+     Provides mechanisms to authenticate the Disruptive Client
+     */
+    struct Auth {
+        
+        /**
+         Creates an `Authenticator` that authenticates a Service Account against the
+         Disruptive REST API.
+         
+         Example:
+         ```
+         Disruptive.auth = Disruptive.Auth.serviceAccount(email: <EMAIL>, keyID: <KEY_ID>, secret: <SECRET>)
+         ```
+         */
+        static func serviceAccount(
+            email   : String,
+            keyID   : String,
+            secret  : String,
+            authURL : String = Disruptive.DefaultURLs.oauthTokenEndpoint
+        ) -> Authenticator {
+            let credentials = OAuth2Authenticator.Credentials(keyID: keyID, issuer: email, secret: secret)
+            return OAuth2Authenticator(credentials: credentials, authURL: authURL)
+        }
     }
 }
 
@@ -31,19 +42,13 @@ public struct ServiceAccountCredentials: Codable {
  This type is only useful when implementing a type that conforms to `Authenticator`,
  and does not need to be accessed or created in any other circumstances.
  */
-public struct Auth {
+public struct AuthToken {
     /// The current token to use for authentication. This `String` needs to
     /// be prefixed with the authentication scheme. Eg: "Bearer ..."
     public let token: String
     
     /// The expiration date of the `token`.
     public let expirationDate: Date
-    
-    /// Creates a new `Auth` instance
-    public init(token: String, expirationDate: Date) {
-        self.token = token
-        self.expirationDate = expirationDate
-    }
 }
 
 /**
@@ -56,9 +61,9 @@ public protocol Authenticator {
     
     /// The authentication data (token, and expiration date). This should be set by
     /// a conforming type after a call to `refreshAccessToken()`.
-    var auth: Auth? { get }
+    var authToken: AuthToken? { get }
     
-    /// Indicates whether the auth provider should automatically attempt to
+    /// Indicates whether the authenticator should automatically attempt to
     /// refresh the access token if the local one is expired, or if no local access token is available.
     /// This is intended to prevent any accidental re-authentications being made
     /// after the client has logged out.
@@ -92,7 +97,7 @@ internal extension Authenticator {
     /// there's an expiration date that is further away than a minute.
     /// Otherwise returns nil.
     private func getLocalAuthToken() -> String? {
-        if let auth = auth, auth.expirationDate.timeIntervalSinceNow > 60 {
+        if let auth = authToken, auth.expirationDate.timeIntervalSinceNow > 60 {
             return auth.token
         } else {
             return nil
@@ -100,8 +105,8 @@ internal extension Authenticator {
     }
     
     /// Will check things in the following order:
-    /// * If the auth provider is logged out, return a `loggedOut` error
-    /// * If there is a local auth token that is not expired (or less than a minute away from expiring), return it
+    /// * If the authenticator is logged out, return a `loggedOut` error.
+    /// * If there is a local auth token that is not expired (or more than a minute away from expiring), return it.
     /// * Attempt to refresh the auth token (and store it in `auth`). If successful, return the new token, otherwise return an error.
     func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
         if shouldAutoRefreshAccessToken == false {
@@ -112,9 +117,9 @@ internal extension Authenticator {
             // There already exists a non-expired auth token
             completion(.success(authToken))
         } else {
-            // The auth provider is either not authenticated, or the auth
-            // token too close to getting expired. Will re-authenticate the auth provider
-            Disruptive.log("Authenticating the auth provider...")
+            // The authenticator is either not authenticated, or the auth
+            // token too close to getting expired. Will re-authenticate the authenticator
+            Disruptive.log("Authenticating the authenticator...")
             refreshAccessToken { result in
                 switch result {
                 case .success():
@@ -122,17 +127,18 @@ internal extension Authenticator {
                         Disruptive.log("Authentication successful")
                         completion(.success(authToken))
                     } else {
-                        Disruptive.log("The auth provider authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
+                        Disruptive.log("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
                         completion(.failure(.unknownError))
                     }
                 case .failure(let e):
-                    Disruptive.log("Failed to authenticate the auth provider with error: \(e)", level: .error)
+                    Disruptive.log("Failed to authenticate the authenticator with error: \(e)", level: .error)
                     completion(.failure(e))
                 }
             }
         }
     }
 }
+
 
 /**
  An `Authenticator` that logs in a service account using OAuth2 with a JWT Bearer Token as an authorization grant.
@@ -141,59 +147,54 @@ internal extension Authenticator {
  However if you'd like the authenticator to no longer be authenticated, you can call `logout()`,
  and then `login()` if you want it to be authenticated again.
  
- See [Authenticator](../Authenticator) for more details about the properties
- and methods.
- 
  See the [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2) for details about OAuth2 authentication using a Service Account.
- 
- Example:
- ```
- let credentials = ServiceAccountCredentials(email: "<EMAIL>", keyID: "<KEY_ID>", secret: "<SECRET>")
- let authenticator = OAuth2Authenticator(credentials: credentials)
- let disruptive = Disruptive(authenticator: authenticator)
- ```
  */
-public class OAuth2Authenticator: Authenticator {
+internal class OAuth2Authenticator: Authenticator {
 
-    /// The service account used to authenticate against the Disruptive Technologies' REST API.
-    public let credentials : ServiceAccountCredentials
-    
     /// The authentication endpoint to fetch the access token from.
-    public let authURL: String
+    let authURL: String
 
     /// The authentication details.
-    private(set) public var auth: Auth?
+    var authToken: AuthToken?
     
     /// An `OAuth2Authenticator` will default to automatically get a fresh access token.
     /// This will be switched on and off when `login()` and `logout()` is called respectively.
-    private(set) public var shouldAutoRefreshAccessToken = true
+    var shouldAutoRefreshAccessToken = true
+    
+    /// The credentials used to authenticate against the Disruptive Technologies' REST API.
+    private let credentials: Credentials
 
+    struct Credentials: Codable {
+        public let keyID  : String
+        public let issuer : String
+        public let secret : String
+    }
     
     
     /**
-     Initializes an `OAuth2Authenticator` using a set of `ServiceAccountCredentials`.
+     Initializes an `OAuth2Authenticator` using a set of `Credentials`.
      
-     - Parameter credentials: The `ServiceAccountCredentials` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
-     - Parameter authURL: Optional parameter. Used to specify the endpoint to exchange a JWT for an access token. The default value is `Disruptive.defaultAuthURL`.
+     - Parameter credentials: The `Credentials` to use for authentication. It can be created in [DT Studio](https://studio.disruptive-technologies.com) by clicking the `Service Account` tab under `API Integrations` in the side menu.
+     - Parameter authURL: Used to specify the endpoint to exchange a JWT for an access token.
      */
-    public init(credentials: ServiceAccountCredentials, authURL: String = Disruptive.defaultAuthURL) {
+    init(credentials: Credentials, authURL: String) {
         self.authURL = authURL
         self.credentials = credentials
     }
     
     /// Refreshes the access token, stores it in the `auth` property, and sets
     /// `shouldAutoRefreshAccessToken` to `true`.
-    public func login(completion: @escaping AuthHandler) {
+    func login(completion: @escaping AuthHandler) {
         refreshAccessToken { [weak self] result in
             self?.shouldAutoRefreshAccessToken = true
             completion(result)
         }
     }
     
-    /// Logs out the auth provider by setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
-    /// to `false`. Call `login()` to log the auth provider back in again.
-    public func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
-        auth = nil
+    /// Logs out the authenticator by setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
+    /// to `false`. Call `login()` to log the authenticator back in again.
+    func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+        authToken = nil
         shouldAutoRefreshAccessToken = false
         completion(.success(()))
     }
@@ -203,8 +204,13 @@ public class OAuth2Authenticator: Authenticator {
     /// along with the received expiration date.
     ///
     /// This flow is described in more detail on the [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2).
-    public func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
-        guard let authJWT = JWT.serviceAccount(authURL: authURL, credentials: credentials) else {
+    func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+        guard let authJWT = JWT.serviceAccount(
+            authURL : authURL,
+            keyID   : credentials.keyID,
+            issuer  : credentials.issuer,
+            secret  : credentials.secret
+        ) else {
             Disruptive.log("Failed to create a JWT from service account credentials: \(credentials)", level: .error)
             completion(.failure(.unknownError))
             return
@@ -227,12 +233,12 @@ public class OAuth2Authenticator: Authenticator {
                 headers: [header],
                 body: body
             )
-            request.send { [weak self] (result: Result<AccessTokenResponse, DisruptiveError>) in
+            request.internalSend { [weak self] (result: Result<AccessTokenResponse, DisruptiveError>) in
                 switch result {
                     case .success(let response):
                         Disruptive.log("OAuth2 authentication successful")
                         DispatchQueue.main.async {
-                            self?.auth = Auth(
+                            self?.authToken = AuthToken(
                                 token: "Bearer \(response.accessToken)",
                                 expirationDate: Date(timeIntervalSinceNow: TimeInterval(response.expiresIn))
                             )

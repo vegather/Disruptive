@@ -33,7 +33,7 @@ class ServiceAccountTests: DisruptiveTests {
     
     func testGetServiceAccounts() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
         
         let respServiceAccounts = [createDummyServiceAccount(), createDummyServiceAccount()]
@@ -69,7 +69,7 @@ class ServiceAccountTests: DisruptiveTests {
     
     func testGetServiceAccountsPage() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
         
         let respServiceAccounts = [createDummyServiceAccount(), createDummyServiceAccount()]
@@ -107,7 +107,7 @@ class ServiceAccountTests: DisruptiveTests {
     func testGetServiceAccount() {
         let reqProjectID = "proj1"
         let reqSAID = "sa1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSAID)")
         
         let respSA = createDummyServiceAccount()
@@ -145,7 +145,7 @@ class ServiceAccountTests: DisruptiveTests {
         let reqProjectID = "abc"
         let reqDisplayName = "dummy"
         let reqBasicAuthEnabled = true
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
         let reqBody = """
         {
@@ -190,7 +190,7 @@ class ServiceAccountTests: DisruptiveTests {
         let reqSaID = "sa1"
         let reqDisplayName = "disp_name"
         let reqBasicAuthEnabled = true
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)")
         let reqBody = """
         {
@@ -239,7 +239,7 @@ class ServiceAccountTests: DisruptiveTests {
     func testUpdateServiceAccountNoParametersSet() {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)")
         let reqBody = """
         { }
@@ -283,7 +283,7 @@ class ServiceAccountTests: DisruptiveTests {
     func testDeleteServiceAccount() {
         let reqSaID = "sa1"
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)")
         
         MockURLProtocol.requestHandler = { request in
@@ -317,7 +317,7 @@ class ServiceAccountTests: DisruptiveTests {
     func testGetServiceAccountKeys() {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)/keys")
         
         let respSaKeys = [createDummyServiceAccountKey(), createDummyServiceAccountKey()]
@@ -354,7 +354,7 @@ class ServiceAccountTests: DisruptiveTests {
     func testGetServiceAccountKeysPage() {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)/keys")
         
         let respSaKeys = [createDummyServiceAccountKey(), createDummyServiceAccountKey()]
@@ -393,7 +393,7 @@ class ServiceAccountTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqKeyID = "key1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)/keys/\(reqKeyID)")
         
         let respSaKey = createDummyServiceAccountKey()
@@ -430,7 +430,7 @@ class ServiceAccountTests: DisruptiveTests {
     func testCreateServiceAccountKey() {
         let reqProjectID = "abc"
         let reqSaId = "sa1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaId)/keys")
         
         let respSaKs = createDummyServiceAccountKeySecret()
@@ -468,7 +468,7 @@ class ServiceAccountTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqKeyID = "key1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts/\(reqSaID)/keys/\(reqKeyID)")
         
         MockURLProtocol.requestHandler = { request in

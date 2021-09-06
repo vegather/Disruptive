@@ -12,7 +12,7 @@ class StreamTests: DisruptiveTests {
 
     func testSubscribeToDevicesNoParameters() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
                 
         MockStreamURLProtocol.requestHandler = { request in
@@ -34,7 +34,7 @@ class StreamTests: DisruptiveTests {
         // Wait a bit to let the request go through (and be asserted)
         let exp = expectation(description: "")
         exp.isInverted = true
-        stream?.onTouch = { _, _ in exp.fulfill() }
+        stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
     }
     
@@ -45,7 +45,7 @@ class StreamTests: DisruptiveTests {
         let productNumbers = ["pn1", "pn2"]
         let reqLabelFilters = ["foo", "bar"]
         let reqEventTypes = [EventType.touch, .batteryStatus, .networkStatus]
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -80,14 +80,14 @@ class StreamTests: DisruptiveTests {
         // Wait a bit to let the request go through (and be asserted)
         let exp = expectation(description: "")
         exp.isInverted = true
-        stream?.onTouch = { _, _ in exp.fulfill() }
+        stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
     }
     
     func testSubscribeToDeviceNoParameters() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -109,7 +109,7 @@ class StreamTests: DisruptiveTests {
         // Wait a bit to let the request go through (and be asserted)
         let exp = expectation(description: "")
         exp.isInverted = true
-        stream?.onTouch = { _, _ in exp.fulfill() }
+        stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
     }
     
@@ -117,7 +117,7 @@ class StreamTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqEventTypes = [EventType.touch, .batteryStatus, .networkStatus]
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -146,7 +146,7 @@ class StreamTests: DisruptiveTests {
         // Wait a bit to let the request go through (and be asserted)
         let exp = expectation(description: "")
         exp.isInverted = true
-        stream?.onTouch = { _, _ in exp.fulfill() }
+        stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
     }
 }

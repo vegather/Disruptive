@@ -75,10 +75,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pagingKey: "dataConnectors") { completion($0) }
+        request.send(pagingKey: "dataConnectors") { completion($0) }
     }
     
     /**
@@ -103,10 +103,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request, pageSize: pageSize, pageToken: pageToken, pagingKey: "dataConnectors") { (result: Result<PagedResult<DataConnector>, DisruptiveError>) in
+        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "dataConnectors") { (result: Result<PagedResult<DataConnector>, DisruptiveError>) in
             switch result {
                 case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, dataConnectors: page.results)))
                 case .failure(let err)  : completion(.failure(err))
@@ -129,10 +129,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -196,10 +196,10 @@ extension Disruptive {
         do {
             // Create the request
             let endpoint = "projects/\(projectID)/dataconnectors"
-            let request = try Request(method: .post, baseURL: baseURL, endpoint: endpoint, body: payload)
+            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
             
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init create data connector request with payload \(payload). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -308,10 +308,10 @@ extension Disruptive {
             // Create the request
             let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
             let params = ["update_mask": [updateMask.joined(separator: ",")]]
-            let request = try Request(method: .patch, baseURL: baseURL, endpoint: endpoint, params: params, body: patch)
+            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params, body: patch)
             
             // Send the request
-            sendRequest(request) { completion($0) }
+            request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init updateDataConnector request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? .unknownError))
@@ -333,10 +333,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
-        let request = Request(method: .delete, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -354,10 +354,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID):metrics"
-        let request = Request(method: .get, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
     
     /**
@@ -375,10 +375,10 @@ extension Disruptive {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID):sync"
-        let request = Request(method: .post, baseURL: baseURL, endpoint: endpoint)
+        let request = Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        sendRequest(request) { completion($0) }
+        request.send() { completion($0) }
     }
 }
 

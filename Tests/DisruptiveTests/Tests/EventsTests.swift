@@ -13,7 +13,7 @@ class EventsTests: DisruptiveTests {
     func testGetEvents() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)/events")
         let reqStart = Date(timeIntervalSince1970: 1606045669)
         let reqEnd   = Date(timeIntervalSince1970: 1606067269)
@@ -261,7 +261,7 @@ class EventsTests: DisruptiveTests {
     func testGetNoEvents() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)/events")
         let reqQueryParams: [String: [String]] = [
             "page_size": ["1000"]
@@ -305,7 +305,7 @@ class EventsTests: DisruptiveTests {
     func testGetUnknownEvents() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)/events")
         let reqQueryParams: [String: [String]] = [
             "page_size": ["1000"]

@@ -2,7 +2,7 @@ import XCTest
 @testable import Disruptive
 
 struct TestAuthenticator: Authenticator {
-    var auth: AuthToken? {
+    var authToken: AuthToken? {
         return AuthToken(token: "foobar", expirationDate: .distantFuture)
     }
     
@@ -35,6 +35,10 @@ class DisruptiveTests: XCTestCase {
         setupAuth()
     }
     
+    override func tearDown() {
+        tearDownAuth()
+    }
+    
     private func setupRequest() {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
@@ -48,8 +52,14 @@ class DisruptiveTests: XCTestCase {
     }
     
     private func setupAuth() {
-        let auth = TestAuthenticator()
-        disruptive = Disruptive(authenticator: auth)
+        Disruptive.auth = TestAuthenticator()
         Disruptive.loggingEnabled = true
+        disruptive = Disruptive()
+    }
+    
+    private func tearDownAuth() {
+        Disruptive.auth = nil
+        Disruptive.loggingEnabled = false
+        disruptive = nil
     }
 }

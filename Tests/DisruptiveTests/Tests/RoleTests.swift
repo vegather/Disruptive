@@ -52,7 +52,7 @@ class RoleTests: DisruptiveTests {
     }
     
     func testGetRoles() {
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("roles")
         
         let respRoles = [createDummyRole(), createDummyRole()]
@@ -88,7 +88,7 @@ class RoleTests: DisruptiveTests {
     
     func testGetRole() {
         let role = Role.RoleType.organizationAdmin
-        let reqURL = URL(string: Disruptive.defaultBaseURL)!
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent(role.resourceName!)
         
         let respRole = createDummyRole()

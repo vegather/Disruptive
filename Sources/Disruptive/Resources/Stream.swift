@@ -37,7 +37,7 @@ extension Disruptive {
         productNumbers : [String]?            = nil,
         labelFilters   : [String]?            = nil,
         eventTypes     : [EventType]?         = nil)
-        -> DeviceEventStream?
+        -> DeviceEventStream
     {
         // Construct parameters
         var params: [String: [String]] = [:]
@@ -57,10 +57,10 @@ extension Disruptive {
             params["event_types"] = eventTypes.map { $0.rawValue }
         }
                 
-        let request = Request(method: .get, baseURL: baseURL, endpoint: "projects/\(projectID)/devices:stream", params: params)
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices:stream", params: params)
         
         // Create the stream, and connect to it
-        return DeviceEventStream(request: request, authenticator: authenticator)
+        return DeviceEventStream(request: request, authenticator: Disruptive.auth)
     }
     
     /**
@@ -70,7 +70,7 @@ extension Disruptive {
      - Parameter deviceID: The identifier of the device to subscribe to.
      - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
      */
-    public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> DeviceEventStream? {
+    public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> DeviceEventStream {
         return subscribeToDevices(
             projectID      : projectID,
             deviceIDs      : [deviceID],
