@@ -232,7 +232,7 @@ class EventsTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getEvents(projectID: reqProjectID, deviceID: reqDeviceID, startDate: reqStart, endDate: reqEnd, eventTypes: EventType.allCases) { result in
+        Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID, startDate: reqStart, endDate: reqEnd, eventTypes: EventType.allCases) { result in
             switch result {
                 case .success(let events):
                     XCTAssertNotNil(events.touch)
@@ -290,7 +290,7 @@ class EventsTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
+        Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let events):
                     XCTAssertEqual(events, Events())
@@ -346,7 +346,7 @@ class EventsTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
+        Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let events):
                     XCTAssertEqual(events, Events())

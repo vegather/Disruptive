@@ -273,7 +273,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+        let stream = Device.subscribeToDevices(projectID: reqProjectID)
         handler(stream, exp)
         
         wait(for: [exp], timeout: 1)
@@ -304,7 +304,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+        let stream = Device.subscribeToDevices(projectID: reqProjectID)
         stream.onError = { err in
             XCTAssertEqual(err, .badRequest)
             exp.fulfill()
@@ -338,7 +338,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         exp.isInverted = true
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+        let stream = Device.subscribeToDevices(projectID: reqProjectID)
         stream.onTemperature = { deviceID, temp in
             exp.fulfill()
         }
@@ -375,7 +375,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         exp.isInverted = true
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+        let stream = Device.subscribeToDevices(projectID: reqProjectID)
         stream.onTemperature = { deviceID, temp in
             exp.fulfill()
         }
@@ -410,7 +410,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         
         let exp = expectation(description: "")
         exp.isInverted = true
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+        let stream = Device.subscribeToDevices(projectID: reqProjectID)
         stream.onTemperature = { _, _ in exp.fulfill() }
         stream.onError = { _ in exp.fulfill()}
         

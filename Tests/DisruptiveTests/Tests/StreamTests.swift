@@ -29,7 +29,7 @@ class StreamTests: DisruptiveTests {
             return [(nil, nil, nil)]
         }
         
-        let stream = disruptive.subscribeToDevices(projectID: reqProjectID)
+        let stream = Device.subscribeToDevices(projectID: reqProjectID)
         
         // Wait a bit to let the request go through (and be asserted)
         let exp = expectation(description: "")
@@ -68,7 +68,7 @@ class StreamTests: DisruptiveTests {
             return [(nil, nil, nil)]
         }
         
-        let stream = disruptive.subscribeToDevices(
+        let stream = Device.subscribeToDevices(
             projectID      : reqProjectID,
             deviceIDs      : reqDeviceIDs,
             deviceTypes    : reqDeviceTypes,
@@ -104,7 +104,7 @@ class StreamTests: DisruptiveTests {
             return [(nil, nil, nil)]
         }
         
-        let stream = disruptive.subscribeToDevice(projectID: reqProjectID, deviceID: reqDeviceID)
+        let stream = Device.subscribeToDevice(projectID: reqProjectID, deviceID: reqDeviceID)
         
         // Wait a bit to let the request go through (and be asserted)
         let exp = expectation(description: "")
@@ -137,7 +137,7 @@ class StreamTests: DisruptiveTests {
             return [(nil, nil, nil)]
         }
         
-        let stream = disruptive.subscribeToDevice(
+        let stream = Device.subscribeToDevice(
             projectID  : reqProjectID,
             deviceID   : reqDeviceID,
             eventTypes : reqEventTypes

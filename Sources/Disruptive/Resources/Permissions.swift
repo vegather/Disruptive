@@ -144,7 +144,7 @@ public enum Permission: String, Codable {
     case serviceAccountUpdate    = "serviceaccount.update"
 }
 
-extension Disruptive {
+extension Permission {
     /**
      Gets all the permissions the currently logged in user has for the given organization.
      
@@ -152,7 +152,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<[Permission], DisruptiveError>`
      */
-    public func getPermissions(
+    public static func getPermissions(
         organizationID : String,
         completion     : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
@@ -166,14 +166,14 @@ extension Disruptive {
     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
     - Parameter result: `Result<[Permission], DisruptiveError>`
     */
-    public func getPermissions(
+    public static func getPermissions(
         projectID  : String,
         completion : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
         getPermissions(endpoint: "projects/\(projectID)/permissions") { completion($0) }
     }
     
-    private func getPermissions(
+    private static func getPermissions(
         endpoint: String,
         completion: @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {

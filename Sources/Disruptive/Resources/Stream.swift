@@ -8,14 +8,14 @@
 
 import Foundation
 
-extension Disruptive {
+extension Device {
     
     /**
      Sets up a device stream to one or more devices in a specific project using server-sent-events. By default, all events for all the devices in the specified project will be subscribed to. The various arguments are ways to limit which devices and event types gets subscribed to.
      
      Example:
      ```
-     let stream = disruptive.subscribeToDevices(projectID: "<PROJECT_ID>")
+     let stream = Device.subscribeToDevices(projectID: "<PROJECT_ID>")
      stream?.onTemperature = { deviceID, tempEvent in
         print("Got \(tempEvent) from \(deviceID)")
      }
@@ -30,7 +30,7 @@ extension Disruptive {
           
      - Returns: A `DeviceEventStream` device stream object with callbacks for each type of event. For example, set a closure on the `onNetworkStatus` property to receive an event each time a device sends out a heart beat.
      */
-    public func subscribeToDevices(
+    public static func subscribeToDevices(
         projectID      : String,
         deviceIDs      : [String]?            = nil,
         deviceTypes    : [Device.DeviceType]? = nil,
@@ -70,7 +70,7 @@ extension Disruptive {
      - Parameter deviceID: The identifier of the device to subscribe to.
      - Parameter eventTypes: Optional parameter to specify which event types to subscribe to. If this is omitted, all the available event types for this device will be received.
      */
-    public func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> DeviceEventStream {
+    public static func subscribeToDevice(projectID: String, deviceID: String, eventTypes: [EventType]? = nil) -> DeviceEventStream {
         return subscribeToDevices(
             projectID      : projectID,
             deviceIDs      : [deviceID],

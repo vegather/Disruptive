@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Disruptive {
+struct Emulator {
     
     /**
      Creates a new emulated device in a specific project.
@@ -22,7 +22,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the newly created `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Device, DisruptiveError>`
      */
-    public func createEmulatedDevice(
+    public static func createEmulatedDevice(
         projectID   : String,
         deviceType  : Device.DeviceType,
         displayName : String,
@@ -66,7 +66,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func deleteEmulatedDevice(
+    public static func deleteEmulatedDevice(
         projectID   : String,
         deviceID    : String,
         completion  : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -90,7 +90,7 @@ extension Disruptive {
      Example:
      ```
      // Publish a temperature event
-     publishEmulatedEvent(
+     Device.publishEmulatedEvent(
          projectID : "<PROJECT_ID>",
          deviceID  : "<DEVICE_ID>",
          event     : TemperatureEvent(value: 10, timestamp: Date())
@@ -106,7 +106,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func publishEmulatedEvent<Event: PublishableEvent>(
+    public static func publishEmulatedEvent<Event: PublishableEvent>(
         projectID          : String,
         deviceID           : String,
         event              : Event,

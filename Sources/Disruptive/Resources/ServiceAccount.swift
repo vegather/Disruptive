@@ -52,7 +52,7 @@ public struct ServiceAccount: Decodable, Equatable {
     public let updateTime: Date
 }
 
-extension Disruptive {
+extension ServiceAccount {
     
     /**
      Gets all the Service Accounts that are available in a specific project.
@@ -66,7 +66,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount], DisruptiveError>`
      */
-    public func getServiceAccounts(
+    public static func getServiceAccounts(
         projectID  : String,
         completion : @escaping (_ result: Result<[ServiceAccount], DisruptiveError>) -> ())
     {
@@ -92,7 +92,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `ServiceAccount`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, serviceAccounts: [ServiceAccount]), DisruptiveError>`
      */
-    public func getServiceAccountsPage(
+    public static func getServiceAccountsPage(
         projectID  : String,
         pageSize   : Int = 100,
         pageToken  : String?,
@@ -119,7 +119,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount, DisruptiveError>`
      */
-    public func getServiceAccount(
+    public static func getServiceAccount(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<ServiceAccount, DisruptiveError>) -> ())
@@ -146,7 +146,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount` (along with its generated identifier). If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount, DisruptiveError>`
      */
-    public func createServiceAccount(
+    public static func createServiceAccount(
         projectID        : String,
         displayName      : String,
         basicAuthEnabled : Bool = false,
@@ -181,7 +181,7 @@ extension Disruptive {
      
      ```
      // Enable basic auth
-     disruptive.updateServiceAccount(
+     ServiceAccount.updateServiceAccount(
          projectID        : "<PROJECT_ID>",
          serviceAccountID : "<SERVICE_ACCOUNT_ID>",
          basicAuthEnabled : true)
@@ -190,7 +190,7 @@ extension Disruptive {
      }
      
      // Change the display name
-     disruptive.updateServiceAccount(
+     ServiceAccount.updateServiceAccount(
          projectID        : "<PROJECT_ID>",
          serviceAccountID : "<SERVICE_ACCOUNT_ID>",
          displayName      : "New Display Name")
@@ -206,7 +206,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `ServiceAccount`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount, DisruptiveError>`
      */
-    public func updateServiceAccount(
+    public static func updateServiceAccount(
         projectID        : String,
         serviceAccountID : String,
         displayName      : String? = nil,
@@ -253,7 +253,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func deleteServiceAccount(
+    public static func deleteServiceAccount(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -279,7 +279,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount.Key`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount.Key], DisruptiveError>`
      */
-    public func getServiceAccountKeys(
+    public static func getServiceAccountKeys(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<[ServiceAccount.Key], DisruptiveError>) -> ())
@@ -307,7 +307,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `ServiceAccount.Key`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, keys: [ServiceAccount.Key]), DisruptiveError>`
      */
-    public func getServiceAccountKeysPage(
+    public static func getServiceAccountKeysPage(
         projectID        : String,
         serviceAccountID : String,
         pageSize         : Int = 100,
@@ -336,7 +336,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount.Key`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount.Key, DisruptiveError>`
      */
-    public func getServiceAccountKey(
+    public static func getServiceAccountKey(
         projectID        : String,
         serviceAccountID : String,
         keyID            : String,
@@ -362,7 +362,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount.KeySecret`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount.KeySecret, DisruptiveError>`
      */
-    public func createServiceAccountKey(
+    public static func createServiceAccountKey(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<ServiceAccount.KeySecret, DisruptiveError>) -> ())
@@ -387,7 +387,7 @@ extension Disruptive {
      - Parameter result: `Result<Void, DisruptiveError>`
 
      */
-    public func deleteServiceAccountKey(
+    public static func deleteServiceAccountKey(
         projectID        : String,
         serviceAccountID : String,
         keyID            : String,

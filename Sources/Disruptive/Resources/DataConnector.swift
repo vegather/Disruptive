@@ -55,7 +55,7 @@ public struct DataConnector: Decodable, Equatable {
     
 }
 
-extension Disruptive {
+extension DataConnector {
     
     /**
      Gets all the Data Connectors that are available in a specific project.
@@ -69,7 +69,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `DataConnector`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[DataConnector], DisruptiveError>`
      */
-    public func getDataConnectors(
+    public static func getDataConnectors(
         projectID  : String,
         completion : @escaping (_ result: Result<[DataConnector], DisruptiveError>) -> ())
     {
@@ -95,7 +95,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `DataConnector`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, dataConnectors: [DataConnector]), DisruptiveError>`
      */
-    public func getDataConnectorsPage(
+    public static func getDataConnectorsPage(
         projectID  : String,
         pageSize   : Int = 100,
         pageToken  : String?,
@@ -122,7 +122,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
-    public func getDataConnector(
+    public static func getDataConnector(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<DataConnector, DisruptiveError>) -> ())
@@ -149,7 +149,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector` (along with its generated identifier). If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
-    public func createDataConnector(
+    public static func createDataConnector(
         projectID     : String,
         displayName   : String,
         pushType      : DataConnector.PushType,
@@ -213,7 +213,7 @@ extension Disruptive {
      
      ```
      // Deactivates a Data Connector by only using the `active` parameter
-     disruptive.updateDataConnector(
+     DataConnector.updateDataConnector(
          projectID       : "<PROJECT_ID>",
          dataConnectorID : "<DC_ID>",
          active          : false)
@@ -222,7 +222,7 @@ extension Disruptive {
      }
   
      // Updates the signature secret of a Data Connector, and nothing else
-     disruptive.updateDataConnector(
+     DataConnector.updateDataConnector(
          projectID       : "<PROJECT_ID>",
          dataConnectorID : "<DC_ID>",
          httpPush        : (url: nil, signatureSecret: "NEW_SECRET", headers: nil))
@@ -241,7 +241,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `DataConnector`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
-    public func updateDataConnector(
+    public static func updateDataConnector(
         projectID       : String,
         dataConnectorID : String,
         displayName     : String? = nil,
@@ -326,7 +326,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func deleteDataConnector(
+    public static func deleteDataConnector(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -347,7 +347,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector.Metrics`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector.Metrics, DisruptiveError>`
      */
-    public func getDataConnectorMetrics(
+    public static func getDataConnectorMetrics(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<DataConnector.Metrics, DisruptiveError>) -> ())
@@ -368,7 +368,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func syncDataConnector(
+    public static func syncDataConnector(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())

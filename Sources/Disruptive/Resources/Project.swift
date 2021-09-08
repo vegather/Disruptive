@@ -56,7 +56,7 @@ public struct Project: Decodable, Equatable {
 }
 
 
-extension Disruptive {
+extension Project {
     /**
      Gets a list of all projects that matches the `query`/`organizationID`.
      
@@ -74,7 +74,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Project], DisruptiveError>`
      */
-    public func getProjects(
+    public static func getProjects(
         organizationID : String? = nil,
         query          : String? = nil,
         completion     : @escaping (_ result: Result<[Project], DisruptiveError>) -> ())
@@ -114,7 +114,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Project`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, projects: [Project]), DisruptiveError>`
      */
-    public func getProjectsPage(
+    public static func getProjectsPage(
         organizationID : String? = nil,
         query          : String? = nil,
         pageSize       : Int = 100,
@@ -149,7 +149,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
-    public func getProject(
+    public static func getProject(
         projectID  : String,
         completion : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
@@ -168,7 +168,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
-    public func createProject(
+    public static func createProject(
         organizationID : String,
         displayName    : String,
         completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
@@ -199,7 +199,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func deleteProject(
+    public static func deleteProject(
         projectID  : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
@@ -219,7 +219,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project` with the updated display name. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
-    public func updateProjectDisplayName(
+    public static func updateProjectDisplayName(
         projectID      : String,
         newDisplayName : String,
         completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())

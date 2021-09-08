@@ -44,7 +44,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getProjects(organizationID: reqOrgID, query: reqQuery) { result in
+        Project.getProjects(organizationID: reqOrgID, query: reqQuery) { result in
             switch result {
                 case .success(let projectsOut):
                     XCTAssertEqual(projectsOut, respProjects)
@@ -81,7 +81,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getProjectsPage(organizationID: reqOrgID, query: reqQuery, pageSize: 2, pageToken: "token") { result in
+        Project.getProjectsPage(organizationID: reqOrgID, query: reqQuery, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -118,7 +118,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getProject(projectID: reqProjectID) { result in
+        Project.getProject(projectID: reqProjectID) { result in
             switch result {
                 case .success(let p):
                     XCTAssertEqual(p, respProject)
@@ -158,7 +158,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.createProject(organizationID: reqOrgID, displayName: reqDisplayName) { result in
+        Project.createProject(organizationID: reqOrgID, displayName: reqDisplayName) { result in
             switch result {
                 case .success(let p):
                     XCTAssertEqual(p, respProject)
@@ -191,7 +191,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.deleteProject(projectID: reqProjectID) { result in
+        Project.deleteProject(projectID: reqProjectID) { result in
             switch result {
                 case .success():
                     break
@@ -231,7 +231,7 @@ class ProjectTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.updateProjectDisplayName(projectID: reqProjectID, newDisplayName: reqDisplayName) { result in
+        Project.updateProjectDisplayName(projectID: reqProjectID, newDisplayName: reqDisplayName) { result in
             switch result {
                 case .success(let p):
                     XCTAssertEqual(p, respProject)

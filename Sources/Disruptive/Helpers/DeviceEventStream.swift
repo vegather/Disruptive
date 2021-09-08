@@ -16,7 +16,7 @@ import Foundation
  
  Example:
  ```
- let stream = disruptive.subscribeToDevices(
+ let stream = Device.subscribeToDevices(
     projectID: "<PROJECT_ID>"
  )
  stream?.onTemperature = { deviceID, temperatureEvent in

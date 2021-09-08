@@ -55,7 +55,7 @@ public struct Member: Decodable, Equatable {
     public let createTime: Date
 }
 
-extension Disruptive {
+extension Member {
     
     /**
      Gets all the Members for a specific organization.
@@ -69,7 +69,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public func getMembers(
+    public static func getMembers(
         organizationID : String,
         completion     : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
@@ -88,14 +88,14 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public func getMembers(
+    public static func getMembers(
         projectID  : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
         getMembers(endpoint: "projects/\(projectID)/members") { completion($0) }
     }
     
-    private func getMembers(
+    private static func getMembers(
         endpoint   : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
@@ -122,7 +122,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
      */
-    public func getMembersPage(
+    public static func getMembersPage(
         organizationID : String,
         pageSize   : Int = 100,
         pageToken  : String?,
@@ -145,7 +145,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
      */
-    public func getMembersPage(
+    public static func getMembersPage(
         projectID  : String,
         pageSize   : Int = 100,
         pageToken  : String?,
@@ -154,7 +154,7 @@ extension Disruptive {
         getMembersPage(endpoint: "projects/\(projectID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
     }
     
-    private func getMembersPage(
+    private static func getMembersPage(
         endpoint   : String,
         pageSize   : Int = 100,
         pageToken  : String?,
@@ -182,7 +182,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public func getMember(
+    public static func getMember(
         organizationID : String,
         memberID       : String,
         completion     : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
@@ -198,7 +198,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public func getMember(
+    public static func getMember(
         projectID  : String,
         memberID   : String,
         completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
@@ -206,7 +206,7 @@ extension Disruptive {
         getMember(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
     }
     
-    private func getMember(
+    private static func getMember(
         endpoint   : String,
         completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
@@ -233,7 +233,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the new `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public func inviteMember(
+    public static func inviteMember(
         organizationID : String,
         roles          : [Role.RoleType],
         email          : String,
@@ -260,7 +260,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the new `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public func inviteMember(
+    public static func inviteMember(
         projectID  : String,
         roles      : [Role.RoleType],
         email      : String,
@@ -273,7 +273,7 @@ extension Disruptive {
         ) { completion($0) }
     }
     
-    private func inviteMember(
+    private static func inviteMember(
         endpoint   : String,
         roles      : [Role.RoleType],
         email      : String,
@@ -330,7 +330,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public func updateMember(
+    public static func updateMember(
         projectID   : String,
         memberID    : String,
         roles       : [Role.RoleType],
@@ -343,7 +343,7 @@ extension Disruptive {
     }
 
     // TODO: Add back displayName and/or status if they're committed to be modifiable.
-    private func updateMember(
+    private static func updateMember(
         endpoint    : String,
         roles       : [Role.RoleType],
         completion  : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
@@ -394,7 +394,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func deleteMember(
+    public static func deleteMember(
         organizationID  : String,
         memberID        : String,
         completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -410,7 +410,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func deleteMember(
+    public static func deleteMember(
         projectID  : String,
         memberID   : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -418,7 +418,7 @@ extension Disruptive {
         deleteMember(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
     }
     
-    private func deleteMember(
+    private static func deleteMember(
         endpoint   : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
@@ -445,7 +445,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned with the invite URL as a `URL`, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<URL, DisruptiveError>`
      */
-    public func getMemberInviteURL(
+    public static func getMemberInviteURL(
         organizationID  : String,
         memberID        : String,
         completion      : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
@@ -467,7 +467,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned with the invite URL as a `URL`, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<URL, DisruptiveError>`
      */
-    public func getMemberInviteURL(
+    public static func getMemberInviteURL(
         projectID  : String,
         memberID   : String,
         completion : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
@@ -475,7 +475,7 @@ extension Disruptive {
         getMemberInviteURL(endpoint: "projects/\(projectID)/members/\(memberID):getInviteUrl") { completion($0) }
     }
     
-    private func getMemberInviteURL(
+    private static func getMemberInviteURL(
         endpoint   : String,
         completion : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
     {

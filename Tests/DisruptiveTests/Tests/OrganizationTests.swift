@@ -40,7 +40,7 @@ class OrganizationTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getOrganizations { result in
+        Organization.getOrganizations { result in
             switch result {
                 case .success(let orgs):
                     XCTAssertEqual(orgs, respOrgs)
@@ -75,7 +75,7 @@ class OrganizationTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getOrganizationsPage(pageSize: 2, pageToken: "token") { result in
+        Organization.getOrganizationsPage(pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -112,7 +112,7 @@ class OrganizationTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getOrganization(organizationID: orgID) { result in
+        Organization.getOrganization(organizationID: orgID) { result in
             switch result {
                 case .success(let org):
                     XCTAssertEqual(org, respOrg)

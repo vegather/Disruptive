@@ -27,7 +27,7 @@ public struct Organization: Decodable, Equatable {
 }
 
 
-extension Disruptive {
+extension Organization {
     /**
      Gets all the organizations available to the authenticated account.
      
@@ -39,7 +39,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Organization`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Organization], DisruptiveError>`
      */
-    public func getOrganizations(
+    public static func getOrganizations(
         completion: @escaping (_ result: Result<[Organization], DisruptiveError>) -> ())
     {
         // Create the request
@@ -62,7 +62,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Organization`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, organizations: [Organization]), DisruptiveError>`
      */
-    public func getOrganizationsPage(
+    public static func getOrganizationsPage(
         pageSize   : Int = 100,
         pageToken  : String?,
         completion : @escaping (_ result: Result<(nextPageToken: String?, organizations: [Organization]), DisruptiveError>) -> ())
@@ -86,7 +86,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Organization`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Organization, DisruptiveError>`
      */
-    public func getOrganization(
+    public static func getOrganization(
         organizationID: String,
         completion: @escaping (_ result: Result<Organization, DisruptiveError>) -> ())
     {

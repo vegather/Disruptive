@@ -55,7 +55,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccounts(projectID: reqProjectID) { result in
+        ServiceAccount.getServiceAccounts(projectID: reqProjectID) { result in
             switch result {
                 case .success(let accounts):
                     XCTAssertEqual(accounts, respServiceAccounts)
@@ -91,7 +91,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccountsPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+        ServiceAccount.getServiceAccountsPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -129,7 +129,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccount(projectID: reqProjectID, serviceAccountID: reqSAID) { result in
+        ServiceAccount.getServiceAccount(projectID: reqProjectID, serviceAccountID: reqSAID) { result in
             switch result {
                 case .success(_):
                     break
@@ -173,7 +173,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.createServiceAccount(projectID: reqProjectID, displayName: reqDisplayName, basicAuthEnabled: reqBasicAuthEnabled) { result in
+        ServiceAccount.createServiceAccount(projectID: reqProjectID, displayName: reqDisplayName, basicAuthEnabled: reqBasicAuthEnabled) { result in
             switch result {
                 case .success(let sa):
                     XCTAssertEqual(sa, respSA)
@@ -219,7 +219,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.updateServiceAccount(
+        ServiceAccount.updateServiceAccount(
             projectID        : reqProjectID,
             serviceAccountID : reqSaID,
             displayName      : reqDisplayName,
@@ -265,7 +265,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.updateServiceAccount(
+        ServiceAccount.updateServiceAccount(
             projectID        : reqProjectID,
             serviceAccountID : reqSaID)
         { result in
@@ -302,7 +302,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.deleteServiceAccount(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
+        ServiceAccount.deleteServiceAccount(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
             switch result {
                 case .success():
                     break
@@ -339,7 +339,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccountKeys(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
+        ServiceAccount.getServiceAccountKeys(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
             switch result {
                 case .success(let keys):
                     XCTAssertEqual(keys, respSaKeys)
@@ -376,7 +376,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccountKeysPage(projectID: reqProjectID, serviceAccountID: reqSaID, pageSize: 2, pageToken: "token") { result in
+        ServiceAccount.getServiceAccountKeysPage(projectID: reqProjectID, serviceAccountID: reqSaID, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -415,7 +415,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.getServiceAccountKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID) { result in
+        ServiceAccount.getServiceAccountKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID) { result in
             switch result {
                 case .success(_):
                     break
@@ -452,7 +452,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.createServiceAccountKey(projectID: reqProjectID, serviceAccountID: reqSaId) { result in
+        ServiceAccount.createServiceAccountKey(projectID: reqProjectID, serviceAccountID: reqSaId) { result in
             switch result {
                 case .success(let ks):
                     XCTAssertEqual(ks, respSaKs)
@@ -487,7 +487,7 @@ class ServiceAccountTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "")
-        disruptive.deleteServiceAccountKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID) { result in
+        ServiceAccount.deleteServiceAccountKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID) { result in
             switch result {
                 case .success():
                     break

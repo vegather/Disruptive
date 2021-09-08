@@ -66,7 +66,7 @@ public struct Device: Decodable, Equatable {
 }
 
 
-extension Disruptive {
+extension Device {
     
     /**
      Gets all the devices in a specific project (including emulated devices).
@@ -79,13 +79,13 @@ extension Disruptive {
      Examples:
      ```swift
      // Get all the devices in the project
-     disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
+     Disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
          ...
      }
      
      // Get all the temperature devices in the project ordered by
      // the temperature (highest temperatures first)
-     disruptive.getDevices(
+     Disruptive.getDevices(
          projectID   : "<PROJECT_ID>",
          deviceTypes : [.temperature],
          orderBy     : (field: "reported.temperature.value", ascending: false))
@@ -104,7 +104,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
-    public func getDevices(
+    public static func getDevices(
         projectID      : String,
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
@@ -151,7 +151,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Device`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>`
      */
-    public func getDevicesPage(
+    public static func getDevicesPage(
         projectID      : String,
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
@@ -185,7 +185,7 @@ extension Disruptive {
         }
     }
     
-    private func createDevicesParams(
+    private static func createDevicesParams(
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
         deviceTypes    : [Device.DeviceType]?              = nil,
@@ -226,7 +226,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Device, DisruptiveError>`
      */
-    public func getDevice(
+    public static func getDevice(
         projectID  : String? = nil,
         deviceID   : String,
         completion : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
@@ -250,7 +250,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func updateDeviceDisplayName(
+    public static func updateDeviceDisplayName(
         projectID      : String,
         deviceID       : String,
         newDisplayName : String,
@@ -276,7 +276,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func deleteDeviceLabel(
+    public static func deleteDeviceLabel(
         projectID  : String,
         deviceID   : String,
         labelKey   : String,
@@ -303,7 +303,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func setDeviceLabel(
+    public static func setDeviceLabel(
         projectID  : String,
         deviceID   : String,
         labelKey   : String,
@@ -329,7 +329,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func batchUpdateDeviceLabels(
+    public static func batchUpdateDeviceLabels(
         projectID      : String,
         deviceIDs      : [String],
         labelsToSet    : [String: String],
@@ -371,7 +371,7 @@ extension Disruptive {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public func transferDevices(
+    public static func transferDevices(
         deviceIDs     : [String],
         fromProjectID : String,
         toProjectID   : String,

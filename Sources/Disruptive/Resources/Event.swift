@@ -38,7 +38,7 @@ public struct Events: Equatable {
 }
 
 
-extension Disruptive {
+extension Device {
     /**
      Fetches historical data for a specific device from the server. The events are
      returned with the newest event at the beginning of the array, and the oldest
@@ -58,7 +58,7 @@ extension Disruptive {
      - Parameter completion: The completion handler that is called when data is returned from the server. This is a `Result` type where the success case is a list of `Events`, and the failure case is a `DisruptiveError`.
      - Parameter result: `Result<Events, DisruptiveError>`
      */
-    public func getEvents(
+    public static func getEvents(
         projectID  : String,
         deviceID   : String,
         startDate  : Date? = nil,
