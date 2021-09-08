@@ -1,8 +1,9 @@
 //
 //  Role.swift
-//  
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 30/11/2020.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
@@ -12,11 +13,7 @@ import Foundation
  
  A `Role` is typically used when inviting a new member to a project or an organization, or when
  listing out the members of a project or an organization.
- 
- Functions relevant for `Role`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getRoles`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getroles(completion:))
- * [`getRole`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getrole(roletype:completion:))
- */
+*/
 public struct Role: Decodable, Equatable {
     
     /// The level of access that is given to the role.

@@ -1,8 +1,9 @@
 //
 //  DataConnector.swift
-//  
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 01/12/2020.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
@@ -11,18 +12,7 @@ import Foundation
  A Data Connector is a mechanism to send device events in real-time from Disruptive Technologies' backend
  to an external service. It can be set up to send specific types of events to a configurable endpoint through an
  HTTP POST request.
- 
- Functions relevant for `DataConnector`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- 
- * [`getDataConnectors`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnectors(projectid:completion:))
- * [`getDataConnectorsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnectorspage(projectid:pagesize:pagetoken:completion:))
- * [`getDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnector(projectid:dataconnectorid:completion:))
- * [`createDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createdataconnector(projectid:displayname:pushtype:eventtypes:labels:isactive:completion:))
- * [`updateDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updatedataconnector(projectid:dataconnectorid:displayname:httppush:isactive:eventtypes:labels:completion:))
- * [`deleteDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deletedataconnector(projectid:dataconnectorid:completion:))
- * [`getDataConnectorMetrics`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdataconnectormetrics(projectid:dataconnectorid:completion:))
- * [`syncDataConnector`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.syncdataconnector(projectid:dataconnectorid:completion:))
- 
+  
  To learn more about Data Connectors, see the following article on the developer website:
  * [Data Connectors](https://developer.disruptive-technologies.com/docs/data-connectors/introduction-to-data-connector)
  */
@@ -61,7 +51,7 @@ extension DataConnector {
      Gets all the Data Connectors that are available in a specific project.
      
      This will handle pagination automatically and send multiple network requests in
-     the background if necessary. If a lot of Data Connectors are expected to be in the project,
+     the backend if necessary. If a lot of Data Connectors are expected to be in the project,
      it might be better to load pages of Data Connectors as they're needed using the
      `getDataConnectorsPage` function instead.
      
@@ -85,8 +75,8 @@ extension DataConnector {
      Gets one page of Data Connectors.
      
      Useful if a lot of Data Connectors are expected in the specified project. This function
-     provides better control for when to get Data Connectors and how many to get at a time so
-     that Data Connectors are only fetch when they are needed. This can also improve performance,
+     provides better control for when to fetch Data Connectors and how many to get at a time so
+     that Data Connectors are only fetched when they are needed. This can also improve performance,
      at a cost of convenience compared to the `getDataConnectors` function.
      
      - Parameter projectID: The identifier of the project to get Data Connectors from.
@@ -145,7 +135,7 @@ extension DataConnector {
      - Parameter pushType: The mechanism to use to push events to an external service. This will also include the parameters to configure the push mechanism.
      - Parameter eventTypes: The event types that the Data Connector will send to the external service.
      - Parameter labels: The labels to be included along with the events. If a device that an event originates from has a label that is not included in this list, it will not be included in the event from the Data Connector. **Note** that if you want the display name of the device to be included in the events to the external service, you need to include the `name` label in this list. The default value of this parameter is an empty list, meaning no labels will be included.
-     - Parameter isActive: Whether or not the Data Connector should start in the active state. This can be changed later by calling the `updateDataConnector` function.
+     - Parameter isActive: Whether or not the Data Connector should start in the active state. This can be changed later by calling the `updateDataConnector` function. The default value is `true`.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector` (along with its generated identifier). If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
@@ -209,7 +199,7 @@ extension DataConnector {
     /**
      Updates the configuration of a Data Connector. Only the parameters that are set will be updated, and the remaining will be left unchanged.
      
-     Examples:
+     Example:
      
      ```
      // Deactivates a Data Connector by only using the `active` parameter

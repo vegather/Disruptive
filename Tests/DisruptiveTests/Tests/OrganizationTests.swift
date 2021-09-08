@@ -1,8 +1,9 @@
 //
 //  OrganizationTests.swift
-//  
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 22/11/2020.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import XCTest

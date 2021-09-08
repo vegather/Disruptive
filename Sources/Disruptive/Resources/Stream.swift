@@ -1,9 +1,9 @@
 //
 //  Stream.swift
-//  DisruptiveAPI
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 01/06/2020.
-//  Copyright © 2020 Disruptive Technologies Research AS. All rights reserved.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation

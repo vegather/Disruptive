@@ -1,9 +1,9 @@
 //
 //  Permissions.swift
-//  DisruptiveAPI
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 21/06/2020.
-//  Copyright © 2020 Disruptive Technologies Research AS. All rights reserved.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
@@ -11,101 +11,7 @@ import Foundation
 /**
  A permission is a specific action that an authenticated account is allowed to do within
  a specific project or organization.
- 
- Functions relevant for `Member`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getPermissions`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getpermissions(projectid:completion:))
- 
- Permissions for the four different roles:
- 
- Project.User:
- * emulator.read
- * device.read
- * dataconnector.read
- * serviceaccount.key.read
- * sensor.read
- * serviceaccount.read
- * membership.read
- * project.read
- 
- Project.Developer:
- * emulator.delete
- * dataconnector.update
- * serviceaccount.read
- * dataconnector.create
- * project.read
- * dataconnector.delete
- * dataconnector.read
- * device.read
- * sensor.read
- * device.update
- * emulator.read
- * emulator.create
- * emulator.update
- * sensor.update
- * membership.read
- * serviceaccount.key.read
- 
- Project.Admin:
- * serviceaccount.key.create
- * project.delete
- * dataconnector.create
- * membership.read
- * emulator.create
- * device.read
- * serviceaccount.update
- * sensor.read
- * serviceaccount.read
- * emulator.update
- * membership.create
- * project.update
- * project.read
- * device.transfer
- * emulator.delete
- * serviceaccount.delete
- * dataconnector.update
- * dataconnector.delete
- * dataconnector.read
- * serviceaccount.key.read
- * emulator.read
- * membership.delete
- * serviceaccount.key.delete
- * serviceaccount.create
- * sensor.update
- * device.update
- * membership.update
- 
- Organization.Admin:
- * device.update
- * membership.read
- * serviceaccount.key.create
- * serviceaccount.delete
- * serviceaccount.key.read
- * membership.create
- * dataconnector.create
- * project.delete
- * device.transfer
- * serviceaccount.key.delete
- * sensor.update
- * membership.update
- * project.read
- * dataconnector.delete
- * device.read
- * dataconnector.read
- * serviceaccount.read
- * emulator.read
- * emulator.create
- * emulator.delete
- * sensor.read
- * serviceaccount.create
- * emulator.update
- * project.update
- * serviceaccount.update
- * dataconnector.update
- * membership.delete
- * project.create
- * organization.update
- * organization.read
- */
+*/
 
 public enum Permission: String, Codable {
     case dataConnectorCreate     = "dataconnector.create"
@@ -146,7 +52,7 @@ public enum Permission: String, Codable {
 
 extension Permission {
     /**
-     Gets all the permissions the currently logged in user has for the given organization.
+     Gets all the permissions the currently logged in account has for the given organization.
      
      - Parameter organizationID: The identifier of the organization to get the permissions for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
@@ -160,7 +66,7 @@ extension Permission {
     }
     
     /**
-    Gets all the permissions the currently logged in user has for the given project.
+    Gets all the permissions the currently logged in account has for the given project.
     
     - Parameter projectID: The identifier of the project to get the permissions for.
     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.

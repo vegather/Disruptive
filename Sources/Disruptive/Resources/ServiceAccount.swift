@@ -1,8 +1,9 @@
 //
 //  ServiceAccount.swift
-//  
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 22/12/2020.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
@@ -11,20 +12,7 @@ import Foundation
  All programmatic interaction with the Disruptive Technologies API is done via a logged-in Service Account.
  
  To learn more about Service Accounts, see the [Service Account page on the developer website](https://developer.disruptive-technologies.com/docs/service-accounts/introduction-to-service-accounts).
- 
- Functions relevant for `ServiceAccount`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getServiceAccounts`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccounts(projectid:completion:))
- * [`getServiceAccountsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountspage(projectid:pagesize:pagetoken:completion:))
- * [`getServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccount(projectid:serviceaccountid:completion:))
- * [`createServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createserviceaccount(projectid:displayname:basicauthenabled:completion:))
- * [`updateServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updateserviceaccount(projectid:serviceaccountid:displayname:basicauthenabled:completion:))
- * [`deleteServiceAccount`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deleteserviceaccount(projectid:serviceaccountid:completion:))
- * [`getServiceAccountKeys`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountkeys(projectid:serviceaccountid:completion:))
- * [`getServiceAccountKeysPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountkeyspage(projectid:serviceaccountid:pagesize:pagetoken:completion:))
- * [`getServiceAccountKey`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getserviceaccountkey(projectid:serviceaccountid:keyid:completion:))
- * [`createServiceAccountKey`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createserviceaccountkey(projectid:serviceaccountid:completion:))
- * [`deleteServiceAccountKey`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deleteserviceaccountkey(projectid:serviceaccountid:keyid:completion:))
- */
+*/
 public struct ServiceAccount: Decodable, Equatable {
     
     /// The unique identifier of the Service Account. This will be different from the `name` field in the REST API

@@ -1,8 +1,9 @@
 //
 //  Member.swift
-//  
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 27/12/2020.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
@@ -10,16 +11,7 @@ import Foundation
 /**
  A `Member` assigns a specific role to an account within a project
  or an organization. The account can be either a user or a service account.
- 
- Functions relevant for `Member`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getMembers`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmembers(projectid:completion:))
- * [`getMembersPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmemberspage(projectid:pagesize:pagetoken:completion:))
- * [`getMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmember(projectid:memberid:completion:))
- * [`inviteMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.invitemember(projectid:roles:email:completion:))
- * [`updateMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updatemember(projectid:memberid:roles:completion:))
- * [`deleteMember`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deletemember(projectid:memberid:completion:))
- * [`getMemberInviteURL`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getmemberinviteurl(projectid:memberid:completion:))
- */
+*/
 public struct Member: Decodable, Equatable {
     
     /// The identifier of the Member.
@@ -95,6 +87,7 @@ extension Member {
         getMembers(endpoint: "projects/\(projectID)/members") { completion($0) }
     }
     
+    // Helper function to get Members for either Projects or Organizations.
     private static func getMembers(
         endpoint   : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
@@ -117,7 +110,7 @@ extension Member {
      at a cost of convenience compared to the `getMembers` function.
      
      - Parameter organizationID: The identifier of the organization to get Members from.
-     - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default.
      - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
@@ -140,7 +133,7 @@ extension Member {
      at a cost of convenience compared to the `getMembers` function.
      
      - Parameter projectID: The identifier of the project to get Members from.
-     - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default
+     - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default.
      - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
@@ -154,6 +147,7 @@ extension Member {
         getMembersPage(endpoint: "projects/\(projectID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
     }
     
+    // Helper function to get a Members page for either Projects or Organizations.
     private static func getMembersPage(
         endpoint   : String,
         pageSize   : Int = 100,
@@ -206,6 +200,7 @@ extension Member {
         getMember(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
     }
     
+    // Helper function to get a specific Member in either a Project or an Organization.
     private static func getMember(
         endpoint   : String,
         completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
@@ -273,6 +268,7 @@ extension Member {
         ) { completion($0) }
     }
     
+    // Helper function to invite Members to either Projects or Organizations.
     private static func inviteMember(
         endpoint   : String,
         roles      : [Role.RoleType],

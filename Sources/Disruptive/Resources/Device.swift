@@ -1,26 +1,15 @@
 //
 //  Device.swift
-//  DisruptiveAPI
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 21/05/2020.
-//  Copyright © 2020 Disruptive Technologies Research AS. All rights reserved.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
 
 /**
  Represents a Sensor or Cloud Connector from Disruptive Technologies.
- 
- Functions relevant for `Device`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevices(projectid:query:deviceids:devicetypes:labelfilters:orderby:completion:))
- * [`getDevicesPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevicespage(projectid:query:deviceids:devicetypes:labelfilters:orderby:pagesize:pagetoken:completion:))
- * [`getDevice`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getdevice(projectid:deviceid:completion:))
- * [`updateDeviceDisplayName`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updatedevicedisplayname(projectid:deviceid:newdisplayname:completion:))
- * [`deleteDeviceLabel`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deletedevicelabel(projectid:deviceid:labelkey:completion:))
- * [`setDeviceLabel`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.setdevicelabel(projectid:deviceid:labelkey:labelvalue:completion:))
- * [`batchUpdateDeviceLabels`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.batchupdatedevicelabels(projectid:deviceids:labelstoset:labelstoremove:completion:))
- * [`transferDevices`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.movedevices(deviceids:fromprojectid:toprojectid:completion:))
- 
  */
 public struct Device: Decodable, Equatable {
     
@@ -100,7 +89,7 @@ extension Device {
      - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
      - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products).
      - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
-     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
+     - Parameter orderBy: Specifies the field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices) documentation for the `GET Devices` endpoint to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
@@ -145,7 +134,7 @@ extension Device {
      - Parameter deviceTypes: Filters on a list of device types. Will be ignored if not set (or `nil`), which is the default.
      - Parameter productNumbers: Filters on a list of product numbers. This is the same product number that can be found on the support pages for both [Sensors](https://support.disruptive-technologies.com/hc/en-us/sections/360003211399-Products) and [Cloud Connectors](https://support.disruptive-technologies.com/hc/en-us/sections/360003168340-Products).
      - Parameter labelFilters: Filters on a set of labels. Will be ignored if not set (or `nil`), which is the default.
-     - Parameter orderBy: Defines a field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices) documentation for the `GET Devices` request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
+     - Parameter orderBy: Specifies the field to order the retrieved devices by. Uses a dot notation format (eg. `reported.temperature.value` or `labels.name`). The fields are defined by the JSON structure of a Device. See the [REST API](https://developer.disruptive-technologies.com/api#/Devices%20%26%20Labels/get_projects__project__devices) documentation for the `GET Devices` request to get hints for which fields are available. Also provides option to specify ascending or descending order.  Will be ignored if not set (or `nil`), which is the default.
      - Parameter pageSize: The maximum number of devices to get for this page. The maximum page size is 100, which is also the default
      - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Device`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
@@ -185,6 +174,7 @@ extension Device {
         }
     }
     
+    // Private helper function to create parameters for the getDevices... requests
     private static func createDevicesParams(
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
@@ -362,8 +352,8 @@ extension Device {
     }
     
     /**
-     Transfers a list of devices from one project to another. The authenticated account must be an admin
-     in the `toProjectID`, or an organization admin in which the `toProjectID` resides.
+     Transfers a list of devices from one project to another. The authenticated account must be a project admin
+     in the `toProjectID`, or an organization admin in the organization that owns the `toProjectID` project.
      
      - Parameter deviceIDs: A list of the device identifiers to transfer from one project to another.
      - Parameter fromProjectID: The identifier of the project to transfer the devices from.

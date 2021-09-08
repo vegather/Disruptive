@@ -1,9 +1,9 @@
 //
 //  Authentication.swift
-//  DisruptiveAPI
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 20/09/2020.
-//  Copyright © 2020 Disruptive Technologies Research AS. All rights reserved.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation

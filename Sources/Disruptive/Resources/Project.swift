@@ -1,24 +1,16 @@
 //
 //  Project.swift
-//  DisruptiveAPI
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 20/05/2020.
-//  Copyright © 2020 Disruptive Technologies Research AS. All rights reserved.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
 
 /**
  Represents a project within an `Organization`.
- 
- Functions relevant for `Project`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getProjects`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojects(organizationid:query:completion:))
- * [`getProjectsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getprojectspage(organizationid:query:pagesize:pagetoken:completion:))
- * [`getProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getproject(projectid:completion:))
- * [`createProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.createproject(organizationid:displayname:completion:))
- * [`deleteProject`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.deleteproject(projectid:completion:))
- * [`updateProjectDisplayName`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.updateprojectdisplayname(projectid:newdisplayname:completion:))
- */
+*/
 public struct Project: Decodable, Equatable {
     
     /// The unique identifier of the project. This will be different from the `name` field in the REST API

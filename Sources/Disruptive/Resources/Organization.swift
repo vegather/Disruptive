@@ -1,21 +1,16 @@
 //
 //  Organization.swift
-//  DisruptiveAPI
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 18/05/2020.
-//  Copyright © 2020 Disruptive Technologies Research AS. All rights reserved.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import Foundation
 
 /**
  Represents an organization registered with Disruptive Technologies.
- 
- Functions relevant for `Organization`s are implemented on the [`Disruptive`](https://vegather.github.io/Disruptive/Disruptive/) struct:
- * [`getOrganizations`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizations(completion:))
- * [`getOrganizationsPage`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganizationspage(pagesize:pagetoken:completion:))
- * [`getOrganization`](https://vegather.github.io/Disruptive/Disruptive/#disruptive.getorganization(organizationid:completion:))
- */
+*/
 public struct Organization: Decodable, Equatable {
     
     /// The unique identifier for the organization. This will be different from the `name` field in the REST API

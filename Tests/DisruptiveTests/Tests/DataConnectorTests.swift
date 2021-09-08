@@ -1,8 +1,9 @@
 //
 //  DataConnectorTests.swift
-//  
+//  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 02/12/2020.
+//  Copyright © 2021 Disruptive Technologies Research AS. All rights reserved.
 //
 
 import XCTest
