@@ -230,7 +230,7 @@ public struct ObjectPresentEvent: Codable, Equatable {
                 case .objectPresent    : try container.encode("PRESENT")
                 case .objectNotPresent : try container.encode("NOT_PRESENT")
                 case .unknown(let s):
-                    throw ParseError.encodingUnknownCase(value: "NetworkStatusEvent.TransmissionMode.unknown(\(s))")
+                    throw ParseError.encodingUnknownCase(value: "ObjectPresentEvent.State.unknown(\(s))")
             }
         }
     }
@@ -457,7 +457,7 @@ public struct WaterPresentEvent: Codable, Equatable {
                 case .waterPresent    : try container.encode("PRESENT")
                 case .waterNotPresent : try container.encode("NOT_PRESENT")
                 case .unknown(let s):
-                    throw ParseError.encodingUnknownCase(value: "NetworkStatusEvent.TransmissionMode.unknown(\(s))")
+                    throw ParseError.encodingUnknownCase(value: "WaterPresentEvent.Statu.unknown(\(s))")
             }
         }
     }
@@ -808,7 +808,7 @@ public struct ConnectionStatusEvent: Codable, Equatable {
                 case .ethernet : try container.encode("ETHERNET")
                 case .cellular : try container.encode("CELLULAR")
                 case .unknown(let s):
-                    throw ParseError.encodingUnknownCase(value: "NetworkStatusEvent.TransmissionMode.unknown(\(s))")
+                    throw ParseError.encodingUnknownCase(value: "ConnectionStatusEvent.Connection.unknown(\(s))")
             }
         }
     }
@@ -852,7 +852,7 @@ public struct ConnectionStatusEvent: Codable, Equatable {
                 case .ethernet : try container.encode("ETHERNET")
                 case .cellular : try container.encode("CELLULAR")
                 case .unknown(let s):
-                    throw ParseError.encodingUnknownCase(value: "NetworkStatusEvent.Available.unknown(\(s))")
+                    throw ParseError.encodingUnknownCase(value: "ConnectionStatusEvent.Available.unknown(\(s))")
             }
         }
     }
