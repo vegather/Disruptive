@@ -434,7 +434,7 @@ extension ServiceAccount.Key {
         let keyResourceName = try container.decode(String.self, forKey: .name)
         let resourceNameComponents = keyResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 6 else {
-            throw ParseError.identifier(path: keyResourceName)
+            throw ParseError.identifier(resourceName: keyResourceName)
         }
         self.identifier       = resourceNameComponents[5]
         self.serviceAccountID = resourceNameComponents[3]
@@ -464,7 +464,7 @@ extension ServiceAccount {
         let saResourceName = try container.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = saResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
-            throw ParseError.identifier(path: saResourceName)
+            throw ParseError.identifier(resourceName: saResourceName)
         }
         self.projectID  = resourceNameComponents[1]
         self.identifier = resourceNameComponents[3]

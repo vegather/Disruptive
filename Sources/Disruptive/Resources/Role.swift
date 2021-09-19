@@ -107,7 +107,7 @@ extension Role {
             let parts = resourceName.components(separatedBy: "/")
             
             guard parts.count == 2, parts[0] == "roles" else {
-                throw ParseError.identifier(path: resourceName)
+                throw ParseError.identifier(resourceName: resourceName)
             }
             switch parts[1] {
                 case "project.user"       : self = .projectUser

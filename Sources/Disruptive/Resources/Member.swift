@@ -585,7 +585,7 @@ extension Member {
         let resourceName = try container.decode(String.self, forKey: .resourceName)
         let resourceNameParts = resourceName.components(separatedBy: "/")
         guard resourceNameParts.count == 4 else {
-            throw ParseError.identifier(path: resourceName)
+            throw ParseError.identifier(resourceName: resourceName)
         }
         self.identifier = resourceNameParts[3]
         if resourceNameParts[0] == "organizations" {
@@ -595,7 +595,7 @@ extension Member {
             self.projectID = resourceNameParts[1]
             self.organizationID = nil
         } else {
-            throw ParseError.identifier(path: resourceName)
+            throw ParseError.identifier(resourceName: resourceName)
         }
         
         self.displayName    = try container.decode(String.self,          forKey: .displayName)

@@ -405,7 +405,7 @@ extension Device {
         let projectResourceName = try container.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = projectResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
-            throw ParseError.identifier(path: projectResourceName)
+            throw ParseError.identifier(resourceName: projectResourceName)
         }
         self.projectID  = resourceNameComponents[1]
         let id = resourceNameComponents[3]

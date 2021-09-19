@@ -517,7 +517,7 @@ extension DataConnector {
         let dcResourceName = try values.decode(String.self, forKey: .resourceName)
         let resourceNameComponents = dcResourceName.components(separatedBy: "/")
         guard resourceNameComponents.count == 4 else {
-            throw ParseError.identifier(path: dcResourceName)
+            throw ParseError.identifier(resourceName: dcResourceName)
         }
         self.projectID  = resourceNameComponents[1]
         self.identifier = resourceNameComponents[3]

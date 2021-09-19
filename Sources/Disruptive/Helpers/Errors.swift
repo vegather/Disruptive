@@ -177,10 +177,25 @@ internal enum InternalError: Error, Equatable {
     }
 }
 
+/**
+ Used for any errors found during encoding or decoding.
+ Will be logged out as an error, and an unknown error will
+ be returned to the user.
+ */
 internal enum ParseError: Error {
-    case identifier(path: String)
+    
+    /// Used when attempting to extract the identifier of a
+    /// resource from its resource name, but the format was unexpected.
+    case identifier(resourceName: String)
+    
+    /// Used when the date format didn't match the expected format.
+    /// The received date string is returned as well.
     case dateFormat(date: String)
-    case stateValue(eventType: EventType, state: String)
+    
+    /// Used when decoding a duration string (such as `"1.432s"`), but
+    /// the format was unexpected.
     case durationFormat(format: String)
+    
+    /// Used when encoding enum values that use the `.unknown` case.
     case encodingUnknownCase(value: String)
 }
