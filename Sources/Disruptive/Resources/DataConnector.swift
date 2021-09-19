@@ -257,48 +257,31 @@ extension DataConnector {
         
         // Prepare the payload
         var patch = DataConnectorPatch()
-        var updateMask = [String]()
         
         if let displayName = displayName {
             patch.displayName = displayName
-            updateMask.append("displayName")
-        }
-        if let httpPush = httpPush {
-            var httpConfig = DataConnectorPatch.HTTPConfig()
-
-            if let url = httpPush.url {
-                httpConfig.url = url
-                updateMask.append("httpConfig.url")
-            }
-            if let secret = httpPush.signatureSecret {
-                httpConfig.signatureSecret = secret
-                updateMask.append("httpConfig.signatureSecret")
-            }
-            if let headers = httpPush.headers {
-                httpConfig.headers = headers
-                updateMask.append("httpConfig.headers")
-            }
-            
-            patch.httpConfig = httpConfig
         }
         if let isActive = isActive {
             patch.status = (isActive ? DataConnector.Status.active : .userDisabled).rawValue
-            updateMask.append("status")
         }
         if let eventTypes = eventTypes {
             patch.events = eventTypes.map { $0.rawValue }
-            updateMask.append("events")
         }
         if let labels = labels {
             patch.labels = labels
-            updateMask.append("labels")
+        }
+        if let httpPush = httpPush {
+            patch.httpConfig = DataConnectorPatch.HTTPConfig(
+                url: httpPush.url,
+                signatureSecret: httpPush.signatureSecret,
+                headers: httpPush.headers
+            )
         }
         
         do {
             // Create the request
             let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
-            let params = ["update_mask": [updateMask.joined(separator: ",")]]
-            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params, body: patch)
+            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
             
             // Send the request
             request.send() { completion($0) }

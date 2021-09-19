@@ -338,31 +338,17 @@ extension Member {
         ) { completion($0) }
     }
 
-    // TODO: Add back displayName and/or status if they're committed to be modifiable.
     private static func updateMember(
         endpoint    : String,
         roles       : [Role.RoleType],
         completion  : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
         struct MemberPatch: Encodable {
-            var displayName: String
             var roles: [Role.RoleType]
-            var status: Member.Status
         }
 
-        // Prepare the payload
-        // Due to some bugs on the backend, the patch body has to include all the fields,
-        // and the `roles` field has to contain exactly one element. Only the fields in the
-        // `updateMask` will actually be modified.
-        var patch = MemberPatch(displayName: "", roles: [.projectUser], status: .pending)
-        var updateMask = [String]()
-
-        patch.roles = roles
-        updateMask.append("roles")
-        
-        
         // At least one of the fields has to be set so that `updateMask` is non-empty
-        if updateMask.count == 0 {
+        if roles.count == 0 {
             let error = DisruptiveError(
                 type: .badRequest,
                 message: "No roles set",
@@ -372,11 +358,13 @@ extension Member {
             completion(.failure(error))
             return
         }
+        
+        // Prepare the payload
+        let patch = MemberPatch(roles: roles)
 
         do {
             // Create the request
-            let params = ["update_mask": [updateMask.joined(separator: ",")]]
-            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params, body: patch)
+            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
 
             // Send the request
             request.send() { completion($0) }

@@ -208,22 +208,18 @@ extension ServiceAccount {
         
         // Prepare the payload
         var patch = ServiceAccountPatch()
-        var updateMask = [String]()
         
         if let displayName = displayName {
             patch.displayName = displayName
-            updateMask.append("displayName")
         }
         if let basicAuthEnabled = basicAuthEnabled {
             patch.enableBasicAuth = basicAuthEnabled
-            updateMask.append("enableBasicAuth")
         }
         
         do {
             // Create the request
             let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
-            let params = ["update_mask": [updateMask.joined(separator: ",")]]
-            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params, body: patch)
+            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
             
             // Send the request
             request.send() { completion($0) }
