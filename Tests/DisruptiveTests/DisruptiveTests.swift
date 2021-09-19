@@ -35,7 +35,6 @@ struct TestAuthenticator: Authenticator {
 
 class DisruptiveTests: XCTestCase {
     var disruptive: Disruptive!
-    var expectation: XCTestExpectation!
     
     override func setUp() {
         setupRequest()
