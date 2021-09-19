@@ -102,7 +102,7 @@ class AuthenticationTests: DisruptiveTests {
         
         
         // Should successfully authenticate
-        var exp = expectation(description: "")
+        var exp = expectation(description: "testOAuth2.login")
         auth.refreshAccessToken { result in
             guard case .success = result else { XCTFail(); return }
             exp.fulfill()
@@ -118,7 +118,7 @@ class AuthenticationTests: DisruptiveTests {
         
         
         // Log out
-        exp = expectation(description: "")
+        exp = expectation(description: "testOAuth2.logout")
         auth.logout { result in
             guard case .success = result else { XCTFail(); return }
             exp.fulfill()
@@ -128,7 +128,7 @@ class AuthenticationTests: DisruptiveTests {
         XCTAssertNil(auth.authToken)
         
         // getActiveAccessToken should return .loggedOut
-        exp = expectation(description: "")
+        exp = expectation(description: "testOAuth2.shouldBeLoggedOut")
         auth.getActiveAccessToken { result in
             guard case .failure(let err) = result, err.type == .loggedOut else { XCTFail(); return }
             exp.fulfill()
@@ -137,7 +137,7 @@ class AuthenticationTests: DisruptiveTests {
 
 
         // Log back in
-        exp = expectation(description: "")
+        exp = expectation(description: "testOAuth2.logBackIn")
         auth.login { result in
             guard case .success = result else { XCTFail(); return }
             exp.fulfill()

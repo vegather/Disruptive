@@ -121,7 +121,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetDevice")
         Device.getDevice(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let device):
@@ -157,7 +157,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetDeviceLookup")
         Device.getDevice(deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let device):
@@ -193,7 +193,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetDevicesNoParameters")
         Device.getDevices(projectID: reqProjectID) { result in
             switch result {
                 case .success(let devices):
@@ -237,7 +237,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetDevicesAllParameters")
         Device.getDevices(
             projectID   : reqProjectID,
             query       : "search query",
@@ -282,7 +282,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetDevicesPageNoParameters")
         Device.getDevicesPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
@@ -329,7 +329,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetDevicesPageAllParameters")
         Device.getDevicesPage(
             projectID      : reqProjectID,
             query          : "search query",
@@ -383,7 +383,7 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testUpdateDeviceDisplayName")
         Device.updateDeviceDisplayName(projectID: reqProjectID, deviceID: reqDeviceID, newDisplayName: reqDisplayName) { result in
             switch result {
                 case .success():
@@ -425,7 +425,7 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testRemoveDeviceLabel")
         Device.deleteDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
             switch result {
                 case .success():
@@ -468,7 +468,7 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSetDeviceLabel")
         Device.setDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKey, labelValue: reqLabelValue) { result in
             switch result {
                 case .success():
@@ -512,7 +512,7 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testBatchUpdateDeviceLabels")
         Device.batchUpdateDeviceLabels(projectID: reqProjectID, deviceIDs: [reqDeviceID], labelsToSet: [reqLabelKeyToSet: reqLabelValueToSet], labelsToRemove: [reqLabelKeyToRemove]) { result in
             switch result {
                 case .success():
@@ -550,7 +550,7 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testMoveDevicesByIDs")
         Device.transferDevices(deviceIDs: reqDeviceIDs, fromProjectID: reqFromProjectID, toProjectID: reqToProjectID) { result in
             switch result {
                 case .success():

@@ -33,7 +33,7 @@ class StreamTests: DisruptiveTests {
         let stream = Device.subscribeToDevices(projectID: reqProjectID)
         
         // Wait a bit to let the request go through (and be asserted)
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSubscribeToDevicesNoParameters")
         exp.isInverted = true
         stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
@@ -79,7 +79,7 @@ class StreamTests: DisruptiveTests {
         )
         
         // Wait a bit to let the request go through (and be asserted)
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSubscribeToDevicesAllParameters")
         exp.isInverted = true
         stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
@@ -108,7 +108,7 @@ class StreamTests: DisruptiveTests {
         let stream = Device.subscribeToDevice(projectID: reqProjectID, deviceID: reqDeviceID)
         
         // Wait a bit to let the request go through (and be asserted)
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSubscribeToDeviceNoParameters")
         exp.isInverted = true
         stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
@@ -145,7 +145,7 @@ class StreamTests: DisruptiveTests {
         )
         
         // Wait a bit to let the request go through (and be asserted)
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSubscribeToDeviceAllParameters")
         exp.isInverted = true
         stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
@@ -187,7 +187,7 @@ class StreamTests: DisruptiveTests {
         let stream = Device.subscribeToDevices(projectID: reqProjectID)
         
         // Wait a bit to let the request go through (and be asserted)
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testStreamError")
         exp.isInverted = true
         stream.onError = { err in
             XCTAssertEqual(err.type, .notFound)

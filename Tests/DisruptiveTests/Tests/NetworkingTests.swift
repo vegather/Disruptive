@@ -74,7 +74,7 @@ class NetworkingTests: DisruptiveTests {
             return (nil, nil, URLError(.badServerResponse))
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testServerUnavailable")
         Project.getProjects() { result in
             switch result {
                 case .success(_): XCTFail("Expected failure")

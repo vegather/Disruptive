@@ -44,7 +44,7 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetProjects")
         Project.getProjects(organizationID: reqOrgID, query: reqQuery) { result in
             switch result {
                 case .success(let projectsOut):
@@ -81,7 +81,7 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetProjectsPage")
         Project.getProjectsPage(organizationID: reqOrgID, query: reqQuery, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
@@ -118,7 +118,7 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetProject")
         Project.getProject(projectID: reqProjectID) { result in
             switch result {
                 case .success(let p):
@@ -158,7 +158,7 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testCreateProject")
         Project.createProject(organizationID: reqOrgID, displayName: reqDisplayName) { result in
             switch result {
                 case .success(let p):
@@ -191,7 +191,7 @@ class ProjectTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testDeleteProject")
         Project.deleteProject(projectID: reqProjectID) { result in
             switch result {
                 case .success():
@@ -231,7 +231,7 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testUpdateProjectDisplayName")
         Project.updateProjectDisplayName(projectID: reqProjectID, newDisplayName: reqDisplayName) { result in
             switch result {
                 case .success(let p):

@@ -74,7 +74,7 @@ class RoleTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetRoles")
         Role.getRoles { result in
             switch result {
                 case .success(let roles):
@@ -110,7 +110,7 @@ class RoleTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetRole")
         Role.getRole(roleType: role) { result in
             switch result {
                 case .success(let role):
@@ -124,7 +124,7 @@ class RoleTests: DisruptiveTests {
     }
     
     func testGetRoleUnknownRole() {
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetRoleUnknownRole")
         Role.getRole(roleType: .unknown(value: "NOT_A_ROLE")) { result in
             switch result {
                 case .success(_)       : XCTFail("Unexpected success")

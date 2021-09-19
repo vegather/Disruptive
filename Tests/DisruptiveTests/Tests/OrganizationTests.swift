@@ -40,7 +40,7 @@ class OrganizationTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetOrganizations")
         Organization.getOrganizations { result in
             switch result {
                 case .success(let orgs):
@@ -75,7 +75,7 @@ class OrganizationTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetOrganizationsPage")
         Organization.getOrganizationsPage(pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
@@ -112,7 +112,7 @@ class OrganizationTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetOrganization")
         Organization.getOrganization(organizationID: orgID) { result in
             switch result {
                 case .success(let org):

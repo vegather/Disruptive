@@ -50,7 +50,7 @@ class PermissionsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetPermissionsForOrganization")
         Permission.getPermissions(organizationID: reqOrgID) { result in
             switch result {
                 case .success(let orgs):
@@ -86,7 +86,7 @@ class PermissionsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetPermissionsForProject")
         Permission.getPermissions(projectID: reqProjectID) { result in
             switch result {
                 case .success(let orgs):

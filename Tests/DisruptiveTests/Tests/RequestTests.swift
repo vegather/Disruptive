@@ -120,7 +120,7 @@ class RequestTests: DisruptiveTests {
     }
     
     func testSendWithNilUrlRequest() {
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSendWithNilUrlRequest")
         
         let req = Request(method: .get, baseURL: "", endpoint: "🙃")
         req.send { (res: Result<String, DisruptiveError>) in
@@ -153,7 +153,7 @@ class RequestTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSendWithKnownError")
         req.send { (result: Result<String, DisruptiveError>) in
             switch result {
                 case .success          : XCTFail("Unexpected success")
@@ -255,7 +255,7 @@ class RequestTests: DisruptiveTests {
             return (respBody, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSendWithUnparseableResults")
         req.send { (result: Result<TouchEvent, DisruptiveError>) in
             switch result {
                 case .success          : XCTFail("Unexpected success")
@@ -388,7 +388,7 @@ class RequestTests: DisruptiveTests {
             }
         }
         
-        let firstExp = expectation(description: "")
+        let firstExp = expectation(description: "testSendRequestSinglePage.first")
         req.send(pageSize: 20, pageToken: nil, pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
             switch result {
                 case .success(let page):
@@ -401,7 +401,7 @@ class RequestTests: DisruptiveTests {
         }
         wait(for: [firstExp], timeout: 1)
         
-        let secondExp = expectation(description: "")
+        let secondExp = expectation(description: "testSendRequestSinglePage.second")
         req.send(pageSize: 30, pageToken: "token", pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
             switch result {
                 case .success(let page):
@@ -467,7 +467,7 @@ class RequestTests: DisruptiveTests {
             }
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testSendRequestAllPages")
         
         req.send(pagingKey: "events") { (result: Result<[TouchEvent], DisruptiveError>) in
             switch result {

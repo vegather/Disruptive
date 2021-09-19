@@ -43,7 +43,7 @@ class EmulatorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testCreateEmulatedDeviceWithLabels")
         Emulator.createEmulatedDevice(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName, labels: reqLabels) { result in
             switch result {
                 case .success(let d):
@@ -87,7 +87,7 @@ class EmulatorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testCreateEmulatedDeviceNoLabels")
         Emulator.createEmulatedDevice(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName) { result in
             switch result {
                 case .success(let d):
@@ -101,7 +101,7 @@ class EmulatorTests: DisruptiveTests {
     }
     
     func testCreateEmulatedDeviceUnknownDeviceType() {
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testCreateEmulatedDeviceUnknownDeviceType")
         Emulator.createEmulatedDevice(projectID: "proj1", deviceType: .unknown(value: "NOT_A_DEVICE"), displayName: "") { result in
             switch result {
                 case .success(_)       : XCTFail("Unexpected success")
@@ -133,7 +133,7 @@ class EmulatorTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testDeleteEmulatedDevice")
         Emulator.deleteEmulatedDevice(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success():
@@ -172,7 +172,7 @@ class EmulatorTests: DisruptiveTests {
                 return (respData, resp, nil)
             }
             
-            let exp = expectation(description: "")
+            let exp = expectation(description: "testPublishEmulatedEventOneEvent")
             Emulator.publishEmulatedEvent(projectID: reqProjectID, deviceID: reqDeviceID, event: event) { result in
                 switch result {
                     case .success()        : break

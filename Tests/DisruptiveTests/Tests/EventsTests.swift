@@ -232,7 +232,7 @@ class EventsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetEvents")
         Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID, startDate: reqStart, endDate: reqEnd, eventTypes: EventType.allCases) { result in
             switch result {
                 case .success(let events):
@@ -290,7 +290,7 @@ class EventsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetNoEvents")
         Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let events):
@@ -346,7 +346,7 @@ class EventsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "")
+        let exp = expectation(description: "testGetUnknownEvents")
         Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let events):
