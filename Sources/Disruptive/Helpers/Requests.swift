@@ -368,7 +368,7 @@ extension Request {
     /// in the future, this will succeed with the `Authorization` header set to the auth token.
     /// If the authenticator is not authenticated or not set, this will return a `.loggedOut` error.
     private static func authenticate(req: Request, completion: @escaping (Result<Request, DisruptiveError>) -> ()) {
-        guard let auth = Disruptive.auth else {
+        guard let auth = Disruptive.authenticator else {
             Disruptive.log("No authentication has been set. Set it with `Disruptive.auth = ...`", level: .error)
             let error = DisruptiveError(type: .loggedOut, message: "Not authenticated", helpLink: nil)
             completion(.failure(error))

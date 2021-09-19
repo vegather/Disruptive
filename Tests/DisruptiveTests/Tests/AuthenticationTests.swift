@@ -26,7 +26,7 @@ class AuthenticationTests: DisruptiveTests {
         
         let creds = OAuth2Authenticator.Credentials(keyID: reqKey, issuer: reqEmail, secret: "secret")
         let auth = OAuth2Authenticator(credentials: creds, authURL: reqURL)
-        Disruptive.auth = auth
+        Disruptive.authenticator = auth
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(

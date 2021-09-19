@@ -17,14 +17,35 @@ public extension Disruptive {
         
         /**
          Creates an `Authenticator` that authenticates a Service Account against the
-         Disruptive REST API.
+         Disruptive REST API using one of the Service Account's keys.
+         
+         The returned `Authenticator` will use OAuth2 in the background to authenticate
+         the Service Account, and the access token will automatically be refreshed in
+         the background. You can read more about that process on the
+         [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2).
+         
+         A Service Account can either be created using DT Studio under
+         "API Integrations -> Service Accounts". Alternatively, if you already have
+         a Service Account, a new one can be created through the API by calling
+         `ServiceAccount.createServiceAccount(...)`.
          
          Example:
          ```
-         Disruptive.auth = Disruptive.Auth.serviceAccount(email: <EMAIL>, keyID: <KEY_ID>, secret: <SECRET>)
+         Disruptive.authenticator = Disruptive.Auth.serviceAccount(
+            email: <EMAIL>,
+            keyID: <KEY_ID>,
+            secret: <SECRET>
+         )
          ```
+         
+         - Parameter email: The email address of the Service Account
+         - Parameter keyID: The identifier of the Service Account key
+         - Parameter secret: The secret of the Service Account key
+         - Parameter authURL: An optional parameter that specifies the token endpoint URL to exchange a JWT for an access token
+         
+         - Returns: An object that implements the `Authenticator` protocol that can be set to `Disruptive.authenticator`.
          */
-        static func serviceAccount(
+        public static func serviceAccount(
             email   : String,
             keyID   : String,
             secret  : String,
@@ -77,13 +98,13 @@ public protocol Authenticator {
     func login(completion: @escaping AuthHandler)
     
     /// A conforming type should clear out any state that was created while logging in,
-    /// including setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
+    /// including setting `authToken` to `nil` and `shouldAutoRefreshAccessToken`
     /// to `false`.
     func logout(completion: @escaping AuthHandler)
     
     /// A conforming type should use a mechanism to acquire an access token than
     /// can be used to authenticate against the Disruptive Technologies' REST API.
-    /// Once that token has been acquired, it should be stored in the `auth` property
+    /// Once that token has been acquired, it should be stored in the `authToken` property
     /// along with a relevant expiration date.
     ///
     /// This will be called automatically when necessary as long as `shouldAutoRefreshAccessToken`
@@ -107,7 +128,7 @@ internal extension Authenticator {
     /// Will check things in the following order:
     /// * If the authenticator is logged out, return a `loggedOut` error.
     /// * If there is a local auth token that is not expired (or more than a minute away from expiring), return it.
-    /// * Attempt to refresh the auth token (and store it in `auth`). If successful, return the new token, otherwise return an error.
+    /// * Attempt to refresh the auth token (and store it in `authToken`). If successful, return the new token, otherwise return an error.
     func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
         if shouldAutoRefreshAccessToken == false {
             // We should no longer be logged in. Just return the `.loggedOut` error code
@@ -192,7 +213,7 @@ internal class OAuth2Authenticator: Authenticator {
         self.credentials = credentials
     }
     
-    /// Refreshes the access token, stores it in the `auth` property, and sets
+    /// Refreshes the access token, stores it in the `authToken` property, and sets
     /// `shouldAutoRefreshAccessToken` to `true`.
     func login(completion: @escaping AuthHandler) {
         refreshAccessToken { [weak self] result in
@@ -201,7 +222,7 @@ internal class OAuth2Authenticator: Authenticator {
         }
     }
     
-    /// Logs out the authenticator by setting `auth` to `nil` and `shouldAutoRefreshAccessToken`
+    /// Logs out the authenticator by setting `authToken` to `nil` and `shouldAutoRefreshAccessToken`
     /// to `false`. Call `login()` to log the authenticator back in again.
     func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
         authToken = nil
@@ -210,7 +231,7 @@ internal class OAuth2Authenticator: Authenticator {
     }
     
     /// Used internally to create a JWT from the service account passed in to the initializer, which is then exchanged
-    /// with an access token from the authentication endpoint. This access token is stored in the `auth` property
+    /// with an access token from the authentication endpoint. This access token is stored in the `authToken` property
     /// along with the received expiration date.
     ///
     /// This flow is described in more detail on the [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2).

@@ -60,7 +60,7 @@ extension Device {
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices:stream", params: params)
         
         // Create the stream, and connect to it
-        return DeviceEventStream(request: request, authenticator: Disruptive.auth)
+        return DeviceEventStream(request: request, authenticator: Disruptive.authenticator)
     }
     
     /**

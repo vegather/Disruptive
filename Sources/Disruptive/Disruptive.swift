@@ -27,10 +27,10 @@ public struct Disruptive {
     /// checked to see if it has a non-expired access token before every request
     /// is sent to the Disruptive backend. If no non-expired access token were found
     /// the `refreshAccessToken` method will be called before attempting to send the request.
-    public static var auth: Authenticator?
+    public static var authenticator: Authenticator?
 }
 
-internal extension Disruptive {
+public extension Disruptive {
     struct DefaultURLs {
         /// The default base URL for the Disruptive Technologies REST API.
         public static let baseURL = "https://api.disruptive-technologies.com/v2/"
