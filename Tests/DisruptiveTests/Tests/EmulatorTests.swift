@@ -105,7 +105,7 @@ class EmulatorTests: DisruptiveTests {
         Emulator.createEmulatedDevice(projectID: "proj1", deviceType: .unknown(value: "NOT_A_DEVICE"), displayName: "") { result in
             switch result {
                 case .success(_)       : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err, .badRequest)
+                case .failure(let err) : XCTAssertEqual(err.type, .badRequest)
             }
             exp.fulfill()
         }

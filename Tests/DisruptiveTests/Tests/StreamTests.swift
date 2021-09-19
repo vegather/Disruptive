@@ -150,4 +150,51 @@ class StreamTests: DisruptiveTests {
         stream.onTouch = { _, _ in exp.fulfill() }
         wait(for: [exp], timeout: 0.05)
     }
+    
+    func testStreamError() {
+        let errorPayload = """
+        {
+            "error": {
+                "code": 5,
+                "message": "not found",
+                "details":[
+                    {
+                        "help": "https://developer.disruptive-technologies.com/docs/error-codes#404"
+                    }
+                ]
+            }
+        }
+        """.data(using: .utf8)!
+        
+        let reqProjectID = "proj1"
+        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+            .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
+        
+        MockStreamURLProtocol.requestHandler = { request in
+            self.assertRequestParams(
+                for           : request,
+                authenticated : true,
+                method        : "GET",
+                queryParams   : [:],
+                headers       : [:],
+                url           : reqURL,
+                body          : nil
+            )
+            
+            return [(errorPayload, nil, nil)]
+        }
+        
+        let stream = Device.subscribeToDevices(projectID: reqProjectID)
+        
+        // Wait a bit to let the request go through (and be asserted)
+        let exp = expectation(description: "")
+        exp.isInverted = true
+        stream.onError = { err in
+            XCTAssertEqual(err.type, .notFound)
+            XCTAssertEqual(err.message, "not found")
+            XCTAssertEqual(err.helpLink, "https://developer.disruptive-technologies.com/docs/error-codes#404")
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 0.05)
+    }
 }

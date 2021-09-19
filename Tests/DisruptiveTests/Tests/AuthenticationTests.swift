@@ -130,7 +130,7 @@ class AuthenticationTests: DisruptiveTests {
         // getActiveAccessToken should return .loggedOut
         exp = expectation(description: "")
         auth.getActiveAccessToken { result in
-            guard case .failure(let err) = result, err == .loggedOut else { XCTFail(); return }
+            guard case .failure(let err) = result, err.type == .loggedOut else { XCTFail(); return }
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1)

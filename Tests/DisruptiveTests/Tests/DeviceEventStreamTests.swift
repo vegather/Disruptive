@@ -307,7 +307,7 @@ class DeviceEventStreamTests: DisruptiveTests {
         let exp = expectation(description: "")
         let stream = Device.subscribeToDevices(projectID: reqProjectID)
         stream.onError = { err in
-            XCTAssertEqual(err, .badRequest)
+            XCTAssertEqual(err.type, .badRequest)
             exp.fulfill()
         }
         

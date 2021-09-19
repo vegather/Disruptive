@@ -179,7 +179,7 @@ extension Project {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init createProject request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
     
@@ -228,7 +228,7 @@ extension Project {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init the update project request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
 }

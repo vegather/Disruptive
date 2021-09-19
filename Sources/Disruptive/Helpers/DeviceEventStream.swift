@@ -175,8 +175,13 @@ public class DeviceEventStream: NSObject {
     private func restartStream() {
         guard hasBeenClosed == false else { return }
         guard let auth = authenticator else {
+            let error = DisruptiveError(
+                type: .loggedOut,
+                message: "Not authenticated",
+                helpLink: nil
+            )
             Disruptive.log("No authentication has been set. Set it with `Disruptive.auth = ...`", level: .error)
-            onError?(.loggedOut)
+            onError?(error)
             return
         }
         
@@ -192,8 +197,13 @@ public class DeviceEventStream: NSObject {
                 
                 // Convert to URLRequest
                 guard let urlRequest = req.urlRequest() else {
+                    let error = DisruptiveError(
+                        type: .unknownError,
+                        message: "Unknown error",
+                        helpLink: nil
+                    )
                     Disruptive.log("Failed to create URLRequest to restart the DeviceEventStream stream", level: .error)
-                    self.onError?(.unknownError)
+                    self.onError?(error)
                     return
                 }
                 
@@ -229,14 +239,14 @@ extension DeviceEventStream: URLSessionDataDelegate {
             func toError() -> DisruptiveError? {
                 // Checking both HTTP codes and gRPC codes
                 switch code {
-                    case 3, 9, 11, 400:  return .badRequest
-                    case 16, 401:        return .unauthorized
-                    case 7, 403:         return .insufficientPermissions
-                    case 5, 404:         return .notFound
-                    case 2, 13, 15, 500: return .serverError
-                    case 14, 503:        return .serverError
+                    case 3, 9, 11, 400:  return DisruptiveError(type: .badRequest,              message: message, helpLink: nil)
+                    case 16, 401:        return DisruptiveError(type: .unauthorized,            message: message, helpLink: nil)
+                    case 7, 403:         return DisruptiveError(type: .insufficientPermissions, message: message, helpLink: nil)
+                    case 5, 404:         return DisruptiveError(type: .notFound,                message: message, helpLink: nil)
+                    case 2, 13, 15, 500: return DisruptiveError(type: .serverError,             message: message, helpLink: nil)
+                    case 14, 503:        return DisruptiveError(type: .serverError,             message: message, helpLink: nil)
                     case 1,4, 504:       return nil // The stream session timed out, and will be restarted. Not considered an error
-                    default :            return .unknownError
+                    default :            return DisruptiveError(type: .unknownError,            message: message, helpLink: nil)
                 }
             }
         }
@@ -319,8 +329,14 @@ extension DeviceEventStream: URLSessionDataDelegate {
             if let statusCode = (task.response as? HTTPURLResponse)?.statusCode {
                 statusCodeStr = ". Status code: \(String(describing: statusCode))"
             }
+            
+            let err = DisruptiveError(
+                type: .serverUnavailable,
+                message: "Stream error",
+                helpLink: nil
+            )
             Disruptive.log("The event stream closed with message: \"\(error.localizedDescription)\"\(statusCodeStr)", level: .error)
-            onError?(.serverUnavailable)
+            onError?(err)
         }
         
         let backoff = retryScheme.nextBackoff()

@@ -38,7 +38,11 @@ struct Emulator {
         // If the device type is `.unknown`, return an error
         guard let typeStr = deviceType.rawValue else {
             Disruptive.log("Unable to use device type \(deviceType) for an emulated device", level: .error)
-            completion(.failure(.badRequest))
+            completion(.failure(DisruptiveError(
+                type: .badRequest,
+                message: "Device type \(deviceType) can't be used as an emulated device",
+                helpLink: nil
+            )))
             return
         }
         
@@ -55,7 +59,7 @@ struct Emulator {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
     
@@ -122,7 +126,7 @@ struct Emulator {
             // Send the request
             request.send() { completion($0) }
         } catch (let err) {
-            completion(.failure((err as? DisruptiveError) ?? .unknownError))
+            completion(.failure((err as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
 }
@@ -176,8 +180,13 @@ private struct PublishBody: Encodable {
             case .cellularStatus     : cellularStatus     = event as? CellularStatusEvent
             case .labelsChanged:
                 // LabelsChangedEvent is not a `PublishableEvent` so this shouldn't happen.
-                DTLog("LabelsChangedEvent cannot be published", level: .error)
-                throw DisruptiveError.badRequest
+                let error = DisruptiveError(
+                    type: .badRequest,
+                    message: "LabelsChangedEvent cannot be published",
+                    helpLink: nil
+                )
+                DTLog(error.message, level: .error)
+                throw error
         }
     }
 }

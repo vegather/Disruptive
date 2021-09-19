@@ -128,7 +128,7 @@ class RoleTests: DisruptiveTests {
         Role.getRole(roleType: .unknown(value: "NOT_A_ROLE")) { result in
             switch result {
                 case .success(_)       : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err, DisruptiveError.badRequest)
+                case .failure(let err) : XCTAssertEqual(err.type, .badRequest)
             }
             exp.fulfill()
         }

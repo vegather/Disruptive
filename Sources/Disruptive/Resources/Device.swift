@@ -347,7 +347,7 @@ extension Device {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init setLabel request with payload: \(body). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
     
@@ -382,7 +382,7 @@ extension Device {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to initialize transfer devices request with payload: \(body). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
 }

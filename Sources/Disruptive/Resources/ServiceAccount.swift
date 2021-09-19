@@ -158,7 +158,7 @@ extension ServiceAccount {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init create service account request with payload \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
     
@@ -229,7 +229,7 @@ extension ServiceAccount {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init updateServiceAccount request with payload: \(patch). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
     

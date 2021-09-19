@@ -133,9 +133,14 @@ extension Request {
     func internalSend<T: Decodable>(decoder: JSONDecoder = JSONDecoder(), completion: @escaping (Result<T, DisruptiveError>) -> ()) {
         
         guard let urlReq = urlRequest() else {
+            let error = DisruptiveError(
+                type: .unknownError,
+                message: "Unknown error",
+                helpLink: nil
+            )
             Disruptive.log("Failed to create URLRequest from request: \(self)", level: .error)
             DispatchQueue.main.async {
-                completion(.failure(.unknownError))
+                completion(.failure(error))
             }
             return
         }
@@ -165,7 +170,7 @@ extension Request {
                 }
                 
                 // Check if we've been rate limited
-                if case .tooManyRequests(let retryAfter) = internalError {
+                if case .tooManyRequests(let retryAfter) = internalError.type {
                     Disruptive.log("Request got rate limited, waiting \(retryAfter) seconds before retrying", level: .warning)
                     
                     // Dispatch the same request again after waiting
@@ -180,9 +185,14 @@ extension Request {
                 // All types of errors should have been handled above, so this
                 // should never happen. This is here as a fallback in case new
                 // types of errors are added in the future.
-                Disruptive.log("The internal error \(internalError) was not handled for \(urlString)", level: .error)
                 DispatchQueue.main.async {
-                    completion(.failure(.unknownError))
+                    let error = DisruptiveError(
+                        type: .unknownError,
+                        message: "Unknown error",
+                        helpLink: nil
+                    )
+                    Disruptive.log("The internal error \(internalError) was not handled for \(urlString)", level: .error)
+                    completion(.failure(error))
                 }
                 return
             }
@@ -204,8 +214,12 @@ extension Request {
             // Parse the returned data
             guard let result: T = Request.parsePayload(data, decoder: decoder) else {
                 DispatchQueue.main.async {
-                    Disruptive.log("Failed to parse the response JSON from \(urlString)", level: .error)
-                    completion(.failure(.unknownError))
+                    let error = DisruptiveError(
+                        type: .unknownError,
+                        message: "Unknown error",
+                        helpLink: nil
+                    )
+                    completion(.failure(error))
                 }
                 return
             }
@@ -242,14 +256,24 @@ extension Request {
     {
         // Check if there is an error (server probably not accessible)
         if let error = error {
+            let err = InternalError(
+                type: .serverUnavailable,
+                message: "Unable to contact server",
+                helpLink: nil
+            )
             Disruptive.log("Request: \(url) resulted in error: \(error) (code: \(String(describing: (error as? URLError)?.code))), response: \(String(describing: response))", level: .error)
-            return .serverUnavailable
+            return err
         }
         
         // Cast response to HTTPURLResponse
         guard let httpResponse = response as? HTTPURLResponse else {
+            let err = InternalError(
+                type: .unknownError,
+                message: "Unable to contact server",
+                helpLink: nil
+            )
             Disruptive.log("Request: \(url) resulted in HTTP Error: \(String(describing: error)). Response: \(String(describing: response))", level: .error)
-            return .unknownError
+            return err
         }
         
         // Check if the status code is outside the 2XX range
@@ -268,23 +292,29 @@ extension Request {
             }
             
             switch httpResponse.statusCode {
-            case 400: return .badRequest
-            case 401: return .unauthorized
-            case 403: return .forbidden
-            case 404: return .notFound
-            case 409: return .conflict
-            case 500: return .internalServerError
-            case 503: return .serviceUnavailable
-            case 504: return .gatewayTimeout
+                case 400: return InternalError(type: .badRequest,          message: message?.error ?? "Invalid arguments",  helpLink: message?.help)
+                case 401: return InternalError(type: .unauthorized,        message: message?.error ?? "Unauthorized",       helpLink: message?.help)
+                case 403: return InternalError(type: .forbidden,           message: message?.error ?? "Forbidden",          helpLink: message?.help)
+                case 404: return InternalError(type: .notFound,            message: message?.error ?? "Not found",          helpLink: message?.help)
+                case 409: return InternalError(type: .conflict,            message: message?.error ?? "Already exists",     helpLink: message?.help)
+                case 500: return InternalError(type: .internalServerError, message: message?.error ?? "Server error",       helpLink: message?.help)
+                case 503: return InternalError(type: .serviceUnavailable,  message: message?.error ?? "Server unavailable", helpLink: message?.help)
+                case 504: return InternalError(type: .gatewayTimeout,      message: message?.error ?? "Request timed out",  helpLink: message?.help)
             case 429:
                 // Read "Retry-After" header for how long we need to wait
                 // Default to 5 seconds if not present
                 let retryAfterStr = httpResponse.value(forHTTPHeaderField: "Retry-After") ?? "5"
                 let retryAfter = Int(retryAfterStr) ?? 5
-                return .tooManyRequests(retryAfter: retryAfter)
+                
+                return InternalError(
+                    type: .tooManyRequests(retryAfter: retryAfter),
+                    message: "Will retry request...",
+                    helpLink: nil
+                )
             default:
-                Disruptive.log("Unexpected status code: \(httpResponse.statusCode)", level: .error)
-                return .unknownError
+                let err = InternalError(type: .unknownError, message: "Unexpected status code: \(httpResponse.statusCode)", helpLink: nil)
+                Disruptive.log(err.message, level: .error)
+                return err
             }
         }
         
@@ -340,7 +370,8 @@ extension Request {
     private static func authenticate(req: Request, completion: @escaping (Result<Request, DisruptiveError>) -> ()) {
         guard let auth = Disruptive.auth else {
             Disruptive.log("No authentication has been set. Set it with `Disruptive.auth = ...`", level: .error)
-            completion(.failure(.loggedOut))
+            let error = DisruptiveError(type: .loggedOut, message: "Not authenticated", helpLink: nil)
+            completion(.failure(error))
             return
         }
         

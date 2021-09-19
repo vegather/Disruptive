@@ -111,8 +111,13 @@ internal extension Authenticator {
     func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
         if shouldAutoRefreshAccessToken == false {
             // We should no longer be logged in. Just return the `.loggedOut` error code
+            let error = DisruptiveError(
+                type: .loggedOut,
+                message: "Not authenticated",
+                helpLink: nil
+            )
             Disruptive.log("The `Authenticator` is not logged in. Call `login()` on the `Authenticator` to log back in.", level: .error)
-            completion(.failure(.loggedOut))
+            completion(.failure(error))
         } else if let authToken = getLocalAuthToken() {
             // There already exists a non-expired auth token
             completion(.success(authToken))
@@ -127,8 +132,13 @@ internal extension Authenticator {
                         Disruptive.log("Authentication successful")
                         completion(.success(authToken))
                     } else {
+                        let error = DisruptiveError(
+                            type: .unknownError,
+                            message: "Authentication error",
+                            helpLink: nil
+                        )
                         Disruptive.log("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
-                        completion(.failure(.unknownError))
+                        completion(.failure(error))
                     }
                 case .failure(let e):
                     Disruptive.log("Failed to authenticate the authenticator with error: \(e)", level: .error)
@@ -211,8 +221,13 @@ internal class OAuth2Authenticator: Authenticator {
             issuer  : credentials.issuer,
             secret  : credentials.secret
         ) else {
+            let error = DisruptiveError(
+                type: .unknownError,
+                message: "Failed to authenticate",
+                helpLink: nil
+            )
             Disruptive.log("Failed to create a JWT from service account credentials: \(credentials)", level: .error)
-            completion(.failure(.unknownError))
+            completion(.failure(error))
             return
         }
         
@@ -253,7 +268,7 @@ internal class OAuth2Authenticator: Authenticator {
             }
         } catch {
             Disruptive.log("Failed to encode body: \(body). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
 

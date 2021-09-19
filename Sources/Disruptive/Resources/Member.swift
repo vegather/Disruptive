@@ -290,7 +290,7 @@ extension Member {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init create member request with payload \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
     
@@ -363,8 +363,13 @@ extension Member {
         
         // At least one of the fields has to be set so that `updateMask` is non-empty
         if updateMask.count == 0 {
+            let error = DisruptiveError(
+                type: .badRequest,
+                message: "No roles set",
+                helpLink: nil
+            )
             Disruptive.log("At least one of the fields in `updateMember` has to be set", level: .error)
-            completion(.failure(.badRequest))
+            completion(.failure(error))
             return
         }
 
@@ -377,7 +382,7 @@ extension Member {
             request.send() { completion($0) }
         } catch (let error) {
             Disruptive.log("Failed to init updateMember request with payload: \(patch). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? .unknownError))
+            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
     
@@ -489,8 +494,13 @@ extension Member {
                     if let url = URL(string: response.inviteUrl) {
                         completion(.success(url))
                     } else {
+                        let error = DisruptiveError(
+                            type: .unknownError,
+                            message: "Unknown error",
+                            helpLink: nil
+                        )
                         Disruptive.log("Failed to convert the inviteUrl response to a URL: \(response.inviteUrl)", level: .error)
-                        completion(.failure(.unknownError))
+                        completion(.failure(error))
                     }
                 case .failure(let err):
                     completion(.failure(err))
@@ -534,8 +544,13 @@ extension Member {
                 case .pending  : try container.encode("PENDING")
                 case .accepted : try container.encode("ACCEPTED")
                 case .unknown:
+                    let error = DisruptiveError(
+                        type: .badRequest,
+                        message: "Unknown member status \"\(self)\"",
+                        helpLink: nil
+                    )
                     Disruptive.log("Can't encode Member.Status with case .unknown", level: .error)
-                    throw DisruptiveError.badRequest
+                    throw error
             }
         }
     }

@@ -62,7 +62,11 @@ extension Role {
     {
         guard let resourceName = roleType.resourceName else {
             Disruptive.log("Can't get role for roleType: \(roleType)", level: .error)
-            completion(.failure(.badRequest))
+            completion(.failure(DisruptiveError(
+                type: .badRequest,
+                message: "Can't get role for roleType: \(roleType)",
+                helpLink: nil
+            )))
             return
         }
         
@@ -124,7 +128,11 @@ extension Role {
                 try container.encode(resourceName)
             } else {
                 Disruptive.log("Can't encode Role.RoleType with case .unknown", level: .error)
-                throw DisruptiveError.badRequest
+                throw DisruptiveError(
+                    type: .badRequest,
+                    message: "Can't use role \(self)",
+                    helpLink: nil
+                )
             }
         }
         

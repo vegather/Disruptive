@@ -124,7 +124,10 @@ class RequestTests: DisruptiveTests {
         
         let req = Request(method: .get, baseURL: "", endpoint: "🙃")
         req.send { (res: Result<String, DisruptiveError>) in
-            XCTAssertEqual(res, .failure(DisruptiveError.unknownError))
+            switch res {
+                case .success(_): XCTFail()
+                case .failure(let err): XCTAssertEqual(err.type, .unknownError)
+            }
             exp.fulfill()
         }
         
@@ -154,7 +157,7 @@ class RequestTests: DisruptiveTests {
         req.send { (result: Result<String, DisruptiveError>) in
             switch result {
                 case .success          : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err, .notFound)
+                case .failure(let err) : XCTAssertEqual(err.type, .notFound)
             }
             exp.fulfill()
         }
@@ -256,7 +259,7 @@ class RequestTests: DisruptiveTests {
         req.send { (result: Result<TouchEvent, DisruptiveError>) in
             switch result {
                 case .success          : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err, .unknownError)
+                case .failure(let err) : XCTAssertEqual(err.type, .unknownError)
             }
             exp.fulfill()
         }
@@ -266,23 +269,23 @@ class RequestTests: DisruptiveTests {
     
     func testCheckResponseWithError() {
         let err = Request.checkResponseForErrors(forRequestURL: "", response: nil, data: nil, error: URLError(.networkConnectionLost))
-        XCTAssertEqual(err, .serverUnavailable)
+        XCTAssertEqual(err?.type, .serverUnavailable)
     }
     
     func testCheckResponseWithoutHTTPResponse() {
         let err = Request.checkResponseForErrors(forRequestURL: "", response: URLResponse(), data: nil, error: nil)
-        XCTAssertEqual(err, .unknownError)
+        XCTAssertEqual(err?.type, .unknownError)
     }
     
     func testCheckResponseWithVariousInvalidStatusCodes() {
-        func assertError(is expected: InternalError?, forStatusCode code: Int) {
+        func assertError(is expected: InternalError.ErrorType?, forStatusCode code: Int) {
             let returned = Request.checkResponseForErrors(
                 forRequestURL : "",
                 response      : HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: code, httpVersion: "2.0", headerFields: nil),
                 data          : nil,
                 error         : nil
             )
-            XCTAssertEqual(expected, returned)
+            XCTAssertEqual(expected, returned?.type)
         }
         
         assertError(is: nil,                             forStatusCode: 200)
@@ -312,7 +315,7 @@ class RequestTests: DisruptiveTests {
             data          : data,
             error         : nil
         )
-        XCTAssertEqual(err, .notFound)
+        XCTAssertEqual(err?.type, .notFound)
     }
     
     func testParsePayloadWithNilPayload() {
