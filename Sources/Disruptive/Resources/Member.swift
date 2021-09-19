@@ -607,15 +607,8 @@ extension Member {
         self.email          = try container.decode(String.self,          forKey: .email)
         self.accountType    = try container.decode(AccountType.self,     forKey: .accountType)
         
-        // When a new Member is created, the `createTime` field comes back as `null`.
-        // This will replace that with the current timestamp (even though it's slightly wrong).
-        // TODO: Remove this workaround if a fix is deployed to the backend.
-        if let createTimestamp = try container.decodeIfPresent(String.self, forKey: .createTime) {
-            self.createTime = try Date(iso8601String: createTimestamp)
-        } else if try container.decodeNil(forKey: .createTime) {
-            self.createTime = Date()
-        } else {
-            throw ParseError.dateFormat(date: "")
-        }
+        // Extract the timestamp
+        let timeString      = try container.decode(String.self, forKey: .createTime)
+        self.createTime     = try Date(iso8601String: timeString)
     }
 }
