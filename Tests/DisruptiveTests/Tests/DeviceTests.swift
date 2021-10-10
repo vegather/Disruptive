@@ -122,7 +122,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDevice")
-        Device.getDevice(projectID: reqProjectID, deviceID: reqDeviceID) { result in
+        Device.get(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let device):
                     XCTAssertEqual(device, respDevice)
@@ -158,7 +158,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDeviceLookup")
-        Device.getDevice(deviceID: reqDeviceID) { result in
+        Device.get(deviceID: reqDeviceID) { result in
             switch result {
                 case .success(let device):
                     XCTAssertEqual(device, respDevice)
@@ -194,7 +194,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDevicesNoParameters")
-        Device.getDevices(projectID: reqProjectID) { result in
+        Device.getAll(projectID: reqProjectID) { result in
             switch result {
                 case .success(let devices):
                     XCTAssertEqual(devices, respDevices)
@@ -238,7 +238,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDevicesAllParameters")
-        Device.getDevices(
+        Device.getAll(
             projectID   : reqProjectID,
             query       : "search query",
             deviceIDs   : ["dev1", "dev2"],
@@ -283,7 +283,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDevicesPageNoParameters")
-        Device.getDevicesPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+        Device.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -330,7 +330,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDevicesPageAllParameters")
-        Device.getDevicesPage(
+        Device.getPage(
             projectID      : reqProjectID,
             query          : "search query",
             deviceIDs      : ["dev1", "dev2"],
@@ -384,7 +384,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testUpdateDeviceDisplayName")
-        Device.updateDeviceDisplayName(projectID: reqProjectID, deviceID: reqDeviceID, newDisplayName: reqDisplayName) { result in
+        Device.updateDisplayName(projectID: reqProjectID, deviceID: reqDeviceID, newDisplayName: reqDisplayName) { result in
             switch result {
                 case .success():
                     break
@@ -426,7 +426,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testRemoveDeviceLabel")
-        Device.deleteDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
+        Device.deleteLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
             switch result {
                 case .success():
                     break
@@ -469,7 +469,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testSetDeviceLabel")
-        Device.setDeviceLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKey, labelValue: reqLabelValue) { result in
+        Device.setLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKey, labelValue: reqLabelValue) { result in
             switch result {
                 case .success():
                     break
@@ -513,7 +513,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testBatchUpdateDeviceLabels")
-        Device.batchUpdateDeviceLabels(projectID: reqProjectID, deviceIDs: [reqDeviceID], labelsToSet: [reqLabelKeyToSet: reqLabelValueToSet], labelsToRemove: [reqLabelKeyToRemove]) { result in
+        Device.batchUpdateLabels(projectID: reqProjectID, deviceIDs: [reqDeviceID], labelsToSet: [reqLabelKeyToSet: reqLabelValueToSet], labelsToRemove: [reqLabelKeyToRemove]) { result in
             switch result {
                 case .success():
                     break
@@ -551,7 +551,7 @@ class DeviceTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testMoveDevicesByIDs")
-        Device.transferDevices(deviceIDs: reqDeviceIDs, fromProjectID: reqFromProjectID, toProjectID: reqToProjectID) { result in
+        Device.transfer(deviceIDs: reqDeviceIDs, fromProjectID: reqFromProjectID, toProjectID: reqToProjectID) { result in
             switch result {
                 case .success():
                     break

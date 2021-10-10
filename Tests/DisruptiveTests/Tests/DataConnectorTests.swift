@@ -125,7 +125,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDataConnectors")
-        DataConnector.getDataConnectors(projectID: reqProjectID) { result in
+        DataConnector.getAll(projectID: reqProjectID) { result in
             switch result {
                 case .success(let dcs):
                     XCTAssertEqual(dcs, respDCs)
@@ -161,7 +161,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDataConnectorsPage")
-        DataConnector.getDataConnectorsPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+        DataConnector.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -199,7 +199,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDataConnector")
-        DataConnector.getDataConnector(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
+        DataConnector.get(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
             switch result {
                 case .success(let dc):
                     XCTAssertEqual(dc, respDC)
@@ -268,7 +268,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testCreateDataConnector")
-        DataConnector.createDataConnector(
+        DataConnector.create(
             projectID   : reqProjectID,
             displayName : reqDisplayName,
             pushType    : reqPushType,
@@ -344,7 +344,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testUpdateDataConnectorAllParametersSet")
-        DataConnector.updateDataConnector(
+        DataConnector.update(
             projectID       : reqProjectID,
             dataConnectorID : reqDcID,
             displayName     : reqDisplayName,
@@ -401,7 +401,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testUpdateDataConnectorNoParametersSet")
-        DataConnector.updateDataConnector(
+        DataConnector.update(
             projectID       : reqProjectID,
             dataConnectorID : reqDcID)
         { result in
@@ -438,7 +438,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testDeleteDataConnector")
-        DataConnector.deleteDataConnector(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
+        DataConnector.delete(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
             switch result {
                 case .success():
                     break
@@ -485,7 +485,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetDataConnectorMetrics")
-        DataConnector.getDataConnectorMetrics(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
+        DataConnector.getMetrics(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
             switch result {
                 case .success(let metrics):
                     XCTAssertEqual(metrics.successCount, reqSuccess)
@@ -521,7 +521,7 @@ class DataConnectorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testSyncDataConnector")
-        DataConnector.syncDataConnector(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
+        DataConnector.sync(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
             switch result {
                 case .success():
                     break

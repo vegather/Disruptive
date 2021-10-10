@@ -1,5 +1,5 @@
 //
-//  Emulator.swift
+//  DeviceEmulator.swift
 //  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 31/12/2020.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct Emulator {
+struct DeviceEmulator {
     
     /**
      Creates a new emulated device in a specific project.
      
-     Emulated devices will be listed in the standard `getDevices` method along with the
+     Emulated devices will be listed in the standard `Device.getAll` method along with the
      physical devices. The `isEmulatedDevice` property will differentiate them.
      
      - Parameter projectID: The identifier of the project to create the emulated device in.
@@ -23,7 +23,7 @@ struct Emulator {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the newly created `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Device, DisruptiveError>`
      */
-    public static func createEmulatedDevice(
+    public static func create(
         projectID   : String,
         deviceType  : Device.DeviceType,
         displayName : String,
@@ -71,7 +71,7 @@ struct Emulator {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func deleteEmulatedDevice(
+    public static func delete(
         projectID   : String,
         deviceID    : String,
         completion  : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -95,7 +95,7 @@ struct Emulator {
      Example:
      ```
      // Publish a temperature event
-     Device.publishEmulatedEvent(
+     DeviceEmulator.publishEvent(
          projectID : "<PROJECT_ID>",
          deviceID  : "<DEVICE_ID>",
          event     : TemperatureEvent(value: 10, timestamp: Date())
@@ -111,7 +111,7 @@ struct Emulator {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func publishEmulatedEvent<Event: PublishableEvent>(
+    public static func publishEvent<Event: PublishableEvent>(
         projectID          : String,
         deviceID           : String,
         event              : Event,

@@ -39,7 +39,7 @@ extension Role {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the array of `Role`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Role], DisruptiveError>`
      */
-    public static func getRoles(
+    public static func getAll(
         completion: @escaping (_ result: Result<[Role], DisruptiveError>) -> ())
     {
         // Create the request
@@ -56,7 +56,7 @@ extension Role {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Role`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Role, DisruptiveError>`
      */
-    public static func getRole(
+    public static func get(
         roleType: Role.RoleType,
         completion: @escaping (_ result: Result<Role, DisruptiveError>) -> ())
     {

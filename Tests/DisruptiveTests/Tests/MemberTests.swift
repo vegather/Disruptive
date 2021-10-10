@@ -113,7 +113,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetProjectMembers")
-        Member.getMembers(projectID: reqProjectID) { result in
+        Member.getAll(projectID: reqProjectID) { result in
             switch result {
                 case .success(let members):
                     XCTAssertEqual(members, respMembers)
@@ -149,7 +149,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetOrgMembers")
-        Member.getMembers(organizationID: reqOrgID) { result in
+        Member.getAll(organizationID: reqOrgID) { result in
             switch result {
                 case .success(let members):
                     XCTAssertEqual(members, respMembers)
@@ -185,7 +185,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetProjectMembersPage")
-        Member.getMembersPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
+        Member.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -222,7 +222,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetOrgMembersPage")
-        Member.getMembersPage(organizationID: reqOrgID, pageSize: 2, pageToken: "token") { result in
+        Member.getPage(organizationID: reqOrgID, pageSize: 2, pageToken: "token") { result in
             switch result {
                 case .success(let page):
                     XCTAssertEqual(page.nextPageToken, "nextToken")
@@ -260,7 +260,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetProjectMember")
-        Member.getMember(projectID: reqProjectID, memberID: reqMemberID) { result in
+        Member.get(projectID: reqProjectID, memberID: reqMemberID) { result in
             switch result {
                 case .success(let member):
                     XCTAssertEqual(member, respMember)
@@ -297,7 +297,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetOrgMember")
-        Member.getMember(organizationID: reqOrgID, memberID: reqMemberID) { result in
+        Member.get(organizationID: reqOrgID, memberID: reqMemberID) { result in
             switch result {
                 case .success(let member):
                     XCTAssertEqual(member, respMember)
@@ -342,7 +342,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testInviteProjectMember")
-        Member.inviteMember(projectID: reqProjectID, roles: reqRoles, email: reqEmail) { result in
+        Member.invite(projectID: reqProjectID, roles: reqRoles, email: reqEmail) { result in
             switch result {
                 case .success(let member):
                     XCTAssertEqual(member, respMember)
@@ -387,7 +387,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testInviteOrgMember")
-        Member.inviteMember(organizationID: reqOrgID, roles: reqRoles, email: reqEmail) { result in
+        Member.invite(organizationID: reqOrgID, roles: reqRoles, email: reqEmail) { result in
             switch result {
                 case .success(let member):
                     XCTAssertEqual(member, respMember)
@@ -433,7 +433,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testUpdateProjectMember")
-        Member.updateMember(projectID: reqProjectID, memberID: reqMemberID, roles: reqRoles) { result in
+        Member.update(projectID: reqProjectID, memberID: reqMemberID, roles: reqRoles) { result in
             switch result {
                 case .success(let member):
                     XCTAssertEqual(member, respMember)
@@ -467,7 +467,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testDeleteProjectMember")
-        Member.deleteMember(projectID: reqProjectID, memberID: reqMemberID) { result in
+        Member.delete(projectID: reqProjectID, memberID: reqMemberID) { result in
             switch result {
                 case .success():
                     break
@@ -501,7 +501,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testDeleteOrgMember")
-        Member.deleteMember(organizationID: reqOrgID, memberID: reqMemberID) { result in
+        Member.delete(organizationID: reqOrgID, memberID: reqMemberID) { result in
             switch result {
                 case .success():
                     break
@@ -542,7 +542,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetProjectMemberInviteURL")
-        Member.getMemberInviteURL(projectID: reqProjectID, memberID: reqMemberID) { result in
+        Member.getInviteURL(projectID: reqProjectID, memberID: reqMemberID) { result in
             switch result {
                 case .success(let url):
                     XCTAssertEqual(url.absoluteString, respURL)
@@ -583,7 +583,7 @@ class MemberTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetOrgMemberInviteURL")
-        Member.getMemberInviteURL(organizationID: reqOrgID, memberID: reqMemberID) { result in
+        Member.getInviteURL(organizationID: reqOrgID, memberID: reqMemberID) { result in
             switch result {
                 case .success(let url):
                     XCTAssertEqual(url.absoluteString, respURL)

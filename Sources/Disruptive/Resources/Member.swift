@@ -55,17 +55,17 @@ extension Member {
      This will handle pagination automatically and send multiple network requests in
      the background if necessary. If a lot of Members are expected to be in the organization,
      it might be better to load pages of Members as they're needed using the
-     `getMembersPage` function instead.
+     `getPage` function instead.
      
      - Parameter organizationID: The identifier of the organization to get Members for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public static func getMembers(
+    public static func getAll(
         organizationID : String,
         completion     : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
-        getMembers(endpoint: "organizations/\(organizationID)/members") { completion($0) }
+        getAll(endpoint: "organizations/\(organizationID)/members") { completion($0) }
     }
     
     /**
@@ -74,21 +74,21 @@ extension Member {
      This will handle pagination automatically and send multiple network requests in
      the background if necessary. If a lot of Members are expected to be in the project,
      it might be better to load pages of Members as they're needed using the
-     `getMembersPage` function instead.
+     `getPage` function instead.
      
      - Parameter projectID: The identifier of the project to get Members for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public static func getMembers(
+    public static func getAll(
         projectID  : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
-        getMembers(endpoint: "projects/\(projectID)/members") { completion($0) }
+        getAll(endpoint: "projects/\(projectID)/members") { completion($0) }
     }
     
     // Helper function to get Members for either Projects or Organizations.
-    private static func getMembers(
+    private static func getAll(
         endpoint   : String,
         completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
     {
@@ -107,7 +107,7 @@ extension Member {
      Useful if a lot of Members are expected in the specified organization. This function
      provides better control for when to get Members and how many to get at a time so
      that Members are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getMembers` function.
+     at a cost of convenience compared to the `getAll` function.
      
      - Parameter organizationID: The identifier of the organization to get Members from.
      - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default.
@@ -115,13 +115,13 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
      */
-    public static func getMembersPage(
+    public static func getPage(
         organizationID : String,
         pageSize   : Int = 100,
         pageToken  : String?,
         completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
     {
-        getMembersPage(endpoint: "organizations/\(organizationID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
+        getPage(endpoint: "organizations/\(organizationID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
     }
     
     /**
@@ -130,7 +130,7 @@ extension Member {
      Useful if a lot of Members are expected in the specified project. This function
      provides better control for when to get Members and how many to get at a time so
      that Members are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getMembers` function.
+     at a cost of convenience compared to the `getAll` function.
      
      - Parameter projectID: The identifier of the project to get Members from.
      - Parameter pageSize: The maximum number of Members to get for this page. The maximum page size is 100, which is also the default.
@@ -138,19 +138,19 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Member`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
      */
-    public static func getMembersPage(
+    public static func getPage(
         projectID  : String,
         pageSize   : Int = 100,
         pageToken  : String?,
         completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
     {
-        getMembersPage(endpoint: "projects/\(projectID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
+        getPage(endpoint: "projects/\(projectID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
     }
     
     // Helper function to get a Members page for either Projects or Organizations.
-    private static func getMembersPage(
+    private static func getPage(
         endpoint   : String,
-        pageSize   : Int = 100,
+        pageSize   : Int,
         pageToken  : String?,
         completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
     {
@@ -176,12 +176,12 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public static func getMember(
+    public static func get(
         organizationID : String,
         memberID       : String,
         completion     : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
-        getMember(endpoint: "organizations/\(organizationID)/members/\(memberID)") { completion($0) }
+        get(endpoint: "organizations/\(organizationID)/members/\(memberID)") { completion($0) }
     }
     
     /**
@@ -192,16 +192,16 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public static func getMember(
+    public static func get(
         projectID  : String,
         memberID   : String,
         completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
-        getMember(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
+        get(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
     }
     
     // Helper function to get a specific Member in either a Project or an Organization.
-    private static func getMember(
+    private static func get(
         endpoint   : String,
         completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
@@ -228,13 +228,13 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the new `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public static func inviteMember(
+    public static func invite(
         organizationID : String,
         roles          : [Role.RoleType],
         email          : String,
         completion     : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
-        inviteMember(
+        invite(
             endpoint: "organizations/\(organizationID)/members",
             roles: roles,
             email: email
@@ -255,13 +255,13 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the new `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public static func inviteMember(
+    public static func invite(
         projectID  : String,
         roles      : [Role.RoleType],
         email      : String,
         completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
-        inviteMember(
+        invite(
             endpoint: "projects/\(projectID)/members",
             roles: roles,
             email: email
@@ -269,7 +269,7 @@ extension Member {
     }
     
     // Helper function to invite Members to either Projects or Organizations.
-    private static func inviteMember(
+    private static func invite(
         endpoint   : String,
         roles      : [Role.RoleType],
         email      : String,
@@ -305,13 +305,13 @@ extension Member {
 //     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
 //     - Parameter result: `Result<Member, DisruptiveError>`
 //     */
-//    public func updateMember(
+//    public func update(
 //        organizationID : String,
 //        memberID       : String,
 //        roles          : [Role.RoleType],
 //        completion     : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
 //    {
-//        updateMember(
+//        update(
 //            endpoint    : "organizations/\(organizationID)/members/\(memberID)",
 //            roles       : roles
 //        ) { completion($0) }
@@ -326,19 +326,19 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `Member`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Member, DisruptiveError>`
      */
-    public static func updateMember(
+    public static func update(
         projectID   : String,
         memberID    : String,
         roles       : [Role.RoleType],
         completion  : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
     {
-        updateMember(
+        update(
             endpoint    : "projects/\(projectID)/members/\(memberID)",
             roles       : roles
         ) { completion($0) }
     }
 
-    private static func updateMember(
+    private static func update(
         endpoint    : String,
         roles       : [Role.RoleType],
         completion  : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
@@ -354,7 +354,7 @@ extension Member {
                 message: "No roles set",
                 helpLink: nil
             )
-            Disruptive.log("At least one of the fields in `updateMember` has to be set", level: .error)
+            Disruptive.log("At least one of the fields in `update` has to be set", level: .error)
             completion(.failure(error))
             return
         }
@@ -369,7 +369,7 @@ extension Member {
             // Send the request
             request.send() { completion($0) }
         } catch (let error) {
-            Disruptive.log("Failed to init updateMember request with payload: \(patch). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
@@ -383,12 +383,12 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func deleteMember(
+    public static func delete(
         organizationID  : String,
         memberID        : String,
         completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
-        deleteMember(endpoint: "organizations/\(organizationID)/members/\(memberID)") { completion($0) }
+        delete(endpoint: "organizations/\(organizationID)/members/\(memberID)") { completion($0) }
     }
     
     /**
@@ -399,15 +399,15 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func deleteMember(
+    public static func delete(
         projectID  : String,
         memberID   : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
-        deleteMember(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
+        delete(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
     }
     
-    private static func deleteMember(
+    private static func delete(
         endpoint   : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
@@ -434,12 +434,12 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned with the invite URL as a `URL`, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<URL, DisruptiveError>`
      */
-    public static func getMemberInviteURL(
+    public static func getInviteURL(
         organizationID  : String,
         memberID        : String,
         completion      : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
     {
-        getMemberInviteURL(endpoint: "organizations/\(organizationID)/members/\(memberID):getInviteUrl") { completion($0) }
+        getInviteURL(endpoint: "organizations/\(organizationID)/members/\(memberID):getInviteUrl") { completion($0) }
     }
     
     /**
@@ -456,15 +456,15 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned with the invite URL as a `URL`, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<URL, DisruptiveError>`
      */
-    public static func getMemberInviteURL(
+    public static func getInviteURL(
         projectID  : String,
         memberID   : String,
         completion : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
     {
-        getMemberInviteURL(endpoint: "projects/\(projectID)/members/\(memberID):getInviteUrl") { completion($0) }
+        getInviteURL(endpoint: "projects/\(projectID)/members/\(memberID):getInviteUrl") { completion($0) }
     }
     
-    private static func getMemberInviteURL(
+    private static func getInviteURL(
         endpoint   : String,
         completion : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
     {

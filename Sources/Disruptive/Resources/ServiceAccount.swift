@@ -48,13 +48,13 @@ extension ServiceAccount {
      This will handle pagination automatically and send multiple network requests in
      the background if necessary. If a lot of Service Accounts are expected to be in the project,
      it might be better to load pages of Service Accounts as they're needed using the
-     `getServiceAccountsPage` function instead.
+     `getPage` function instead.
      
      - Parameter projectID: The identifier of the project to get Service Accounts from.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount], DisruptiveError>`
      */
-    public static func getServiceAccounts(
+    public static func getAll(
         projectID  : String,
         completion : @escaping (_ result: Result<[ServiceAccount], DisruptiveError>) -> ())
     {
@@ -72,7 +72,7 @@ extension ServiceAccount {
      Useful if a lot of Service Accounts are expected in the specified project. This function
      provides better control for when to get Service Accounts and how many to get at a time so
      that Service Accounts are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getServiceAccounts` function.
+     at a cost of convenience compared to the `getAll` function.
      
      - Parameter projectID: The identifier of the project to get Service Accounts from.
      - Parameter pageSize: The maximum number of Service Accounts to get for this page. The maximum page size is 100, which is also the default
@@ -80,7 +80,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `ServiceAccount`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, serviceAccounts: [ServiceAccount]), DisruptiveError>`
      */
-    public static func getServiceAccountsPage(
+    public static func getPage(
         projectID  : String,
         pageSize   : Int = 100,
         pageToken  : String?,
@@ -107,7 +107,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount, DisruptiveError>`
      */
-    public static func getServiceAccount(
+    public static func get(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<ServiceAccount, DisruptiveError>) -> ())
@@ -134,7 +134,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount` (along with its generated identifier). If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount, DisruptiveError>`
      */
-    public static func createServiceAccount(
+    public static func create(
         projectID        : String,
         displayName      : String,
         basicAuthEnabled : Bool = false,
@@ -169,7 +169,7 @@ extension ServiceAccount {
      
      ```
      // Enable basic auth
-     ServiceAccount.updateServiceAccount(
+     ServiceAccount.update(
          projectID        : "<PROJECT_ID>",
          serviceAccountID : "<SERVICE_ACCOUNT_ID>",
          basicAuthEnabled : true)
@@ -178,7 +178,7 @@ extension ServiceAccount {
      }
      
      // Change the display name
-     ServiceAccount.updateServiceAccount(
+     ServiceAccount.update(
          projectID        : "<PROJECT_ID>",
          serviceAccountID : "<SERVICE_ACCOUNT_ID>",
          displayName      : "New Display Name")
@@ -194,7 +194,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `ServiceAccount`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount, DisruptiveError>`
      */
-    public static func updateServiceAccount(
+    public static func update(
         projectID        : String,
         serviceAccountID : String,
         displayName      : String? = nil,
@@ -224,7 +224,7 @@ extension ServiceAccount {
             // Send the request
             request.send() { completion($0) }
         } catch (let error) {
-            Disruptive.log("Failed to init updateServiceAccount request with payload: \(patch). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
@@ -237,7 +237,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func deleteServiceAccount(
+    public static func delete(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -256,14 +256,14 @@ extension ServiceAccount {
      This will handle pagination automatically and send multiple network requests in
      the background if necessary. If a lot of keys are expected to be available for the Service Account,
      it might be better to load pages of keys as they're needed using the
-     `getServiceAccountKeysPage` function instead.
+     `getKeysPage` function instead.
      
      - Parameter projectID: The identifier of the project the Service Account is in.
      - Parameter serviceAccountID: The identifier of the Service Account to get keys for.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `ServiceAccount.Key`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[ServiceAccount.Key], DisruptiveError>`
      */
-    public static func getServiceAccountKeys(
+    public static func getAllKeys(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<[ServiceAccount.Key], DisruptiveError>) -> ())
@@ -282,7 +282,7 @@ extension ServiceAccount {
      Useful if a lot of keys are expected to be available for this Service Account. This function
      provides better control for when to get keys and how many to get at a time so
      that keys are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getServiceAccountKeys` function.
+     at a cost of convenience compared to the `getAllKeys` function.
      
      - Parameter projectID: The identifier of the project the Service Account is in.
      - Parameter serviceAccountID: The identifier of the Service Account to get keys for.
@@ -291,7 +291,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `ServiceAccount.Key`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, keys: [ServiceAccount.Key]), DisruptiveError>`
      */
-    public static func getServiceAccountKeysPage(
+    public static func getKeysPage(
         projectID        : String,
         serviceAccountID : String,
         pageSize         : Int = 100,
@@ -320,7 +320,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount.Key`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount.Key, DisruptiveError>`
      */
-    public static func getServiceAccountKey(
+    public static func getKey(
         projectID        : String,
         serviceAccountID : String,
         keyID            : String,
@@ -346,7 +346,7 @@ extension ServiceAccount {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `ServiceAccount.KeySecret`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<ServiceAccount.KeySecret, DisruptiveError>`
      */
-    public static func createServiceAccountKey(
+    public static func createKey(
         projectID        : String,
         serviceAccountID : String,
         completion       : @escaping (_ result: Result<ServiceAccount.KeySecret, DisruptiveError>) -> ())
@@ -371,7 +371,7 @@ extension ServiceAccount {
      - Parameter result: `Result<Void, DisruptiveError>`
 
      */
-    public static func deleteServiceAccountKey(
+    public static func deleteKey(
         projectID        : String,
         serviceAccountID : String,
         keyID            : String,

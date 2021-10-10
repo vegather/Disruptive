@@ -63,18 +63,18 @@ extension Device {
      This will handle pagination automatically and send multiple network requests in
      the background if necessary. If a lot of devices are expected to be in the project,
      it might be better to load pages of devices as they're needed using the
-     `getDevicesPage` function instead.
+     `getPage` function instead.
      
      Examples:
      ```swift
      // Get all the devices in the project
-     Disruptive.getDevices(projectID: "<PROJECT_ID>") { result in
+     Disruptive.getAll(projectID: "<PROJECT_ID>") { result in
          ...
      }
      
      // Get all the temperature devices in the project ordered by
      // the temperature (highest temperatures first)
-     Disruptive.getDevices(
+     Disruptive.getAll(
          projectID   : "<PROJECT_ID>",
          deviceTypes : [.temperature],
          orderBy     : (field: "reported.temperature.value", ascending: false))
@@ -93,7 +93,7 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Device`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Device], DisruptiveError>`
      */
-    public static func getDevices(
+    public static func getAll(
         projectID      : String,
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
@@ -104,7 +104,7 @@ extension Device {
         completion     : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
     {
         // Set up the query parameters
-        let params = createDevicesParams(
+        let params = makeDeviceQueryParams(
             query:          query,
             deviceIDs:      deviceIDs,
             deviceTypes:    deviceTypes,
@@ -126,7 +126,7 @@ extension Device {
      Useful if a lot of devices are expected in the specified project. This function
      provides better control for when to get devices and how many to get at a time so
      that devices are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getDevices` function.
+     at a cost of convenience compared to the `getAll` function.
      
      - Parameter projectID: The identifier of the project to get devices from.
      - Parameter query: Simple keyword based search. Will be ignored if not set (or `nil`), which is the default.
@@ -140,7 +140,7 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Device`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>`
      */
-    public static func getDevicesPage(
+    public static func getPage(
         projectID      : String,
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
@@ -153,7 +153,7 @@ extension Device {
         completion     : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
     {
         // Set up the query parameters
-        let params = createDevicesParams(
+        let params = makeDeviceQueryParams(
             query:          query,
             deviceIDs:      deviceIDs,
             deviceTypes:    deviceTypes,
@@ -174,8 +174,8 @@ extension Device {
         }
     }
     
-    // Private helper function to create parameters for the getDevices... requests
-    private static func createDevicesParams(
+    // Private helper function to create parameters for the get devices requests
+    private static func makeDeviceQueryParams(
         query          : String?                           = nil,
         deviceIDs      : [String]?                         = nil,
         deviceTypes    : [Device.DeviceType]?              = nil,
@@ -216,7 +216,7 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Device`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Device, DisruptiveError>`
      */
-    public static func getDevice(
+    public static func get(
         projectID  : String? = nil,
         deviceID   : String,
         completion : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
@@ -232,7 +232,7 @@ extension Device {
     /**
      Updates the display name of a device to a new value (overwrites it if a display name already exists).
      
-     This is a convenience function for `batchUpdateDeviceLabels` by setting the `name` label to the new display name.
+     This is a convenience function for `batchUpdateLabels` by setting the `name` label to the new display name.
      
      - Parameter projectID: The identifier of the project the device is in.
      - Parameter deviceID: The identifier of the device to change the display name of.
@@ -240,13 +240,13 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func updateDeviceDisplayName(
+    public static func updateDisplayName(
         projectID      : String,
         deviceID       : String,
         newDisplayName : String,
         completion     : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
-        batchUpdateDeviceLabels(
+        batchUpdateLabels(
             projectID      : projectID,
             deviceIDs      : [deviceID],
             labelsToSet    : ["name": newDisplayName],
@@ -258,7 +258,7 @@ extension Device {
     /**
      Deletes the specified label for the device. Will return success if the label didn't exist.
      
-     This is a convenience function for `batchUpdateDeviceLabels`.
+     This is a convenience function for `batchUpdateLabels`.
      
      - Parameter projectID: The identifier of the project the device is in.
      - Parameter deviceID: The identifier of the device to delete a label from.
@@ -266,13 +266,13 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func deleteDeviceLabel(
+    public static func deleteLabel(
         projectID  : String,
         deviceID   : String,
         labelKey   : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
-        batchUpdateDeviceLabels(
+        batchUpdateLabels(
             projectID      : projectID,
             deviceIDs      : [deviceID],
             labelsToSet    : [:],
@@ -284,7 +284,7 @@ extension Device {
     /**
      Assigns a value to a label key for a specific device. If the label key doesn't already exists it will be created, otherwise the value for the key is updated. This is in effect an upsert.
      
-     This is a convenience function for `batchUpdateDeviceLabels`.
+     This is a convenience function for `batchUpdateLabels`.
      
      - Parameter projectID: The identifier of the project the device is in.
      - Parameter deviceID: The identifier of the device to set the label for.
@@ -293,14 +293,14 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func setDeviceLabel(
+    public static func setLabel(
         projectID  : String,
         deviceID   : String,
         labelKey   : String,
         labelValue : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
-        batchUpdateDeviceLabels(
+        batchUpdateLabels(
             projectID      : projectID,
             deviceIDs      : [deviceID],
             labelsToSet    : [labelKey: labelValue],
@@ -319,7 +319,7 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func batchUpdateDeviceLabels(
+    public static func batchUpdateLabels(
         projectID      : String,
         deviceIDs      : [String],
         labelsToSet    : [String: String],
@@ -361,7 +361,7 @@ extension Device {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func transferDevices(
+    public static func transfer(
         deviceIDs     : [String],
         fromProjectID : String,
         toProjectID   : String,

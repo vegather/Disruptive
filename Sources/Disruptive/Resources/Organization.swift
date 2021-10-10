@@ -29,12 +29,12 @@ extension Organization {
      This will handle pagination automatically and send multiple network requests in
      the background if necessary. If a lot of organizations are expected to be available,
      it might be better to load pages of organizations as they're needed using the
-     `getOrganizationsPage` function instead.
+     `getPage` function instead.
      
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Organization`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Organization], DisruptiveError>`
      */
-    public static func getOrganizations(
+    public static func getAll(
         completion: @escaping (_ result: Result<[Organization], DisruptiveError>) -> ())
     {
         // Create the request
@@ -50,14 +50,14 @@ extension Organization {
      Useful if a lot of organizations are expected to be available. This function
      provides better control for when to get organizations and how many to get at a time so
      that organizations are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getOrganizations` function.
+     at a cost of convenience compared to the `getAll` function.
      
      - Parameter pageSize: The maximum number of organizations to get for this page. The maximum page size is 100, which is also the default
      - Parameter pageToken: The token of the page to get. For the first page, set this to `nil`. For subsequent pages, use the `nextPageToken` received when getting the previous page.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Organization`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, organizations: [Organization]), DisruptiveError>`
      */
-    public static func getOrganizationsPage(
+    public static func getPage(
         pageSize   : Int = 100,
         pageToken  : String?,
         completion : @escaping (_ result: Result<(nextPageToken: String?, organizations: [Organization]), DisruptiveError>) -> ())
@@ -81,7 +81,7 @@ extension Organization {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Organization`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Organization, DisruptiveError>`
      */
-    public static func getOrganization(
+    public static func get(
         organizationID: String,
         completion: @escaping (_ result: Result<Organization, DisruptiveError>) -> ())
     {

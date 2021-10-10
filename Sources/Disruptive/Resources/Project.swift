@@ -59,14 +59,14 @@ extension Project {
      This will handle pagination automatically and send multiple network requests in
      the background if necessary. If a lot of projects are expected to be available,
      it might be better to load pages of projects as they're needed using the
-     `getProjectsPage` function instead.
+     `getPage` function instead.
      
      - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch all the project the authenticated account has access to.
      - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), all projects will be returned.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Project`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Project], DisruptiveError>`
      */
-    public static func getProjects(
+    public static func getAll(
         organizationID : String? = nil,
         query          : String? = nil,
         completion     : @escaping (_ result: Result<[Project], DisruptiveError>) -> ())
@@ -97,7 +97,7 @@ extension Project {
      Useful if a lot of projects are expected to be available. This function
      provides better control for when to get projects and how many to get at a time so
      that projects are only fetch when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getProjects` function.
+     at a cost of convenience compared to the `getAll` function.
      
      - Parameter organizationID: Optional parameter. The identifier of the organization to get projects from. If not specified (or nil), will fetch projects the authenticated account has access to from all organizations.
      - Parameter query: Optional parameter. Simple keyword based search. If not specified (or nil), any projects will be returned.
@@ -106,7 +106,7 @@ extension Project {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `Project`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, projects: [Project]), DisruptiveError>`
      */
-    public static func getProjectsPage(
+    public static func getPage(
         organizationID : String? = nil,
         query          : String? = nil,
         pageSize       : Int = 100,
@@ -141,7 +141,7 @@ extension Project {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
-    public static func getProject(
+    public static func get(
         projectID  : String,
         completion : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
     {
@@ -160,7 +160,7 @@ extension Project {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
-    public static func createProject(
+    public static func create(
         organizationID : String,
         displayName    : String,
         completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
@@ -178,7 +178,7 @@ extension Project {
             // Create the new project
             request.send() { completion($0) }
         } catch (let error) {
-            Disruptive.log("Failed to init createProject request with payload: \(payload). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init create request with payload: \(payload). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
@@ -191,7 +191,7 @@ extension Project {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func deleteProject(
+    public static func delete(
         projectID  : String,
         completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
     {
@@ -211,7 +211,7 @@ extension Project {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project` with the updated display name. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
-    public static func updateProjectDisplayName(
+    public static func updateDisplayName(
         projectID      : String,
         newDisplayName : String,
         completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())

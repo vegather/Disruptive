@@ -44,7 +44,7 @@ class EmulatorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testCreateEmulatedDeviceWithLabels")
-        Emulator.createEmulatedDevice(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName, labels: reqLabels) { result in
+        DeviceEmulator.create(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName, labels: reqLabels) { result in
             switch result {
                 case .success(let d):
                     XCTAssertEqual(d, respDevice)
@@ -88,7 +88,7 @@ class EmulatorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testCreateEmulatedDeviceNoLabels")
-        Emulator.createEmulatedDevice(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName) { result in
+        DeviceEmulator.create(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName) { result in
             switch result {
                 case .success(let d):
                     XCTAssertEqual(d, respDevice)
@@ -102,7 +102,7 @@ class EmulatorTests: DisruptiveTests {
     
     func testCreateEmulatedDeviceUnknownDeviceType() {
         let exp = expectation(description: "testCreateEmulatedDeviceUnknownDeviceType")
-        Emulator.createEmulatedDevice(projectID: "proj1", deviceType: .unknown(value: "NOT_A_DEVICE"), displayName: "") { result in
+        DeviceEmulator.create(projectID: "proj1", deviceType: .unknown(value: "NOT_A_DEVICE"), displayName: "") { result in
             switch result {
                 case .success(_)       : XCTFail("Unexpected success")
                 case .failure(let err) : XCTAssertEqual(err.type, .badRequest)
@@ -134,7 +134,7 @@ class EmulatorTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testDeleteEmulatedDevice")
-        Emulator.deleteEmulatedDevice(projectID: reqProjectID, deviceID: reqDeviceID) { result in
+        DeviceEmulator.delete(projectID: reqProjectID, deviceID: reqDeviceID) { result in
             switch result {
                 case .success():
                     break
@@ -173,7 +173,7 @@ class EmulatorTests: DisruptiveTests {
             }
             
             let exp = expectation(description: "testPublishEmulatedEventOneEvent")
-            Emulator.publishEmulatedEvent(projectID: reqProjectID, deviceID: reqDeviceID, event: event) { result in
+            DeviceEmulator.publishEvent(projectID: reqProjectID, deviceID: reqDeviceID, event: event) { result in
                 switch result {
                     case .success()        : break
                     case .failure(let err) : XCTFail("Unexpected error: \(err)")

@@ -58,11 +58,11 @@ extension Permission {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<[Permission], DisruptiveError>`
      */
-    public static func getPermissions(
+    public static func getAll(
         organizationID : String,
         completion     : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
-        getPermissions(endpoint: "organizations/\(organizationID)/permissions") { completion($0) }
+        getAll(endpoint: "organizations/\(organizationID)/permissions") { completion($0) }
     }
     
     /**
@@ -72,14 +72,14 @@ extension Permission {
     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
     - Parameter result: `Result<[Permission], DisruptiveError>`
     */
-    public static func getPermissions(
+    public static func getAll(
         projectID  : String,
         completion : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {
-        getPermissions(endpoint: "projects/\(projectID)/permissions") { completion($0) }
+        getAll(endpoint: "projects/\(projectID)/permissions") { completion($0) }
     }
     
-    private static func getPermissions(
+    private static func getAll(
         endpoint: String,
         completion: @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
     {

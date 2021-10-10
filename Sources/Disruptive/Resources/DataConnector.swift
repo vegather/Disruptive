@@ -53,13 +53,13 @@ extension DataConnector {
      This will handle pagination automatically and send multiple network requests in
      the backend if necessary. If a lot of Data Connectors are expected to be in the project,
      it might be better to load pages of Data Connectors as they're needed using the
-     `getDataConnectorsPage` function instead.
+     `getPage` function instead.
      
      - Parameter projectID: The identifier of the project to get Data Connectors from.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `DataConnector`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[DataConnector], DisruptiveError>`
      */
-    public static func getDataConnectors(
+    public static func getAll(
         projectID  : String,
         completion : @escaping (_ result: Result<[DataConnector], DisruptiveError>) -> ())
     {
@@ -77,7 +77,7 @@ extension DataConnector {
      Useful if a lot of Data Connectors are expected in the specified project. This function
      provides better control for when to fetch Data Connectors and how many to get at a time so
      that Data Connectors are only fetched when they are needed. This can also improve performance,
-     at a cost of convenience compared to the `getDataConnectors` function.
+     at a cost of convenience compared to the `getAll` function.
      
      - Parameter projectID: The identifier of the project to get Data Connectors from.
      - Parameter pageSize: The maximum number of Data Connectors to get for this page. The maximum page size is 100, which is also the default
@@ -85,7 +85,7 @@ extension DataConnector {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain a tuple with both an array of `DataConnector`s, as well as the token for the next page. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<(nextPageToken: String?, dataConnectors: [DataConnector]), DisruptiveError>`
      */
-    public static func getDataConnectorsPage(
+    public static func getPage(
         projectID  : String,
         pageSize   : Int = 100,
         pageToken  : String?,
@@ -112,7 +112,7 @@ extension DataConnector {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
-    public static func getDataConnector(
+    public static func get(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<DataConnector, DisruptiveError>) -> ())
@@ -135,11 +135,11 @@ extension DataConnector {
      - Parameter pushType: The mechanism to use to push events to an external service. This will also include the parameters to configure the push mechanism.
      - Parameter eventTypes: The event types that the Data Connector will send to the external service.
      - Parameter labels: The labels to be included along with the events. If a device that an event originates from has a label that is not included in this list, it will not be included in the event from the Data Connector. **Note** that if you want the display name of the device to be included in the events to the external service, you need to include the `name` label in this list. The default value of this parameter is an empty list, meaning no labels will be included.
-     - Parameter isActive: Whether or not the Data Connector should start in the active state. This can be changed later by calling the `updateDataConnector` function. The default value is `true`.
+     - Parameter isActive: Whether or not the Data Connector should start in the active state. This can be changed later by calling the `update` function. The default value is `true`.
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector` (along with its generated identifier). If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
-    public static func createDataConnector(
+    public static func create(
         projectID     : String,
         displayName   : String,
         pushType      : DataConnector.PushType,
@@ -203,7 +203,7 @@ extension DataConnector {
      
      ```
      // Deactivates a Data Connector by only using the `active` parameter
-     DataConnector.updateDataConnector(
+     DataConnector.update(
          projectID       : "<PROJECT_ID>",
          dataConnectorID : "<DC_ID>",
          active          : false)
@@ -212,7 +212,7 @@ extension DataConnector {
      }
   
      // Updates the signature secret of a Data Connector, and nothing else
-     DataConnector.updateDataConnector(
+     DataConnector.update(
          projectID       : "<PROJECT_ID>",
          dataConnectorID : "<DC_ID>",
          httpPush        : (url: nil, signatureSecret: "NEW_SECRET", headers: nil))
@@ -231,7 +231,7 @@ extension DataConnector {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the updated `DataConnector`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector, DisruptiveError>`
      */
-    public static func updateDataConnector(
+    public static func update(
         projectID       : String,
         dataConnectorID : String,
         displayName     : String? = nil,
@@ -286,7 +286,7 @@ extension DataConnector {
             // Send the request
             request.send() { completion($0) }
         } catch (let error) {
-            Disruptive.log("Failed to init updateDataConnector request with payload: \(patch). Error: \(error)", level: .error)
+            Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
             completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
         }
     }
@@ -299,7 +299,7 @@ extension DataConnector {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func deleteDataConnector(
+    public static func delete(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -320,7 +320,7 @@ extension DataConnector {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `DataConnector.Metrics`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<DataConnector.Metrics, DisruptiveError>`
      */
-    public static func getDataConnectorMetrics(
+    public static func getMetrics(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<DataConnector.Metrics, DisruptiveError>) -> ())
@@ -341,7 +341,7 @@ extension DataConnector {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func syncDataConnector(
+    public static func sync(
         projectID       : String,
         dataConnectorID : String,
         completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
@@ -402,12 +402,12 @@ extension DataConnector {
         /// to an external service.
         case active
         
-        /// The Data Connector is deactivated. It can be reactivated by calling the `updateDataConnector` function.
+        /// The Data Connector is deactivated. It can be reactivated by calling the `update` function.
         case userDisabled
         
         /// The Data Connector will be set to this state by the system if it has received
         /// too many errors recently, or if it keeps seeing errors for a prolonged period of time.
-        /// It can be reactivated by calling the `updateDataConnector` function.
+        /// It can be reactivated by calling the `update` function.
         case systemDisabled
         
         /// The status received for the Data Connector was unknown.

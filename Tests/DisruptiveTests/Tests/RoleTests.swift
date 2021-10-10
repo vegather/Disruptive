@@ -75,7 +75,7 @@ class RoleTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetRoles")
-        Role.getRoles { result in
+        Role.getAll { result in
             switch result {
                 case .success(let roles):
                     XCTAssertEqual(roles, respRoles)
@@ -111,7 +111,7 @@ class RoleTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetRole")
-        Role.getRole(roleType: role) { result in
+        Role.get(roleType: role) { result in
             switch result {
                 case .success(let role):
                     XCTAssertEqual(role, respRole)
@@ -125,7 +125,7 @@ class RoleTests: DisruptiveTests {
     
     func testGetRoleUnknownRole() {
         let exp = expectation(description: "testGetRoleUnknownRole")
-        Role.getRole(roleType: .unknown(value: "NOT_A_ROLE")) { result in
+        Role.get(roleType: .unknown(value: "NOT_A_ROLE")) { result in
             switch result {
                 case .success(_)       : XCTFail("Unexpected success")
                 case .failure(let err) : XCTAssertEqual(err.type, .badRequest)

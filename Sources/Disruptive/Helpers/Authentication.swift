@@ -27,7 +27,7 @@ public extension Disruptive {
          A Service Account can either be created using DT Studio under
          "API Integrations -> Service Accounts". Alternatively, if you already have
          a Service Account, a new one can be created through the API by calling
-         `ServiceAccount.createServiceAccount(...)`.
+         `ServiceAccount.create(...)`.
          
          Example:
          ```

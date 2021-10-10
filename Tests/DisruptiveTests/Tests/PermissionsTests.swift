@@ -51,7 +51,7 @@ class PermissionsTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetPermissionsForOrganization")
-        Permission.getPermissions(organizationID: reqOrgID) { result in
+        Permission.getAll(organizationID: reqOrgID) { result in
             switch result {
                 case .success(let orgs):
                     XCTAssertEqual(orgs, respPermissions)
@@ -87,7 +87,7 @@ class PermissionsTests: DisruptiveTests {
         }
         
         let exp = expectation(description: "testGetPermissionsForProject")
-        Permission.getPermissions(projectID: reqProjectID) { result in
+        Permission.getAll(projectID: reqProjectID) { result in
             switch result {
                 case .success(let orgs):
                     XCTAssertEqual(orgs, respPermissions)
