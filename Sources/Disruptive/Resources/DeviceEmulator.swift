@@ -27,9 +27,8 @@ struct DeviceEmulator {
         projectID   : String,
         deviceType  : Device.DeviceType,
         displayName : String,
-        labels      : [String: String] = [:],
-        completion  : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
-    {
+        labels      : [String: String] = [:]
+    ) async throws -> Device {
         struct EmulatedPayload: Encodable {
             let type: String
             var labels: [String: String]
@@ -38,29 +37,29 @@ struct DeviceEmulator {
         // If the device type is `.unknown`, return an error
         guard let typeStr = deviceType.rawValue else {
             Disruptive.log("Unable to use device type \(deviceType) for an emulated device", level: .error)
-            completion(.failure(DisruptiveError(
+            throw DisruptiveError(
                 type: .badRequest,
                 message: "Device type \(deviceType) can't be used as an emulated device",
                 helpLink: nil
-            )))
-            return
+            )
         }
         
         // Prepare the payload
         var payload = EmulatedPayload(type: typeStr, labels: labels)
         payload.labels["name"] = displayName
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
             let endpoint = "projects/\(projectID)/devices"
-            let request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: payload)
-            
-            // Create the new project
-            request.send() { completion($0) }
+            request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: payload)
         } catch (let error) {
             Disruptive.log("Failed to init request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Create the new project
+        return try await request.send()
     }
     
     /**
@@ -73,15 +72,14 @@ struct DeviceEmulator {
      */
     public static func delete(
         projectID   : String,
-        deviceID    : String,
-        completion  : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+        deviceID    : String
+    ) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)/devices/\(deviceID)"
         let request = Request(method: .delete, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        try await request.send()
     }
     
     /**
@@ -114,9 +112,8 @@ struct DeviceEmulator {
     public static func publishEvent<Event: PublishableEvent>(
         projectID          : String,
         deviceID           : String,
-        event              : Event,
-        completion         : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+        event              : Event
+    ) async throws {
         do {
             // Create request
             let endpoint = "projects/\(projectID)/devices/\(deviceID):publish"
@@ -124,9 +121,9 @@ struct DeviceEmulator {
             let request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: body)
 
             // Send the request
-            request.send() { completion($0) }
+            try await request.send()
         } catch (let err) {
-            completion(.failure((err as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (err as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
     }
 }

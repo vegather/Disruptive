@@ -89,7 +89,7 @@ class MemberTests: DisruptiveTests {
         assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
     }
     
-    func testGetProjectMembers() {
+    func testGetProjectMembers() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members")
@@ -112,20 +112,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetProjectMembers")
-        Member.getAll(projectID: reqProjectID) { result in
-            switch result {
-                case .success(let members):
-                    XCTAssertEqual(members, respMembers)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let members = try await Member.getAll(projectID: reqProjectID)
+        XCTAssertEqual(members, respMembers)
     }
     
-    func testGetOrgMembers() {
+    func testGetOrgMembers() async throws {
         let reqOrgID = "org1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members")
@@ -148,20 +139,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetOrgMembers")
-        Member.getAll(organizationID: reqOrgID) { result in
-            switch result {
-                case .success(let members):
-                    XCTAssertEqual(members, respMembers)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let members = try await Member.getAll(organizationID: reqOrgID)
+        XCTAssertEqual(members, respMembers)
     }
     
-    func testGetProjectMembersPage() {
+    func testGetProjectMembersPage() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members")
@@ -184,21 +166,12 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetProjectMembersPage")
-        Member.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.members, respMembers)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await Member.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.members, respMembers)
     }
     
-    func testGetOrgMembersPage() {
+    func testGetOrgMembersPage() async throws {
         let reqOrgID = "org1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members")
@@ -221,21 +194,12 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetOrgMembersPage")
-        Member.getPage(organizationID: reqOrgID, pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.members, respMembers)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await Member.getPage(organizationID: reqOrgID, pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.members, respMembers)
     }
     
-    func testGetProjectMember() {
+    func testGetProjectMember() async throws {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -259,20 +223,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetProjectMember")
-        Member.get(projectID: reqProjectID, memberID: reqMemberID) { result in
-            switch result {
-                case .success(let member):
-                    XCTAssertEqual(member, respMember)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let member = try await Member.get(projectID: reqProjectID, memberID: reqMemberID)
+        XCTAssertEqual(member, respMember)
     }
     
-    func testGetOrgMember() {
+    func testGetOrgMember() async throws {
         let reqOrgID = "org1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -296,20 +251,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetOrgMember")
-        Member.get(organizationID: reqOrgID, memberID: reqMemberID) { result in
-            switch result {
-                case .success(let member):
-                    XCTAssertEqual(member, respMember)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let member = try await Member.get(organizationID: reqOrgID, memberID: reqMemberID)
+        XCTAssertEqual(member, respMember)
     }
     
-    func testInviteProjectMember() {
+    func testInviteProjectMember() async throws {
         let reqProjectID = "proj1"
         let reqRoles = [Role.RoleType.projectUser]
         let reqEmail = "test@dt.com"
@@ -341,20 +287,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testInviteProjectMember")
-        Member.invite(projectID: reqProjectID, roles: reqRoles, email: reqEmail) { result in
-            switch result {
-                case .success(let member):
-                    XCTAssertEqual(member, respMember)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let member = try await Member.invite(projectID: reqProjectID, roles: reqRoles, email: reqEmail)
+        XCTAssertEqual(member, respMember)
     }
     
-    func testInviteOrgMember() {
+    func testInviteOrgMember() async throws {
         let reqOrgID = "org1"
         let reqRoles = [Role.RoleType.organizationAdmin]
         let reqEmail = "test@dt.com"
@@ -386,20 +323,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testInviteOrgMember")
-        Member.invite(organizationID: reqOrgID, roles: reqRoles, email: reqEmail) { result in
-            switch result {
-                case .success(let member):
-                    XCTAssertEqual(member, respMember)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let member = try await Member.invite(organizationID: reqOrgID, roles: reqRoles, email: reqEmail)
+        XCTAssertEqual(member, respMember)
     }
     
-    func testUpdateProjectMember() {
+    func testUpdateProjectMember() async throws {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
         let reqRoles = [Role.RoleType.projectAdmin]
@@ -432,20 +360,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testUpdateProjectMember")
-        Member.update(projectID: reqProjectID, memberID: reqMemberID, roles: reqRoles) { result in
-            switch result {
-                case .success(let member):
-                    XCTAssertEqual(member, respMember)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let member = try await Member.update(projectID: reqProjectID, memberID: reqMemberID, roles: reqRoles)
+        XCTAssertEqual(member, respMember)
     }
     
-    func testDeleteProjectMember() {
+    func testDeleteProjectMember() async throws {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -466,20 +385,10 @@ class MemberTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testDeleteProjectMember")
-        Member.delete(projectID: reqProjectID, memberID: reqMemberID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Member.delete(projectID: reqProjectID, memberID: reqMemberID)
     }
     
-    func testDeleteOrgMember() {
+    func testDeleteOrgMember() async throws {
         let reqOrgID = "org1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -500,20 +409,10 @@ class MemberTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testDeleteOrgMember")
-        Member.delete(organizationID: reqOrgID, memberID: reqMemberID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Member.delete(organizationID: reqOrgID, memberID: reqMemberID)
     }
     
-    func testGetProjectMemberInviteURL() {
+    func testGetProjectMemberInviteURL() async throws {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -541,20 +440,11 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetProjectMemberInviteURL")
-        Member.getInviteURL(projectID: reqProjectID, memberID: reqMemberID) { result in
-            switch result {
-                case .success(let url):
-                    XCTAssertEqual(url.absoluteString, respURL)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let url = try await Member.getInviteURL(projectID: reqProjectID, memberID: reqMemberID)
+        XCTAssertEqual(url.absoluteString, respURL)
     }
     
-    func testGetOrgMemberInviteURL() {
+    func testGetOrgMemberInviteURL() async throws {
         let reqOrgID = "org1"
         let reqMemberID = "member1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -582,17 +472,8 @@ class MemberTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetOrgMemberInviteURL")
-        Member.getInviteURL(organizationID: reqOrgID, memberID: reqMemberID) { result in
-            switch result {
-                case .success(let url):
-                    XCTAssertEqual(url.absoluteString, respURL)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let url = try await Member.getInviteURL(organizationID: reqOrgID, memberID: reqMemberID)
+        XCTAssertEqual(url.absoluteString, respURL)
     }
 }
 

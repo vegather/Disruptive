@@ -58,11 +58,8 @@ extension Permission {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<[Permission], DisruptiveError>`
      */
-    public static func getAll(
-        organizationID : String,
-        completion     : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
-    {
-        getAll(endpoint: "organizations/\(organizationID)/permissions") { completion($0) }
+    public static func getAll(organizationID: String) async throws -> [Permission] {
+        return try await getAll(endpoint: "organizations/\(organizationID)/permissions")
     }
     
     /**
@@ -72,27 +69,17 @@ extension Permission {
     - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned containing an array of all the available permissions. Otherwise a `DisruptiveError` is returned in the `.failure` case.
     - Parameter result: `Result<[Permission], DisruptiveError>`
     */
-    public static func getAll(
-        projectID  : String,
-        completion : @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
-    {
-        getAll(endpoint: "projects/\(projectID)/permissions") { completion($0) }
+    public static func getAll(projectID: String) async throws -> [Permission] {
+        return try await getAll(endpoint: "projects/\(projectID)/permissions")
     }
     
-    private static func getAll(
-        endpoint: String,
-        completion: @escaping (_ result: Result<[Permission], DisruptiveError>) -> ())
-    {
+    private static func getAll(endpoint: String) async throws -> [Permission] {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send(pagingKey: "permissions") { (response: Result<[PermissionWrapper], DisruptiveError>) in
-            switch response {
-                case .success(let wrappers) : completion(.success(wrappers.compactMap { $0.permission }))
-                case .failure(let error)    : completion(.failure(error))
-            }
-        }
+        let wrappers: [PermissionWrapper] = try await request.send(pagingKey: "permissions")
+        return wrappers.compactMap { $0.permission }
     }
 }
 

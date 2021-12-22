@@ -27,7 +27,7 @@ class PermissionsTests: DisruptiveTests {
         XCTAssertNil(wrapper.permission)
     }
     
-    func testGetPermissionsForOrganization() {
+    func testGetPermissionsForOrganization() async throws {
         let reqOrgID = "org1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/permissions")
@@ -50,20 +50,11 @@ class PermissionsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetPermissionsForOrganization")
-        Permission.getAll(organizationID: reqOrgID) { result in
-            switch result {
-                case .success(let orgs):
-                    XCTAssertEqual(orgs, respPermissions)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let perms = try await Permission.getAll(organizationID: reqOrgID)
+        XCTAssertEqual(perms, respPermissions)
     }
     
-    func testGetPermissionsForProject() {
+    func testGetPermissionsForProject() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/permissions")
@@ -86,17 +77,8 @@ class PermissionsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetPermissionsForProject")
-        Permission.getAll(projectID: reqProjectID) { result in
-            switch result {
-                case .success(let orgs):
-                    XCTAssertEqual(orgs, respPermissions)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let perms = try await Permission.getAll(projectID: reqProjectID)
+        XCTAssertEqual(perms, respPermissions)
     }
 }
 

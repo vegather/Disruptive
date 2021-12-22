@@ -11,7 +11,7 @@ import XCTest
 
 class EventsTests: DisruptiveTests {
     
-    func testGetEvents() {
+    func testGetEvents() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -232,34 +232,32 @@ class EventsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetEvents")
-        Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID, startDate: reqStart, endDate: reqEnd, eventTypes: EventType.allCases) { result in
-            switch result {
-                case .success(let events):
-                    XCTAssertNotNil(events.touch)
-                    XCTAssertNotNil(events.temperature)
-                    XCTAssertNotNil(events.objectPresent)
-                    XCTAssertNotNil(events.humidity)
-                    XCTAssertNotNil(events.objectPresentCount)
-                    XCTAssertNotNil(events.touchCount)
-                    XCTAssertNotNil(events.waterPresent)
-                    XCTAssertNotNil(events.networkStatus)
-                    XCTAssertNotNil(events.batteryStatus)
-                    XCTAssertNotNil(events.connectionStatus)
-                    XCTAssertNotNil(events.ethernetStatus)
-                    XCTAssertNotNil(events.cellularStatus)
-                    XCTAssertNotNil(events.connectionStatus)
-                    XCTAssertNotNil(events.labelsChanged)
-                    
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let events = try await Device.getEvents(
+            projectID  : reqProjectID,
+            deviceID   : reqDeviceID,
+            startDate  : reqStart,
+            endDate    : reqEnd,
+            eventTypes : EventType.allCases
+        )
+        
+        XCTAssertNotNil(events.touch)
+        XCTAssertNotNil(events.temperature)
+        XCTAssertNotNil(events.objectPresent)
+        XCTAssertNotNil(events.humidity)
+        XCTAssertNotNil(events.objectPresentCount)
+        XCTAssertNotNil(events.touchCount)
+        XCTAssertNotNil(events.waterPresent)
+        XCTAssertNotNil(events.networkStatus)
+        XCTAssertNotNil(events.batteryStatus)
+        XCTAssertNotNil(events.connectionStatus)
+        XCTAssertNotNil(events.ethernetStatus)
+        XCTAssertNotNil(events.cellularStatus)
+        XCTAssertNotNil(events.connectionStatus)
+        XCTAssertNotNil(events.labelsChanged)
+        
     }
     
-    func testGetNoEvents() {
+    func testGetNoEvents() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -290,20 +288,11 @@ class EventsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetNoEvents")
-        Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
-            switch result {
-                case .success(let events):
-                    XCTAssertEqual(events, Events())
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let events = try await Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID)
+        XCTAssertEqual(events, Events())
     }
     
-    func testGetUnknownEvents() {
+    func testGetUnknownEvents() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -346,17 +335,8 @@ class EventsTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetUnknownEvents")
-        Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID) { result in
-            switch result {
-                case .success(let events):
-                    XCTAssertEqual(events, Events())
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let events = try await Device.getEvents(projectID: reqProjectID, deviceID: reqDeviceID)
+        XCTAssertEqual(events, Events())
     }
     
     func testMergeNothing() {

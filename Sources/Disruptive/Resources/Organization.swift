@@ -34,14 +34,12 @@ extension Organization {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Organization`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Organization], DisruptiveError>`
      */
-    public static func getAll(
-        completion: @escaping (_ result: Result<[Organization], DisruptiveError>) -> ())
-    {
+    public static func getAll() async throws -> [Organization] {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "organizations")
         
         // Send the request
-        request.send(pagingKey: "organizations") { completion($0) }
+        return try await request.send(pagingKey: "organizations")
     }
     
     /**
@@ -59,19 +57,14 @@ extension Organization {
      */
     public static func getPage(
         pageSize   : Int = 100,
-        pageToken  : String?,
-        completion : @escaping (_ result: Result<(nextPageToken: String?, organizations: [Organization]), DisruptiveError>) -> ())
-    {
+        pageToken  : String?
+    ) async throws -> (nextPageToken: String?, organizations: [Organization]) {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "organizations")
         
         // Send the request
-        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "organizations") { (result: Result<PagedResult<Organization>, DisruptiveError>) in
-            switch result {
-                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, organizations: page.results)))
-                case .failure(let err)  : completion(.failure(err))
-            }
-        }
+        let page: PagedResult<Organization> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "organizations")
+        return (nextPageToken: page.nextPageToken, organizations: page.results)
     }
     
     /**
@@ -81,16 +74,13 @@ extension Organization {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Organization`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Organization, DisruptiveError>`
      */
-    public static func get(
-        organizationID: String,
-        completion: @escaping (_ result: Result<Organization, DisruptiveError>) -> ())
-    {
+    public static func get(organizationID: String) async throws -> Organization {
         // Create the request
         let endpoint = "organizations/\(organizationID)"
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        return try await request.send()
     }
 }
 

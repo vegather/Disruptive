@@ -11,7 +11,7 @@ import XCTest
 
 class EmulatorTests: DisruptiveTests {
     
-    func testCreateEmulatedDeviceWithLabels() {
+    func testCreateEmulatedDeviceWithLabels() async throws  {
         let reqProjectID = "abc"
         let reqDeviceType = Device.DeviceType.temperature
         let reqDisplayName = "dummy"
@@ -43,20 +43,16 @@ class EmulatorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testCreateEmulatedDeviceWithLabels")
-        DeviceEmulator.create(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName, labels: reqLabels) { result in
-            switch result {
-                case .success(let d):
-                    XCTAssertEqual(d, respDevice)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let d = try await DeviceEmulator.create(
+            projectID   : reqProjectID,
+            deviceType  : reqDeviceType,
+            displayName : reqDisplayName,
+            labels      : reqLabels
+        )
+        XCTAssertEqual(d, respDevice)
     }
     
-    func testCreateEmulatedDeviceNoLabels() {
+    func testCreateEmulatedDeviceNoLabels() async throws {
         let reqProjectID = "abc"
         let reqDeviceType = Device.DeviceType.temperature
         let reqDisplayName = "dummy"
@@ -87,32 +83,26 @@ class EmulatorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testCreateEmulatedDeviceNoLabels")
-        DeviceEmulator.create(projectID: reqProjectID, deviceType: reqDeviceType, displayName: reqDisplayName) { result in
-            switch result {
-                case .success(let d):
-                    XCTAssertEqual(d, respDevice)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let d = try await DeviceEmulator.create(
+            projectID   : reqProjectID,
+            deviceType  : reqDeviceType,
+            displayName : reqDisplayName
+        )
+        XCTAssertEqual(d, respDevice)
     }
     
-    func testCreateEmulatedDeviceUnknownDeviceType() {
-        let exp = expectation(description: "testCreateEmulatedDeviceUnknownDeviceType")
-        DeviceEmulator.create(projectID: "proj1", deviceType: .unknown(value: "NOT_A_DEVICE"), displayName: "") { result in
-            switch result {
-                case .success(_)       : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err.type, .badRequest)
-            }
-            exp.fulfill()
+    func testCreateEmulatedDeviceUnknownDeviceType() async throws {
+        do {
+            _ = try await DeviceEmulator.create(projectID: "proj1", deviceType: .unknown(value: "NOT_A_DEVICE"), displayName: "")
+            XCTFail("Unexpected success")
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.type, .badRequest)
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
         }
-        wait(for: [exp], timeout: 1)
     }
     
-    func testDeleteEmulatedDevice() {
+    func testDeleteEmulatedDevice() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "emudev1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseEmulatorURL)!
@@ -133,21 +123,11 @@ class EmulatorTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testDeleteEmulatedDevice")
-        DeviceEmulator.delete(projectID: reqProjectID, deviceID: reqDeviceID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await DeviceEmulator.delete(projectID: reqProjectID, deviceID: reqDeviceID)
     }
     
-    func testPublishEmulatedEventOneEvent() {
-        func assertEvent<T: PublishableEvent>(event: T, expectedPayload: Data) {
+    func testPublishEmulatedEventOneEvent() async throws {
+        func assertEvent<T: PublishableEvent>(event: T, expectedPayload: Data) async throws {
             let reqProjectID = "proj1"
             let reqDeviceID = "dev1"
             let reqURL = URL(string: Disruptive.DefaultURLs.baseEmulatorURL)!
@@ -172,20 +152,12 @@ class EmulatorTests: DisruptiveTests {
                 return (respData, resp, nil)
             }
             
-            let exp = expectation(description: "testPublishEmulatedEventOneEvent")
-            DeviceEmulator.publishEvent(projectID: reqProjectID, deviceID: reqDeviceID, event: event) { result in
-                switch result {
-                    case .success()        : break
-                    case .failure(let err) : XCTFail("Unexpected error: \(err)")
-                }
-                exp.fulfill()
-            }
-            wait(for: [exp], timeout: 1)
+            try await DeviceEmulator.publishEvent(projectID: reqProjectID, deviceID: reqDeviceID, event: event)
         }
         
         let now = Date()
         
-        assertEvent(
+        try await assertEvent(
             event: TouchEvent(timestamp: now),
             expectedPayload: """
             {
@@ -196,7 +168,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
         
-        assertEvent(
+        try await assertEvent(
             event: TemperatureEvent(
                 celsius: 15,
                 timestamp: now,
@@ -239,7 +211,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
 
-        assertEvent(
+        try await assertEvent(
             event: ObjectPresentEvent(state: .objectPresent, timestamp: now),
             expectedPayload: """
             {
@@ -251,7 +223,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
 
-        assertEvent(
+        try await assertEvent(
             event: HumidityEvent(celsius: 12, relativeHumidity: 13, timestamp: now),
             expectedPayload: """
             {
@@ -264,7 +236,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
 
-        assertEvent(
+        try await assertEvent(
             event: ObjectPresentCountEvent(total: 99, timestamp: now),
             expectedPayload: """
             {
@@ -276,7 +248,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
         
-        assertEvent(
+        try await assertEvent(
             event: TouchCountEvent(total: 70, timestamp: now),
             expectedPayload: """
             {
@@ -288,7 +260,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
 
-        assertEvent(
+        try await assertEvent(
             event: WaterPresentEvent(state: .waterNotPresent, timestamp: now),
             expectedPayload: """
             {
@@ -300,7 +272,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
 
-        assertEvent(
+        try await assertEvent(
             event: NetworkStatusEvent(
                 signalStrength: 65,
                 rssi: -30,
@@ -327,7 +299,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
         
-        assertEvent(
+        try await assertEvent(
             event: BatteryStatusEvent(percentage: 50, timestamp: now),
             expectedPayload: """
             {
@@ -339,7 +311,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
         
-        assertEvent(
+        try await assertEvent(
             event: ConnectionStatusEvent(connection: .ethernet, available: [.cellular, .ethernet], timestamp: now),
             expectedPayload: """
             {
@@ -352,7 +324,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
         
-        assertEvent(
+        try await assertEvent(
             event: EthernetStatusEvent(macAddress: "mac_address", ipAddress: "ip_address", errors: [.init(code: "code", message: "message")], timestamp: now),
             expectedPayload: """
             {
@@ -366,7 +338,7 @@ class EmulatorTests: DisruptiveTests {
             """.data(using: .utf8)!
         )
         
-        assertEvent(
+        try await assertEvent(
             event: CellularStatusEvent(signalStrength: 34, errors: [.init(code: "code", message: "message")], timestamp: now),
             expectedPayload: """
             {

@@ -121,6 +121,15 @@ extension Request {
     /// Use this instead of `Void` as a generic parameter (the `T`) for the `send` function since `Void` cannot be `Decodable`.
     struct EmptyResponse: Decodable {}
     
+    
+    func internalSend<T: Decodable>(decoder: JSONDecoder = JSONDecoder()) async throws -> T {
+        return try await withUnsafeThrowingContinuation { continuation in
+            internalSend(decoder: decoder) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
     /**
      Sends the request to the Disruptive backend. This function does not handle authentications, so it's expected
      that the `Authorization` header is already populated (if necessary). If a "429 Too Many Requests" error is
@@ -130,7 +139,7 @@ extension Request {
      
      - Parameter decoder: If some custom decoding is required (eg. pagination), this default decoder can be replaced with a custom one.
      */
-    func internalSend<T: Decodable>(decoder: JSONDecoder = JSONDecoder(), completion: @escaping (Result<T, DisruptiveError>) -> ()) {
+    func internalSend<T: Decodable>(decoder: JSONDecoder, completion: @escaping (Result<T, DisruptiveError>) -> ()) {
         
         guard let urlReq = urlRequest() else {
             let error = DisruptiveError(
@@ -367,68 +376,31 @@ extension Request {
     /// If the `Disruptive.auth` authenticator is already authenticated and the expiration date is far enough
     /// in the future, this will succeed with the `Authorization` header set to the auth token.
     /// If the authenticator is not authenticated or not set, this will return a `.loggedOut` error.
-    private static func authenticate(req: Request, completion: @escaping (Result<Request, DisruptiveError>) -> ()) {
+    private static func authenticated(req: Request) async throws -> Request {
         guard let auth = Disruptive.authenticator else {
             Disruptive.log("No authentication has been set. Set it with `Disruptive.auth = ...`", level: .error)
-            let error = DisruptiveError(type: .loggedOut, message: "Not authenticated", helpLink: nil)
-            completion(.failure(error))
-            return
+            throw DisruptiveError(type: .loggedOut, message: "Not authenticated", helpLink: nil)
         }
+        
+        let token = try await auth.getActiveAccessToken()
         
         var authenticatedReq = req
-        
-        auth.getActiveAccessToken { result in
-            switch result {
-            case .success(let token):
-                authenticatedReq.setHeader(field: "Authorization", value: token)
-                completion(.success(authenticatedReq))
-            case .failure(let e):
-                completion(.failure(e))
-            }
-        }
+        authenticatedReq.setHeader(field: "Authorization", value: token)
+        return authenticatedReq
     }
     
     /// Makes sure the authenticator is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This will not return anything if successful, but it will return a
     /// `DisruptiveError` on failure.
-    func send(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
-        // Create a new request with a non-expired access token
-        // in the `Authorization` header.
-        Request.authenticate(req: self) { authResult in
-            
-            switch authResult {
-            case .success(let authenticatedReq):
-                // Send the request to the Disruptive endpoint
-                // Switch out the `EmptyResponse` payload with `Void` (aka "()")
-                authenticatedReq.internalSend { (response: Result<Request.EmptyResponse, DisruptiveError>) in
-                    switch response {
-                    case .success: completion(.success(()))
-                    case .failure(let err): completion(.failure(err))
-                    }
-                }
-            case .failure(let err):
-                completion(.failure(err))
-            }
-        }
+    func send() async throws {
+        let _: Request.EmptyResponse = try await Request.authenticated(req: self).internalSend()
     }
     
     /// Makes sure the authenticator is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This will return a single value if successful, and a
     /// `DisruptiveError` on failure.
-    func send<T: Decodable>(completion: @escaping (Result<T, DisruptiveError>) -> ()) {
-        // Create a new request with a non-expired access token
-        // in the `Authorization` header.
-        Request.authenticate(req: self) { authResult in
-            switch authResult {
-            case .success(let authenticatedReq):
-                // Send the request to the Disruptive endpoint
-                authenticatedReq.internalSend {
-                    completion($0)
-                }
-            case .failure(let err):
-                completion(.failure(err))
-            }
-        }
+    func send<T: Decodable>() async throws -> T {
+        return try await Request.authenticated(req: self).internalSend()
     }
     
     /// Makes sure the authenticator is authenticated, and adds the `Authorization` header to
@@ -437,9 +409,9 @@ extension Request {
     func send<T: Decodable>(
         pageSize   : Int,
         pageToken  : String?,
-        pagingKey  : String,
-        completion : @escaping (Result<PagedResult<T>, DisruptiveError>) -> ())
-    {
+        pagingKey  : String
+    ) async throws -> PagedResult<T> {
+        
         // Set the pagination query parameters
         var req = self
         req.params["page_size"] = [String(pageSize)]
@@ -450,92 +422,53 @@ extension Request {
         // Prepare a JSON decoder for decoding paged results
         let decoder = Request.pagingJSONDecoder(pagingKey: pagingKey)
         
-        // Create a new request with a non-expired access token
-        // in the `Authorization` header.
-        Request.authenticate(req: req) { authResult in
-            switch authResult {
-                case .success(let authenticatedReq):
-                    authenticatedReq.internalSend(decoder: decoder) {
-                        completion($0)
-                    }
-                case .failure(let err):
-                    completion(.failure(err))
-            }
-        }
+        // Send the request
+        return try await Request.authenticated(req: req).internalSend(decoder: decoder)
     }
     
     /// Makes sure the authenticator is authenticated, and adds the `Authorization` header to
     /// the request before sending it. This expects a list of paginated items to be returned, and fetches
     /// all the available pages before returning.
-    func send<T: Decodable>(
-        pagingKey: String,
-        completion: @escaping (Result<[T], DisruptiveError>) -> ())
-    {
-        // Prepare a decoder for decoding paginated results
-        let decoder = Request.pagingJSONDecoder(pagingKey: pagingKey)
-        
-        Request.fetchPages(request: self, decoder: decoder, cumulativeResults: [], pageingKey: pagingKey) { completion($0) }
+    func send<T: Decodable>(pagingKey: String) async throws -> [T] {
+        return try await Request.fetchPages(
+            request: self,
+            decoder: Request.pagingJSONDecoder(pagingKey: pagingKey),
+            cumulativeResults: [],
+            pageingKey: pagingKey
+        )
     }
     
     // Recursive function to fetch all the pages as long as `nextPageToken` is set.
-    // The structure of this is a bit unfortunate due to having multiple nested
-    // function calls that takes a completion closure. This can be improved once
-    // Swift gains support for async/await.
-    // More details here: https://gist.github.com/lattner/429b9070918248274f25b714dcfc7619
     private static func fetchPages<T: Decodable>(
         request: Request,
         decoder: JSONDecoder,
         cumulativeResults: [T],
-        pageingKey: String,
-        completion: @escaping (Result<[T], DisruptiveError>) -> ())
-    {
-        // Create a new request with a non-expired access token
-        // in the `Authorization` header.
-        Request.authenticate(req: request) { authResult in
-            switch authResult {
-                case .success(let authenticatedReq):
-                    // We now have an authenticated request to fetch the next page
-                    authenticatedReq.internalSend(decoder: decoder) { (result: Result<PagedResult<T>, DisruptiveError>) in
-                        switch result {
-                            case .success(let pagedResult):
-                                
-                                // Create a new array of all the items received so far
-                                let updatedResultsArray = cumulativeResults + pagedResult.results
-                                
-                                // Check if there are any more pages
-                                if let nextPageToken = pagedResult.nextPageToken {
-                                    // This was not the last page, send request for the next page
-                                    var nextRequest = authenticatedReq
-                                    nextRequest.params["page_token"] = [nextPageToken]
-                                    
-                                    Disruptive.log("Still more pages to load for \(String(describing: nextRequest.urlRequest()?.url))")
-                                    
-                                    // Fetch the next page
-                                    Request.fetchPages(
-                                        request           : nextRequest,
-                                        decoder           : decoder,
-                                        cumulativeResults : updatedResultsArray,
-                                        pageingKey        : pageingKey,
-                                        completion        : completion
-                                    )
-                                } else {
-                                    // This was the last page
-                                    DispatchQueue.main.async {
-                                        completion(.success(updatedResultsArray))
-                                    }
-                                }
-                                
-                            // The request failed
-                            case .failure(let err):
-                                completion(.failure(err))
-                        }
-                    }
-                    
-                // Authentication failed
-                case .failure(let err):
-                    completion(.failure(err))
-            }
+        pageingKey: String
+    ) async throws -> [T] {
+        
+        let pagedResult: PagedResult<T> = try await Request.authenticated(req: request).internalSend(decoder: decoder)
+        
+        // Create a new array of all the items received so far
+        let updatedResultsArray = cumulativeResults + pagedResult.results
+        
+        // Check if there are any more pages to load
+        guard let nextPageToken = pagedResult.nextPageToken else {
+            return updatedResultsArray
         }
+        
+        // This was not the last page, send request for the next page
+        var nextRequest = try await Request.authenticated(req: request)
+        nextRequest.params["page_token"] = [nextPageToken]
+        
+        Disruptive.log("Still more pages to load for \(String(describing: nextRequest.urlRequest()?.url))")
+        
+        // Fetch the next page
+        return try await Request.fetchPages(
+            request           : nextRequest,
+            decoder           : decoder,
+            cumulativeResults : updatedResultsArray,
+            pageingKey        : pageingKey
+        )
     }
     
     /// Returns a JSONDecoder that replaces the key with the given `pagingKey` with the key "results". Any other

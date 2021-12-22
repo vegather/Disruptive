@@ -69,20 +69,19 @@ class NetworkingTests: DisruptiveTests {
         }
     }
     
-    func testServerUnavailable() {
+    func testServerUnavailable() async throws {
         MockURLProtocol.requestHandler = { request in
             return (nil, nil, URLError(.badServerResponse))
         }
         
-        let exp = expectation(description: "testServerUnavailable")
-        Project.getAll() { result in
-            switch result {
-                case .success(_): XCTFail("Expected failure")
-                case .failure(let err): XCTAssertEqual(err.type, .serverUnavailable)
-            }
-            exp.fulfill()
+        do {
+            _ = try await Project.getAll()
+            XCTFail("Unexpected success")
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.type, .serverUnavailable)
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
         }
-        wait(for: [exp], timeout: 1)
     }
     
     func testPagination() {

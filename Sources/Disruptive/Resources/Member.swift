@@ -61,11 +61,8 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public static func getAll(
-        organizationID : String,
-        completion     : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
-    {
-        getAll(endpoint: "organizations/\(organizationID)/members") { completion($0) }
+    public static func getAll(organizationID: String) async throws -> [Member] {
+        return try await getAll(endpoint: "organizations/\(organizationID)/members")
     }
     
     /**
@@ -80,23 +77,17 @@ extension Member {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `Member`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Member], DisruptiveError>`
      */
-    public static func getAll(
-        projectID  : String,
-        completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
-    {
-        getAll(endpoint: "projects/\(projectID)/members") { completion($0) }
+    public static func getAll(projectID: String) async throws -> [Member] {
+        return try await getAll(endpoint: "projects/\(projectID)/members")
     }
     
     // Helper function to get Members for either Projects or Organizations.
-    private static func getAll(
-        endpoint   : String,
-        completion : @escaping (_ result: Result<[Member], DisruptiveError>) -> ())
-    {
+    private static func getAll(endpoint: String) async throws -> [Member] {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send(pagingKey: "members") { completion($0) }
+        return try await request.send(pagingKey: "members")
     }
     
     
@@ -117,11 +108,10 @@ extension Member {
      */
     public static func getPage(
         organizationID : String,
-        pageSize   : Int = 100,
-        pageToken  : String?,
-        completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
-    {
-        getPage(endpoint: "organizations/\(organizationID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
+        pageSize       : Int = 100,
+        pageToken      : String?
+    ) async throws -> (nextPageToken: String?, members: [Member]) {
+        return try await getPage(endpoint: "organizations/\(organizationID)/members", pageSize: pageSize, pageToken: pageToken)
     }
     
     /**
@@ -139,31 +129,25 @@ extension Member {
      - Parameter result: `Result<(nextPageToken: String?, members: [Member]), DisruptiveError>`
      */
     public static func getPage(
-        projectID  : String,
-        pageSize   : Int = 100,
-        pageToken  : String?,
-        completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
-    {
-        getPage(endpoint: "projects/\(projectID)/members", pageSize: pageSize, pageToken: pageToken) { completion($0) }
+        projectID : String,
+        pageSize  : Int = 100,
+        pageToken : String?
+    ) async throws -> (nextPageToken: String?, members: [Member]) {
+        return try await getPage(endpoint: "projects/\(projectID)/members", pageSize: pageSize, pageToken: pageToken)
     }
     
     // Helper function to get a Members page for either Projects or Organizations.
     private static func getPage(
-        endpoint   : String,
-        pageSize   : Int,
-        pageToken  : String?,
-        completion : @escaping (_ result: Result<(nextPageToken: String?, members: [Member]), DisruptiveError>) -> ())
-    {
+        endpoint  : String,
+        pageSize  : Int,
+        pageToken : String?
+    ) async throws -> (nextPageToken: String?, members: [Member]) {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "members") { (result: Result<PagedResult<Member>, DisruptiveError>) in
-            switch result {
-                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, members: page.results)))
-                case .failure(let err)  : completion(.failure(err))
-            }
-        }
+        let page: PagedResult<Member> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "members")
+        return (nextPageToken: page.nextPageToken, members: page.results)
     }
     
     
@@ -178,10 +162,9 @@ extension Member {
      */
     public static func get(
         organizationID : String,
-        memberID       : String,
-        completion     : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
-        get(endpoint: "organizations/\(organizationID)/members/\(memberID)") { completion($0) }
+        memberID       : String
+    ) async throws -> Member {
+        return try await get(endpoint: "organizations/\(organizationID)/members/\(memberID)")
     }
     
     /**
@@ -193,23 +176,19 @@ extension Member {
      - Parameter result: `Result<Member, DisruptiveError>`
      */
     public static func get(
-        projectID  : String,
-        memberID   : String,
-        completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
-        get(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
+        projectID : String,
+        memberID  : String
+    ) async throws -> Member {
+        return try await get(endpoint: "projects/\(projectID)/members/\(memberID)")
     }
     
     // Helper function to get a specific Member in either a Project or an Organization.
-    private static func get(
-        endpoint   : String,
-        completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
+    private static func get(endpoint: String) async throws -> Member {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        return try await request.send()
     }
     
     
@@ -231,14 +210,13 @@ extension Member {
     public static func invite(
         organizationID : String,
         roles          : [Role.RoleType],
-        email          : String,
-        completion     : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
-        invite(
+        email          : String
+    ) async throws -> Member {
+        return try await invite(
             endpoint: "organizations/\(organizationID)/members",
             roles: roles,
             email: email
-        ) { completion($0) }
+        )
     }
     
     /**
@@ -256,25 +234,23 @@ extension Member {
      - Parameter result: `Result<Member, DisruptiveError>`
      */
     public static func invite(
-        projectID  : String,
-        roles      : [Role.RoleType],
-        email      : String,
-        completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
-        invite(
+        projectID : String,
+        roles     : [Role.RoleType],
+        email     : String
+    ) async throws -> Member {
+        return try await invite(
             endpoint: "projects/\(projectID)/members",
             roles: roles,
             email: email
-        ) { completion($0) }
+        )
     }
     
     // Helper function to invite Members to either Projects or Organizations.
     private static func invite(
-        endpoint   : String,
-        roles      : [Role.RoleType],
-        email      : String,
-        completion : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
+        endpoint : String,
+        roles    : [Role.RoleType],
+        email    : String
+    ) async throws -> Member {
         // Prepare the payload
         struct MemberPayload: Encodable {
             let roles: [Role.RoleType]
@@ -282,16 +258,17 @@ extension Member {
         }
         let payload = MemberPayload(roles: roles, email: email)
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
-            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
-            
-            // Send the request
-            request.send() { completion($0) }
-        } catch (let error) {
+            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
+        } catch {
             Disruptive.log("Failed to init create member request with payload \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Send the request
+        return try await request.send()
     }
     
     
@@ -327,51 +304,48 @@ extension Member {
      - Parameter result: `Result<Member, DisruptiveError>`
      */
     public static func update(
-        projectID   : String,
-        memberID    : String,
-        roles       : [Role.RoleType],
-        completion  : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
-        update(
-            endpoint    : "projects/\(projectID)/members/\(memberID)",
-            roles       : roles
-        ) { completion($0) }
+        projectID : String,
+        memberID  : String,
+        roles     : [Role.RoleType]
+    ) async throws -> Member {
+        return try await update(
+            endpoint : "projects/\(projectID)/members/\(memberID)",
+            roles    : roles
+        )
     }
 
     private static func update(
-        endpoint    : String,
-        roles       : [Role.RoleType],
-        completion  : @escaping (_ result: Result<Member, DisruptiveError>) -> ())
-    {
+        endpoint : String,
+        roles    : [Role.RoleType]
+    ) async throws -> Member {
         struct MemberPatch: Encodable {
             var roles: [Role.RoleType]
         }
 
         // At least one of the fields has to be set so that `updateMask` is non-empty
         if roles.count == 0 {
-            let error = DisruptiveError(
+            Disruptive.log("At least one of the fields in `update` has to be set", level: .error)
+            throw DisruptiveError(
                 type: .badRequest,
                 message: "No roles set",
                 helpLink: nil
             )
-            Disruptive.log("At least one of the fields in `update` has to be set", level: .error)
-            completion(.failure(error))
-            return
         }
         
         // Prepare the payload
         let patch = MemberPatch(roles: roles)
 
+        // Create the request
+        let request: Request
         do {
-            // Create the request
-            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
-
-            // Send the request
-            request.send() { completion($0) }
+            request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
         } catch (let error) {
             Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Send the request
+        return try await request.send()
     }
     
     
@@ -384,11 +358,10 @@ extension Member {
      - Parameter result: `Result<Void, DisruptiveError>`
      */
     public static func delete(
-        organizationID  : String,
-        memberID        : String,
-        completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
-        delete(endpoint: "organizations/\(organizationID)/members/\(memberID)") { completion($0) }
+        organizationID : String,
+        memberID       : String
+    ) async throws {
+        try await delete(endpoint: "organizations/\(organizationID)/members/\(memberID)")
     }
     
     /**
@@ -400,22 +373,18 @@ extension Member {
      - Parameter result: `Result<Void, DisruptiveError>`
      */
     public static func delete(
-        projectID  : String,
-        memberID   : String,
-        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
-        delete(endpoint: "projects/\(projectID)/members/\(memberID)") { completion($0) }
+        projectID : String,
+        memberID  : String
+    ) async throws {
+        try await delete(endpoint: "projects/\(projectID)/members/\(memberID)")
     }
     
-    private static func delete(
-        endpoint   : String,
-        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+    private static func delete(endpoint: String) async throws {
         // Create the request
         let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        try await request.send()
     }
     
     
@@ -435,11 +404,10 @@ extension Member {
      - Parameter result: `Result<URL, DisruptiveError>`
      */
     public static func getInviteURL(
-        organizationID  : String,
-        memberID        : String,
-        completion      : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
-    {
-        getInviteURL(endpoint: "organizations/\(organizationID)/members/\(memberID):getInviteUrl") { completion($0) }
+        organizationID : String,
+        memberID       : String
+    ) async throws -> URL {
+        return try await getInviteURL(endpoint: "organizations/\(organizationID)/members/\(memberID):getInviteUrl")
     }
     
     /**
@@ -457,17 +425,13 @@ extension Member {
      - Parameter result: `Result<URL, DisruptiveError>`
      */
     public static func getInviteURL(
-        projectID  : String,
-        memberID   : String,
-        completion : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
-    {
-        getInviteURL(endpoint: "projects/\(projectID)/members/\(memberID):getInviteUrl") { completion($0) }
+        projectID : String,
+        memberID  : String
+    ) async throws -> URL {
+        return try await getInviteURL(endpoint: "projects/\(projectID)/members/\(memberID):getInviteUrl")
     }
     
-    private static func getInviteURL(
-        endpoint   : String,
-        completion : @escaping (_ result: Result<URL, DisruptiveError>) -> ())
-    {
+    private static func getInviteURL(endpoint: String) async throws -> URL {
         struct InviteURLResponse: Decodable {
             let inviteUrl: String
         }
@@ -476,24 +440,17 @@ extension Member {
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { (result: Result<InviteURLResponse, DisruptiveError>) in
-            switch result {
-                case .success(let response):
-                    if let url = URL(string: response.inviteUrl) {
-                        completion(.success(url))
-                    } else {
-                        let error = DisruptiveError(
-                            type: .unknownError,
-                            message: "Unknown error",
-                            helpLink: nil
-                        )
-                        Disruptive.log("Failed to convert the inviteUrl response to a URL: \(response.inviteUrl)", level: .error)
-                        completion(.failure(error))
-                    }
-                case .failure(let err):
-                    completion(.failure(err))
-            }
+        let response: InviteURLResponse = try await request.send()
+        guard let url = URL(string: response.inviteUrl) else {
+            Disruptive.log("Failed to convert the inviteUrl response to a URL: \(response.inviteUrl)", level: .error)
+            throw DisruptiveError(
+                type: .unknownError,
+                message: "Unknown error",
+                helpLink: nil
+            )
         }
+        
+        return url
     }
 }
 

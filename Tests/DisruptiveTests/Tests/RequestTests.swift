@@ -119,22 +119,20 @@ class RequestTests: DisruptiveTests {
         XCTAssertNil(req.urlRequest())
     }
     
-    func testSendWithNilUrlRequest() {
-        let exp = expectation(description: "testSendWithNilUrlRequest")
-        
+    func testSendWithNilUrlRequest() async throws {
         let req = Request(method: .get, baseURL: "", endpoint: "🙃")
-        req.send { (res: Result<String, DisruptiveError>) in
-            switch res {
-                case .success(_): XCTFail()
-                case .failure(let err): XCTAssertEqual(err.type, .unknownError)
-            }
-            exp.fulfill()
-        }
         
-        wait(for: [exp], timeout: 1)
+        do {
+            let _: String = try await req.send()
+            XCTFail()
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.type, .unknownError)
+        } catch {
+            XCTFail()
+        }
     }
     
-    func testSendWithKnownError() {
+    func testSendWithKnownError() async throws {
         let req = Request(method: .get, baseURL: "https://example.com/", endpoint: "ep")
         let reqURL = req.urlRequest()!.url!
         
@@ -153,19 +151,17 @@ class RequestTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testSendWithKnownError")
-        req.send { (result: Result<String, DisruptiveError>) in
-            switch result {
-                case .success          : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err.type, .notFound)
-            }
-            exp.fulfill()
+        do {
+            let _: String = try await req.send()
+            XCTFail()
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.type, .notFound)
+        } catch {
+            XCTFail()
         }
-        
-        wait(for: [exp], timeout: 1)
     }
     
-    func testSendWithRateLimitError() {
+    func testSendWithRateLimitError() async throws {
         let body = """
         {
             "updateTime": "\(Date().iso8601String())"
@@ -178,7 +174,6 @@ class RequestTests: DisruptiveTests {
         // * First time a rate limit of 1 second is returned.
         // * Second time a 200 is returned
         var count = 0
-        let retryExpectations = expectation(description: "retry")
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
@@ -198,7 +193,6 @@ class RequestTests: DisruptiveTests {
             } else if count == 1 {
                 // Success
                 resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
-                retryExpectations.fulfill()
             } else {
                 XCTFail("Should only be called twice")
                 return (nil, nil, nil)
@@ -209,19 +203,10 @@ class RequestTests: DisruptiveTests {
             return (body, resp, nil)
         }
         
-        let exp = expectation(description: "success")
-        req.send { (result: Result<TouchEvent, DisruptiveError>) in
-            switch result {
-                case .success: break
-                case .failure(let err) : XCTFail("Err: \(err)")
-            }
-            exp.fulfill()
-        }
-        
-        wait(for: [retryExpectations, exp], timeout: 2)
+        let _: TouchEvent = try await req.send()
     }
     
-    func testSendWithEmptyResponse() {
+    func testSendWithEmptyResponse() async throws {
         let req = Request(method: .get, baseURL: "https://example.com/", endpoint: "ep")
         let reqURL = req.urlRequest()!.url!
 
@@ -230,19 +215,10 @@ class RequestTests: DisruptiveTests {
             return (nil, resp, nil)
         }
 
-        let exp = expectation(description: "success")
-        req.send { (result: Result<Request.EmptyResponse, DisruptiveError>) in
-            switch result {
-                case .success: break
-                case .failure(let err) : XCTFail("Err: \(err)")
-            }
-            exp.fulfill()
-        }
-
-        wait(for: [exp], timeout: 2)
+        let _: Request.EmptyResponse = try await req.send()
     }
     
-    func testSendWithUnparseableResults() {
+    func testSendWithUnparseableResults() async throws {
         let req = Request(method: .get, baseURL: "https://example.com/", endpoint: "ep")
         let reqURL = req.urlRequest()!.url!
         
@@ -255,16 +231,14 @@ class RequestTests: DisruptiveTests {
             return (respBody, resp, nil)
         }
         
-        let exp = expectation(description: "testSendWithUnparseableResults")
-        req.send { (result: Result<TouchEvent, DisruptiveError>) in
-            switch result {
-                case .success          : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err.type, .unknownError)
-            }
-            exp.fulfill()
+        do {
+            let _: TouchEvent = try await req.send()
+            XCTFail()
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.type, .unknownError)
+        } catch {
+            XCTFail()
         }
-        
-        wait(for: [exp], timeout: 2)
     }
     
     func testCheckResponseWithError() {
@@ -338,7 +312,7 @@ class RequestTests: DisruptiveTests {
         XCTAssertNotNil(event)
     }
     
-    func testSendRequestSinglePage() {
+    func testSendRequestSinglePage() async throws {
         let firstResponse = """
         {
             "events": [
@@ -388,34 +362,16 @@ class RequestTests: DisruptiveTests {
             }
         }
         
-        let firstExp = expectation(description: "testSendRequestSinglePage.first")
-        req.send(pageSize: 20, pageToken: nil, pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "token")
-                    XCTAssertEqual(page.results.count, 1)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            firstExp.fulfill()
-        }
-        wait(for: [firstExp], timeout: 1)
+        let page1: PagedResult<TouchEvent> = try await req.send(pageSize: 20, pageToken: nil, pagingKey: "events")
+        XCTAssertEqual(page1.nextPageToken, "token")
+        XCTAssertEqual(page1.results.count, 1)
         
-        let secondExp = expectation(description: "testSendRequestSinglePage.second")
-        req.send(pageSize: 30, pageToken: "token", pagingKey: "events") { (result: Result<PagedResult<TouchEvent>, DisruptiveError>) in
-            switch result {
-                case .success(let page):
-                    XCTAssertNil(page.nextPageToken)
-                    XCTAssertEqual(page.results.count, 1)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            secondExp.fulfill()
-        }
-        wait(for: [secondExp], timeout: 1)
+        let page2: PagedResult<TouchEvent> = try await req.send(pageSize: 30, pageToken: "token", pagingKey: "events")
+        XCTAssertNil(page2.nextPageToken)
+        XCTAssertEqual(page2.results.count, 1)
     }
     
-    func testSendRequestAllPages() {
+    func testSendRequestAllPages() async throws {
         let firstResponse = """
         {
             "events": [
@@ -467,16 +423,7 @@ class RequestTests: DisruptiveTests {
             }
         }
         
-        let exp = expectation(description: "testSendRequestAllPages")
-        
-        req.send(pagingKey: "events") { (result: Result<[TouchEvent], DisruptiveError>) in
-            switch result {
-                case .success(let events) : XCTAssertEqual(events.count, 2)
-                case .failure(let err)    : XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1)
+        let events: [TouchEvent] = try await req.send(pagingKey: "events")
+        XCTAssertEqual(events.count, 2)
     }
 }

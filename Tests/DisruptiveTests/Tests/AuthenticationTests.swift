@@ -10,7 +10,7 @@ import XCTest
 @testable import Disruptive
 
 class AuthenticationTests: DisruptiveTests {
-    func testOAuth2() {
+    func testOAuth2() async throws {
         let reqKey = "key"
         let reqEmail = "email"
         let reqURL = Disruptive.DefaultURLs.oauthTokenEndpoint
@@ -102,12 +102,7 @@ class AuthenticationTests: DisruptiveTests {
         
         
         // Should successfully authenticate
-        var exp = expectation(description: "testOAuth2.login")
-        auth.refreshAccessToken { result in
-            guard case .success = result else { XCTFail(); return }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await auth.refreshAccessToken()
         XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
         XCTAssertNotNil(auth.authToken)
         XCTAssertGreaterThan(
@@ -118,31 +113,23 @@ class AuthenticationTests: DisruptiveTests {
         
         
         // Log out
-        exp = expectation(description: "testOAuth2.logout")
-        auth.logout { result in
-            guard case .success = result else { XCTFail(); return }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await auth.logout()
         XCTAssertFalse(auth.shouldAutoRefreshAccessToken)
         XCTAssertNil(auth.authToken)
         
         // getActiveAccessToken should return .loggedOut
-        exp = expectation(description: "testOAuth2.shouldBeLoggedOut")
-        auth.getActiveAccessToken { result in
-            guard case .failure(let err) = result, err.type == .loggedOut else { XCTFail(); return }
-            exp.fulfill()
+        do {
+            _ = try await auth.getActiveAccessToken()
+            XCTFail("Unexpected success")
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.type, .loggedOut)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
         }
-        wait(for: [exp], timeout: 1)
 
 
         // Log back in
-        exp = expectation(description: "testOAuth2.logBackIn")
-        auth.login { result in
-            guard case .success = result else { XCTFail(); return }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await auth.login()
         XCTAssertTrue(auth.shouldAutoRefreshAccessToken)
         XCTAssertNotNil(auth.authToken)
         XCTAssertGreaterThan(

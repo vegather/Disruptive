@@ -18,19 +18,11 @@ struct TestAuthenticator: Authenticator {
         return true
     }
     
-    func login(completion: @escaping AuthHandler) {
-        completion(.success(()))
-    }
+    func login() async throws {}
     
-    func logout(completion: @escaping AuthHandler) {
-        completion(.success(()))
-    }
+    func logout() async throws {}
     
-    func refreshAccessToken(completion: @escaping AuthHandler) {
-        completion(.success(()))
-    }
-    
-    
+    func refreshAccessToken() async throws {}
 }
 
 class DisruptiveTests: XCTestCase {

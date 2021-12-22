@@ -97,7 +97,7 @@ class DeviceTests: DisruptiveTests {
         XCTAssertEqual(Device.DeviceType.unknown(value: "").rawValue, nil)
     }
     
-    func testGetDevice() {
+    func testGetDevice() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -121,20 +121,11 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDevice")
-        Device.get(projectID: reqProjectID, deviceID: reqDeviceID) { result in
-            switch result {
-                case .success(let device):
-                    XCTAssertEqual(device, respDevice)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let device = try await Device.get(projectID: reqProjectID, deviceID: reqDeviceID)
+        XCTAssertEqual(device, respDevice)
     }
     
-    func testGetDeviceLookup() {
+    func testGetDeviceLookup() async throws {
         let reqDeviceID = "dev1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/-/devices/\(reqDeviceID)")
@@ -157,20 +148,11 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDeviceLookup")
-        Device.get(deviceID: reqDeviceID) { result in
-            switch result {
-                case .success(let device):
-                    XCTAssertEqual(device, respDevice)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let device = try await Device.get(deviceID: reqDeviceID)
+        XCTAssertEqual(device, respDevice)
     }
     
-    func testGetDevicesNoParameters() {
+    func testGetDevicesNoParameters() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -193,20 +175,11 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDevicesNoParameters")
-        Device.getAll(projectID: reqProjectID) { result in
-            switch result {
-                case .success(let devices):
-                    XCTAssertEqual(devices, respDevices)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let devices = try await Device.getAll(projectID: reqProjectID)
+        XCTAssertEqual(devices, respDevices)
     }
     
-    func testGetDevicesAllParameters() {
+    func testGetDevicesAllParameters() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -237,8 +210,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDevicesAllParameters")
-        Device.getAll(
+        let devices = try await Device.getAll(
             projectID   : reqProjectID,
             query       : "search query",
             deviceIDs   : ["dev1", "dev2"],
@@ -247,19 +219,10 @@ class DeviceTests: DisruptiveTests {
             labelFilters: ["key1": "value1", "key2": "value2"],
             orderBy     : (field: "reported.temperature.value", ascending: false)
         )
-        { result in
-            switch result {
-                case .success(let devices):
-                    XCTAssertEqual(devices, respDevices)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        XCTAssertEqual(devices, respDevices)
     }
     
-    func testGetDevicesPageNoParameters() {
+    func testGetDevicesPageNoParameters() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -282,21 +245,12 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDevicesPageNoParameters")
-        Device.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.devices, respDevices)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await Device.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.devices, respDevices)
     }
     
-    func testGetDevicesPageAllParameters() {
+    func testGetDevicesPageAllParameters() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
@@ -329,8 +283,7 @@ class DeviceTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDevicesPageAllParameters")
-        Device.getPage(
+        let page = try await Device.getPage(
             projectID      : reqProjectID,
             query          : "search query",
             deviceIDs      : ["dev1", "dev2"],
@@ -341,20 +294,11 @@ class DeviceTests: DisruptiveTests {
             pageSize       : 2,
             pageToken      : "token"
         )
-        { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.devices, respDevices)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.devices, respDevices)
     }
     
-    func testUpdateDeviceDisplayName() {
+    func testUpdateDeviceDisplayName() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqDisplayName = "Dummy"
@@ -383,20 +327,14 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testUpdateDeviceDisplayName")
-        Device.updateDisplayName(projectID: reqProjectID, deviceID: reqDeviceID, newDisplayName: reqDisplayName) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Device.updateDisplayName(
+            projectID      : reqProjectID,
+            deviceID       : reqDeviceID,
+            newDisplayName : reqDisplayName
+        )
     }
     
-    func testRemoveDeviceLabel() {
+    func testRemoveDeviceLabel() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqLabelKeyToRemove = "labelKey"
@@ -425,20 +363,14 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testRemoveDeviceLabel")
-        Device.deleteLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKeyToRemove) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Device.deleteLabel(
+            projectID : reqProjectID,
+            deviceID  : reqDeviceID,
+            labelKey  : reqLabelKeyToRemove
+        )
     }
     
-    func testSetDeviceLabel() {
+    func testSetDeviceLabel() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqLabelKey = "key"
@@ -468,20 +400,15 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testSetDeviceLabel")
-        Device.setLabel(projectID: reqProjectID, deviceID: reqDeviceID, labelKey: reqLabelKey, labelValue: reqLabelValue) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Device.setLabel(
+            projectID  : reqProjectID,
+            deviceID   : reqDeviceID,
+            labelKey   : reqLabelKey,
+            labelValue : reqLabelValue
+        )
     }
     
-    func testBatchUpdateDeviceLabels() {
+    func testBatchUpdateDeviceLabels() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqLabelKeyToSet = "key"
@@ -512,20 +439,15 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testBatchUpdateDeviceLabels")
-        Device.batchUpdateLabels(projectID: reqProjectID, deviceIDs: [reqDeviceID], labelsToSet: [reqLabelKeyToSet: reqLabelValueToSet], labelsToRemove: [reqLabelKeyToRemove]) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Device.batchUpdateLabels(
+            projectID      : reqProjectID,
+            deviceIDs      : [reqDeviceID],
+            labelsToSet    : [reqLabelKeyToSet: reqLabelValueToSet],
+            labelsToRemove : [reqLabelKeyToRemove]
+        )
     }
     
-    func testMoveDevicesByIDs() {
+    func testMoveDevicesByIDs() async throws {
         let reqFromProjectID = "proj1"
         let reqToProjectID = "proj2"
         let reqDeviceIDs = ["dev1", "dev2"]
@@ -550,17 +472,11 @@ class DeviceTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testMoveDevicesByIDs")
-        Device.transfer(deviceIDs: reqDeviceIDs, fromProjectID: reqFromProjectID, toProjectID: reqToProjectID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Device.transfer(
+            deviceIDs     : reqDeviceIDs,
+            fromProjectID : reqFromProjectID,
+            toProjectID   : reqToProjectID
+        )
     }
     
     func testDeviceTypeDisplayName() {

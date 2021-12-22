@@ -68,9 +68,8 @@ extension Project {
      */
     public static func getAll(
         organizationID : String? = nil,
-        query          : String? = nil,
-        completion     : @escaping (_ result: Result<[Project], DisruptiveError>) -> ())
-    {
+        query          : String? = nil
+    ) async throws -> [Project] {
         // Set up the query parameters
         var params: [String: [String]] = [:]
         if let orgID = organizationID {
@@ -84,7 +83,7 @@ extension Project {
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects", params: params)
         
         // Send the request
-        request.send(pagingKey: "projects") { completion($0) }
+        return try await request.send(pagingKey: "projects")
     }
     
     /**
@@ -110,9 +109,8 @@ extension Project {
         organizationID : String? = nil,
         query          : String? = nil,
         pageSize       : Int = 100,
-        pageToken      : String?,
-        completion     : @escaping (_ result: Result<(nextPageToken: String?, projects: [Project]), DisruptiveError>) -> ())
-    {
+        pageToken      : String?
+    ) async throws -> (nextPageToken: String?, projects: [Project]) {
         // Set up the query parameters
         var params: [String: [String]] = [:]
         if let orgID = organizationID {
@@ -126,12 +124,8 @@ extension Project {
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects", params: params)
         
         // Send the request
-        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "projects") { (result: Result<PagedResult<Project>, DisruptiveError>) in
-            switch result {
-                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, projects: page.results)))
-                case .failure(let err)  : completion(.failure(err))
-            }
-        }
+        let page: PagedResult<Project> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "projects")
+        return (nextPageToken: page.nextPageToken, projects: page.results)
     }
     
     /**
@@ -141,15 +135,12 @@ extension Project {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Project`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Project, DisruptiveError>`
      */
-    public static func get(
-        projectID  : String,
-        completion : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
-    {
+    public static func get(projectID: String) async throws -> Project {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)")
         
         // Send the request
-        request.send() { completion($0) }
+        return try await request.send()
     }
     
     /**
@@ -162,25 +153,25 @@ extension Project {
      */
     public static func create(
         organizationID : String,
-        displayName    : String,
-        completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
-    {
+        displayName    : String
+    ) async throws -> Project {
         // Create body for new project
         let payload = [
             "displayName" : displayName,
             "organization": "organizations/\(organizationID)"
         ]
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
-            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: "projects", body: payload)
-            
-            // Create the new project
-            request.send() { completion($0) }
+            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: "projects", body: payload)
         } catch (let error) {
             Disruptive.log("Failed to init create request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Create the new project
+        return try await request.send()
     }
     
     /**
@@ -191,16 +182,13 @@ extension Project {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` result case is returned, otherwise a `DisruptiveError` is returned in the `.failure` case.
      - Parameter result: `Result<Void, DisruptiveError>`
      */
-    public static func delete(
-        projectID  : String,
-        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+    public static func delete(projectID: String) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)"
         let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        try await request.send()
     }
     
     /**
@@ -213,23 +201,23 @@ extension Project {
      */
     public static func updateDisplayName(
         projectID      : String,
-        newDisplayName : String,
-        completion     : @escaping (_ result: Result<Project, DisruptiveError>) -> ())
-    {
+        newDisplayName : String
+    ) async throws -> Project {
         let payload = [
             "displayName": newDisplayName
         ]
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
-            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)", body: payload)
-            
-            // Update the project display name
-            request.send() { completion($0) }
+            request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)", body: payload)
         } catch (let error) {
             Disruptive.log("Failed to init the update project request with payload: \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Update the project display name
+        return try await request.send()
     }
 }
 

@@ -100,9 +100,8 @@ extension Device {
         deviceTypes    : [Device.DeviceType]?              = nil,
         productNumbers : [String]?                         = nil,
         labelFilters   : [String: String]?                 = nil,
-        orderBy        : (field: String, ascending: Bool)? = nil,
-        completion     : @escaping (_ result: Result<[Device], DisruptiveError>) -> ())
-    {
+        orderBy        : (field: String, ascending: Bool)? = nil
+    ) async throws -> [Device] {
         // Set up the query parameters
         let params = makeDeviceQueryParams(
             query:          query,
@@ -117,7 +116,7 @@ extension Device {
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
-        request.send(pagingKey: "devices") { completion($0) }
+        return try await request.send(pagingKey: "devices")
     }
     
     /**
@@ -149,9 +148,8 @@ extension Device {
         labelFilters   : [String: String]?                 = nil,
         orderBy        : (field: String, ascending: Bool)? = nil,
         pageSize       : Int = 100,
-        pageToken      : String?,
-        completion     : @escaping (_ result: Result<(nextPageToken: String?, devices: [Device]), DisruptiveError>) -> ())
-    {
+        pageToken      : String?
+    ) async throws -> (nextPageToken: String?, devices: [Device]) {
         // Set up the query parameters
         let params = makeDeviceQueryParams(
             query:          query,
@@ -166,12 +164,8 @@ extension Device {
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
-        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "devices") { (result: Result<PagedResult<Device>, DisruptiveError>) in
-            switch result {
-                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, devices: page.results)))
-                case .failure(let err)  : completion(.failure(err))
-            }
-        }
+        let page: PagedResult<Device> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "devices")
+        return (nextPageToken: page.nextPageToken, devices: page.results)
     }
     
     // Private helper function to create parameters for the get devices requests
@@ -217,16 +211,15 @@ extension Device {
      - Parameter result: `Result<Device, DisruptiveError>`
      */
     public static func get(
-        projectID  : String? = nil,
-        deviceID   : String,
-        completion : @escaping (_ result: Result<Device, DisruptiveError>) -> ())
+        projectID : String? = nil,
+        deviceID  : String) async throws -> Device
     {
         // Create the request
         let endpoint = "projects/\(projectID ?? "-")/devices/\(deviceID)"
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        return try await request.send()
     }
     
     /**
@@ -243,15 +236,13 @@ extension Device {
     public static func updateDisplayName(
         projectID      : String,
         deviceID       : String,
-        newDisplayName : String,
-        completion     : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
-        batchUpdateLabels(
+        newDisplayName : String
+    ) async throws {
+        try await batchUpdateLabels(
             projectID      : projectID,
             deviceIDs      : [deviceID],
             labelsToSet    : ["name": newDisplayName],
-            labelsToRemove : [],
-            completion     : completion
+            labelsToRemove : []
         )
     }
     
@@ -269,15 +260,13 @@ extension Device {
     public static func deleteLabel(
         projectID  : String,
         deviceID   : String,
-        labelKey   : String,
-        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
-        batchUpdateLabels(
+        labelKey   : String
+    ) async throws {
+        try await batchUpdateLabels(
             projectID      : projectID,
             deviceIDs      : [deviceID],
             labelsToSet    : [:],
-            labelsToRemove : [labelKey],
-            completion     : completion
+            labelsToRemove : [labelKey]
         )
     }
     
@@ -297,15 +286,13 @@ extension Device {
         projectID  : String,
         deviceID   : String,
         labelKey   : String,
-        labelValue : String,
-        completion : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
-        batchUpdateLabels(
+        labelValue : String
+    ) async throws {
+        try await batchUpdateLabels(
             projectID      : projectID,
             deviceIDs      : [deviceID],
             labelsToSet    : [labelKey: labelValue],
-            labelsToRemove : [],
-            completion     : completion
+            labelsToRemove : []
         )
     }
     
@@ -323,9 +310,8 @@ extension Device {
         projectID      : String,
         deviceIDs      : [String],
         labelsToSet    : [String: String],
-        labelsToRemove : [String],
-        completion     : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+        labelsToRemove : [String]
+    ) async throws {
         // Create the body
         struct Body: Codable {
             let devices: [String]
@@ -338,17 +324,18 @@ extension Device {
             removeLabels: labelsToRemove
         )
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
             let endpoint = "projects/\(projectID)/devices:batchUpdate"
-            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
-            
-            // Send the request
-            request.send() { completion($0) }
+            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
         } catch (let error) {
             Disruptive.log("Failed to init setLabel request with payload: \(body). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+     
+        // Send the request
+        try await request.send()
     }
     
     /**
@@ -364,26 +351,26 @@ extension Device {
     public static func transfer(
         deviceIDs     : [String],
         fromProjectID : String,
-        toProjectID   : String,
-        completion    : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+        toProjectID   : String
+    ) async throws {
         // Create the body
         struct Body: Codable {
             let devices: [String]
         }
         let body = Body(devices: deviceIDs.map { "projects/\(fromProjectID)/devices/\($0)" })
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
             let endpoint = "projects/\(toProjectID)/devices:transfer"
-            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
-            
-            // Send the request
-            request.send() { completion($0) }
+            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
         } catch (let error) {
             Disruptive.log("Failed to initialize transfer devices request with payload: \(body). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Send the request
+        try await request.send()
     }
 }
 

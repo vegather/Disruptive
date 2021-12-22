@@ -39,14 +39,12 @@ extension Role {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the array of `Role`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[Role], DisruptiveError>`
      */
-    public static func getAll(
-        completion: @escaping (_ result: Result<[Role], DisruptiveError>) -> ())
-    {
+    public static func getAll() async throws -> [Role] {
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "roles")
         
         // Send the request
-        request.send(pagingKey: "roles") { completion($0) }
+        return try await request.send(pagingKey: "roles")
     }
     
     /**
@@ -56,25 +54,21 @@ extension Role {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain the `Role`. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<Role, DisruptiveError>`
      */
-    public static func get(
-        roleType: Role.RoleType,
-        completion: @escaping (_ result: Result<Role, DisruptiveError>) -> ())
-    {
+    public static func get(roleType: Role.RoleType) async throws -> Role {
         guard let resourceName = roleType.resourceName else {
             Disruptive.log("Can't get role for roleType: \(roleType)", level: .error)
-            completion(.failure(DisruptiveError(
+            throw DisruptiveError(
                 type: .badRequest,
                 message: "Can't get role for roleType: \(roleType)",
                 helpLink: nil
-            )))
-            return
+            )
         }
         
         // Create the request
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: resourceName)
         
         // Send the request
-        request.send() { completion($0) }
+        return try await request.send()
     }
 }
 

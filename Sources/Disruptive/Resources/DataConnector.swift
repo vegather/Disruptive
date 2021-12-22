@@ -59,16 +59,13 @@ extension DataConnector {
      - Parameter completion: The completion handler to be called when a response is received from the server. If successful, the `.success` case of the result will contain an array of `DataConnector`s. If a failure occurred, the `.failure` case will contain a `DisruptiveError`.
      - Parameter result: `Result<[DataConnector], DisruptiveError>`
      */
-    public static func getAll(
-        projectID  : String,
-        completion : @escaping (_ result: Result<[DataConnector], DisruptiveError>) -> ())
-    {
+    public static func getAll(projectID: String) async throws -> [DataConnector] {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors"
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send(pagingKey: "dataConnectors") { completion($0) }
+        return try await request.send(pagingKey: "dataConnectors")
     }
     
     /**
@@ -88,20 +85,15 @@ extension DataConnector {
     public static func getPage(
         projectID  : String,
         pageSize   : Int = 100,
-        pageToken  : String?,
-        completion : @escaping (_ result: Result<(nextPageToken: String?, dataConnectors: [DataConnector]), DisruptiveError>) -> ())
-    {
+        pageToken  : String?
+    ) async throws -> (nextPageToken: String?, dataConnectors: [DataConnector]) {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors"
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "dataConnectors") { (result: Result<PagedResult<DataConnector>, DisruptiveError>) in
-            switch result {
-                case .success(let page) : completion(.success((nextPageToken: page.nextPageToken, dataConnectors: page.results)))
-                case .failure(let err)  : completion(.failure(err))
-            }
-        }
+        let page: PagedResult<DataConnector> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "dataConnectors")
+        return (nextPageToken: page.nextPageToken, dataConnectors: page.results)
     }
     
     /**
@@ -114,15 +106,14 @@ extension DataConnector {
      */
     public static func get(
         projectID       : String,
-        dataConnectorID : String,
-        completion      : @escaping (_ result: Result<DataConnector, DisruptiveError>) -> ())
-    {
+        dataConnectorID : String
+    ) async throws -> DataConnector {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        return try await request.send()
     }
     
     /**
@@ -145,9 +136,8 @@ extension DataConnector {
         pushType      : DataConnector.PushType,
         eventTypes    : [EventType],
         labels        : [String] = [],
-        isActive      : Bool = true,
-        completion    : @escaping (_ result: Result<DataConnector, DisruptiveError>) -> ())
-    {
+        isActive      : Bool = true
+    ) async throws -> DataConnector {
         guard case let .httpPush(url, secret, headers) = pushType else {
             fatalError("PushType \(pushType) is currently not supported")
         }
@@ -183,17 +173,18 @@ extension DataConnector {
             )
         )
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
             let endpoint = "projects/\(projectID)/dataconnectors"
-            let request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
-            
-            // Send the request
-            request.send() { completion($0) }
-        } catch (let error) {
+            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
+        } catch {
             Disruptive.log("Failed to init create data connector request with payload \(payload). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Send the request
+        return try await request.send()
     }
     
     /**
@@ -238,9 +229,8 @@ extension DataConnector {
         httpPush        : (url: String?, signatureSecret: String?, headers: [String: String]?)? = nil,
         isActive        : Bool? = nil,
         eventTypes      : [EventType]? = nil,
-        labels          : [String]? = nil,
-        completion      : @escaping (_ result: Result<DataConnector, DisruptiveError>) -> ())
-    {
+        labels          : [String]? = nil
+    ) async throws -> DataConnector {
         struct DataConnectorPatch: Encodable {
             var displayName: String?
             var status: String?
@@ -278,17 +268,18 @@ extension DataConnector {
             )
         }
         
+        // Create the request
+        let request: Request
         do {
-            // Create the request
             let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
-            let request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
-            
-            // Send the request
-            request.send() { completion($0) }
-        } catch (let error) {
+            request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
+        } catch {
             Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
+        
+        // Send the request
+        return try await request.send()
     }
     
     /**
@@ -301,15 +292,14 @@ extension DataConnector {
      */
     public static func delete(
         projectID       : String,
-        dataConnectorID : String,
-        completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+        dataConnectorID : String
+    ) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
         let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        try await request.send()
     }
     
     /**
@@ -322,15 +312,14 @@ extension DataConnector {
      */
     public static func getMetrics(
         projectID       : String,
-        dataConnectorID : String,
-        completion      : @escaping (_ result: Result<DataConnector.Metrics, DisruptiveError>) -> ())
-    {
+        dataConnectorID : String
+    ) async throws -> DataConnector.Metrics {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID):metrics"
         let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        return try await request.send()
     }
     
     /**
@@ -343,15 +332,14 @@ extension DataConnector {
      */
     public static func sync(
         projectID       : String,
-        dataConnectorID : String,
-        completion      : @escaping (_ result: Result<Void, DisruptiveError>) -> ())
-    {
+        dataConnectorID : String
+    ) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID):sync"
         let request = Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint)
         
         // Send the request
-        request.send() { completion($0) }
+        try await request.send()
     }
 }
 

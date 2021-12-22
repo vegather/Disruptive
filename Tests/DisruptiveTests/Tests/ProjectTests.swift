@@ -20,7 +20,7 @@ class ProjectTests: DisruptiveTests {
     
     
     
-    func testGetProjects() {
+    func testGetProjects() async throws {
         let reqOrgID = "abc"
         let reqQuery = "dummy"
         let reqParams = ["organization": [reqOrgID], "query": [reqQuery]]
@@ -44,20 +44,11 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetProjects")
-        Project.getAll(organizationID: reqOrgID, query: reqQuery) { result in
-            switch result {
-                case .success(let projectsOut):
-                    XCTAssertEqual(projectsOut, respProjects)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let projectsOut = try await Project.getAll(organizationID: reqOrgID, query: reqQuery)
+        XCTAssertEqual(projectsOut, respProjects)
     }
     
-    func testGetProjectsPage() {
+    func testGetProjectsPage() async throws {
         let reqOrgID = "abc"
         let reqQuery = "dummy"
         let reqParams = ["organization": [reqOrgID], "query": [reqQuery], "page_size": ["2"], "page_token": ["token"]]
@@ -81,21 +72,12 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetProjectsPage")
-        Project.getPage(organizationID: reqOrgID, query: reqQuery, pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.projects, respProjects)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await Project.getPage(organizationID: reqOrgID, query: reqQuery, pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.projects, respProjects)
     }
     
-    func testGetProject() {
+    func testGetProject() async throws {
         let reqProjectID = "abc"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)")
@@ -118,20 +100,11 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetProject")
-        Project.get(projectID: reqProjectID) { result in
-            switch result {
-                case .success(let p):
-                    XCTAssertEqual(p, respProject)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let p = try await Project.get(projectID: reqProjectID)
+        XCTAssertEqual(p, respProject)
     }
     
-    func testCreateProject() {
+    func testCreateProject() async throws {
         let reqOrgID = "abc"
         let reqDisplayName = "dummy"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!.appendingPathComponent("projects")
@@ -157,21 +130,12 @@ class ProjectTests: DisruptiveTests {
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
             return (respData, resp, nil)
         }
-        
-        let exp = expectation(description: "testCreateProject")
-        Project.create(organizationID: reqOrgID, displayName: reqDisplayName) { result in
-            switch result {
-                case .success(let p):
-                    XCTAssertEqual(p, respProject)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+                
+        let p = try await Project.create(organizationID: reqOrgID, displayName: reqDisplayName)
+        XCTAssertEqual(p, respProject)
     }
     
-    func testDeleteProject() {
+    func testDeleteProject() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)")
@@ -191,20 +155,10 @@ class ProjectTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testDeleteProject")
-        Project.delete(projectID: reqProjectID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await Project.delete(projectID: reqProjectID)
     }
     
-    func testUpdateProjectDisplayName() {
+    func testUpdateProjectDisplayName() async throws {
         let reqProjectID = "abc"
         let reqDisplayName = "dummy"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -231,17 +185,8 @@ class ProjectTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testUpdateProjectDisplayName")
-        Project.updateDisplayName(projectID: reqProjectID, newDisplayName: reqDisplayName) { result in
-            switch result {
-                case .success(let p):
-                    XCTAssertEqual(p, respProject)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let p = try await Project.updateDisplayName(projectID: reqProjectID, newDisplayName: reqDisplayName)
+        XCTAssertEqual(p, respProject)
     }
 }
 

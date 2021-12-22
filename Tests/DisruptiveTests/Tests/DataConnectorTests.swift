@@ -101,7 +101,7 @@ class DataConnectorTests: DisruptiveTests {
         assert(status: .unknown(value: "UNKNOWN_STATUS"), equals: nil)
     }
     
-    func testGetDataConnectors() {
+    func testGetDataConnectors() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
@@ -124,20 +124,11 @@ class DataConnectorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDataConnectors")
-        DataConnector.getAll(projectID: reqProjectID) { result in
-            switch result {
-                case .success(let dcs):
-                    XCTAssertEqual(dcs, respDCs)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let dcs = try await DataConnector.getAll(projectID: reqProjectID)
+        XCTAssertEqual(dcs, respDCs)
     }
     
-    func testGetDataConnectorsPage() {
+    func testGetDataConnectorsPage() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
@@ -160,21 +151,12 @@ class DataConnectorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDataConnectorsPage")
-        DataConnector.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.dataConnectors, respDCs)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await DataConnector.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.dataConnectors, respDCs)
     }
     
-    func testGetDataConnector() {
+    func testGetDataConnector() async throws {
         let reqDcID = "dc1"
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -198,20 +180,11 @@ class DataConnectorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDataConnector")
-        DataConnector.get(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
-            switch result {
-                case .success(let dc):
-                    XCTAssertEqual(dc, respDC)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let dc = try await DataConnector.get(projectID: reqProjectID, dataConnectorID: reqDcID)
+        XCTAssertEqual(dc, respDC)
     }
     
-    func testCreateDataConnector() {
+    func testCreateDataConnector() async throws {
         let reqProjectID = "proj1"
         let reqDisplayName = "disp_name"
         let reqPushURL = "dummyURL"
@@ -267,27 +240,18 @@ class DataConnectorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testCreateDataConnector")
-        DataConnector.create(
+        let dc = try await DataConnector.create(
             projectID   : reqProjectID,
             displayName : reqDisplayName,
             pushType    : reqPushType,
             eventTypes  : reqEventTypes,
             labels      : reqLabels,
-            isActive    : reqStatus == .active)
-        { result in
-            switch result {
-                case .success(let dc):
-                    XCTAssertEqual(dc, respDC)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+            isActive    : reqStatus == .active
+        )
+        XCTAssertEqual(dc, respDC)
     }
     
-    func testUpdateDataConnectorAllParametersSet() {
+    func testUpdateDataConnectorAllParametersSet() async throws {
         let reqProjectID = "proj1"
         let reqDcID = "dc1"
         let reqDisplayName = "disp_name"
@@ -343,28 +307,19 @@ class DataConnectorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testUpdateDataConnectorAllParametersSet")
-        DataConnector.update(
+        let dc = try await DataConnector.update(
             projectID       : reqProjectID,
             dataConnectorID : reqDcID,
             displayName     : reqDisplayName,
             httpPush        : (url: reqPushURL, signatureSecret: reqPushSecret, headers: reqPushHeaders),
             isActive        : reqStatus == .active,
             eventTypes      : reqEventTypes,
-            labels          : reqLabels)
-        { result in
-            switch result {
-                case .success(let dc):
-                    XCTAssertEqual(dc, respDC)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+            labels          : reqLabels
+        )
+        XCTAssertEqual(dc, respDC)
     }
     
-    func testUpdateDataConnectorNoParametersSet() {
+    func testUpdateDataConnectorNoParametersSet() async throws {
         let reqProjectID = "proj1"
         let reqDcID = "dc1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -400,23 +355,11 @@ class DataConnectorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testUpdateDataConnectorNoParametersSet")
-        DataConnector.update(
-            projectID       : reqProjectID,
-            dataConnectorID : reqDcID)
-        { result in
-            switch result {
-                case .success(let dc):
-                    XCTAssertEqual(dc, respDC)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let dc = try await DataConnector.update(projectID: reqProjectID, dataConnectorID: reqDcID)
+        XCTAssertEqual(dc, respDC)
     }
     
-    func testDeleteDataConnector() {
+    func testDeleteDataConnector() async throws {
         let reqDcID = "dc1"
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -437,20 +380,10 @@ class DataConnectorTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testDeleteDataConnector")
-        DataConnector.delete(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await DataConnector.delete(projectID: reqProjectID, dataConnectorID: reqDcID)
     }
     
-    func testGetDataConnectorMetrics() {
+    func testGetDataConnectorMetrics() async throws {
         let reqDcID = "dc1"
         let reqProjectID = "proj1"
         let reqSuccess = 455
@@ -484,22 +417,13 @@ class DataConnectorTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetDataConnectorMetrics")
-        DataConnector.getMetrics(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
-            switch result {
-                case .success(let metrics):
-                    XCTAssertEqual(metrics.successCount, reqSuccess)
-                    XCTAssertEqual(metrics.errorCount, reqError)
-                    XCTAssertEqual(metrics.latency99p, TimeInterval(reqLatency))
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let metrics = try await DataConnector.getMetrics(projectID: reqProjectID, dataConnectorID: reqDcID)
+        XCTAssertEqual(metrics.successCount, reqSuccess)
+        XCTAssertEqual(metrics.errorCount, reqError)
+        XCTAssertEqual(metrics.latency99p, TimeInterval(reqLatency))
     }
     
-    func testSyncDataConnector() {
+    func testSyncDataConnector() async throws {
         let reqDcID = "dc1"
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -520,17 +444,7 @@ class DataConnectorTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testSyncDataConnector")
-        DataConnector.sync(projectID: reqProjectID, dataConnectorID: reqDcID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await DataConnector.sync(projectID: reqProjectID, dataConnectorID: reqDcID)
     }
 }
 

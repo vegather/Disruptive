@@ -60,9 +60,9 @@ extension Device {
         deviceID   : String,
         startDate  : Date? = nil,
         endDate    : Date? = nil,
-        eventTypes : [EventType]? = nil,
-        completion : @escaping (_ result: Result<Events, DisruptiveError>) -> ())
-    {
+        eventTypes : [EventType]? = nil
+    ) async throws -> Events {
+        
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
         
@@ -81,20 +81,12 @@ extension Device {
         params["page_size"] = ["1000"]
         
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices/\(deviceID)/events", params: params)
+        let endpoint = "projects/\(projectID)/devices/\(deviceID)/events"
+        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params)
         
         // Send the request
-        request.send(pagingKey: "events") { (response: Result<[EventContainer], DisruptiveError>) in
-            switch response {
-                case .success(let eventContainers):
-                    var events = Events(events: eventContainers)
-                    events.sort()
-                    
-                    completion(.success(events))
-                case .failure(let error):
-                    completion(.failure(error))
-            }
-        }
+        let containers: [EventContainer] = try await request.send(pagingKey: "events")
+        return Events(events: containers)
     }
 }
 

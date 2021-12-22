@@ -52,7 +52,7 @@ class RoleTests: DisruptiveTests {
         XCTAssertThrowsError(try JSONEncoder().encode(Role.RoleType.unknown(value: "")))
     }
     
-    func testGetRoles() {
+    func testGetRoles() async throws {
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("roles")
         
@@ -74,20 +74,11 @@ class RoleTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetRoles")
-        Role.getAll { result in
-            switch result {
-                case .success(let roles):
-                    XCTAssertEqual(roles, respRoles)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let roles = try await Role.getAll()
+        XCTAssertEqual(roles, respRoles)
     }
     
-    func testGetRole() {
+    func testGetRole() async throws {
         let role = Role.RoleType.organizationAdmin
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent(role.resourceName!)
@@ -110,29 +101,19 @@ class RoleTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetRole")
-        Role.get(roleType: role) { result in
-            switch result {
-                case .success(let role):
-                    XCTAssertEqual(role, respRole)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let roleOut = try await Role.get(roleType: role)
+        XCTAssertEqual(roleOut, respRole)
     }
     
-    func testGetRoleUnknownRole() {
-        let exp = expectation(description: "testGetRoleUnknownRole")
-        Role.get(roleType: .unknown(value: "NOT_A_ROLE")) { result in
-            switch result {
-                case .success(_)       : XCTFail("Unexpected success")
-                case .failure(let err) : XCTAssertEqual(err.type, .badRequest)
-            }
-            exp.fulfill()
+    func testGetRoleUnknownRole() async throws {        
+        do {
+            _ = try await Role.get(roleType: .unknown(value: "NOT_A_ROLE"))
+            XCTFail("Unexpected success")
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.type, .badRequest)
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
         }
-        wait(for: [exp], timeout: 1)
     }
 }
 

@@ -138,8 +138,8 @@ public class DeviceEventStream: NSObject {
         
         // Starting the stream in the next runloop cycle in case no authenticator
         // has been, and we want to call `onError?()` immediately.
-        DispatchQueue.main.async { [weak self] in
-            self?.restartStream()
+        Task {
+            await restartStream()
         }
     }
     
@@ -172,7 +172,7 @@ public class DeviceEventStream: NSObject {
         )
     }
     
-    private func restartStream() {
+    private func restartStream() async {
         guard hasBeenClosed == false else { return }
         guard let auth = authenticator else {
             let error = DisruptiveError(
@@ -185,36 +185,32 @@ public class DeviceEventStream: NSObject {
             return
         }
         
-        auth.getActiveAccessToken { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let token):
-                
-                // Add the "Authorization" header to the Request
-                var req = self.request
-                req.setHeader(field: "Authorization", value: token)
-                
-                // Convert to URLRequest
-                guard let urlRequest = req.urlRequest() else {
-                    let error = DisruptiveError(
-                        type: .unknownError,
-                        message: "Unknown error",
-                        helpLink: nil
-                    )
-                    Disruptive.log("Failed to create URLRequest to restart the DeviceEventStream stream", level: .error)
-                    self.onError?(error)
-                    return
-                }
-                
-                // Send the request (connect to stream)
-                self.task = self.session.dataTask(with: urlRequest)
-                self.task?.resume()
-            case .failure(let e):
-                Disruptive.log("Failed to authenticate the DeviceEventStream stream. Error: \(e)", level: .error)
-                self.onError?(e)
-            }
+        // Add the "Authorization" header to the Request
+        var req = self.request
+        do {
+            let token = try await auth.getActiveAccessToken()
+            req.setHeader(field: "Authorization", value: token)
+        } catch {
+            Disruptive.log("Failed to authenticate the DeviceEventStream stream. Error: \(error)", level: .error)
+            self.onError?((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil))
+            return
         }
+        
+        // Convert to URLRequest
+        guard let urlRequest = req.urlRequest() else {
+            let error = DisruptiveError(
+                type: .unknownError,
+                message: "Unknown error",
+                helpLink: nil
+            )
+            Disruptive.log("Failed to create URLRequest to restart the DeviceEventStream stream", level: .error)
+            self.onError?(error)
+            return
+        }
+        
+        // Send the request (connect to stream)
+        self.task = self.session.dataTask(with: urlRequest)
+        self.task?.resume()
     }
 }
 
@@ -342,8 +338,10 @@ extension DeviceEventStream: URLSessionDataDelegate {
         let backoff = retryScheme.nextBackoff()
         Disruptive.log("Disconnected from event stream. Reconnecting in \(backoff)s...")
         
-        DispatchQueue.global().asyncAfter(deadline: .now() + backoff) { [weak self] in
-            self?.restartStream()
+        // Restart the stream after a backoff
+        Task {
+            try await Task.sleep(nanoseconds: UInt64(backoff) * 1_000_000_000)
+            await restartStream()
         }
     }
 }

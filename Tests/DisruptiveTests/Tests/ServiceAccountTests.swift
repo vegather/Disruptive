@@ -32,7 +32,7 @@ class ServiceAccountTests: DisruptiveTests {
         XCTAssertEqual(keySecretIn, keySecretOut)
     }
     
-    func testGetServiceAccounts() {
+    func testGetServiceAccounts() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
@@ -55,20 +55,11 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetServiceAccounts")
-        ServiceAccount.getAll(projectID: reqProjectID) { result in
-            switch result {
-                case .success(let accounts):
-                    XCTAssertEqual(accounts, respServiceAccounts)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let accounts = try await ServiceAccount.getAll(projectID: reqProjectID)
+        XCTAssertEqual(accounts, respServiceAccounts)
     }
     
-    func testGetServiceAccountsPage() {
+    func testGetServiceAccountsPage() async throws {
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/serviceaccounts")
@@ -91,21 +82,12 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetServiceAccountsPage")
-        ServiceAccount.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.serviceAccounts, respServiceAccounts)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await ServiceAccount.getPage(projectID: reqProjectID, pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.serviceAccounts, respServiceAccounts)
     }
     
-    func testGetServiceAccount() {
+    func testGetServiceAccount() async throws {
         let reqProjectID = "proj1"
         let reqSAID = "sa1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -129,20 +111,11 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetServiceAccount")
-        ServiceAccount.get(projectID: reqProjectID, serviceAccountID: reqSAID) { result in
-            switch result {
-                case .success(_):
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let sa = try await ServiceAccount.get(projectID: reqProjectID, serviceAccountID: reqSAID)
+        XCTAssertEqual(respSA, sa)
     }
     
-    func testCreateServiceAccount() {
+    func testCreateServiceAccount() async throws {
         let reqProjectID = "abc"
         let reqDisplayName = "dummy"
         let reqBasicAuthEnabled = true
@@ -173,20 +146,11 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testCreateServiceAccount")
-        ServiceAccount.create(projectID: reqProjectID, displayName: reqDisplayName, basicAuthEnabled: reqBasicAuthEnabled) { result in
-            switch result {
-                case .success(let sa):
-                    XCTAssertEqual(sa, respSA)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let sa = try await ServiceAccount.create(projectID: reqProjectID, displayName: reqDisplayName, basicAuthEnabled: reqBasicAuthEnabled)
+        XCTAssertEqual(sa, respSA)
     }
     
-    func testUpdateServiceAccountAllParametersSet() {
+    func testUpdateServiceAccountAllParametersSet() async throws {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqDisplayName = "disp_name"
@@ -219,25 +183,16 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testUpdateServiceAccountAllParametersSet")
-        ServiceAccount.update(
+        let sa = try await ServiceAccount.update(
             projectID        : reqProjectID,
             serviceAccountID : reqSaID,
             displayName      : reqDisplayName,
-            basicAuthEnabled : reqBasicAuthEnabled)
-        { result in
-            switch result {
-                case .success(let sa):
-                    XCTAssertEqual(sa, respSA)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+            basicAuthEnabled : reqBasicAuthEnabled
+        )
+        XCTAssertEqual(sa, respSA)
     }
     
-    func testUpdateServiceAccountNoParametersSet() {
+    func testUpdateServiceAccountNoParametersSet() async throws {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -264,24 +219,12 @@ class ServiceAccountTests: DisruptiveTests {
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
             return (respData, resp, nil)
         }
-        
-        let exp = expectation(description: "testUpdateServiceAccountNoParametersSet")
-        ServiceAccount.update(
-            projectID        : reqProjectID,
-            serviceAccountID : reqSaID)
-        { result in
-            switch result {
-                case .success(let sa):
-                    XCTAssertEqual(sa, respSA)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+                
+        let sa = try await ServiceAccount.update(projectID: reqProjectID, serviceAccountID: reqSaID)
+        XCTAssertEqual(sa, respSA)
     }
     
-    func testDeleteServiceAccount() {
+    func testDeleteServiceAccount() async throws {
         let reqSaID = "sa1"
         let reqProjectID = "proj1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -302,20 +245,10 @@ class ServiceAccountTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testDeleteServiceAccount")
-        ServiceAccount.delete(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await ServiceAccount.delete(projectID: reqProjectID, serviceAccountID: reqSaID)
     }
     
-    func testGetServiceAccountKeys() {
+    func testGetServiceAccountKeys() async throws {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -339,20 +272,11 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetServiceAccountKeys")
-        ServiceAccount.getAllKeys(projectID: reqProjectID, serviceAccountID: reqSaID) { result in
-            switch result {
-                case .success(let keys):
-                    XCTAssertEqual(keys, respSaKeys)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let keys = try await ServiceAccount.getAllKeys(projectID: reqProjectID, serviceAccountID: reqSaID)
+        XCTAssertEqual(keys, respSaKeys)
     }
     
-    func testGetServiceAccountKeysPage() {
+    func testGetServiceAccountKeysPage() async throws {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -376,21 +300,12 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetServiceAccountKeysPage")
-        ServiceAccount.getKeysPage(projectID: reqProjectID, serviceAccountID: reqSaID, pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.keys, respSaKeys)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await ServiceAccount.getKeysPage(projectID: reqProjectID, serviceAccountID: reqSaID, pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.keys, respSaKeys)
     }
     
-    func testGetServiceAccountKey() {
+    func testGetServiceAccountKey() async throws {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqKeyID = "key1"
@@ -415,20 +330,11 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetServiceAccountKey")
-        ServiceAccount.getKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID) { result in
-            switch result {
-                case .success(_):
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let keys = try await ServiceAccount.getKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID)
+        XCTAssertEqual(respSaKey, keys)
     }
     
-    func testCreateServiceAccountKey() {
+    func testCreateServiceAccountKey() async throws {
         let reqProjectID = "abc"
         let reqSaId = "sa1"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
@@ -452,20 +358,11 @@ class ServiceAccountTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testCreateServiceAccountKey")
-        ServiceAccount.createKey(projectID: reqProjectID, serviceAccountID: reqSaId) { result in
-            switch result {
-                case .success(let ks):
-                    XCTAssertEqual(ks, respSaKs)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let ks = try await ServiceAccount.createKey(projectID: reqProjectID, serviceAccountID: reqSaId)
+        XCTAssertEqual(ks, respSaKs)
     }
     
-    func testDeleteServiceAccountKey() {
+    func testDeleteServiceAccountKey() async throws {
         let reqProjectID = "proj1"
         let reqSaID = "sa1"
         let reqKeyID = "key1"
@@ -487,17 +384,7 @@ class ServiceAccountTests: DisruptiveTests {
             return (nil, resp, nil)
         }
         
-        let exp = expectation(description: "testDeleteServiceAccountKey")
-        ServiceAccount.deleteKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID) { result in
-            switch result {
-                case .success():
-                    break
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        try await ServiceAccount.deleteKey(projectID: reqProjectID, serviceAccountID: reqSaID, keyID: reqKeyID)
     }
 }
 

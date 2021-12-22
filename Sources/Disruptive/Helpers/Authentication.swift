@@ -89,18 +89,15 @@ public protocol Authenticator {
     /// This is intended to prevent any accidental re-authentications being made
     /// after the client has logged out.
     var shouldAutoRefreshAccessToken: Bool { get }
-    
-    /// The completion closure type used by the auth functions
-    typealias AuthHandler = (Result<Void, DisruptiveError>) -> ()
-    
+        
     /// A conforming type should call `refreshAccessToken()` to get an initial access token,
     /// and if successful, set `shouldAutoRefreshAccessToken` to `true`.
-    func login(completion: @escaping AuthHandler)
+    func login() async throws
     
     /// A conforming type should clear out any state that was created while logging in,
     /// including setting `authToken` to `nil` and `shouldAutoRefreshAccessToken`
     /// to `false`.
-    func logout(completion: @escaping AuthHandler)
+    func logout() async throws
     
     /// A conforming type should use a mechanism to acquire an access token than
     /// can be used to authenticate against the Disruptive Technologies' REST API.
@@ -109,7 +106,7 @@ public protocol Authenticator {
     ///
     /// This will be called automatically when necessary as long as `shouldAutoRefreshAccessToken`
     /// is set to `true`.
-    func refreshAccessToken(completion: @escaping AuthHandler)
+    func refreshAccessToken() async throws
 }
 
 internal extension Authenticator {
@@ -129,43 +126,45 @@ internal extension Authenticator {
     /// * If the authenticator is logged out, return a `loggedOut` error.
     /// * If there is a local auth token that is not expired (or more than a minute away from expiring), return it.
     /// * Attempt to refresh the auth token (and store it in `authToken`). If successful, return the new token, otherwise return an error.
-    func getActiveAccessToken(completion: @escaping (Result<String, DisruptiveError>) -> ()) {
+    func getActiveAccessToken() async throws -> String {
         if shouldAutoRefreshAccessToken == false {
+            Disruptive.log("The `Authenticator` is not logged in. Call `login()` on the `Authenticator` to log back in.", level: .error)
+            
             // We should no longer be logged in. Just return the `.loggedOut` error code
-            let error = DisruptiveError(
+            throw DisruptiveError(
                 type: .loggedOut,
                 message: "Not authenticated",
                 helpLink: nil
             )
-            Disruptive.log("The `Authenticator` is not logged in. Call `login()` on the `Authenticator` to log back in.", level: .error)
-            completion(.failure(error))
         } else if let authToken = getLocalAuthToken() {
             // There already exists a non-expired auth token
-            completion(.success(authToken))
+            return authToken
         } else {
             // The authenticator is either not authenticated, or the auth
             // token too close to getting expired. Will re-authenticate the authenticator
             Disruptive.log("Authenticating the authenticator...")
-            refreshAccessToken { result in
-                switch result {
-                case .success():
-                    if let authToken = getLocalAuthToken() {
-                        Disruptive.log("Authentication successful")
-                        completion(.success(authToken))
-                    } else {
-                        let error = DisruptiveError(
-                            type: .unknownError,
-                            message: "Authentication error",
-                            helpLink: nil
-                        )
-                        Disruptive.log("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
-                        completion(.failure(error))
-                    }
-                case .failure(let e):
-                    Disruptive.log("Failed to authenticate the authenticator with error: \(e)", level: .error)
-                    completion(.failure(e))
-                }
+            
+            
+            do {
+                try await refreshAccessToken()
+            } catch {
+                Disruptive.log("Failed to authenticate the authenticator with error: \(error)", level: .error)
+                throw error
             }
+                
+                if let authToken = getLocalAuthToken() {
+                    Disruptive.log("Authentication successful")
+                    return authToken
+                } else {
+                    Disruptive.log("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
+                    
+                    throw DisruptiveError(
+                        type: .unknownError,
+                        message: "Authentication error",
+                        helpLink: nil
+                    )
+                }
+                
         }
     }
 }
@@ -215,19 +214,16 @@ internal class OAuth2Authenticator: Authenticator {
     
     /// Refreshes the access token, stores it in the `authToken` property, and sets
     /// `shouldAutoRefreshAccessToken` to `true`.
-    func login(completion: @escaping AuthHandler) {
-        refreshAccessToken { [weak self] result in
-            self?.shouldAutoRefreshAccessToken = true
-            completion(result)
-        }
+    func login() async throws {
+        try await refreshAccessToken()
+        shouldAutoRefreshAccessToken = true
     }
     
     /// Logs out the authenticator by setting `authToken` to `nil` and `shouldAutoRefreshAccessToken`
     /// to `false`. Call `login()` to log the authenticator back in again.
-    func logout(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+    func logout() async throws {
         authToken = nil
         shouldAutoRefreshAccessToken = false
-        completion(.success(()))
     }
     
     /// Used internally to create a JWT from the service account passed in to the initializer, which is then exchanged
@@ -235,21 +231,20 @@ internal class OAuth2Authenticator: Authenticator {
     /// along with the received expiration date.
     ///
     /// This flow is described in more detail on the [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2).
-    func refreshAccessToken(completion: @escaping (Result<Void, DisruptiveError>) -> ()) {
+    func refreshAccessToken() async throws {
         guard let authJWT = JWT.serviceAccount(
             authURL : authURL,
             keyID   : credentials.keyID,
             issuer  : credentials.issuer,
             secret  : credentials.secret
         ) else {
-            let error = DisruptiveError(
+            Disruptive.log("Failed to create a JWT from service account credentials: \(credentials)", level: .error)
+            
+            throw DisruptiveError(
                 type: .unknownError,
                 message: "Failed to authenticate",
                 helpLink: nil
             )
-            Disruptive.log("Failed to create a JWT from service account credentials: \(credentials)", level: .error)
-            completion(.failure(error))
-            return
         }
         
         let header = HTTPHeader(
@@ -261,35 +256,34 @@ internal class OAuth2Authenticator: Authenticator {
             "assertion" : authJWT
         ])!
         
+        // Prepare the request
+        var request: Request
         do {
-            let request = try Request(
+            request = try Request(
                 method: .post,
                 baseURL: authURL,
                 endpoint: "",
                 headers: [header],
                 body: body
             )
-            request.internalSend { [weak self] (result: Result<AccessTokenResponse, DisruptiveError>) in
-                switch result {
-                    case .success(let response):
-                        Disruptive.log("OAuth2 authentication successful")
-                        DispatchQueue.main.async {
-                            self?.authToken = AuthToken(
-                                token: "Bearer \(response.accessToken)",
-                                expirationDate: Date(timeIntervalSinceNow: TimeInterval(response.expiresIn))
-                            )
-                            completion(.success(()))
-                        }
-                    case .failure(let e):
-                        Disruptive.log("OAuth2 authentication failed with error: \(e)", level: .error)
-                        DispatchQueue.main.async {
-                            completion(.failure(e))
-                        }
-                }
-            }
         } catch {
             Disruptive.log("Failed to encode body: \(body). Error: \(error)", level: .error)
-            completion(.failure((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)))
+            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+        }
+        
+        // Send the request
+        do {
+            let response: AccessTokenResponse = try await request.internalSend()
+            
+            authToken = AuthToken(
+                token: "Bearer \(response.accessToken)",
+                expirationDate: Date(timeIntervalSinceNow: TimeInterval(response.expiresIn))
+            )
+            
+            Disruptive.log("OAuth2 authentication successful")
+        } catch {
+            Disruptive.log("OAuth2 authentication failed with error: \(error)", level: .error)
+            throw error
         }
     }
 

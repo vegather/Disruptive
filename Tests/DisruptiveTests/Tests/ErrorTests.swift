@@ -9,7 +9,7 @@ import XCTest
 @testable import Disruptive
 
 class ErrorTests: DisruptiveTests {
-    func testRestApiErrorFormat() {
+    func testRestApiErrorFormat() async throws {
         let errorPayload = """
         {
             "error": "already exists",
@@ -42,19 +42,15 @@ class ErrorTests: DisruptiveTests {
             endpoint: "getError"
         )
         
-        let exp = expectation(description: "testRestApiErrorFormat")
-        
-        req.internalSend { (result: Result<Request.EmptyResponse, DisruptiveError>) in
-            switch result {
-                case .success(_): XCTFail()
-                case .failure(let err):
-                    XCTAssertEqual(err.message, "already exists")
-                    XCTAssertEqual(err.type, .resourceAlreadyExists)
-                    XCTAssertEqual(err.helpLink, "https://docs.d21s.com/error/#409")
-            }
-            exp.fulfill()
+        do {
+            let _: Request.EmptyResponse = try await req.internalSend()
+            XCTFail()
+        } catch let error as DisruptiveError {
+            XCTAssertEqual(error.message, "already exists")
+            XCTAssertEqual(error.type, .resourceAlreadyExists)
+            XCTAssertEqual(error.helpLink, "https://docs.d21s.com/error/#409")
+        } catch {
+            XCTFail()
         }
-        
-        wait(for: [exp], timeout: 1)
     }
 }

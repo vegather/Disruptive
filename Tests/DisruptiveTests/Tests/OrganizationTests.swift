@@ -18,7 +18,7 @@ class OrganizationTests: DisruptiveTests {
         XCTAssertEqual(orgIn, orgOut)
     }
     
-    func testGetOrganizations() {
+    func testGetOrganizations() async throws {
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations")
         
@@ -40,20 +40,11 @@ class OrganizationTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetOrganizations")
-        Organization.getAll { result in
-            switch result {
-                case .success(let orgs):
-                    XCTAssertEqual(orgs, respOrgs)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let orgs = try await Organization.getAll()
+        XCTAssertEqual(orgs, respOrgs)
     }
     
-    func testGetOrganizationsPage() {
+    func testGetOrganizationsPage() async throws {
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations")
         
@@ -75,21 +66,12 @@ class OrganizationTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetOrganizationsPage")
-        Organization.getPage(pageSize: 2, pageToken: "token") { result in
-            switch result {
-                case .success(let page):
-                    XCTAssertEqual(page.nextPageToken, "nextToken")
-                    XCTAssertEqual(page.organizations, respOrgs)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let page = try await Organization.getPage(pageSize: 2, pageToken: "token")
+        XCTAssertEqual(page.nextPageToken, "nextToken")
+        XCTAssertEqual(page.organizations, respOrgs)
     }
     
-    func testGetOrganization() {
+    func testGetOrganization() async throws {
         let orgID = "dummy"
         let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(orgID)")
@@ -112,17 +94,8 @@ class OrganizationTests: DisruptiveTests {
             return (respData, resp, nil)
         }
         
-        let exp = expectation(description: "testGetOrganization")
-        Organization.get(organizationID: orgID) { result in
-            switch result {
-                case .success(let org):
-                    XCTAssertEqual(org, respOrg)
-                case .failure(let err):
-                    XCTFail("Unexpected error: \(err)")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
+        let org = try await Organization.get(organizationID: orgID)
+        XCTAssertEqual(org, respOrg)
     }
 }
 
