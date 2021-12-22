@@ -263,7 +263,7 @@ extension Member {
         do {
             request = try Request(method: .post, endpoint: endpoint, body: payload)
         } catch {
-            Disruptive.log("Failed to init create member request with payload \(payload). Error: \(error)", level: .error)
+            Logger.error("Failed to init create member request with payload \(payload). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
         
@@ -324,7 +324,7 @@ extension Member {
 
         // At least one of the fields has to be set so that `updateMask` is non-empty
         if roles.count == 0 {
-            Disruptive.log("At least one of the fields in `update` has to be set", level: .error)
+            Logger.error("At least one of the fields in `update` has to be set")
             throw DisruptiveError(
                 type: .badRequest,
                 message: "No roles set",
@@ -340,7 +340,7 @@ extension Member {
         do {
             request = try Request(method: .patch, endpoint: endpoint, body: patch)
         } catch (let error) {
-            Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
+            Logger.error("Failed to init update request with payload: \(patch). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
         
@@ -442,7 +442,7 @@ extension Member {
         // Send the request
         let response: InviteURLResponse = try await request.send()
         guard let url = URL(string: response.inviteUrl) else {
-            Disruptive.log("Failed to convert the inviteUrl response to a URL: \(response.inviteUrl)", level: .error)
+            Logger.error("Failed to convert the inviteUrl response to a URL: \(response.inviteUrl)")
             throw DisruptiveError(
                 type: .unknownError,
                 message: "Unknown error",
@@ -494,7 +494,7 @@ extension Member {
                         message: "Unknown member status \"\(self)\"",
                         helpLink: nil
                     )
-                    Disruptive.log("Can't encode Member.Status with case .unknown", level: .error)
+                    Logger.error("Can't encode Member.Status with case .unknown")
                     throw error
             }
         }

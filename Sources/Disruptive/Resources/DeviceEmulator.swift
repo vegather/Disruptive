@@ -36,7 +36,7 @@ struct DeviceEmulator {
         
         // If the device type is `.unknown`, return an error
         guard let typeStr = deviceType.rawValue else {
-            Disruptive.log("Unable to use device type \(deviceType) for an emulated device", level: .error)
+            Logger.error("Unable to use device type \(deviceType) for an emulated device")
             throw DisruptiveError(
                 type: .badRequest,
                 message: "Device type \(deviceType) can't be used as an emulated device",
@@ -54,7 +54,7 @@ struct DeviceEmulator {
             let endpoint = "projects/\(projectID)/devices"
             request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: payload)
         } catch (let error) {
-            Disruptive.log("Failed to init request with payload: \(payload). Error: \(error)", level: .error)
+            Logger.error("Failed to init request with payload: \(payload). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
         
@@ -182,7 +182,7 @@ private struct PublishBody: Encodable {
                     message: "LabelsChangedEvent cannot be published",
                     helpLink: nil
                 )
-                DTLog(error.message, level: .error)
+                Logger.error(error.message)
                 throw error
         }
     }

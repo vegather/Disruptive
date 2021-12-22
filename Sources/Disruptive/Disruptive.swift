@@ -20,14 +20,27 @@ public struct Disruptive {
     /// The base URL for the Disruptive Technologies emulator REST API.
     public static var emulatorBaseURL = DefaultURLs.baseEmulatorURL
     
-    /// Whether or not the DisruptiveAPI should log to the console. Defaults to `false`.
-    public static var loggingEnabled = false
-    
     /// The authentication mechanism used by `Disruptive`. This will be
     /// checked to see if it has a non-expired access token before every request
     /// is sent to the Disruptive backend. If no non-expired access token were found
     /// the `refreshAccessToken` method will be called before attempting to send the request.
     public static var authenticator: Authenticator?
+    
+    /// An enum of the available logging levels for the Disruptive package.
+    /// Each level enables all the levels above it. For example, the `.info`
+    /// logging level enables `.info`, `.warning`, and `.error`.
+    public enum LoggingLevel: Int {
+        case off     = 0
+        case error   = 1
+        case warning = 2
+        case info    = 3
+        case debug   = 4
+    }
+    
+    /// The logging level to use for the Disruptive package. Provides details useful
+    /// information in a nice format about what is going on while data is being fetched
+    /// from the Disruptive APIs. Defaults to `.off`.
+    public static var loggingLevel: LoggingLevel = .off
 }
 
 public extension Disruptive {

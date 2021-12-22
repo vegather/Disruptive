@@ -128,7 +128,7 @@ internal extension Authenticator {
     /// * Attempt to refresh the auth token (and store it in `authToken`). If successful, return the new token, otherwise return an error.
     func getActiveAccessToken() async throws -> String {
         if shouldAutoRefreshAccessToken == false {
-            Disruptive.log("The `Authenticator` is not logged in. Call `login()` on the `Authenticator` to log back in.", level: .error)
+            Logger.error("The `Authenticator` is not logged in. Call `login()` on the `Authenticator` to log back in.")
             
             // We should no longer be logged in. Just return the `.loggedOut` error code
             throw DisruptiveError(
@@ -142,21 +142,21 @@ internal extension Authenticator {
         } else {
             // The authenticator is either not authenticated, or the auth
             // token too close to getting expired. Will re-authenticate the authenticator
-            Disruptive.log("Authenticating the authenticator...")
+            Logger.info("Authenticating the authenticator...")
             
             
             do {
                 try await refreshAccessToken()
             } catch {
-                Disruptive.log("Failed to authenticate the authenticator with error: \(error)", level: .error)
+                Logger.error("Failed to authenticate the authenticator with error: \(error)")
                 throw error
             }
                 
                 if let authToken = getLocalAuthToken() {
-                    Disruptive.log("Authentication successful")
+                    Logger.info("Authentication successful")
                     return authToken
                 } else {
-                    Disruptive.log("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.", level: .error)
+                    Logger.error("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.")
                     
                     throw DisruptiveError(
                         type: .unknownError,
@@ -238,7 +238,7 @@ internal class OAuth2Authenticator: Authenticator {
             issuer  : credentials.issuer,
             secret  : credentials.secret
         ) else {
-            Disruptive.log("Failed to create a JWT from service account credentials: \(credentials)", level: .error)
+            Logger.error("Failed to create a JWT from service account credentials: \(credentials)")
             
             throw DisruptiveError(
                 type: .unknownError,
@@ -267,7 +267,7 @@ internal class OAuth2Authenticator: Authenticator {
                 body: body
             )
         } catch {
-            Disruptive.log("Failed to encode body: \(body). Error: \(error)", level: .error)
+            Logger.error("Failed to encode body: \(body). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
         
@@ -280,9 +280,9 @@ internal class OAuth2Authenticator: Authenticator {
                 expirationDate: Date(timeIntervalSinceNow: TimeInterval(response.expiresIn))
             )
             
-            Disruptive.log("OAuth2 authentication successful")
+            Logger.info("OAuth2 authentication successful")
         } catch {
-            Disruptive.log("OAuth2 authentication failed with error: \(error)", level: .error)
+            Logger.error("OAuth2 authentication failed with error: \(error)")
             throw error
         }
     }

@@ -330,7 +330,7 @@ extension Device {
             let endpoint = "projects/\(projectID)/devices:batchUpdate"
             request = try Request(method: .post, endpoint: endpoint, body: body)
         } catch (let error) {
-            Disruptive.log("Failed to init setLabel request with payload: \(body). Error: \(error)", level: .error)
+            Logger.error("Failed to init setLabel request with payload: \(body). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
      
@@ -365,7 +365,7 @@ extension Device {
             let endpoint = "projects/\(toProjectID)/devices:transfer"
             request = try Request(method: .post, endpoint: endpoint, body: body)
         } catch (let error) {
-            Disruptive.log("Failed to initialize transfer devices request with payload: \(body). Error: \(error)", level: .error)
+            Logger.error("Failed to initialize transfer devices request with payload: \(body). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
         

@@ -179,7 +179,7 @@ extension DataConnector {
             let endpoint = "projects/\(projectID)/dataconnectors"
             request = try Request(method: .post, endpoint: endpoint, body: payload)
         } catch {
-            Disruptive.log("Failed to init create data connector request with payload \(payload). Error: \(error)", level: .error)
+            Logger.error("Failed to init create data connector request with payload \(payload). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
         
@@ -274,7 +274,7 @@ extension DataConnector {
             let endpoint = "projects/\(projectID)/dataconnectors/\(dataConnectorID)"
             request = try Request(method: .patch, endpoint: endpoint, body: patch)
         } catch {
-            Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
+            Logger.error("Failed to init update request with payload: \(patch). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
         }
         
@@ -436,7 +436,7 @@ extension DataConnector {
                     message: "Invalid request",
                     helpLink: nil
                 )
-                Disruptive.log("Can't encode DataConnector.Status with case .unknown", level: .error)
+                Logger.error("Can't encode DataConnector.Status with case .unknown")
                 throw error
             }
         }

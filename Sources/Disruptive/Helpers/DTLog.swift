@@ -8,16 +8,6 @@
 
 import Foundation
 
-/// The severity of the log. Might be used to prefix
-/// the log message with a symbol to make it easily
-/// distinguishable.
-public enum LogLevel {
-    case debug
-    case info
-    case warning
-    case error
-}
-
 /**
  Provides a nicely formatted log output with the file, function, and line number the
  log statement came from. Also includes a timestamp with millisecond accuracy.
@@ -37,9 +27,9 @@ public enum LogLevel {
  - Parameter functionName: Should be left as-is to get the correct function name.
  - Parameter lineNumber: Should be left as-is to get the correct line number.
  */
-public func DTLog(
+public func log(
     _ message   : Any      = "",
-    level       : LogLevel = .info,
+    prefix      : String,
     filePath    : String   = #file,
     functionName: String   = #function,
     lineNumber  : Int      = #line)
@@ -47,14 +37,6 @@ public func DTLog(
     let fileNameWidth = 20
     let functionNameWidth = 30
     let lineNumberWidth = 7
-    
-    let prefix: String
-    switch level {
-        case .debug   : prefix = "🐛 "
-        case .info    : prefix = ""
-        case .warning : prefix = "⚠️ "
-        case .error   : prefix = "❌ "
-    }
     
     var printString = ""
     
@@ -109,25 +91,85 @@ public func DTLog(
 }
 
 
-internal extension Disruptive {
+internal struct Logger {
     
-    /// Used for internal logging. Lets the `DTLog` global function be public while
-    /// respecting the `Disruptive.loggingEnabled` flag only for internal logging.
-    static func log(
+    /// Used for debug logging. Will only print if `Disruptive.loggingLevel`
+    /// is set to `.debug`.
+    static func debug(
         _ message   : Any      = "",
-        level       : LogLevel = .info,
         filePath    : String   = #file,
         functionName: String   = #function,
         lineNumber  : Int      = #line)
     {
-        guard Disruptive.loggingEnabled else { return }
+        guard shouldLog(level: .debug) else { return }
         
-        DTLog(
+        log(
             message,
-            level        : level,
+            prefix       : "🐛 ",
             filePath     : filePath,
             functionName : functionName,
             lineNumber   : lineNumber
         )
+    }
+    
+    /// Used for informational logging. Will only print if `Disruptive.loggingLevel`
+    /// is set to `.info` or `.debug`.
+    static func info(
+        _ message   : Any      = "",
+        filePath    : String   = #file,
+        functionName: String   = #function,
+        lineNumber  : Int      = #line)
+    {
+        guard shouldLog(level: .info) else { return }
+        
+        log(
+            message,
+            prefix       : "",
+            filePath     : filePath,
+            functionName : functionName,
+            lineNumber   : lineNumber
+        )
+    }
+    
+    /// Used for warning logging. Will only print if `Disruptive.loggingLevel`
+    /// is set to `.warning`, `.info`, or `.debug`.
+    static func warning(
+        _ message   : Any      = "",
+        filePath    : String   = #file,
+        functionName: String   = #function,
+        lineNumber  : Int      = #line)
+    {
+        guard shouldLog(level: .warning) else { return }
+        
+        log(
+            message,
+            prefix       : "⚠️ ",
+            filePath     : filePath,
+            functionName : functionName,
+            lineNumber   : lineNumber
+        )
+    }
+    
+    /// Used for error logging. Will only print if `Disruptive.loggingLevel`
+    /// is set to `.error`, `.warning`, `.info`, or `.debug`.
+    static func error(
+        _ message   : Any      = "",
+        filePath    : String   = #file,
+        functionName: String   = #function,
+        lineNumber  : Int      = #line)
+    {
+        guard shouldLog(level: .error) else { return }
+        
+        log(
+            message,
+            prefix       : "❌ ",
+            filePath     : filePath,
+            functionName : functionName,
+            lineNumber   : lineNumber
+        )
+    }
+    
+    private static func shouldLog(level: Disruptive.LoggingLevel) -> Bool {
+        return Disruptive.loggingLevel.rawValue >= level.rawValue
     }
 }

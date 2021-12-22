@@ -56,7 +56,7 @@ extension Role {
      */
     public static func get(roleType: Role.RoleType) async throws -> Role {
         guard let resourceName = roleType.resourceName else {
-            Disruptive.log("Can't get role for roleType: \(roleType)", level: .error)
+            Logger.error("Can't get role for roleType: \(roleType)")
             throw DisruptiveError(
                 type: .badRequest,
                 message: "Can't get role for roleType: \(roleType)",
@@ -121,7 +121,7 @@ extension Role {
                 var container = encoder.singleValueContainer()
                 try container.encode(resourceName)
             } else {
-                Disruptive.log("Can't encode Role.RoleType with case .unknown", level: .error)
+                Logger.error("Can't encode Role.RoleType with case .unknown")
                 throw DisruptiveError(
                     type: .badRequest,
                     message: "Can't use role \(self)",

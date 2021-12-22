@@ -180,7 +180,7 @@ public class DeviceEventStream: NSObject {
                 message: "Not authenticated",
                 helpLink: nil
             )
-            Disruptive.log("No authentication has been set. Set it with `Disruptive.auth = ...`", level: .error)
+            Logger.error("No authentication has been set. Set it with `Disruptive.auth = ...`")
             onError?(error)
             return
         }
@@ -191,7 +191,7 @@ public class DeviceEventStream: NSObject {
             let token = try await auth.getActiveAccessToken()
             req.setHeader(field: "Authorization", value: token)
         } catch {
-            Disruptive.log("Failed to authenticate the DeviceEventStream stream. Error: \(error)", level: .error)
+            Logger.error("Failed to authenticate the DeviceEventStream stream. Error: \(error)")
             self.onError?((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil))
             return
         }
@@ -203,7 +203,7 @@ public class DeviceEventStream: NSObject {
                 message: "Unknown error",
                 helpLink: nil
             )
-            Disruptive.log("Failed to create URLRequest to restart the DeviceEventStream stream", level: .error)
+            Logger.error("Failed to create URLRequest to restart the DeviceEventStream stream")
             self.onError?(error)
             return
         }
@@ -272,7 +272,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
             case .ethernetStatus     (let d, let e): onEthernetStatus?(d, e)
             case .cellularStatus     (let d, let e): onCellularStatus?(d, e)
                 
-            case .unknown(let eventType): Disruptive.log("Unknown event type: \(eventType)", level: .warning)
+            case .unknown(let eventType): Logger.warning("Unknown event type: \(eventType)")
         }
     }
     
@@ -284,7 +284,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
             helpStr = ". Help URL: \(help)"
         }
         
-        Disruptive.log("Got an error from the stream. Message: \"\(payload.error.message)\". Error: \(dtErr)\(helpStr)", level: .warning)
+        Logger.warning("Got an error from the stream. Message: \"\(payload.error.message)\". Error: \(dtErr)\(helpStr)")
         onError?(dtErr)
     }
     
@@ -304,7 +304,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
             } else if let error = try? JSONDecoder().decode(StreamError.self, from: message) {
                 handleError(with: error)
             } else {
-                Disruptive.log("Failed to decode stream data: \(String(data: message, encoding: .utf8) as Any)", level: .error)
+                Logger.error("Failed to decode stream data: \(String(data: message, encoding: .utf8) as Any)")
             }
         }
     }
@@ -315,7 +315,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
         didCompleteWithError error: Error?)
     {
         if hasBeenClosed {
-            Disruptive.log("Stream closed")
+            Logger.info("Stream closed")
             return
         }
         
@@ -331,12 +331,12 @@ extension DeviceEventStream: URLSessionDataDelegate {
                 message: "Stream error",
                 helpLink: nil
             )
-            Disruptive.log("The event stream closed with message: \"\(error.localizedDescription)\"\(statusCodeStr)", level: .error)
+            Logger.error("The event stream closed with message: \"\(error.localizedDescription)\"\(statusCodeStr)")
             onError?(err)
         }
         
         let backoff = retryScheme.nextBackoff()
-        Disruptive.log("Disconnected from event stream. Reconnecting in \(backoff)s...")
+        Logger.info("Disconnected from event stream. Reconnecting in \(backoff)s...")
         
         // Restart the stream after a backoff
         Task {

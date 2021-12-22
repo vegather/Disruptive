@@ -109,7 +109,7 @@ extension Events {
                 case .ethernetStatus    (_, let event): Events.addToList(list: &ethernetStatus,     newItem: event)
                 case .cellularStatus    (_, let event): Events.addToList(list: &cellularStatus,     newItem: event)
                 case .labelsChanged     (_, let event): Events.addToList(list: &labelsChanged,      newItem: event)
-                case .unknown(let eventType): Disruptive.log("Unknown event type: \(eventType)", level: .warning)
+                case .unknown(let eventType): Logger.warning("Unknown event type: \(eventType)")
             }
         }
     }

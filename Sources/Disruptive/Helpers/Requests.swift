@@ -147,7 +147,7 @@ extension Request {
                 message: "Unknown error",
                 helpLink: nil
             )
-            Disruptive.log("Failed to create URLRequest from request: \(self)", level: .error)
+            Logger.error("Failed to create URLRequest from request: \(self)")
             DispatchQueue.main.async {
                 completion(.failure(error))
             }
@@ -171,7 +171,7 @@ extension Request {
             {
                 // If this error can be converted to a disruptive error
                 if let dtErr = internalError.disruptiveError() {
-                    Disruptive.log("Request to \(urlString) resulted in error: \(dtErr)", level: .error)
+                    Logger.error("Request to \(urlString) resulted in error: \(dtErr)")
                     DispatchQueue.main.async {
                         completion(.failure(dtErr))
                     }
@@ -180,7 +180,7 @@ extension Request {
                 
                 // Check if we've been rate limited
                 if case .tooManyRequests(let retryAfter) = internalError.type {
-                    Disruptive.log("Request got rate limited, waiting \(retryAfter) seconds before retrying", level: .warning)
+                    Logger.warning("Request got rate limited, waiting \(retryAfter) seconds before retrying")
                     
                     // Dispatch the same request again after waiting
                     DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(retryAfter)) {
@@ -200,7 +200,7 @@ extension Request {
                         message: "Unknown error",
                         helpLink: nil
                     )
-                    Disruptive.log("The internal error \(internalError) was not handled for \(urlString)", level: .error)
+                    Logger.error("The internal error \(internalError) was not handled for \(urlString)")
                     completion(.failure(error))
                 }
                 return
@@ -270,7 +270,7 @@ extension Request {
                 message: "Unable to contact server",
                 helpLink: nil
             )
-            Disruptive.log("Request: \(url) resulted in error: \(error) (code: \(String(describing: (error as? URLError)?.code))), response: \(String(describing: response))", level: .error)
+            Logger.error("Request: \(url) resulted in error: \(error) (code: \(String(describing: (error as? URLError)?.code))), response: \(String(describing: response))")
             return err
         }
         
@@ -281,7 +281,7 @@ extension Request {
                 message: "Unable to contact server",
                 helpLink: nil
             )
-            Disruptive.log("Request: \(url) resulted in HTTP Error: \(String(describing: error)). Response: \(String(describing: response))", level: .error)
+            Logger.error("Request: \(url) resulted in HTTP Error: \(String(describing: error)). Response: \(String(describing: response))")
             return err
         }
         
@@ -295,9 +295,9 @@ extension Request {
             
             // Log the error
             if let msg = message {
-                Disruptive.log("Received status code \(httpResponse.statusCode) from the backend with message: \(msg)", level: .error)
+                Logger.error("Received status code \(httpResponse.statusCode) from the backend with message: \(msg)")
             } else {
-                Disruptive.log("Received status code \(httpResponse.statusCode) from the backend", level: .error)
+                Logger.error("Received status code \(httpResponse.statusCode) from the backend")
             }
             
             switch httpResponse.statusCode {
@@ -322,7 +322,7 @@ extension Request {
                 )
             default:
                 let err = InternalError(type: .unknownError, message: "Unexpected status code: \(httpResponse.statusCode)", helpLink: nil)
-                Disruptive.log(err.message, level: .error)
+                Logger.error(err.message)
                 return err
             }
         }
@@ -338,7 +338,7 @@ extension Request {
     static func parsePayload<T: Decodable>(_ payload: Data?, decoder: JSONDecoder) -> T? {
         // Unwrap payload
         guard let payload = payload else {
-            Disruptive.log("Didn't get a body in the response as expected", level: .error)
+            Logger.error("Didn't get a body in the response as expected")
             return nil
         }
         
@@ -348,10 +348,10 @@ extension Request {
         } catch {
             // Failed to decode payload
             if let str = String(data: payload, encoding: .utf8) {
-                Disruptive.log("Failed to parse JSON: \(str)", level: .error)
-                Disruptive.log("Error: \(error)", level: .error)
+                Logger.error("Failed to parse JSON: \(str)")
+                Logger.error("Error: \(error)")
             } else {
-                Disruptive.log("Failed to parse payload data: \(payload)", level: .error)
+                Logger.error("Failed to parse payload data: \(payload)")
             }
             
             return nil
@@ -378,7 +378,7 @@ extension Request {
     /// If the authenticator is not authenticated or not set, this will return a `.loggedOut` error.
     private static func authenticated(req: Request) async throws -> Request {
         guard let auth = Disruptive.authenticator else {
-            Disruptive.log("No authentication has been set. Set it with `Disruptive.auth = ...`", level: .error)
+            Logger.error("No authentication has been set. Set it with `Disruptive.auth = ...`")
             throw DisruptiveError(type: .loggedOut, message: "Not authenticated", helpLink: nil)
         }
         
@@ -460,7 +460,7 @@ extension Request {
         var nextRequest = try await Request.authenticated(req: request)
         nextRequest.params["page_token"] = [nextPageToken]
         
-        Disruptive.log("Still more pages to load for \(String(describing: nextRequest.urlRequest()?.url))")
+        Logger.info("Still more pages to load for \(String(describing: nextRequest.urlRequest()?.url))")
         
         // Fetch the next page
         return try await Request.fetchPages(

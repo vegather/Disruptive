@@ -52,13 +52,13 @@ class DisruptiveTests: XCTestCase {
     
     private func setupAuth() {
         Disruptive.authenticator = TestAuthenticator()
-        Disruptive.loggingEnabled = true
+        Disruptive.loggingLevel = .debug
         disruptive = Disruptive()
     }
     
     private func tearDownAuth() {
         Disruptive.authenticator = nil
-        Disruptive.loggingEnabled = false
+        Disruptive.loggingLevel = .off
         disruptive = nil
     }
 }
