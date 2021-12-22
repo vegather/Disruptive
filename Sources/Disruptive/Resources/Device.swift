@@ -68,13 +68,13 @@ extension Device {
      Examples:
      ```swift
      // Get all the devices in the project
-     Disruptive.getAll(projectID: "<PROJECT_ID>") { result in
+     Device.getAll(projectID: "<PROJECT_ID>") { result in
          ...
      }
      
      // Get all the temperature devices in the project ordered by
      // the temperature (highest temperatures first)
-     Disruptive.getAll(
+     Device.getAll(
          projectID   : "<PROJECT_ID>",
          deviceTypes : [.temperature],
          orderBy     : (field: "reported.temperature.value", ascending: false))

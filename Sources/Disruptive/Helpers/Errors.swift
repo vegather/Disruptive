@@ -59,7 +59,8 @@ public struct DisruptiveError: Error {
     
     /// A message about what went wrong that is intended to be shown to a user.
     /// Note that a more detailed error message might be available in the logs.
-    /// This can be turned on through `Disruptive.loggingEnabled = true`.
+    /// This can be turned on through `Disruptive.loggingLevel = .info` (select
+    /// appropriate level).
     let message: String
     
     /// If available, contains a URL to a page that might help solve the problem.

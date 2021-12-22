@@ -373,12 +373,12 @@ extension Request {
 
 extension Request {
     
-    /// If the `Disruptive.auth` authenticator is already authenticated and the expiration date is far enough
+    /// If the `Disruptive.authenticator` authenticator is already authenticated and the expiration date is far enough
     /// in the future, this will succeed with the `Authorization` header set to the auth token.
     /// If the authenticator is not authenticated or not set, this will return a `.loggedOut` error.
     private static func authenticated(req: Request) async throws -> Request {
         guard let auth = Disruptive.authenticator else {
-            Logger.error("No authentication has been set. Set it with `Disruptive.auth = ...`")
+            Logger.error("No authentication has been set. Set it with `Disruptive.authenticator = ...`")
             throw DisruptiveError(type: .loggedOut, message: "Not authenticated", helpLink: nil)
         }
         
