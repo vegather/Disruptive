@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension Disruptive {
+public extension Config {
     
     /**
      Provides mechanisms to authenticate the Disruptive Client
@@ -31,7 +31,7 @@ public extension Disruptive {
          
          Example:
          ```
-         Disruptive.authenticator = Disruptive.Auth.serviceAccount(
+         Config.authenticator = Disruptive.Auth.serviceAccount(
             email: <EMAIL>,
             keyID: <KEY_ID>,
             secret: <SECRET>
@@ -43,13 +43,13 @@ public extension Disruptive {
          - Parameter secret: The secret of the Service Account key
          - Parameter authURL: An optional parameter that specifies the token endpoint URL to exchange a JWT for an access token
          
-         - Returns: An object that implements the `Authenticator` protocol that can be set to `Disruptive.authenticator`.
+         - Returns: An object that implements the `Authenticator` protocol that can be set to `Config.authenticator`.
          */
         public static func serviceAccount(
             email   : String,
             keyID   : String,
             secret  : String,
-            authURL : String = Disruptive.DefaultURLs.oauthTokenEndpoint
+            authURL : String = Config.DefaultURLs.oauthTokenEndpoint
         ) -> Authenticator {
             let credentials = OAuth2Authenticator.Credentials(keyID: keyID, issuer: email, secret: secret)
             return OAuth2Authenticator(credentials: credentials, authURL: authURL)

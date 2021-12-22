@@ -24,7 +24,7 @@ class ProjectTests: DisruptiveTests {
         let reqOrgID = "abc"
         let reqQuery = "dummy"
         let reqParams = ["organization": [reqOrgID], "query": [reqQuery]]
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!.appendingPathComponent("projects")
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!.appendingPathComponent("projects")
         
         let respProjects = [createDummyProject(), createDummyProject()]
         let respData = createProjectsJSON(from: respProjects)
@@ -52,7 +52,7 @@ class ProjectTests: DisruptiveTests {
         let reqOrgID = "abc"
         let reqQuery = "dummy"
         let reqParams = ["organization": [reqOrgID], "query": [reqQuery], "page_size": ["2"], "page_token": ["token"]]
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!.appendingPathComponent("projects")
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!.appendingPathComponent("projects")
         
         let respProjects = [createDummyProject(), createDummyProject()]
         let respData = createProjectsJSON(from: respProjects, nextPageToken: "nextToken")
@@ -79,7 +79,7 @@ class ProjectTests: DisruptiveTests {
     
     func testGetProject() async throws {
         let reqProjectID = "abc"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)")
         
         let respProject = createDummyProject()
@@ -107,7 +107,7 @@ class ProjectTests: DisruptiveTests {
     func testCreateProject() async throws {
         let reqOrgID = "abc"
         let reqDisplayName = "dummy"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!.appendingPathComponent("projects")
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!.appendingPathComponent("projects")
         let reqBody = try! JSONEncoder().encode([
             "displayName": reqDisplayName,
             "organization": "organizations/\(reqOrgID)"
@@ -137,7 +137,7 @@ class ProjectTests: DisruptiveTests {
     
     func testDeleteProject() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)")
         
         MockURLProtocol.requestHandler = { request in
@@ -161,7 +161,7 @@ class ProjectTests: DisruptiveTests {
     func testUpdateProjectDisplayName() async throws {
         let reqProjectID = "abc"
         let reqDisplayName = "dummy"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)")
         let reqBody = try! JSONEncoder().encode([
             "displayName": reqDisplayName,

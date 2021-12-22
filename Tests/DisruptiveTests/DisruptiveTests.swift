@@ -26,7 +26,6 @@ struct TestAuthenticator: Authenticator {
 }
 
 class DisruptiveTests: XCTestCase {
-    var disruptive: Disruptive!
     
     override func setUp() {
         setupRequest()
@@ -51,14 +50,12 @@ class DisruptiveTests: XCTestCase {
     }
     
     private func setupAuth() {
-        Disruptive.authenticator = TestAuthenticator()
-        Disruptive.loggingLevel = .debug
-        disruptive = Disruptive()
+        Config.loggingLevel = .debug
+        Config.authenticator = TestAuthenticator()
     }
     
     private func tearDownAuth() {
-        Disruptive.authenticator = nil
-        Disruptive.loggingLevel = .off
-        disruptive = nil
+        Config.authenticator = nil
+        Config.loggingLevel = .off
     }
 }

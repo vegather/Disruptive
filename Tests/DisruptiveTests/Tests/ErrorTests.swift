@@ -18,7 +18,7 @@ class ErrorTests: DisruptiveTests {
         }
         """.data(using: .utf8)!
         
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("getError")
         
         MockURLProtocol.requestHandler = { request in

@@ -100,7 +100,7 @@ class DeviceTests: DisruptiveTests {
     func testGetDevice() async throws {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices/\(reqDeviceID)")
         
         let respDevice = DeviceTests.createDummyDevice()
@@ -127,7 +127,7 @@ class DeviceTests: DisruptiveTests {
     
     func testGetDeviceLookup() async throws {
         let reqDeviceID = "dev1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/-/devices/\(reqDeviceID)")
         
         let respDevice = DeviceTests.createDummyDevice()
@@ -154,7 +154,7 @@ class DeviceTests: DisruptiveTests {
     
     func testGetDevicesNoParameters() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         
         let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
@@ -181,7 +181,7 @@ class DeviceTests: DisruptiveTests {
     
     func testGetDevicesAllParameters() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         let reqParams: [String: [String]] = [
             "query"           : ["search query"],
@@ -224,7 +224,7 @@ class DeviceTests: DisruptiveTests {
     
     func testGetDevicesPageNoParameters() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         
         let respDevices = [DeviceTests.createDummyDevice(), DeviceTests.createDummyDevice()]
@@ -252,7 +252,7 @@ class DeviceTests: DisruptiveTests {
     
     func testGetDevicesPageAllParameters() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices")
         let reqParams: [String: [String]] = [
             "query"           : ["search query"],
@@ -302,7 +302,7 @@ class DeviceTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqDisplayName = "Dummy"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:batchUpdate")
         let reqBody = """
         {
@@ -338,7 +338,7 @@ class DeviceTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqLabelKeyToRemove = "labelKey"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:batchUpdate")
         let reqBody = """
         {
@@ -375,7 +375,7 @@ class DeviceTests: DisruptiveTests {
         let reqDeviceID = "dev1"
         let reqLabelKey = "key"
         let reqLabelValue = "value"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:batchUpdate")
         let reqBody = """
         {
@@ -414,7 +414,7 @@ class DeviceTests: DisruptiveTests {
         let reqLabelKeyToSet = "key"
         let reqLabelValueToSet = "value"
         let reqLabelKeyToRemove = "labelToRemove"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:batchUpdate")
         let reqBody = """
         {
@@ -451,7 +451,7 @@ class DeviceTests: DisruptiveTests {
         let reqFromProjectID = "proj1"
         let reqToProjectID = "proj2"
         let reqDeviceIDs = ["dev1", "dev2"]
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqToProjectID)/devices:transfer")
         let reqBody = try! JSONEncoder().encode([
             "devices": reqDeviceIDs.map { "projects/\(reqFromProjectID)/devices/\($0)" }

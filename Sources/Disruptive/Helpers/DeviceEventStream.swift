@@ -180,7 +180,7 @@ public class DeviceEventStream: NSObject {
                 message: "Not authenticated",
                 helpLink: nil
             )
-            Logger.error("No authentication has been set. Set it with `Disruptive.authenticator = ...`")
+            Logger.error("No authentication has been set. Set it with `Config.authenticator = ...`")
             onError?(error)
             return
         }

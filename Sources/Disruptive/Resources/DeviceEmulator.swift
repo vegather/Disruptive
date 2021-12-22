@@ -52,7 +52,7 @@ struct DeviceEmulator {
         let request: Request
         do {
             let endpoint = "projects/\(projectID)/devices"
-            request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: payload)
+            request = try Request(method: .post, baseURL: Config.emulatorBaseURL, endpoint: endpoint, body: payload)
         } catch (let error) {
             Logger.error("Failed to init request with payload: \(payload). Error: \(error)")
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
@@ -76,7 +76,7 @@ struct DeviceEmulator {
     ) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)/devices/\(deviceID)"
-        let request = Request(method: .delete, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint)
+        let request = Request(method: .delete, baseURL: Config.emulatorBaseURL, endpoint: endpoint)
         
         // Send the request
         try await request.send()
@@ -118,7 +118,7 @@ struct DeviceEmulator {
             // Create request
             let endpoint = "projects/\(projectID)/devices/\(deviceID):publish"
             let body = try PublishBody(event: event)
-            let request = try Request(method: .post, baseURL: Disruptive.emulatorBaseURL, endpoint: endpoint, body: body)
+            let request = try Request(method: .post, baseURL: Config.emulatorBaseURL, endpoint: endpoint, body: body)
 
             // Send the request
             try await request.send()

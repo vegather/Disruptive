@@ -103,7 +103,7 @@ class DataConnectorTests: DisruptiveTests {
     
     func testGetDataConnectors() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
         
         let respDCs = [createDummyDataConnector(), createDummyDataConnector()]
@@ -130,7 +130,7 @@ class DataConnectorTests: DisruptiveTests {
     
     func testGetDataConnectorsPage() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
         
         let respDCs = [createDummyDataConnector(), createDummyDataConnector()]
@@ -159,7 +159,7 @@ class DataConnectorTests: DisruptiveTests {
     func testGetDataConnector() async throws {
         let reqDcID = "dc1"
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors/\(reqDcID)")
         
         let respDC = createDummyDataConnector()
@@ -194,7 +194,7 @@ class DataConnectorTests: DisruptiveTests {
         let reqEventTypes = [EventType.temperature, .batteryStatus, .networkStatus]
         let reqLabels = ["building_nr"]
         let reqStatus = DataConnector.Status.userDisabled
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors")
         let reqBody = """
         {
@@ -262,7 +262,7 @@ class DataConnectorTests: DisruptiveTests {
         let reqEventTypes = [EventType.temperature, .batteryStatus, .networkStatus]
         let reqLabels = ["building_nr"]
         let reqStatus = DataConnector.Status.userDisabled
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors/\(reqDcID)")
         let reqBody = """
         {
@@ -322,7 +322,7 @@ class DataConnectorTests: DisruptiveTests {
     func testUpdateDataConnectorNoParametersSet() async throws {
         let reqProjectID = "proj1"
         let reqDcID = "dc1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors/\(reqDcID)")
         let reqBody = """
         { }
@@ -362,7 +362,7 @@ class DataConnectorTests: DisruptiveTests {
     func testDeleteDataConnector() async throws {
         let reqDcID = "dc1"
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors/\(reqDcID)")
                 
         MockURLProtocol.requestHandler = { request in
@@ -389,7 +389,7 @@ class DataConnectorTests: DisruptiveTests {
         let reqSuccess = 455
         let reqError = 1
         let reqLatency = 0.123
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors/\(reqDcID):metrics")
         
         let respData = """
@@ -426,7 +426,7 @@ class DataConnectorTests: DisruptiveTests {
     func testSyncDataConnector() async throws {
         let reqDcID = "dc1"
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/dataconnectors/\(reqDcID):sync")
         
         MockURLProtocol.requestHandler = { request in

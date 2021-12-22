@@ -91,7 +91,7 @@ class MemberTests: DisruptiveTests {
     
     func testGetProjectMembers() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members")
         
         let respMembers = [createDummyMember(), createDummyMember()]
@@ -118,7 +118,7 @@ class MemberTests: DisruptiveTests {
     
     func testGetOrgMembers() async throws {
         let reqOrgID = "org1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members")
         
         let respMembers = [createDummyMember(), createDummyMember()]
@@ -145,7 +145,7 @@ class MemberTests: DisruptiveTests {
     
     func testGetProjectMembersPage() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members")
         
         let respMembers = [createDummyMember(), createDummyMember()]
@@ -173,7 +173,7 @@ class MemberTests: DisruptiveTests {
     
     func testGetOrgMembersPage() async throws {
         let reqOrgID = "org1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members")
         
         let respMembers = [createDummyMember(), createDummyMember()]
@@ -202,7 +202,7 @@ class MemberTests: DisruptiveTests {
     func testGetProjectMember() async throws {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members/\(reqMemberID)")
         
         let respMember = createDummyMember()
@@ -230,7 +230,7 @@ class MemberTests: DisruptiveTests {
     func testGetOrgMember() async throws {
         let reqOrgID = "org1"
         let reqMemberID = "member1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members/\(reqMemberID)")
         
         let respMember = createDummyMember()
@@ -259,7 +259,7 @@ class MemberTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqRoles = [Role.RoleType.projectUser]
         let reqEmail = "test@dt.com"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members")
         
         let reqBody = """
@@ -295,7 +295,7 @@ class MemberTests: DisruptiveTests {
         let reqOrgID = "org1"
         let reqRoles = [Role.RoleType.organizationAdmin]
         let reqEmail = "test@dt.com"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members")
         
         let reqBody = """
@@ -331,7 +331,7 @@ class MemberTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
         let reqRoles = [Role.RoleType.projectAdmin]
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members/\(reqMemberID)")
         
         let reqBody = """
@@ -365,7 +365,7 @@ class MemberTests: DisruptiveTests {
     func testDeleteProjectMember() async throws {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members/\(reqMemberID)")
                 
         MockURLProtocol.requestHandler = { request in
@@ -389,7 +389,7 @@ class MemberTests: DisruptiveTests {
     func testDeleteOrgMember() async throws {
         let reqOrgID = "org1"
         let reqMemberID = "member1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members/\(reqMemberID)")
         
         MockURLProtocol.requestHandler = { request in
@@ -413,7 +413,7 @@ class MemberTests: DisruptiveTests {
     func testGetProjectMemberInviteURL() async throws {
         let reqProjectID = "proj1"
         let reqMemberID = "member1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/members/\(reqMemberID):getInviteUrl")
         
         let respURL = "https://identity.disruptive-technologies.com/account/invite/foo/bar/?next=https%3A%2F%2Fstudio.disruptive-technologies.com"
@@ -445,7 +445,7 @@ class MemberTests: DisruptiveTests {
     func testGetOrgMemberInviteURL() async throws {
         let reqOrgID = "org1"
         let reqMemberID = "member1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/members/\(reqMemberID):getInviteUrl")
         
         let respURL = "https://identity.disruptive-technologies.com/account/invite/foo/bar/?next=https%3A%2F%2Fstudio.disruptive-technologies.com"

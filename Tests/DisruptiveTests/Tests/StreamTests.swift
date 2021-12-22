@@ -13,7 +13,7 @@ class StreamTests: DisruptiveTests {
 
     func testSubscribeToDevicesNoParameters() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
                 
         MockStreamURLProtocol.requestHandler = { request in
@@ -46,7 +46,7 @@ class StreamTests: DisruptiveTests {
         let productNumbers = ["pn1", "pn2"]
         let reqLabelFilters = ["foo", "bar"]
         let reqEventTypes = [EventType.touch, .batteryStatus, .networkStatus]
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -88,7 +88,7 @@ class StreamTests: DisruptiveTests {
     func testSubscribeToDeviceNoParameters() {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -118,7 +118,7 @@ class StreamTests: DisruptiveTests {
         let reqProjectID = "proj1"
         let reqDeviceID = "dev1"
         let reqEventTypes = [EventType.touch, .batteryStatus, .networkStatus]
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -167,7 +167,7 @@ class StreamTests: DisruptiveTests {
         """.data(using: .utf8)!
         
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in

@@ -13,7 +13,7 @@ class AuthenticationTests: DisruptiveTests {
     func testOAuth2() async throws {
         let reqKey = "key"
         let reqEmail = "email"
-        let reqURL = Disruptive.DefaultURLs.oauthTokenEndpoint
+        let reqURL = Config.DefaultURLs.oauthTokenEndpoint
         
         let respAccessToken = "dummy_token"
         let respPayload = """
@@ -26,7 +26,7 @@ class AuthenticationTests: DisruptiveTests {
         
         let creds = OAuth2Authenticator.Credentials(keyID: reqKey, issuer: reqEmail, secret: "secret")
         let auth = OAuth2Authenticator(credentials: creds, authURL: reqURL)
-        Disruptive.authenticator = auth
+        Config.authenticator = auth
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(

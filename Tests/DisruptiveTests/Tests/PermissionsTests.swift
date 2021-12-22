@@ -29,7 +29,7 @@ class PermissionsTests: DisruptiveTests {
     
     func testGetPermissionsForOrganization() async throws {
         let reqOrgID = "org1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(reqOrgID)/permissions")
         
         let respPermissions: [Permission] = [.organizationRead, .organizationUpdate]
@@ -56,7 +56,7 @@ class PermissionsTests: DisruptiveTests {
     
     func testGetPermissionsForProject() async throws {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/permissions")
         
         let respPermissions: [Permission] = [.projectRead, .projectCreate]

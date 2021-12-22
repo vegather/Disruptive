@@ -18,7 +18,7 @@ internal struct Request {
     
     init(
         method   : HTTPMethod,
-        baseURL  : String = Disruptive.baseURL,
+        baseURL  : String = Config.baseURL,
         endpoint : String,
         headers  : [HTTPHeader] = [],
         params   : [String: [String]] = [:])
@@ -33,7 +33,7 @@ internal struct Request {
     
     init<Body: Encodable>(
         method   : HTTPMethod,
-        baseURL  : String = Disruptive.baseURL,
+        baseURL  : String = Config.baseURL,
         endpoint : String,
         headers  : [HTTPHeader] = [],
         params   : [String: [String]] = [:],
@@ -373,12 +373,12 @@ extension Request {
 
 extension Request {
     
-    /// If the `Disruptive.authenticator` authenticator is already authenticated and the expiration date is far enough
+    /// If the `Config.authenticator` authenticator is already authenticated and the expiration date is far enough
     /// in the future, this will succeed with the `Authorization` header set to the auth token.
     /// If the authenticator is not authenticated or not set, this will return a `.loggedOut` error.
     private static func authenticated(req: Request) async throws -> Request {
-        guard let auth = Disruptive.authenticator else {
-            Logger.error("No authentication has been set. Set it with `Disruptive.authenticator = ...`")
+        guard let auth = Config.authenticator else {
+            Logger.error("No authentication has been set. Set it with `Config.authenticator = ...`")
             throw DisruptiveError(type: .loggedOut, message: "Not authenticated", helpLink: nil)
         }
         

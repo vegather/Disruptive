@@ -1,5 +1,5 @@
 //
-//  Disruptive.swift
+//  Config.swift
 //  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 18/05/2020.
@@ -9,10 +9,10 @@
 import Foundation
 
 /**
- Contains the shared global state of the `Disruptive` package. Any changes made to the static
+ Contains the shared global config of the `Disruptive` package. Any changes made to the static
  variables in this struct will affect all requests made after the change
  */
-public struct Disruptive {
+public struct Config {
         
     /// The base URL for the Disruptive Technologies REST API.
     public static var baseURL = DefaultURLs.baseURL
@@ -20,7 +20,7 @@ public struct Disruptive {
     /// The base URL for the Disruptive Technologies emulator REST API.
     public static var emulatorBaseURL = DefaultURLs.baseEmulatorURL
     
-    /// The authentication mechanism used by `Disruptive`. This will be
+    /// The authentication mechanism used by the `Disruptive` package. This will be
     /// checked to see if it has a non-expired access token before every request
     /// is sent to the Disruptive backend. If no non-expired access token were found
     /// the `refreshAccessToken` method will be called before attempting to send the request.
@@ -37,13 +37,13 @@ public struct Disruptive {
         case debug   = 4
     }
     
-    /// The logging level to use for the Disruptive package. Provides details useful
-    /// information in a nice format about what is going on while data is being fetched
+    /// The logging level to use for the Disruptive package. Provides nicely formatted
+    /// information about what is going on while data is being fetched
     /// from the Disruptive APIs. Defaults to `.off`.
     public static var loggingLevel: LoggingLevel = .off
 }
 
-public extension Disruptive {
+public extension Config {
     struct DefaultURLs {
         /// The default base URL for the Disruptive Technologies REST API.
         public static let baseURL = "https://api.disruptive-technologies.com/v2/"

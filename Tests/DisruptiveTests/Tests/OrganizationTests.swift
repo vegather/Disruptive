@@ -19,7 +19,7 @@ class OrganizationTests: DisruptiveTests {
     }
     
     func testGetOrganizations() async throws {
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations")
         
         let respOrgs = [createDummyOrganization(), createDummyOrganization()]
@@ -45,7 +45,7 @@ class OrganizationTests: DisruptiveTests {
     }
     
     func testGetOrganizationsPage() async throws {
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations")
         
         let respOrgs = [createDummyOrganization(), createDummyOrganization()]
@@ -73,7 +73,7 @@ class OrganizationTests: DisruptiveTests {
     
     func testGetOrganization() async throws {
         let orgID = "dummy"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("organizations/\(orgID)")
         
         let respOrg = createDummyOrganization()

@@ -255,7 +255,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func runEventTest(payload: Data, handler: (DeviceEventStream, XCTestExpectation) -> ()) {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         MockStreamURLProtocol.requestHandler = { request in
@@ -282,7 +282,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func testErrorMessage() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """
@@ -316,7 +316,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func testNoMessageIfNoResponse() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """
@@ -352,7 +352,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func testCloseStream() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """
@@ -387,7 +387,7 @@ class DeviceEventStreamTests: DisruptiveTests {
     
     func testUnknownEvent() {
         let reqProjectID = "proj1"
-        let reqURL = URL(string: Disruptive.DefaultURLs.baseURL)!
+        let reqURL = URL(string: Config.DefaultURLs.baseURL)!
             .appendingPathComponent("projects/\(reqProjectID)/devices:stream")
         
         let payload = """

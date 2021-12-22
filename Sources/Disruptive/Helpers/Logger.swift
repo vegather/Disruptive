@@ -169,7 +169,7 @@ internal struct Logger {
         )
     }
     
-    private static func shouldLog(level: Disruptive.LoggingLevel) -> Bool {
-        return Disruptive.loggingLevel.rawValue >= level.rawValue
+    private static func shouldLog(level: Config.LoggingLevel) -> Bool {
+        return Config.loggingLevel.rawValue >= level.rawValue
     }
 }
