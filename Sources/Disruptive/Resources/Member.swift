@@ -84,7 +84,7 @@ extension Member {
     // Helper function to get Members for either Projects or Organizations.
     private static func getAll(endpoint: String) async throws -> [Member] {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send(pagingKey: "members")
@@ -143,7 +143,7 @@ extension Member {
         pageToken : String?
     ) async throws -> (nextPageToken: String?, members: [Member]) {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         let page: PagedResult<Member> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "members")
@@ -185,7 +185,7 @@ extension Member {
     // Helper function to get a specific Member in either a Project or an Organization.
     private static func get(endpoint: String) async throws -> Member {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send()
@@ -261,7 +261,7 @@ extension Member {
         // Create the request
         let request: Request
         do {
-            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
+            request = try Request(method: .post, endpoint: endpoint, body: payload)
         } catch {
             Disruptive.log("Failed to init create member request with payload \(payload). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
@@ -338,7 +338,7 @@ extension Member {
         // Create the request
         let request: Request
         do {
-            request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
+            request = try Request(method: .patch, endpoint: endpoint, body: patch)
         } catch (let error) {
             Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
@@ -381,7 +381,7 @@ extension Member {
     
     private static func delete(endpoint: String) async throws {
         // Create the request
-        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, endpoint: endpoint)
         
         // Send the request
         try await request.send()
@@ -437,7 +437,7 @@ extension Member {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         let response: InviteURLResponse = try await request.send()

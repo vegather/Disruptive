@@ -57,7 +57,7 @@ extension Device {
             params["event_types"] = eventTypes.map { $0.rawValue }
         }
                 
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices:stream", params: params)
+        let request = Request(method: .get, endpoint: "projects/\(projectID)/devices:stream", params: params)
         
         // Create the stream, and connect to it
         return DeviceEventStream(request: request, authenticator: Disruptive.authenticator)

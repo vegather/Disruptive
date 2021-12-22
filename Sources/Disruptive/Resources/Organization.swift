@@ -36,7 +36,7 @@ extension Organization {
      */
     public static func getAll() async throws -> [Organization] {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "organizations")
+        let request = Request(method: .get, endpoint: "organizations")
         
         // Send the request
         return try await request.send(pagingKey: "organizations")
@@ -60,7 +60,7 @@ extension Organization {
         pageToken  : String?
     ) async throws -> (nextPageToken: String?, organizations: [Organization]) {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "organizations")
+        let request = Request(method: .get, endpoint: "organizations")
         
         // Send the request
         let page: PagedResult<Organization> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "organizations")
@@ -77,7 +77,7 @@ extension Organization {
     public static func get(organizationID: String) async throws -> Organization {
         // Create the request
         let endpoint = "organizations/\(organizationID)"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send()

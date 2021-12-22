@@ -113,7 +113,7 @@ extension Device {
         )
         
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices", params: params)
+        let request = Request(method: .get, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
         return try await request.send(pagingKey: "devices")
@@ -161,7 +161,7 @@ extension Device {
         )
         
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)/devices", params: params)
+        let request = Request(method: .get, endpoint: "projects/\(projectID)/devices", params: params)
         
         // Send the request
         let page: PagedResult<Device> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "devices")
@@ -216,7 +216,7 @@ extension Device {
     {
         // Create the request
         let endpoint = "projects/\(projectID ?? "-")/devices/\(deviceID)"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send()
@@ -328,7 +328,7 @@ extension Device {
         let request: Request
         do {
             let endpoint = "projects/\(projectID)/devices:batchUpdate"
-            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
+            request = try Request(method: .post, endpoint: endpoint, body: body)
         } catch (let error) {
             Disruptive.log("Failed to init setLabel request with payload: \(body). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
@@ -363,7 +363,7 @@ extension Device {
         let request: Request
         do {
             let endpoint = "projects/\(toProjectID)/devices:transfer"
-            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: body)
+            request = try Request(method: .post, endpoint: endpoint, body: body)
         } catch (let error) {
             Disruptive.log("Failed to initialize transfer devices request with payload: \(body). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)

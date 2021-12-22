@@ -41,7 +41,7 @@ extension Role {
      */
     public static func getAll() async throws -> [Role] {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "roles")
+        let request = Request(method: .get, endpoint: "roles")
         
         // Send the request
         return try await request.send(pagingKey: "roles")
@@ -65,7 +65,7 @@ extension Role {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: resourceName)
+        let request = Request(method: .get, endpoint: resourceName)
         
         // Send the request
         return try await request.send()

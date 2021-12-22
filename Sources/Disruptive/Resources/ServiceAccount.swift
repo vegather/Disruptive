@@ -57,7 +57,7 @@ extension ServiceAccount {
     public static func getAll(projectID  : String) async throws -> [ServiceAccount] {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send(pagingKey: "serviceAccounts")
@@ -84,7 +84,7 @@ extension ServiceAccount {
     ) async throws -> (nextPageToken: String?, serviceAccounts: [ServiceAccount]) {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         let page: PagedResult<ServiceAccount> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "serviceAccounts")
@@ -105,7 +105,7 @@ extension ServiceAccount {
     ) async throws -> ServiceAccount {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send()
@@ -143,7 +143,7 @@ extension ServiceAccount {
         let request: Request
         do {
             let endpoint = "projects/\(projectID)/serviceaccounts"
-            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint, body: payload)
+            request = try Request(method: .post, endpoint: endpoint, body: payload)
         } catch (let error) {
             Disruptive.log("Failed to init create service account request with payload \(payload). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
@@ -210,7 +210,7 @@ extension ServiceAccount {
         let request: Request
         do {
             let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
-            request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: endpoint, body: patch)
+            request = try Request(method: .patch, endpoint: endpoint, body: patch)
         } catch (let error) {
             Disruptive.log("Failed to init update request with payload: \(patch). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
@@ -234,7 +234,7 @@ extension ServiceAccount {
     ) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
-        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, endpoint: endpoint)
         
         // Send the request
         return try await request.send()
@@ -259,7 +259,7 @@ extension ServiceAccount {
     ) async throws -> [ServiceAccount.Key] {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send(pagingKey: "keys")
@@ -288,7 +288,7 @@ extension ServiceAccount {
     {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         let page: PagedResult<ServiceAccount.Key> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "keys")
@@ -311,7 +311,7 @@ extension ServiceAccount {
     ) async throws -> ServiceAccount.Key {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys/\(keyID)"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         return try await request.send()
@@ -335,7 +335,7 @@ extension ServiceAccount {
     ) async throws -> ServiceAccount.KeySecret {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys"
-        let request = Request(method: .post, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .post, endpoint: endpoint)
         
         // Send the request
         return try await request.send()
@@ -360,7 +360,7 @@ extension ServiceAccount {
     ) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)/keys/\(keyID)"
-        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, endpoint: endpoint)
         
         // Send the request
         try await request.send()

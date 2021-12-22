@@ -75,7 +75,7 @@ extension Permission {
     
     private static func getAll(endpoint: String) async throws -> [Permission] {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .get, endpoint: endpoint)
         
         // Send the request
         let wrappers: [PermissionWrapper] = try await request.send(pagingKey: "permissions")

@@ -82,7 +82,7 @@ extension Device {
         
         // Create the request
         let endpoint = "projects/\(projectID)/devices/\(deviceID)/events"
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: endpoint, params: params)
+        let request = Request(method: .get, endpoint: endpoint, params: params)
         
         // Send the request
         let containers: [EventContainer] = try await request.send(pagingKey: "events")

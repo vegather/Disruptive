@@ -80,7 +80,7 @@ extension Project {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects", params: params)
+        let request = Request(method: .get, endpoint: "projects", params: params)
         
         // Send the request
         return try await request.send(pagingKey: "projects")
@@ -121,7 +121,7 @@ extension Project {
         }
         
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects", params: params)
+        let request = Request(method: .get, endpoint: "projects", params: params)
         
         // Send the request
         let page: PagedResult<Project> = try await request.send(pageSize: pageSize, pageToken: pageToken, pagingKey: "projects")
@@ -137,7 +137,7 @@ extension Project {
      */
     public static func get(projectID: String) async throws -> Project {
         // Create the request
-        let request = Request(method: .get, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)")
+        let request = Request(method: .get, endpoint: "projects/\(projectID)")
         
         // Send the request
         return try await request.send()
@@ -164,7 +164,7 @@ extension Project {
         // Create the request
         let request: Request
         do {
-            request = try Request(method: .post, baseURL: Disruptive.baseURL, endpoint: "projects", body: payload)
+            request = try Request(method: .post, endpoint: "projects", body: payload)
         } catch (let error) {
             Disruptive.log("Failed to init create request with payload: \(payload). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
@@ -185,7 +185,7 @@ extension Project {
     public static func delete(projectID: String) async throws {
         // Create the request
         let endpoint = "projects/\(projectID)"
-        let request = Request(method: .delete, baseURL: Disruptive.baseURL, endpoint: endpoint)
+        let request = Request(method: .delete, endpoint: endpoint)
         
         // Send the request
         try await request.send()
@@ -210,7 +210,7 @@ extension Project {
         // Create the request
         let request: Request
         do {
-            request = try Request(method: .patch, baseURL: Disruptive.baseURL, endpoint: "projects/\(projectID)", body: payload)
+            request = try Request(method: .patch, endpoint: "projects/\(projectID)", body: payload)
         } catch (let error) {
             Disruptive.log("Failed to init the update project request with payload: \(payload). Error: \(error)", level: .error)
             throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)

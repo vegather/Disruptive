@@ -17,11 +17,11 @@ internal struct Request {
     let body: Data?
     
     init(
-        method: HTTPMethod,
-        baseURL: String,
-        endpoint: String,
-        headers: [HTTPHeader] = [],
-        params: [String: [String]] = [:])
+        method   : HTTPMethod,
+        baseURL  : String = Disruptive.baseURL,
+        endpoint : String,
+        headers  : [HTTPHeader] = [],
+        params   : [String: [String]] = [:])
     {
         self.method = method
         self.baseURL = baseURL
@@ -32,13 +32,13 @@ internal struct Request {
     }
     
     init<Body: Encodable>(
-        method: HTTPMethod,
-        baseURL: String,
-        endpoint: String,
-        headers: [HTTPHeader] = [],
-        params: [String: [String]] = [:],
-        body: Body) throws
-    {
+        method   : HTTPMethod,
+        baseURL  : String = Disruptive.baseURL,
+        endpoint : String,
+        headers  : [HTTPHeader] = [],
+        params   : [String: [String]] = [:],
+        body     : Body
+    ) throws {
         self.headers = headers
         
         // If the body is already of type `Data`, just set it directly.
