@@ -1,5 +1,5 @@
 //
-//  DTLog.swift
+//  Logger.swift
 //  Disruptive
 //
 //  Created by Vegard Solheim Theriault on 23/05/2020.
