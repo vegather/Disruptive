@@ -297,7 +297,7 @@ class DataConnectorTests: DisruptiveTests {
                 for           : request,
                 authenticated : true,
                 method        : "PATCH",
-                queryParams   : ["update_mask": ["displayName,httpConfig.url,httpConfig.signatureSecret,httpConfig.headers,status,events,labels"]],
+                queryParams   : [:],
                 headers       : [:],
                 url           : reqURL,
                 body          : reqBody
@@ -345,7 +345,7 @@ class DataConnectorTests: DisruptiveTests {
                 for           : request,
                 authenticated : true,
                 method        : "PATCH",
-                queryParams   : ["update_mask": [""]],
+                queryParams   : [:],
                 headers       : [:],
                 url           : reqURL,
                 body          : reqBody

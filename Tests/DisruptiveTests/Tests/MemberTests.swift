@@ -336,9 +336,7 @@ class MemberTests: DisruptiveTests {
         
         let reqBody = """
         {
-            "displayName": "",
             "roles": ["roles/project.admin"],
-            "status": "PENDING"
         }
         """.data(using: .utf8)!
         
@@ -350,7 +348,7 @@ class MemberTests: DisruptiveTests {
                 for           : request,
                 authenticated : true,
                 method        : "PATCH",
-                queryParams   : ["update_mask": ["roles"]],
+                queryParams   : [:],
                 headers       : [:],
                 url           : reqURL,
                 body          : reqBody

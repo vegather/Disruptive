@@ -173,7 +173,7 @@ class ServiceAccountTests: DisruptiveTests {
                 for           : request,
                 authenticated : true,
                 method        : "PATCH",
-                queryParams   : ["update_mask": ["displayName,enableBasicAuth"]],
+                queryParams   : [:],
                 headers       : [:],
                 url           : reqURL,
                 body          : reqBody
@@ -210,7 +210,7 @@ class ServiceAccountTests: DisruptiveTests {
                 for           : request,
                 authenticated : true,
                 method        : "PATCH",
-                queryParams   : ["update_mask": [""]],
+                queryParams   : [:],
                 headers       : [:],
                 url           : reqURL,
                 body          : reqBody
