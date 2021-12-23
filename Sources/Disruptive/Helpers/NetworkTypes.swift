@@ -38,7 +38,7 @@ internal struct PagedResult<T: Decodable>: Decodable {
         self.results = try container.decode([T].self, forKey: .results)
         
         let nextString = try container.decode(String.self, forKey: .nextPageToken)
-        if nextString.count == 0 {
+        if nextString.isEmpty {
             self.nextPageToken = nil
         } else {
             self.nextPageToken = nextString

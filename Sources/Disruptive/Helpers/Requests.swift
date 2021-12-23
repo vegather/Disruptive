@@ -82,7 +82,7 @@ internal struct Request {
         guard var urlComponents = URLComponents(string: baseURL + endpoint) else {
             return nil
         }
-        if params.count > 0 {
+        if params.isEmpty == false {
             urlComponents.queryItems = params.flatMap { paramName, paramValues in
                 return paramValues.map { URLQueryItem(name: paramName, value: $0) }
             }

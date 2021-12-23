@@ -323,7 +323,7 @@ extension Member {
         }
 
         // At least one of the fields has to be set so that `updateMask` is non-empty
-        if roles.count == 0 {
+        if roles.isEmpty {
             Logger.error("At least one of the fields in `update` has to be set")
             throw DisruptiveError(
                 type: .badRequest,
