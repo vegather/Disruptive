@@ -165,9 +165,9 @@ extension Project {
         let request: Request
         do {
             request = try Request(method: .post, endpoint: "projects", body: payload)
-        } catch (let error) {
+        } catch {
             Logger.error("Failed to init create request with payload: \(payload). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
         
         // Create the new project
@@ -211,9 +211,9 @@ extension Project {
         let request: Request
         do {
             request = try Request(method: .patch, endpoint: "projects/\(projectID)", body: payload)
-        } catch (let error) {
+        } catch {
             Logger.error("Failed to init the update project request with payload: \(payload). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
         
         // Update the project display name

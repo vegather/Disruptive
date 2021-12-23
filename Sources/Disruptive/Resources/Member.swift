@@ -264,7 +264,7 @@ extension Member {
             request = try Request(method: .post, endpoint: endpoint, body: payload)
         } catch {
             Logger.error("Failed to init create member request with payload \(payload). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
         
         // Send the request
@@ -339,9 +339,9 @@ extension Member {
         let request: Request
         do {
             request = try Request(method: .patch, endpoint: endpoint, body: patch)
-        } catch (let error) {
+        } catch {
             Logger.error("Failed to init update request with payload: \(patch). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
         
         // Send the request

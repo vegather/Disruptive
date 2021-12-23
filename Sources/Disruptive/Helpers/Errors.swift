@@ -65,6 +65,22 @@ public struct DisruptiveError: Error {
     
     /// If available, contains a URL to a page that might help solve the problem.
     let helpLink: String?
+    
+    internal init(error: Error) {
+        if let e = error as? DisruptiveError {
+            self = e
+        } else {
+            type = .unknownError
+            message = "Unknown error"
+            helpLink = nil
+        }
+    }
+    
+    internal init(type: ErrorType, message: String, helpLink: String?) {
+        self.type = type
+        self.message = message
+        self.helpLink = helpLink
+    }
 }
 
 /**

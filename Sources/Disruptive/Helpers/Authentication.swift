@@ -268,7 +268,7 @@ internal class OAuth2Authenticator: Authenticator {
             )
         } catch {
             Logger.error("Failed to encode body: \(body). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
         
         // Send the request

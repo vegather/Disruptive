@@ -144,9 +144,9 @@ extension ServiceAccount {
         do {
             let endpoint = "projects/\(projectID)/serviceaccounts"
             request = try Request(method: .post, endpoint: endpoint, body: payload)
-        } catch (let error) {
+        } catch {
             Logger.error("Failed to init create service account request with payload \(payload). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
 
         // Send the request
@@ -211,9 +211,9 @@ extension ServiceAccount {
         do {
             let endpoint = "projects/\(projectID)/serviceaccounts/\(serviceAccountID)"
             request = try Request(method: .patch, endpoint: endpoint, body: patch)
-        } catch (let error) {
+        } catch {
             Logger.error("Failed to init update request with payload: \(patch). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
 
         // Send the request

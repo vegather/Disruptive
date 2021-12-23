@@ -192,7 +192,7 @@ public class DeviceEventStream: NSObject {
             req.setHeader(field: "Authorization", value: token)
         } catch {
             Logger.error("Failed to authenticate the DeviceEventStream stream. Error: \(error)")
-            self.onError?((error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil))
+            self.onError?(DisruptiveError(error: error))
             return
         }
         

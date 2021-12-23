@@ -53,9 +53,9 @@ struct DeviceEmulator {
         do {
             let endpoint = "projects/\(projectID)/devices"
             request = try Request(method: .post, baseURL: Config.emulatorBaseURL, endpoint: endpoint, body: payload)
-        } catch (let error) {
+        } catch {
             Logger.error("Failed to init request with payload: \(payload). Error: \(error)")
-            throw (error as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+            throw DisruptiveError(error: error)
         }
         
         // Create the new project
@@ -122,8 +122,8 @@ struct DeviceEmulator {
 
             // Send the request
             try await request.send()
-        } catch (let err) {
-            throw (err as? DisruptiveError) ?? DisruptiveError(type: .unknownError, message: "", helpLink: nil)
+        } catch {
+            throw DisruptiveError(error: error)
         }
     }
 }
