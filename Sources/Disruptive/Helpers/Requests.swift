@@ -183,8 +183,12 @@ extension Request {
                     Logger.warning("Request got rate limited, waiting \(retryAfter) seconds before retrying")
                     
                     // Dispatch the same request again after waiting
-                    DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(retryAfter)) {
-                        self.internalSend(decoder: decoder, completion: completion)
+                    Task {
+                        do {
+                            let delay = UInt64(retryAfter) * 1_000_000_000
+                            try await Task.sleep(nanoseconds: delay)
+                            internalSend(decoder: decoder, completion: completion)
+                        } catch {}
                     }
                     
                     return

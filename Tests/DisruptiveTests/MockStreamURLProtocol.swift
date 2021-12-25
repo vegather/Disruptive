@@ -68,8 +68,9 @@ class MockStreamURLProtocol: URLProtocol {
             }
         }
         
-        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) {
-            self.handleNextCallback()
+        Task {
+            try await Task.sleep(nanoseconds: 300_000_000) // 300 ms
+            handleNextCallback()
         }
     }
     
