@@ -22,7 +22,7 @@ class MemberTests: DisruptiveTests {
             "status": "PENDING",
             "email": "member@dt.com",
             "accountType": "USER",
-            "createTime": null
+            "createTime": "2020-12-30T23:04:16.017228Z"
         }
         """.data(using: .utf8)!
         
@@ -34,7 +34,7 @@ class MemberTests: DisruptiveTests {
         XCTAssertEqual(firstMember.status, Member.Status.pending)
         XCTAssertEqual(firstMember.email, "member@dt.com")
         XCTAssertEqual(firstMember.accountType, .user)
-        XCTAssertLessThanOrEqual(Date().timeIntervalSince(firstMember.createTime), 1)
+        XCTAssertEqual(firstMember.createTime, try! Date(iso8601String: "2020-12-30T23:04:16.017Z"))
         
         
         
