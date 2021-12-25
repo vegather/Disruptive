@@ -138,13 +138,9 @@ class RequestTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 404, httpVersion: nil, headerFields: nil)!
@@ -177,13 +173,10 @@ class RequestTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : body
+                for    : request,
+                method : "GET",
+                url    : reqURL,
+                body   : body
             )
             
             let resp: HTTPURLResponse
@@ -342,13 +335,10 @@ class RequestTests: DisruptiveTests {
                 
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : count == 0 ? ["page_size": ["20"]] : ["page_size": ["30"], "page_token": ["token"]],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : count == 0 ? ["page_size": ["20"]] : ["page_size": ["30"], "page_token": ["token"]],
+                url         : reqURL
             )
             
             defer { count += 1 }
@@ -401,13 +391,10 @@ class RequestTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : count == 0 ? [:] : ["page_token": ["token"]],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : count == 0 ? [:] : ["page_token": ["token"]],
+                url         : reqURL
             )
             
             defer {

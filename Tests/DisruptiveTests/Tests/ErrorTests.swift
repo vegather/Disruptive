@@ -26,10 +26,7 @@ class ErrorTests: DisruptiveTests {
                 for           : request,
                 authenticated : false,
                 method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                url           : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 409, httpVersion: nil, headerFields: nil)!

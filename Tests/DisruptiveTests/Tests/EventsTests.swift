@@ -219,13 +219,10 @@ class EventsTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : reqQueryParams,
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : reqQueryParams,
+                url         : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -275,13 +272,10 @@ class EventsTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : reqQueryParams,
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : reqQueryParams,
+                url         : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -322,13 +316,10 @@ class EventsTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : reqQueryParams,
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : reqQueryParams,
+                url         : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!

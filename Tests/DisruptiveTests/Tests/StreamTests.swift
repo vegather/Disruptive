@@ -18,13 +18,9 @@ class StreamTests: DisruptiveTests {
                 
         MockStreamURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             return [(nil, nil, nil)]
@@ -51,19 +47,16 @@ class StreamTests: DisruptiveTests {
         
         MockStreamURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [
+                for : request,
+                method : "GET",
+                queryParams : [
                     "device_ids"      : reqDeviceIDs,
                     "label_filters"   : reqLabelFilters,
                     "device_types"    : reqDeviceTypes.map { $0.rawValue! },
                     "product_numbers" : productNumbers,
                     "event_types"     : reqEventTypes .map { $0.rawValue }
                 ],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                url : reqURL
             )
             
             return [(nil, nil, nil)]
@@ -93,13 +86,10 @@ class StreamTests: DisruptiveTests {
         
         MockStreamURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : ["device_ids": [reqDeviceID]],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : ["device_ids": [reqDeviceID]],
+                url         : reqURL
             )
             
             return [(nil, nil, nil)]
@@ -123,16 +113,13 @@ class StreamTests: DisruptiveTests {
         
         MockStreamURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
+                for : request,
+                method : "GET",
                 queryParams   : [
                     "device_ids"  : [reqDeviceID],
                     "event_types" : reqEventTypes .map { $0.rawValue }
                 ],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                url : reqURL
             )
             
             return [(nil, nil, nil)]
@@ -172,13 +159,9 @@ class StreamTests: DisruptiveTests {
         
         MockStreamURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             return [(errorPayload, nil, nil)]

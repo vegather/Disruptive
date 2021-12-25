@@ -30,13 +30,10 @@ class EmulatorTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : reqBody
+                for    : request,
+                method : "POST",
+                url    : reqURL,
+                body   : reqBody
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -70,13 +67,10 @@ class EmulatorTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : reqBody
+                for    : request,
+                method : "POST",
+                url    : reqURL,
+                body   : reqBody
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -110,13 +104,9 @@ class EmulatorTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "DELETE",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "DELETE",
+                url    : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -139,13 +129,10 @@ class EmulatorTests: DisruptiveTests {
             
             MockURLProtocol.requestHandler = { request in
                 self.assertRequestParams(
-                    for           : request,
-                    authenticated : true,
-                    method        : "POST",
-                    queryParams   : [:],
-                    headers       : [:],
-                    url           : reqURL,
-                    body          : expectedPayload
+                    for    : request,
+                    method : "POST",
+                    url    : reqURL,
+                    body   : expectedPayload
                 )
                 
                 let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!

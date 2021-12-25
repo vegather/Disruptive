@@ -27,13 +27,9 @@ class OrganizationTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -53,13 +49,10 @@ class OrganizationTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : ["page_size": ["2"], "page_token": ["token"]],
+                url         : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -81,13 +74,9 @@ class OrganizationTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!

@@ -108,13 +108,9 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -135,13 +131,9 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -162,13 +154,9 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for    : request,
+                method : "GET",
+                url    : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -197,13 +185,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : reqParams,
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : reqParams,
+                url         : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -232,13 +217,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : ["page_size": ["2"], "page_token": ["token"]],
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : ["page_size": ["2"], "page_token": ["token"]],
+                url         : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -270,13 +252,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "GET",
-                queryParams   : reqParams,
-                headers       : [:],
-                url           : reqURL,
-                body          : nil
+                for         : request,
+                method      : "GET",
+                queryParams : reqParams,
+                url         : reqURL
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -314,13 +293,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : reqBody
+                for    : request,
+                method : "POST",
+                url    : reqURL,
+                body   : reqBody
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -350,13 +326,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : reqBody
+                for    : request,
+                method : "POST",
+                url    : reqURL,
+                body   : reqBody
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -387,13 +360,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : reqBody
+                for    : request,
+                method : "POST",
+                url    : reqURL,
+                body   : reqBody
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -426,13 +396,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : reqBody
+                for    : request,
+                method : "POST",
+                url    : reqURL,
+                body   : reqBody
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
@@ -459,13 +426,10 @@ class DeviceTests: DisruptiveTests {
         
         MockURLProtocol.requestHandler = { request in
             self.assertRequestParams(
-                for           : request,
-                authenticated : true,
-                method        : "POST",
-                queryParams   : [:],
-                headers       : [:],
-                url           : reqURL,
-                body          : reqBody
+                for    : request,
+                method : "POST",
+                url    : reqURL,
+                body   : reqBody
             )
             
             let resp = HTTPURLResponse(url: reqURL, statusCode: 200, httpVersion: nil, headerFields: nil)!

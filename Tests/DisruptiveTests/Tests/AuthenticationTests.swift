@@ -33,10 +33,8 @@ class AuthenticationTests: DisruptiveTests {
                 for           : request,
                 authenticated : false,
                 method        : "POST",
-                queryParams   : [:],
                 headers       : ["Content-Type": "application/x-www-form-urlencoded"],
-                url           : URL(string: reqURL)!,
-                body          : nil
+                url           : URL(string: reqURL)!
             )
             
             let resp = HTTPURLResponse(url: URL(string: reqURL)!, statusCode: 200, httpVersion: nil, headerFields: nil)!

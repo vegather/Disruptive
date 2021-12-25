@@ -49,13 +49,13 @@ extension URLRequest {
 
 extension DisruptiveTests {
     func assertRequestParams(
-        for request: URLRequest,
-        authenticated: Bool,
-        method: String,
-        queryParams: [String: [String]],
-        headers: [String: String],
-        url: URL,
-        body: Data?
+        for request   : URLRequest,
+        authenticated : Bool = true,
+        method        : String,
+        queryParams   : [String: [String]] = [:],
+        headers       : [String: String] = [:],
+        url           : URL,
+        body          : Data? = nil
     ) {
         // Validate HTTP method
         XCTAssertEqual(request.httpMethod, method)
