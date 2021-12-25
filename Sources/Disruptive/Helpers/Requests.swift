@@ -450,6 +450,11 @@ extension Request {
         pageingKey: String
     ) async throws -> [T] {
         
+        // Before fetching the next page, check if the Task we're
+        // in has been cancelled.
+        try Task.checkCancellation()
+        
+        // Send the request for the next page
         let pagedResult: PagedResult<T> = try await Request.authenticated(req: request).internalSend(decoder: decoder)
         
         // Create a new array of all the items received so far
