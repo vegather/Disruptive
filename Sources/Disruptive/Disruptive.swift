@@ -20,10 +20,12 @@ public struct Config {
     /// The base URL for the Disruptive Technologies emulator REST API.
     public static var emulatorBaseURL = DefaultURLs.baseEmulatorURL
     
-    /// The authentication mechanism used by the `Disruptive` package. This will be
-    /// checked to see if it has a non-expired access token before every request
-    /// is sent to the Disruptive backend. If no non-expired access token were found
-    /// the `refreshAccessToken` method will be called before attempting to send the request.
+    /// The authentication mechanism used by the `Disruptive` package.
+    /// This will be used to authonticate every request sent to the Disruptive backend,
+    /// and the access token will be automatically refreshed if required.
+    ///
+    /// Authenticators are created using the `Auth` struct, for example
+    /// `Auth.serviceAccount(...)`.
     public static var authenticator: Authenticator?
     
     /// An enum of the available logging levels for the Disruptive package.

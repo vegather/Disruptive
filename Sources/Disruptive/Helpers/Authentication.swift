@@ -8,52 +8,49 @@
 
 import Foundation
 
-public extension Config {
+/**
+ Provides mechanisms to authenticate the Disruptive Client
+ */
+public struct Auth {
     
     /**
-     Provides mechanisms to authenticate the Disruptive Client
+     Creates an `Authenticator` that authenticates a Service Account against the
+     Disruptive REST API using one of the Service Account's keys.
+     
+     The returned `Authenticator` will use OAuth2 in the background to authenticate
+     the Service Account, and the access token will automatically be refreshed in
+     the background. You can read more about that process on the
+     [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2).
+     
+     A Service Account and its keys can either be created using DT Studio under
+     "API Integrations -> Service Accounts". Alternatively, if you already have
+     a Service Account, a new one can be created through the API by calling
+     `ServiceAccount.create(...)` and `ServiceAccount.createKey(...)`.
+     
+     Example:
+     ```
+     Config.authenticator = Auth.serviceAccount(
+        email: <EMAIL>,
+        keyID: <KEY_ID>,
+        secret: <SECRET>
+     )
+     ```
+     
+     - Parameter email: The email address of the Service Account
+     - Parameter keyID: The identifier of the Service Account key
+     - Parameter secret: The secret of the Service Account key
+     - Parameter authURL: An optional parameter that specifies the token endpoint URL to exchange a JWT for an access token
+     
+     - Returns: An object that implements the `Authenticator` protocol that can be set to `Config.authenticator`.
      */
-    struct Auth {
-        
-        /**
-         Creates an `Authenticator` that authenticates a Service Account against the
-         Disruptive REST API using one of the Service Account's keys.
-         
-         The returned `Authenticator` will use OAuth2 in the background to authenticate
-         the Service Account, and the access token will automatically be refreshed in
-         the background. You can read more about that process on the
-         [Developer Website](https://developer.disruptive-technologies.com/docs/authentication/oauth2).
-         
-         A Service Account can either be created using DT Studio under
-         "API Integrations -> Service Accounts". Alternatively, if you already have
-         a Service Account, a new one can be created through the API by calling
-         `ServiceAccount.create(...)`.
-         
-         Example:
-         ```
-         Config.authenticator = Disruptive.Auth.serviceAccount(
-            email: <EMAIL>,
-            keyID: <KEY_ID>,
-            secret: <SECRET>
-         )
-         ```
-         
-         - Parameter email: The email address of the Service Account
-         - Parameter keyID: The identifier of the Service Account key
-         - Parameter secret: The secret of the Service Account key
-         - Parameter authURL: An optional parameter that specifies the token endpoint URL to exchange a JWT for an access token
-         
-         - Returns: An object that implements the `Authenticator` protocol that can be set to `Config.authenticator`.
-         */
-        public static func serviceAccount(
-            email   : String,
-            keyID   : String,
-            secret  : String,
-            authURL : String = Config.DefaultURLs.oauthTokenEndpoint
-        ) -> Authenticator {
-            let credentials = OAuth2Authenticator.Credentials(keyID: keyID, issuer: email, secret: secret)
-            return OAuth2Authenticator(credentials: credentials, authURL: authURL)
-        }
+    public static func serviceAccount(
+        email   : String,
+        keyID   : String,
+        secret  : String,
+        authURL : String = Config.DefaultURLs.oauthTokenEndpoint
+    ) -> Authenticator {
+        let credentials = OAuth2Authenticator.Credentials(keyID: keyID, issuer: email, secret: secret)
+        return OAuth2Authenticator(credentials: credentials, authURL: authURL)
     }
 }
 
