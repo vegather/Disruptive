@@ -149,19 +149,18 @@ internal extension Authenticator {
                 throw error
             }
                 
-                if let authToken = getLocalAuthToken() {
-                    Logger.info("Authentication successful")
-                    return authToken
-                } else {
-                    Logger.error("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.")
-                    
-                    throw DisruptiveError(
-                        type: .unknownError,
-                        message: "Authentication error",
-                        helpLink: nil
-                    )
-                }
+            if let authToken = getLocalAuthToken() {
+                Logger.info("Authentication successful")
+                return authToken
+            } else {
+                Logger.error("The authenticator authenticated successfully, but unexpectedly there was not a non-expired local access token available.")
                 
+                throw DisruptiveError(
+                    type: .unknownError,
+                    message: "Authentication error",
+                    helpLink: nil
+                )
+            }
         }
     }
 }
