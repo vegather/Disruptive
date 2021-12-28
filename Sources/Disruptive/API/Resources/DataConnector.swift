@@ -138,21 +138,19 @@ extension DataConnector {
         labels        : [String] = [],
         isActive      : Bool = true
     ) async throws -> DataConnector {
-        guard case let .httpPush(url, secret, headers) = pushType else {
-            fatalError("PushType \(pushType) is currently not supported")
-        }
         
         // Since the initial status can only be active or user disabled, the argument is
         // a Bool instead of a Status. This just converts that back to a Status.
         let initialStatus = isActive ? DataConnector.Status.active : .userDisabled
         
+        // Create the payload
         struct DataConnectorPayload: Encodable {
             let displayName: String
             let events: [String]
             let labels: [String]
-            let type: String
             let status: DataConnector.Status
-            let httpConfig: HTTPConfig
+            var type: String = ""
+            var httpConfig: HTTPConfig? = nil
             
             struct HTTPConfig: Encodable {
                 let url: String
@@ -160,18 +158,26 @@ extension DataConnector {
                 let headers: [String: String]
             }
         }
-        let payload = DataConnectorPayload(
+        var payload = DataConnectorPayload(
             displayName : displayName,
             events      : eventTypes.map { $0.rawValue },
             labels      : labels,
-            type        : "HTTP_PUSH", // Update this if new push types are added
-            status      : initialStatus,
-            httpConfig  : DataConnectorPayload.HTTPConfig(
+            status      : initialStatus
+        )
+        
+        // Set the DC type and config
+        switch pushType {
+        case .httpPush(let url, let signatureSecret, let headers):
+            payload.type = "HTTP_PUSH"
+            payload.httpConfig = DataConnectorPayload.HTTPConfig(
                 url             : url,
-                signatureSecret : secret,
+                signatureSecret : signatureSecret,
                 headers         : headers
             )
-        )
+        // Ensure that `.unknown` is not specified as the pushType
+        case.unknown:
+            fatalError("PushType \(pushType) is not supported")
+        }
         
         // Create the request
         let request: Request
