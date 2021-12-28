@@ -118,9 +118,7 @@ public class DeviceEventStream: NSObject {
     private var task: URLSessionTask?
     private let request: Request
     private let authenticator: Authenticator?
-    
-    private var retryScheme = RetryScheme()
-    
+    private var retryScheme = ExponentialBackoffScheme(initialBackoff: 0, maxRetries: nil)
     private var hasBeenClosed = false
     
     
@@ -335,7 +333,7 @@ extension DeviceEventStream: URLSessionDataDelegate {
             onError?(err)
         }
         
-        let backoff = retryScheme.nextBackoff()
+        let backoff = retryScheme.nextBackoff()! // Our retry-scheme has infinite retries
         Logger.info("Disconnected from event stream. Reconnecting in \(backoff)s...")
         
         // Restart the stream after a backoff
